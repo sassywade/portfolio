@@ -5,7 +5,7 @@
   --ink: #242321;
   --muted: #7d7a73;
   --line: rgba(36, 35, 33, 0.15);
-  --acid: #e6e1d7;
+  --acid: #002fa7;
   --serif: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   --sans: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -467,10 +467,10 @@ em {
   background: currentColor;
 }
 
-.case-swatch--signal { background: #e6e1d7; color: #4d4a44; }
+.case-swatch--signal { background: #002fa7; color: #fff; }
 .case-swatch--field { background: #e8b99f; color: #693e33; }
 .case-swatch--archive { background: #6c9fb6; color: #263f46; }
-.case-swatch--ground { background: #e6e1d7; color: #4d4a44; }
+.case-swatch--ground { background: #002fa7; color: #fff; }
 .case-swatch--systems { background: #c9c0de; color: #50475f; }
 .case-swatch--afterimage { background: #e1c86e; color: #4d4427; }
 
@@ -549,7 +549,7 @@ em {
 .case-hero-media--signal { background: #171b2b; color: #f4f0e8; }
 .case-hero-media--field { background: #e8b99f; color: #693e33; }
 .case-hero-media--archive { background: #6c9fb6; color: #f2f0eb; }
-.case-hero-media--ground { background: #e6e1d7; color: #242321; }
+.case-hero-media--ground { background: #002fa7; color: #fff; }
 .case-hero-media--systems { background: #c9c0de; color: #50475f; }
 .case-hero-media--afterimage { background: #e1c86e; color: #4d4427; }
 
@@ -704,7 +704,7 @@ em {
   color: #242321;
 }
 
-.case-visual-theme--signal { background: #e6e1d7; }
+.case-visual-theme--signal { background: #002fa7; color: #fff; }
 .case-visual-theme--field { background: #e8b99f; }
 .case-visual-theme--archive { background: #9ec0cb; }
 .case-visual-theme--ground { background: #cadbd0; }
@@ -1055,7 +1055,7 @@ em {
 .next-project--signal { background: #171b2b; color: #f4f0e8; }
 .next-project--field { background: #e8b99f; color: #693e33; }
 .next-project--archive { background: #6c9fb6; color: #f2f0eb; }
-.next-project--ground { background: #e6e1d7; color: #242321; }
+.next-project--ground { background: #002fa7; color: #fff; }
 .next-project--systems { background: #c9c0de; color: #50475f; }
 .next-project--afterimage { background: #e1c86e; color: #4d4427; }
 
@@ -1323,9 +1323,9 @@ em {
   right: -10%;
   width: 76%;
   aspect-ratio: 1;
-  border: 1px solid rgba(36, 35, 33, 0.28);
+  border: 1px solid rgba(0, 47, 167, 0.55);
   border-radius: 50%;
-  box-shadow: 0 0 0 24px rgba(36, 35, 33, 0.05), 0 0 0 72px rgba(36, 35, 33, 0.03);
+  box-shadow: 0 0 0 24px rgba(0, 47, 167, 0.08), 0 0 0 72px rgba(0, 47, 167, 0.04);
 }
 
 .signal-orbit::after {
@@ -1336,7 +1336,7 @@ em {
   height: 16px;
   border-radius: 50%;
   background: var(--acid);
-  box-shadow: 0 0 25px rgba(36, 35, 33, 0.18);
+  box-shadow: 0 0 25px rgba(0, 47, 167, 0.55);
   content: "";
 }
 
@@ -1350,7 +1350,7 @@ em {
 .signal-copy span {
   display: block;
   margin-bottom: 10px;
-  color: var(--acid);
+  color: #ffffff;
   font-family: var(--mono);
   font-size: 9px;
   text-transform: uppercase;
@@ -1493,7 +1493,7 @@ em {
 }
 
 .project-mockup--ground {
-  background: #e6e1d7;
+  background: #002fa7;
 }
 
 .ground-browser {
@@ -1530,7 +1530,7 @@ em {
   padding: 13% 9%;
 }
 
-.ground-kicker { color: #6e7520; font-size: 8px; }
+.ground-kicker { color: #002fa7; font-size: 8px; }
 
 .ground-browser__content strong {
   font-family: var(--serif);
@@ -2863,8 +2863,8 @@ em {
 }
 
 .case-hero-strip > div:last-child {
-  background: #e6e1d7;
-  color: #4d4a44;
+  background: #002fa7;
+  color: #fff;
 }
 
 .case-hero-strip span,
@@ -3007,7 +3007,7 @@ em {
   line-height: 0.84;
 }
 
-.case-carousel--signal .case-carousel__viewport { background: #e6e1d7; color: #4d4a44; }
+.case-carousel--signal .case-carousel__viewport { background: #002fa7; color: #fff; }
 .case-carousel--field .case-carousel__viewport { background: #e8b99f; color: #693e33; }
 .case-carousel--archive .case-carousel__viewport { background: #9ec0cb; color: #263f46; }
 .case-carousel--ground .case-carousel__viewport { background: #cadbd0; color: #3f594c; }
