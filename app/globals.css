@@ -3208,6 +3208,170 @@ em {
   transition-delay: 140ms;
 }
 
+/* Pointer island: a lightweight smiley that exhales in the direction of travel. */
+.smiley-cursor {
+  --smiley-x: -100px;
+  --smiley-y: -100px;
+  --smiley-angle: 0rad;
+  --smiley-air-opacity: 0;
+  --smiley-air-stretch: 0.55;
+  --smiley-wind-duration: 850ms;
+  --smiley-face-scale: 1;
+  --smiley-eye-scale: 1;
+  --smiley-mouth-scale: 1;
+  --smiley-cheek-opacity: 0;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 58px;
+  height: 44px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--smiley-x), var(--smiley-y), 0);
+  transition: opacity 180ms ease;
+  will-change: transform, opacity;
+  z-index: 1000;
+}
+
+.has-smiley-cursor {
+  cursor: none;
+}
+
+.has-smiley-cursor * {
+  cursor: none !important;
+}
+
+.has-smiley-cursor .smiley-cursor {
+  display: block;
+}
+
+.smiley-cursor.is-visible {
+  opacity: 1;
+}
+
+.smiley-cursor__direction {
+  position: relative;
+  width: 58px;
+  height: 44px;
+  transform: rotate(var(--smiley-angle));
+  transform-origin: 18px 22px;
+}
+
+.smiley-cursor__face {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--acid);
+  box-shadow: 2px 3px 0 rgba(36, 35, 33, 0.12);
+  transform: scale(var(--smiley-face-scale));
+  transform-origin: 18px 18px;
+}
+
+.smiley-cursor__eye,
+.smiley-cursor__cheek,
+.smiley-cursor__mouth {
+  position: absolute;
+  display: block;
+}
+
+.smiley-cursor__eye {
+  top: 11px;
+  width: 3px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: scaleY(var(--smiley-eye-scale));
+}
+
+.smiley-cursor__eye--left {
+  left: 10px;
+}
+
+.smiley-cursor__eye--right {
+  right: 10px;
+}
+
+.smiley-cursor__cheek {
+  top: 19px;
+  width: 6px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ec8e75;
+  opacity: var(--smiley-cheek-opacity);
+}
+
+.smiley-cursor__cheek--left {
+  left: 6px;
+}
+
+.smiley-cursor__cheek--right {
+  right: 6px;
+}
+
+.smiley-cursor__mouth {
+  top: 19px;
+  left: 16px;
+  width: 6px;
+  height: 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  transform: scaleX(var(--smiley-mouth-scale));
+}
+
+.smiley-cursor__air {
+  position: absolute;
+  top: 13px;
+  left: 33px;
+  width: 25px;
+  height: 19px;
+  opacity: var(--smiley-air-opacity);
+  transform: scaleX(var(--smiley-air-stretch));
+  transform-origin: left center;
+}
+
+.smiley-cursor__air span {
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 7px;
+  border-top: 1px solid var(--ink);
+  border-radius: 50%;
+  animation: smiley-wind var(--smiley-wind-duration) var(--compact-ease) infinite;
+}
+
+.smiley-cursor__air span:nth-child(1) {
+  top: 0;
+}
+
+.smiley-cursor__air span:nth-child(2) {
+  top: 6px;
+  width: 19px;
+  animation-delay: -180ms;
+}
+
+.smiley-cursor__air span:nth-child(3) {
+  top: 12px;
+  width: 14px;
+  animation-delay: -360ms;
+}
+
+@keyframes smiley-wind {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateX(0) scaleX(0.7);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(5px) scaleX(1);
+  }
+}
+
 /* Compact landing treatment: a small accent, friendly corners, and soft motion. */
 :root {
   --compact-ease: cubic-bezier(0.2, 0, 0, 1);
