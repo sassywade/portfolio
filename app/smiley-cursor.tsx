@@ -1,5 +1,8 @@
 "use client";
 
+/* Native local images keep cursor-frame swaps immediate and avoid optimizer overhead. */
+/* eslint-disable @next/next/no-img-element */
+
 import { useEffect, useRef } from "react";
 
 export function SmileyCursor() {
