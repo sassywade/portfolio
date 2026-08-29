@@ -100,53 +100,27 @@ export default function Home() {
   return (
     <main className="site-shell page-enter">
       <Soundscape />
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Neel Saswade home" data-cuelume-toggle="pulse">
-          <span className="wordmark-mark">NS</span>
-          <span>Neel Saswade</span>
-        </a>
-        <nav className="site-nav" aria-label="Main navigation">
-          <a href="#work" data-cuelume-toggle="pulse">Work</a>
-          <a href="#about" data-cuelume-toggle="pulse">About</a>
-          <a href="#contact" data-cuelume-toggle="pulse">Contact</a>
+      <section className="pranathi-intro" id="top" aria-labelledby="hero-title">
+        <p className="pranathi-name" id="hero-title">Neel Saswade</p>
+        <div className="pranathi-bio">
+          <p>
+            I&apos;m a designer based in San Francisco. Currently, I&apos;m exploring
+            thoughtful product experiences with teams working on <span className="placeholder-mark">[something good]</span>.
+            Previously, I designed at <span className="placeholder-mark">[company]</span> and <span className="placeholder-mark">[company]</span>.
+          </p>
+          <p>In my free time I ride bikes, photograph SF, and go backpacking.</p>
+        </div>
+        <nav className="pranathi-links" aria-label="Social links">
+          <a href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">Email ↗</a>
+          <a href="https://x.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">X ↗</a>
+          <a href="https://github.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">GitHub ↗</a>
+          <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">LinkedIn ↗</a>
         </nav>
-        <span className="header-status"><i /> Open to select projects</span>
-      </header>
-
-      <section className="hero" id="top" aria-labelledby="hero-title">
-        <div className="hero-aside hero-aside--top">
-          <span className="eyebrow">Portfolio / 2025</span>
-        </div>
-        <div className="hero-main">
-          <p className="hero-kicker">Product designer + creative partner</p>
-          <h1 id="hero-title">Neel <em>Saswade</em></h1>
-          <div className="hero-details">
-            <p className="hero-intro">
-              I&apos;m a designer based in San Francisco, making thoughtful digital
-              experiences for people and teams doing meaningful work.
-            </p>
-            <p className="hero-note">
-              Currently designing at <span className="placeholder-mark">[company]</span>.<br />
-              Previously at <span className="placeholder-mark">[company]</span> and <span className="placeholder-mark">[company]</span>.
-            </p>
-          </div>
-        </div>
-        <div className="hero-aside hero-aside--bottom">
-          <span>Scroll to see<br />selected work</span>
-          <span className="scroll-arrow">↓</span>
-        </div>
       </section>
 
-      <div className="intro-rule" aria-hidden="true" />
-
-      <section className="work-section" id="work" aria-labelledby="work-title">
-        <div className="section-heading">
-          <p className="eyebrow">A selection of things</p>
-          <h2 id="work-title">Selected <em>work</em></h2>
-          <p className="section-count">(06)</p>
-        </div>
-
-        <div className="project-grid">
+      <section className="pranathi-work" id="work" aria-labelledby="work-title">
+        <h2 className="sr-only" id="work-title">Selected work</h2>
+        <div className="project-grid pranathi-project-grid">
           {projects.map((project) => (
             <Reveal className="project-reveal" key={project.number}>
               <a className="project-card" href={`/case-studies/${project.slug}`} data-cuelume-toggle="pulse">
@@ -167,29 +141,10 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <section className="note-section" id="about" aria-labelledby="note-title">
-        <div className="note-mark">✳</div>
-        <p className="eyebrow">A little more</p>
-        <h2 id="note-title">Good work usually starts before the <em>pixels.</em></h2>
-        <p>
-          I like finding the sharp idea hiding inside a messy problem — then
-          giving it a shape that feels obvious in hindsight. More details,
-          writing, and the occasional experiment are on their way here.
-        </p>
-      </section>
-
-      <footer className="site-footer" id="contact">
-        <div className="footer-topline">
-          <span className="eyebrow">Have a project in mind?</span>
-          <span className="footer-year">© 2025</span>
-        </div>
-        <a className="footer-cta" href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">
-          Let&apos;s make<br /><em>something good.</em> <span>↗</span>
-        </a>
+      <footer className="site-footer pranathi-footer" id="contact">
         <SecretFooter />
         <div className="footer-bottomline">
-          <span>San Francisco, CA</span>
+          <span>San Francisco, CA · © 2025</span>
           <div className="footer-links">
             <a href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">Email ↗</a>
             <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">LinkedIn ↗</a>

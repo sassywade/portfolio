@@ -2033,3 +2033,172 @@ em {
     transition-duration: .01ms !important;
   }
 }
+
+/* Homepage layout: a quiet, text-first introduction followed by the work. */
+.pranathi-intro {
+  width: min(100% - 64px, 860px);
+  margin: 0 auto;
+  padding: clamp(190px, 28vh, 310px) 0 clamp(240px, 32vh, 360px);
+}
+
+.pranathi-name {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(40px, 4vw, 50px);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.pranathi-bio {
+  max-width: 850px;
+  color: #373530;
+  font-family: var(--serif);
+  font-size: clamp(19px, 1.7vw, 24px);
+  letter-spacing: -0.02em;
+  line-height: 1.72;
+}
+
+.pranathi-bio p {
+  margin: 0;
+}
+
+.pranathi-bio p + p {
+  margin-top: 48px;
+}
+
+.pranathi-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 52px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pranathi-links a,
+.pranathi-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 220ms ease;
+}
+
+.pranathi-links a:hover,
+.pranathi-footer a:hover {
+  color: var(--ink);
+}
+
+.pranathi-work {
+  width: min(100% - 64px, 1368px);
+  margin: 0 auto;
+}
+
+.pranathi-project-grid {
+  gap: 22px;
+}
+
+.pranathi-project-grid .project-card {
+  display: block;
+}
+
+.pranathi-project-grid .project-mockup {
+  aspect-ratio: 1.05;
+  border-radius: 17px;
+}
+
+.pranathi-project-grid .project-info {
+  padding: 18px 2px 0;
+}
+
+.pranathi-project-grid .project-title-row h3 {
+  font-size: 21px;
+}
+
+.pranathi-project-grid .project-info > p {
+  min-height: 0;
+  margin-top: 9px;
+  font-size: 13px;
+}
+
+.pranathi-project-grid .project-meta {
+  margin-top: 14px;
+}
+
+.pranathi-footer {
+  width: min(100% - 64px, 1368px);
+  margin: 0 auto;
+  padding-top: 130px;
+}
+
+.pranathi-footer .footer-bottomline {
+  margin-top: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .pranathi-intro {
+    padding-top: 170px;
+    padding-bottom: 220px;
+  }
+
+  .pranathi-work,
+  .pranathi-footer {
+    width: min(100% - 36px, 700px);
+  }
+
+  .pranathi-project-grid {
+    gap: 54px 18px;
+  }
+}
+
+@media (max-width: 580px) {
+  .pranathi-intro {
+    width: min(100% - 36px, 700px);
+    padding-top: 132px;
+    padding-bottom: 170px;
+  }
+
+  .pranathi-name {
+    font-size: 39px;
+  }
+
+  .pranathi-bio {
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  .pranathi-bio p + p {
+    margin-top: 34px;
+  }
+
+  .pranathi-links {
+    margin-top: 40px;
+  }
+
+  .pranathi-project-grid {
+    gap: 52px;
+  }
+
+  .pranathi-project-grid .project-mockup {
+    aspect-ratio: 1.08;
+  }
+
+  .pranathi-footer {
+    padding-top: 92px;
+  }
+}
