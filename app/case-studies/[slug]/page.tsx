@@ -109,7 +109,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           <b>→</b>
           <span>{project.title}</span>
         </Link>
-        <Link className="case-topbar-link" href="/#work" data-cuelume-toggle="pulse">All work ↗</Link>
+        <Link className="case-topbar-link" href="/work" data-cuelume-toggle="pulse">All work ↗</Link>
       </header>
 
       <section className="case-intro" aria-labelledby="case-title">
@@ -160,7 +160,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             <p className="case-kicker">Key learnings</p>
             <h2 id="reflection-title">The work got better when the answer got quieter.</h2>
             <p>{narrative.reflection}</p>
-            <Link href="/#contact" className="case-contact-link" data-cuelume-toggle="pulse">Have a similar problem? Say hello ↗</Link>
+            <Link href="/contact" className="case-contact-link" data-cuelume-toggle="pulse">Have a similar problem? Say hello ↗</Link>
           </section>
         </Reveal>
       </div>
