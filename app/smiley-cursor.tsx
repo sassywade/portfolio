@@ -194,10 +194,14 @@ export function SmileyCursor() {
             <circle className="smiley-cursor__pupil" cx="45" cy="27" r="2" />
             <path className="smiley-cursor__feature smiley-cursor__feature--fill" d="M27 42C27 35 40 35 41 42C40 50 29 51 27 42Z" />
             <ellipse className="smiley-cursor__mouth-hole" cx="34" cy="43" rx="4" ry="5" />
+            <path className="smiley-cursor__feature" d="M11 34L14 35" />
+            <path className="smiley-cursor__feature" d="M52 34L55 33" />
             <path className="smiley-cursor__wind-line" d="M59 39C70 39 81 34 91 27C99 21 105 28 101 35C98 41 92 42 88 37" />
             <path className="smiley-cursor__wind-line" d="M59 45C73 45 85 42 97 36" />
             <path className="smiley-cursor__wind-line" d="M62 51C75 52 85 49 94 46" />
             <path className="smiley-cursor__wind-line" d="M72 56C82 57 88 55 94 52" />
+            <path className="smiley-cursor__wind-line" d="M76 31C83 23 92 25 89 31C87 35 81 34 82 29" />
+            <path className="smiley-cursor__wind-line" d="M90 48C98 43 106 46 102 51C99 54 95 52 97 49" />
           </g>
         </svg>
       </div>

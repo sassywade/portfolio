@@ -3519,6 +3519,7 @@ em {
   width: 112px;
   height: 72px;
   overflow: visible;
+  animation: smiley-pet-breathe 2.8s ease-in-out infinite;
 }
 
 .smiley-cursor__outline {
@@ -3584,5 +3585,15 @@ em {
 
   50% {
     transform: translateX(4px) scaleX(1);
+  }
+}
+
+@keyframes smiley-pet-breathe {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-0.5px) scale(1.012);
   }
 }
