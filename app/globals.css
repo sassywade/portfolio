@@ -3597,3 +3597,35 @@ em {
     transform: translateY(-0.5px) scale(1.012);
   }
 }
+
+/* Use the supplied drawings as the four cursor-pet frames. */
+.smiley-cursor {
+  width: 132px;
+  height: 72px;
+}
+
+.smiley-cursor__direction {
+  width: 132px;
+  height: 72px;
+  transform-origin: 23px 32px;
+}
+
+.smiley-cursor__asset {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  display: block;
+  width: auto;
+  height: 64px;
+  max-width: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.smiley-cursor[data-state="idle"] .smiley-cursor__asset--idle,
+.smiley-cursor[data-state="light"] .smiley-cursor__asset--light,
+.smiley-cursor[data-state="strong"] .smiley-cursor__asset--strong,
+.smiley-cursor[data-state="strained"] .smiley-cursor__asset--strained {
+  opacity: 1;
+}
