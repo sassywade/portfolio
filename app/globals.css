@@ -76,12 +76,14 @@ a {
 
 .reveal[data-reveal-ready="true"] {
   opacity: 0;
+  filter: blur(5px);
   transform: translateY(18px);
-  transition: opacity 650ms ease, transform 650ms cubic-bezier(.22,.7,.2,1);
+  transition: opacity 650ms ease, filter 650ms ease, transform 650ms cubic-bezier(.22,.7,.2,1);
 }
 
 .reveal[data-reveal-ready="true"].is-visible {
   opacity: 1;
+  filter: blur(0);
   transform: translateY(0);
 }
 
@@ -2108,6 +2110,26 @@ em {
 .pranathi-project-grid .project-mockup {
   aspect-ratio: 1.05;
   border-radius: 17px;
+  will-change: transform;
+}
+
+.pranathi-project-grid .project-card .project-mockup {
+  transition: transform 700ms cubic-bezier(.62,.61,.02,1), box-shadow 450ms ease;
+}
+
+.pranathi-project-grid .project-card:hover .project-mockup,
+.pranathi-project-grid .project-card:focus-visible .project-mockup {
+  transform: translateY(-7px) scale(1.01);
+  box-shadow: 0 17px 28px rgba(36, 35, 33, 0.1);
+}
+
+.pranathi-project-grid .project-info {
+  transition: transform 450ms cubic-bezier(.62,.61,.02,1);
+}
+
+.pranathi-project-grid .project-card:hover .project-info,
+.pranathi-project-grid .project-card:focus-visible .project-info {
+  transform: translateY(-2px);
 }
 
 .pranathi-project-grid .project-info {
@@ -2713,4 +2735,37 @@ em {
   .play-item p {
     font-size: 15px;
   }
+}
+
+/* Caleb Wu-inspired type-slide navigation: compact, tactile, and non-blocking. */
+.site-header--pages .site-nav a {
+  display: grid;
+  overflow: hidden;
+}
+
+.site-nav__label {
+  grid-area: 1 / 1;
+  transition: transform 700ms cubic-bezier(.62,.61,.02,1);
+}
+
+.site-nav__label--hover {
+  transform: translateY(110%);
+}
+
+.site-header--pages .site-nav a:hover .site-nav__label:first-child,
+.site-header--pages .site-nav a:focus-visible .site-nav__label:first-child {
+  transform: translateY(-110%);
+}
+
+.site-header--pages .site-nav a:hover .site-nav__label--hover,
+.site-header--pages .site-nav a:focus-visible .site-nav__label--hover {
+  transform: translateY(0);
+}
+
+.site-header--pages .site-nav a:nth-child(2) .site-nav__label {
+  transition-delay: 70ms;
+}
+
+.site-header--pages .site-nav a:nth-child(3) .site-nav__label {
+  transition-delay: 140ms;
 }
