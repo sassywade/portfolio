@@ -3207,3 +3207,130 @@ em {
 .site-header--pages .site-nav a:nth-child(3) .site-nav__label {
   transition-delay: 140ms;
 }
+
+/* Compact landing treatment: a small accent, friendly corners, and soft motion. */
+:root {
+  --compact-ease: cubic-bezier(0.2, 0, 0, 1);
+  --compact-radius: 14px;
+}
+
+@keyframes compact-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(4deg);
+  }
+}
+
+@keyframes compact-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translateY(-1px) scale(1.005);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.reveal[data-reveal-ready="true"] {
+  transform: translateY(18px) scale(0.985);
+  transition-timing-function: var(--compact-ease);
+}
+
+.pranathi-intro,
+.simple-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.pranathi-intro > *,
+.simple-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pranathi-intro::before,
+.simple-page::before {
+  position: absolute;
+  top: clamp(135px, 22vh, 240px);
+  right: 7%;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pranathi-intro::after,
+.simple-page::after {
+  position: absolute;
+  top: clamp(124px, 20vh, 226px);
+  right: calc(7% + 4px);
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--acid);
+  content: "";
+  animation: compact-float 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pranathi-name,
+.pranathi-bio,
+.pranathi-links,
+.simple-page h1,
+.simple-page__copy,
+.simple-page__lede,
+.play-list {
+  animation: compact-pop 700ms var(--compact-ease) both;
+}
+
+.pranathi-name,
+.simple-page h1 {
+  animation-delay: 70ms;
+}
+
+.pranathi-bio,
+.simple-page__copy,
+.simple-page__lede {
+  animation-delay: 140ms;
+}
+
+.pranathi-links,
+.play-list {
+  animation-delay: 210ms;
+}
+
+.pranathi-project-grid .project-mockup {
+  border-radius: var(--compact-radius);
+}
+
+@media (max-width: 580px) {
+  .pranathi-intro::before,
+  .simple-page::before {
+    top: 88px;
+    right: 9%;
+    width: 30px;
+    height: 30px;
+  }
+
+  .pranathi-intro::after,
+  .simple-page::after {
+    top: 81px;
+    right: calc(9% + 3px);
+    width: 11px;
+    height: 11px;
+  }
+}
