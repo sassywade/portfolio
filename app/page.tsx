@@ -1,55 +1,7 @@
 import { Soundscape } from "./soundscape";
-
-const projects = [
-  {
-    number: "01",
-    title: "Signal / noise",
-    description: "A calmer way to make sense of a busy product.",
-    category: "Product design",
-    year: "2025",
-    theme: "signal",
-  },
-  {
-    number: "02",
-    title: "Field notes",
-    description: "A visual identity for people who make things slowly.",
-    category: "Brand + direction",
-    year: "2024",
-    theme: "field",
-  },
-  {
-    number: "03",
-    title: "The archive",
-    description: "Turning a collection of stories into a place to wander.",
-    category: "Digital experience",
-    year: "2024",
-    theme: "archive",
-  },
-  {
-    number: "04",
-    title: "Common ground",
-    description: "Tools for making space around the important conversations.",
-    category: "Product design",
-    year: "2023",
-    theme: "ground",
-  },
-  {
-    number: "05",
-    title: "Soft systems",
-    description: "A flexible toolkit for a distinctly human service.",
-    category: "Strategy + design",
-    year: "2023",
-    theme: "systems",
-  },
-  {
-    number: "06",
-    title: "Afterimage",
-    description: "A small study in memory, motion, and the everyday.",
-    category: "Experiments",
-    year: "2022",
-    theme: "afterimage",
-  },
-] as const;
+import { projects } from "./projects";
+import { Reveal } from "./reveal";
+import { SecretFooter } from "./secret-footer";
 
 function ProjectMockup({ theme }: { theme: (typeof projects)[number]["theme"] }) {
   return (
@@ -146,7 +98,7 @@ function ProjectMockup({ theme }: { theme: (typeof projects)[number]["theme"] })
 
 export default function Home() {
   return (
-    <main className="site-shell">
+    <main className="site-shell page-enter">
       <Soundscape />
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label="Neel Saswade home" data-cuelume-toggle="pulse">
@@ -196,20 +148,22 @@ export default function Home() {
 
         <div className="project-grid">
           {projects.map((project) => (
-            <a className="project-card" href="#contact" key={project.number} data-cuelume-toggle="pulse">
-              <ProjectMockup theme={project.theme} />
-              <div className="project-info">
-                <div className="project-title-row">
-                  <h3>{project.title}</h3>
-                  <span className="project-number">{project.number}</span>
+            <Reveal className="project-reveal" key={project.number}>
+              <a className="project-card" href={`/case-studies/${project.slug}`} data-cuelume-toggle="pulse">
+                <ProjectMockup theme={project.theme} />
+                <div className="project-info">
+                  <div className="project-title-row">
+                    <h3>{project.title}</h3>
+                    <span className="project-number">{project.number}</span>
+                  </div>
+                  <p>{project.description}</p>
+                  <div className="project-meta">
+                    <span>{project.category}</span>
+                    <span>{project.year} <b>↗</b></span>
+                  </div>
                 </div>
-                <p>{project.description}</p>
-                <div className="project-meta">
-                  <span>{project.category}</span>
-                  <span>{project.year} <b>↗</b></span>
-                </div>
-              </div>
-            </a>
+              </a>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -233,6 +187,7 @@ export default function Home() {
         <a className="footer-cta" href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">
           Let&apos;s make<br /><em>something good.</em> <span>↗</span>
         </a>
+        <SecretFooter />
         <div className="footer-bottomline">
           <span>San Francisco, CA</span>
           <div className="footer-links">
