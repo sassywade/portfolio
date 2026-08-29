@@ -3508,14 +3508,15 @@ em {
 
 /* Use the supplied drawings as the four cursor-pet frames. */
 .smiley-cursor {
-  width: 132px;
-  height: 72px;
+  width: 116px;
+  height: 64px;
 }
 
 .smiley-cursor__direction {
-  width: 132px;
-  height: 72px;
-  transform-origin: 23px 32px;
+  width: 116px;
+  height: 64px;
+  transform: none;
+  transform-origin: 20px 28px;
 }
 
 .smiley-cursor__asset {
@@ -3524,7 +3525,7 @@ em {
   left: 0;
   display: block;
   width: auto;
-  height: 64px;
+  height: 56px;
   max-width: none;
   opacity: 0;
   pointer-events: none;
@@ -3545,8 +3546,8 @@ em {
 .smiley-cursor__wind-frame {
   clip-path: inset(0 0 0 48%);
   opacity: 0;
-  transform: translateX(-8px) scaleX(0.88);
-  transform-origin: left center;
+  transform: translateX(-8px) scaleX(0.88) rotate(var(--smiley-angle));
+  transform-origin: 20px 28px;
   transition: opacity 180ms ease 120ms, transform 300ms var(--compact-ease) 120ms;
 }
 
@@ -3554,5 +3555,5 @@ em {
 .smiley-cursor[data-state="strong"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strong,
 .smiley-cursor[data-state="strained"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strained {
   opacity: 1;
-  transform: translateX(0) scaleX(1);
+  transform: translateX(0) scaleX(1) rotate(var(--smiley-angle));
 }

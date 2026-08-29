@@ -29,6 +29,8 @@ export function SmileyCursor() {
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
+    let springVelocityX = 0;
+    let springVelocityY = 0;
     let targetAngle = 0;
     let currentAngle = 0;
     let targetBlow = 0;
@@ -39,8 +41,10 @@ export function SmileyCursor() {
       const isResting = timestamp - lastMoveTime > 90;
       const nextBlow = isResting ? 0 : targetBlow;
 
-      currentX += (targetX - currentX) * 0.55;
-      currentY += (targetY - currentY) * 0.55;
+      springVelocityX = (springVelocityX + (targetX - currentX) * 0.12) * 0.72;
+      springVelocityY = (springVelocityY + (targetY - currentY) * 0.12) * 0.72;
+      currentX += springVelocityX;
+      currentY += springVelocityY;
       currentBlow += (nextBlow - currentBlow) * 0.18;
 
       const angleDelta = Math.atan2(
@@ -76,6 +80,8 @@ export function SmileyCursor() {
       const stillSettling =
         Math.abs(targetX - currentX) > 0.2 ||
         Math.abs(targetY - currentY) > 0.2 ||
+        Math.abs(springVelocityX) > 0.2 ||
+        Math.abs(springVelocityY) > 0.2 ||
         Math.abs(nextBlow - currentBlow) > 0.01;
 
       if (stillSettling) {
@@ -103,8 +109,8 @@ export function SmileyCursor() {
         lastY = event.clientY;
         lastTime = timestamp;
         lastMoveTime = timestamp;
-        targetX = currentX = event.clientX - 23 - 40;
-        targetY = currentY = event.clientY - 32;
+        targetX = currentX = event.clientX - 20 - 34;
+        targetY = currentY = event.clientY - 28;
         hasPointerPosition = true;
         cursor.classList.add("is-visible");
         scheduleFrame();
@@ -119,9 +125,9 @@ export function SmileyCursor() {
       if (distance > 0.5) {
         targetAngle = Math.atan2(event.clientY - lastY, event.clientX - lastX);
       }
-      const followDistance = 40 + intensity * 24;
-      targetX = event.clientX - 23 - Math.cos(targetAngle) * followDistance;
-      targetY = event.clientY - 32 - Math.sin(targetAngle) * followDistance;
+      const followDistance = 34 + intensity * 18;
+      targetX = event.clientX - 20 - Math.cos(targetAngle) * followDistance;
+      targetY = event.clientY - 28 - Math.sin(targetAngle) * followDistance;
       targetBlow = intensity;
       lastX = event.clientX;
       lastY = event.clientY;
