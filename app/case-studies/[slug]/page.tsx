@@ -104,12 +104,11 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
       <Soundscape />
       <header className="case-study-topbar">
         <Link className="case-breadcrumb" href="/" data-cuelume-toggle="pulse">
-          <span className="case-breadcrumb__mark">NS</span>
-          <span>Neel Saswade</span>
+          <span>Work</span>
           <b>→</b>
           <span>{project.title}</span>
         </Link>
-        <Link className="case-topbar-link" href="/work" data-cuelume-toggle="pulse">All work ↗</Link>
+        <Link className="case-topbar-link" href="/" data-cuelume-toggle="pulse">All work ↗</Link>
       </header>
 
       <section className="case-intro" aria-labelledby="case-title">
@@ -160,7 +159,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             <p className="case-kicker">Key learnings</p>
             <h2 id="reflection-title">The work got better when the answer got quieter.</h2>
             <p>{narrative.reflection}</p>
-            <Link href="/contact" className="case-contact-link" data-cuelume-toggle="pulse">Have a similar problem? Say hello ↗</Link>
+            <a href="mailto:hello@yourname.com" className="case-contact-link" data-cuelume-toggle="pulse">Want to talk about it? Say hello ↗</a>
           </section>
         </Reveal>
       </div>

@@ -1,22 +1,18 @@
 import Link from "next/link";
 
 type SiteHeaderProps = {
-  current?: "home" | "work" | "about" | "contact";
+  current?: "work" | "about" | "play";
 };
 
 const links = [
-  ["work", "Work", "/work"],
+  ["work", "Work", "/#work"],
   ["about", "About", "/about"],
-  ["contact", "Contact", "/contact"],
+  ["play", "Play", "/play"],
 ] as const;
 
 export function SiteHeader({ current }: SiteHeaderProps) {
   return (
     <header className="site-header site-header--pages">
-      <Link className="wordmark" href="/" aria-label="Neel Saswade home" data-cuelume-toggle="page">
-        <span className="wordmark-mark">NS</span>
-        <span>Neel Saswade</span>
-      </Link>
       <nav className="site-nav" aria-label="Main navigation">
         {links.map(([id, label, href]) => (
           <Link
@@ -30,7 +26,6 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           </Link>
         ))}
       </nav>
-      <span className="header-status"><i /> Open to select projects</span>
     </header>
   );
 }

@@ -1,14 +1,12 @@
 import { Soundscape } from "./soundscape";
 import { ProjectGrid } from "./project-card";
-import { projects } from "./projects";
-import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
 export default function Home() {
   return (
     <main className="site-shell page-enter" id="top">
       <Soundscape />
-      <SiteHeader current="home" />
+      <SiteHeader current="work" />
 
       <section className="pranathi-intro pranathi-intro--home" aria-labelledby="hero-title">
         <p className="pranathi-name" id="hero-title">Neel Saswade</p>
@@ -28,15 +26,10 @@ export default function Home() {
         </nav>
       </section>
 
-      <section className="home-work-preview" aria-labelledby="home-work-title">
-        <div className="page-section-heading">
-          <h2 id="home-work-title">Selected work</h2>
-          <a href="/work" data-cuelume-toggle="page">View all work ↗</a>
-        </div>
-        <ProjectGrid items={projects.slice(0, 3)} />
+      <section className="pranathi-work" id="work" aria-labelledby="work-title">
+        <h2 className="sr-only" id="work-title">Work</h2>
+        <ProjectGrid />
       </section>
-
-      <SiteFooter />
     </main>
   );
 }
