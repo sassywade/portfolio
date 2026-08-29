@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CaseStudyNav } from "../../case-study-nav";
+import { CaseStudyCarousel } from "../../case-study-carousel";
+import { CaseStudyMedia } from "../../case-study-media";
 import { caseStudies, projects } from "../../projects";
 import { Reveal } from "../../reveal";
 import { Soundscape } from "../../soundscape";
@@ -111,48 +113,58 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         <Link className="case-topbar-link" href="/" data-cuelume-toggle="pulse">All work ↗</Link>
       </header>
 
-      <section className="case-intro" aria-labelledby="case-title">
-        <div className="case-intro__body">
-          <div className={`case-swatch case-swatch--${project.theme}`} aria-hidden="true"><span /><span /></div>
-          <p className="case-kicker">{narrative.collaborator} / {project.number}</p>
-          <h1 id="case-title">{project.title}</h1>
-          <p className="case-lede">{narrative.lede}</p>
-        </div>
-        <aside className="case-meta" aria-label="Project details">
-          <div><span>Role</span><strong>{narrative.role}</strong></div>
-          <div><span>Team</span><strong>{narrative.team.map((member) => <em key={member}>{member}</em>)}</strong></div>
-          <div><span>Year</span><strong>{project.year}</strong></div>
-        </aside>
-      </section>
-
-      <Reveal className="case-media-reveal">
-        <figure className={`case-hero-media case-hero-media--${project.theme}`}>
-          <div className="case-hero-media__halo" />
-          <div className="case-hero-display">
-            <span>{project.number} / concept preview</span>
-            <strong>{project.title}</strong>
-            <em>placeholder art direction</em>
+      <div className="case-study-frame">
+        <section className="case-intro" aria-labelledby="case-title">
+          <div className="case-intro__body">
+            <div className={`case-swatch case-swatch--${project.theme}`} aria-hidden="true"><span /><span /></div>
+            <p className="case-kicker">{narrative.collaborator} / {project.number}</p>
+            <h1 id="case-title">{project.title}</h1>
+            <p className="case-lede">{narrative.lede}</p>
           </div>
-          <figcaption>Visual placeholder — replace with project hero imagery.</figcaption>
-        </figure>
-      </Reveal>
+          <aside className="case-meta" aria-label="Project details">
+            <div><span>Role</span><strong>{narrative.role}</strong></div>
+            <div><span>Team</span><strong>{narrative.team.map((member) => <em key={member}>{member}</em>)}</strong></div>
+            <div><span>Year</span><strong>{project.year}</strong></div>
+          </aside>
+        </section>
 
-      <div className="case-study-content">
+        <Reveal className="case-media-reveal">
+          <figure className={`case-hero-media case-hero-media--${project.theme}`}>
+            <div className="case-hero-media__halo" />
+            <div className="case-hero-display">
+              <span>{project.number} / concept preview</span>
+              <strong>{project.title}</strong>
+              <em>placeholder art direction</em>
+            </div>
+            <figcaption>Visual placeholder — replace with project hero imagery.</figcaption>
+          </figure>
+        </Reveal>
+
+        <div className={`case-hero-strip case-hero-strip--${project.theme}`} aria-label="Additional project imagery">
+          <div><span>placeholder / 01</span><strong>Context</strong></div>
+          <div><span>placeholder / 02</span><strong>Direction</strong></div>
+        </div>
+
+        <div className="case-study-content">
         {narrative.sections.map((section, index) => (
           <Reveal className={`case-section-reveal ${index % 2 ? "case-section-reveal--reverse" : ""}`} key={section.id}>
-            <section className="case-section" id={section.id} aria-labelledby={`${section.id}-title`}>
+            <section className={`case-section ${index === 0 ? "case-section--lead" : ""}`} id={section.id} aria-labelledby={`${section.id}-title`}>
               <div className="case-section__copy">
                 <p className="case-kicker">{section.label}</p>
                 <h2 id={`${section.id}-title`}>{section.title}</h2>
                 <p>{section.body}</p>
               </div>
               <figure className="case-section__visual" aria-label={`${section.label} visual placeholder`}>
-                <CaseStudyVisual kind={section.visual} theme={project.theme} />
+                <CaseStudyMedia label={section.label}>
+                  <CaseStudyVisual kind={section.visual} theme={project.theme} />
+                </CaseStudyMedia>
                 <figcaption>Visual placeholder / replace with project work</figcaption>
               </figure>
             </section>
           </Reveal>
         ))}
+
+        <CaseStudyCarousel theme={project.theme} />
 
         <Reveal>
           <section className="case-reflection" id="reflection" aria-labelledby="reflection-title">
@@ -162,15 +174,16 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             <a href="mailto:hello@yourname.com" className="case-contact-link" data-cuelume-toggle="pulse">Want to talk about it? Say hello ↗</a>
           </section>
         </Reveal>
-      </div>
+        </div>
 
-      <Reveal className="next-project-reveal">
-        <Link className={`next-project next-project--${nextProject.theme}`} href={`/case-studies/${nextProject.slug}`} data-cuelume-toggle="pulse">
-          <span className="case-kicker">Next project / {nextProject.number}</span>
-          <h2>{nextProject.title}</h2>
-          <span className="next-project__link">Open study <b>↗</b></span>
-        </Link>
-      </Reveal>
+        <Reveal className="next-project-reveal">
+          <Link className={`next-project next-project--${nextProject.theme}`} href={`/case-studies/${nextProject.slug}`} data-cuelume-toggle="pulse">
+            <span className="case-kicker">Next project / {nextProject.number}</span>
+            <h2>{nextProject.title}</h2>
+            <span className="next-project__link">Open study <b>↗</b></span>
+          </Link>
+        </Reveal>
+      </div>
 
       <CaseStudyNav items={navItems} />
     </main>
