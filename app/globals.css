@@ -3234,15 +3234,7 @@ em {
   z-index: 1000;
 }
 
-.has-smiley-cursor {
-  cursor: none;
-}
-
-.has-smiley-cursor * {
-  cursor: none !important;
-}
-
-.has-smiley-cursor .smiley-cursor {
+.has-cursor-pet .smiley-cursor {
   display: block;
 }
 

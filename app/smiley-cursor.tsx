@@ -18,7 +18,7 @@ export function SmileyCursor() {
       return;
     }
 
-    root.classList.add("has-smiley-cursor");
+    root.classList.add("has-cursor-pet");
 
     let frame: number | null = null;
     let lastX = 0;
@@ -102,8 +102,8 @@ export function SmileyCursor() {
         lastY = event.clientY;
         lastTime = timestamp;
         lastMoveTime = timestamp;
-        targetX = currentX = event.clientX - 31;
-        targetY = currentY = event.clientY - 36;
+        targetX = currentX = event.clientX - 23 - 40;
+        targetY = currentY = event.clientY - 32;
         hasPointerPosition = true;
         cursor.classList.add("is-visible");
         scheduleFrame();
@@ -115,11 +115,12 @@ export function SmileyCursor() {
       const velocity = distance / elapsed;
       const intensity = Math.min(0.72, Math.max(0, (velocity - 0.12) / 2.15));
 
-      targetX = event.clientX - 23;
-      targetY = event.clientY - 32;
       if (distance > 0.5) {
         targetAngle = Math.atan2(event.clientY - lastY, event.clientX - lastX);
       }
+      const followDistance = 40 + intensity * 24;
+      targetX = event.clientX - 23 - Math.cos(targetAngle) * followDistance;
+      targetY = event.clientY - 32 - Math.sin(targetAngle) * followDistance;
       targetBlow = intensity;
       lastX = event.clientX;
       lastY = event.clientY;
@@ -147,7 +148,7 @@ export function SmileyCursor() {
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerout", handlePointerOut);
-      root.classList.remove("has-smiley-cursor");
+      root.classList.remove("has-cursor-pet");
       if (frame !== null) {
         window.cancelAnimationFrame(frame);
       }
