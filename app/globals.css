@@ -3498,3 +3498,91 @@ em {
     height: 11px;
   }
 }
+
+/* Hand-drawn cursor states: neutral, puffing, strained, then fully blowing. */
+.smiley-cursor {
+  --smiley-wind-opacity: 0;
+  width: 112px;
+  height: 72px;
+}
+
+.smiley-cursor__direction {
+  width: 112px;
+  height: 72px;
+  transform-origin: 31px 36px;
+}
+
+.smiley-cursor__art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 112px;
+  height: 72px;
+  overflow: visible;
+}
+
+.smiley-cursor__outline {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.smiley-cursor__state {
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.smiley-cursor[data-state="idle"] .smiley-cursor__state--idle,
+.smiley-cursor[data-state="light"] .smiley-cursor__state--light,
+.smiley-cursor[data-state="strong"] .smiley-cursor__state--strong,
+.smiley-cursor[data-state="strained"] .smiley-cursor__state--strained {
+  opacity: 1;
+}
+
+.smiley-cursor__feature,
+.smiley-cursor__wind-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.smiley-cursor__feature--fill {
+  fill: var(--ink);
+}
+
+.smiley-cursor__pupil {
+  fill: var(--ink);
+}
+
+.smiley-cursor__mouth-hole {
+  fill: var(--paper);
+}
+
+.smiley-cursor__wind-line {
+  opacity: var(--smiley-wind-opacity);
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: smiley-wind-line var(--smiley-wind-duration) var(--compact-ease) infinite;
+}
+
+.smiley-cursor__wind-line:nth-of-type(2n) {
+  animation-delay: -180ms;
+}
+
+.smiley-cursor__wind-line:nth-of-type(3n) {
+  animation-delay: -360ms;
+}
+
+@keyframes smiley-wind-line {
+  0%, 100% {
+    transform: translateX(0) scaleX(0.78);
+  }
+
+  50% {
+    transform: translateX(4px) scaleX(1);
+  }
+}
