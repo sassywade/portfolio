@@ -3388,16 +3388,6 @@ em {
   --compact-radius: 14px;
 }
 
-@keyframes compact-float {
-  0%, 100% {
-    transform: translateY(0) rotate(-4deg);
-  }
-
-  50% {
-    transform: translateY(-7px) rotate(4deg);
-  }
-}
-
 @keyframes compact-pop {
   0% {
     opacity: 0;
