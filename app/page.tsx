@@ -18,12 +18,6 @@ export default function Home() {
           </p>
           <p>In my free time I ride bikes, photograph SF, and go backpacking.</p>
         </div>
-        <nav className="pranathi-links" aria-label="Social links">
-          <a href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">Email ↗</a>
-          <a href="https://x.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">X ↗</a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">GitHub ↗</a>
-          <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">LinkedIn ↗</a>
-        </nav>
       </section>
 
       <section className="pranathi-work" id="work" aria-labelledby="work-title">

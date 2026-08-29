@@ -2071,29 +2071,6 @@ em {
   margin-top: 48px;
 }
 
-.pranathi-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-  margin-top: 52px;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.pranathi-links a,
-.pranathi-footer a {
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 220ms ease;
-}
-
-.pranathi-links a:hover,
-.pranathi-footer a:hover {
-  color: var(--ink);
-}
-
 .pranathi-work {
   width: min(100% - 64px, 1368px);
   margin: 0 auto;
@@ -2206,10 +2183,6 @@ em {
 
   .pranathi-bio p + p {
     margin-top: 34px;
-  }
-
-  .pranathi-links {
-    margin-top: 40px;
   }
 
   .pranathi-project-grid {
@@ -3412,7 +3385,6 @@ em {
 
 .pranathi-name,
 .pranathi-bio,
-.pranathi-links,
 .simple-page h1,
 .simple-page__copy,
 .simple-page__lede,
@@ -3431,7 +3403,6 @@ em {
   animation-delay: 140ms;
 }
 
-.pranathi-links,
 .play-list {
   animation-delay: 210ms;
 }
