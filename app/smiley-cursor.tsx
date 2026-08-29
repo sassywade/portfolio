@@ -71,6 +71,7 @@ export function SmileyCursor() {
             : currentBlow > 0.03
               ? "light"
               : "idle";
+      cursor.dataset.wind = currentBlow > 0.3 ? "on" : "off";
 
       const stillSettling =
         Math.abs(targetX - currentX) > 0.2 ||
@@ -156,12 +157,15 @@ export function SmileyCursor() {
   }, []);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" aria-hidden="true">
       <div className="smiley-cursor__direction">
-        <img className="smiley-cursor__asset smiley-cursor__asset--idle" src="/pet/pet-idle.png" alt="" />
-        <img className="smiley-cursor__asset smiley-cursor__asset--light" src="/pet/pet-light.png" alt="" />
-        <img className="smiley-cursor__asset smiley-cursor__asset--strong" src="/pet/pet-strong.png" alt="" />
-        <img className="smiley-cursor__asset smiley-cursor__asset--strained" src="/pet/pet-strained.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--light smiley-cursor__face-frame" src="/pet/pet-light.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--strong smiley-cursor__face-frame" src="/pet/pet-strong.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--strained smiley-cursor__face-frame" src="/pet/pet-strained.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--light smiley-cursor__wind-frame" src="/pet/pet-light.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--strong smiley-cursor__wind-frame" src="/pet/pet-strong.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--strained smiley-cursor__wind-frame" src="/pet/pet-strained.png" alt="" />
       </div>
     </div>
   );

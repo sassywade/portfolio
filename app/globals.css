@@ -3531,9 +3531,28 @@ em {
   transition: opacity 140ms ease;
 }
 
-.smiley-cursor[data-state="idle"] .smiley-cursor__asset--idle,
-.smiley-cursor[data-state="light"] .smiley-cursor__asset--light,
-.smiley-cursor[data-state="strong"] .smiley-cursor__asset--strong,
-.smiley-cursor[data-state="strained"] .smiley-cursor__asset--strained {
+.smiley-cursor[data-state="idle"] .smiley-cursor__face-frame.smiley-cursor__asset--idle,
+.smiley-cursor[data-state="light"] .smiley-cursor__face-frame.smiley-cursor__asset--light,
+.smiley-cursor[data-state="strong"] .smiley-cursor__face-frame.smiley-cursor__asset--strong,
+.smiley-cursor[data-state="strained"] .smiley-cursor__face-frame.smiley-cursor__asset--strained {
   opacity: 1;
+}
+
+.smiley-cursor__face-frame {
+  clip-path: inset(0 48% 0 0);
+}
+
+.smiley-cursor__wind-frame {
+  clip-path: inset(0 0 0 48%);
+  opacity: 0;
+  transform: translateX(-8px) scaleX(0.88);
+  transform-origin: left center;
+  transition: opacity 180ms ease 120ms, transform 300ms var(--compact-ease) 120ms;
+}
+
+.smiley-cursor[data-state="light"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--light,
+.smiley-cursor[data-state="strong"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strong,
+.smiley-cursor[data-state="strained"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strained {
+  opacity: 1;
+  transform: translateX(0) scaleX(1);
 }
