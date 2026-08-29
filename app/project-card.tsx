@@ -5,19 +5,13 @@ import { Reveal } from "./reveal";
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <Reveal className="project-reveal">
-      <a className="project-card" href={`/case-studies/${project.slug}`} data-cuelume-toggle="pulse">
+      <a
+        className="project-card"
+        href={`/case-studies/${project.slug}`}
+        aria-label={`Open ${project.title} case study`}
+        data-cuelume-toggle="pulse"
+      >
         <ProjectMockup theme={project.theme} />
-        <div className="project-info">
-          <div className="project-title-row">
-            <h3>{project.title}</h3>
-            <span className="project-number">{project.number}</span>
-          </div>
-          <p>{project.description}</p>
-          <div className="project-meta">
-            <span>{project.category}</span>
-            <span>{project.year} <b>↗</b></span>
-          </div>
-        </div>
       </a>
     </Reveal>
   );

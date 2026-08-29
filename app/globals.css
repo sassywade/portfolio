@@ -3008,6 +3008,24 @@ em {
 }
 
 .case-carousel--signal .case-carousel__viewport { background: #002fa7; color: #fff; }
+
+/* Work archive: image-only white tiles using the supplied product screenshots. */
+.pranathi-project-grid .project-mockup {
+  display: grid;
+  aspect-ratio: 1.25;
+  padding: 14px;
+  border: 1px solid rgba(36, 35, 33, 0.1);
+  border-radius: var(--compact-radius);
+  background: #fff;
+  place-items: center;
+}
+
+.project-work-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .case-carousel--field .case-carousel__viewport { background: #e8b99f; color: #693e33; }
 .case-carousel--archive .case-carousel__viewport { background: #9ec0cb; color: #263f46; }
 .case-carousel--ground .case-carousel__viewport { background: #cadbd0; color: #3f594c; }
