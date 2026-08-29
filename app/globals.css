@@ -3420,47 +3420,6 @@ em {
   transition-timing-function: var(--compact-ease);
 }
 
-.pranathi-intro,
-.simple-page {
-  position: relative;
-  isolation: isolate;
-}
-
-.pranathi-intro > *,
-.simple-page > * {
-  position: relative;
-  z-index: 1;
-}
-
-.pranathi-intro::before,
-.simple-page::before {
-  position: absolute;
-  top: clamp(135px, 22vh, 240px);
-  right: 7%;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(36, 35, 33, 0.15);
-  border-radius: 50%;
-  content: "";
-  pointer-events: none;
-  z-index: 0;
-}
-
-.pranathi-intro::after,
-.simple-page::after {
-  position: absolute;
-  top: clamp(124px, 20vh, 226px);
-  right: calc(7% + 4px);
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  background: var(--acid);
-  content: "";
-  animation: compact-float 5s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
 .pranathi-name,
 .pranathi-bio,
 .pranathi-links,
@@ -3489,24 +3448,6 @@ em {
 
 .pranathi-project-grid .project-mockup {
   border-radius: var(--compact-radius);
-}
-
-@media (max-width: 580px) {
-  .pranathi-intro::before,
-  .simple-page::before {
-    top: 88px;
-    right: 9%;
-    width: 30px;
-    height: 30px;
-  }
-
-  .pranathi-intro::after,
-  .simple-page::after {
-    top: 81px;
-    right: calc(9% + 3px);
-    width: 11px;
-    height: 11px;
-  }
 }
 
 /* Hand-drawn cursor states: neutral, puffing, strained, then fully blowing. */
