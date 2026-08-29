@@ -52,7 +52,7 @@ a {
   background-image:
     linear-gradient(rgba(36, 35, 33, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(36, 35, 33, 0.035) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background-size: 40px 40px;
 }
 
 @keyframes editorial-enter {
