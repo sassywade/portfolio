@@ -1,3 +1,5 @@
+import { Soundscape } from "./soundscape";
+
 const projects = [
   {
     number: "01",
@@ -145,15 +147,16 @@ function ProjectMockup({ theme }: { theme: (typeof projects)[number]["theme"] })
 export default function Home() {
   return (
     <main className="site-shell">
+      <Soundscape />
       <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Neel Saswade home">
+        <a className="wordmark" href="#top" aria-label="Neel Saswade home" data-cuelume-toggle="pulse">
           <span className="wordmark-mark">NS</span>
           <span>Neel Saswade</span>
         </a>
         <nav className="site-nav" aria-label="Main navigation">
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="#work" data-cuelume-toggle="pulse">Work</a>
+          <a href="#about" data-cuelume-toggle="pulse">About</a>
+          <a href="#contact" data-cuelume-toggle="pulse">Contact</a>
         </nav>
         <span className="header-status"><i /> Open to select projects</span>
       </header>
@@ -193,7 +196,7 @@ export default function Home() {
 
         <div className="project-grid">
           {projects.map((project) => (
-            <a className="project-card" href="#contact" key={project.number}>
+            <a className="project-card" href="#contact" key={project.number} data-cuelume-toggle="pulse">
               <ProjectMockup theme={project.theme} />
               <div className="project-info">
                 <div className="project-title-row">
@@ -227,17 +230,17 @@ export default function Home() {
           <span className="eyebrow">Have a project in mind?</span>
           <span className="footer-year">© 2025</span>
         </div>
-        <a className="footer-cta" href="mailto:hello@yourname.com">
+        <a className="footer-cta" href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">
           Let&apos;s make<br /><em>something good.</em> <span>↗</span>
         </a>
         <div className="footer-bottomline">
           <span>San Francisco, CA</span>
           <div className="footer-links">
-            <a href="mailto:hello@yourname.com">Email ↗</a>
-            <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-            <a href="https://www.instagram.com" target="_blank" rel="noreferrer">Instagram ↗</a>
+            <a href="mailto:hello@yourname.com" data-cuelume-toggle="pulse">Email ↗</a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">LinkedIn ↗</a>
+            <a href="https://www.instagram.com" target="_blank" rel="noreferrer" data-cuelume-toggle="pulse">Instagram ↗</a>
           </div>
-          <span>Back to top <a href="#top">↑</a></span>
+          <span>Back to top <a href="#top" data-cuelume-toggle="pulse">↑</a></span>
         </div>
       </footer>
     </main>
