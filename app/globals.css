@@ -6484,6 +6484,57 @@ html[data-environment-style="ascii-terminal"] .smiley-cursor__asset {
   filter: invert(1) sepia(0.15);
 }
 
+/* The studio card grid is an explicit background override for every art direction. */
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] {
+  --paper: #ffffff;
+  --ink: #65625f;
+  --muted: #7d7a73;
+  --line: rgba(36, 35, 33, 0.15);
+  --acid: #002fa7;
+}
+
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] body {
+  background: #ffffff;
+}
+
+.site-shell[data-atmosphere="grid"][data-environment-style] {
+  --ink: #65625f;
+  --muted: #7d7a73;
+  --line: rgba(36, 35, 33, 0.15);
+  --acid: #002fa7;
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(36, 35, 33, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36, 35, 33, 0.035) 1px, transparent 1px);
+  background-position: 0 0;
+  background-size: 40px 40px;
+  color: var(--ink);
+}
+
+.site-shell[data-atmosphere="grid"] .hero-meadow__style-atmosphere {
+  opacity: 0;
+}
+
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .top-pet-pull {
+  background: #ffffff;
+}
+
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .top-pet-pull__frame,
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .smiley-cursor__asset {
+  filter: none;
+}
+
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-settings__gear,
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-settings__panel,
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-settings__atmospheres button,
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-settings__texture-options button,
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-settings__style-select-wrap,
+html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-settings__style-select-wrap select {
+  border-color: rgba(36, 35, 33, 0.15);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--ink);
+}
+
 .meadow-settings__style-picker {
   display: grid;
   gap: 6px;

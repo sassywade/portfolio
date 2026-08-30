@@ -1,5 +1,5 @@
 export const PORTFOLIO_ATMOSPHERES = [
-  { id: "grid", label: "Studio grid" },
+  { id: "grid", label: "Studio card grid" },
   { id: "day", label: "Clear day" },
   { id: "sunny", label: "Sunny" },
   { id: "foggy", label: "Foggy" },

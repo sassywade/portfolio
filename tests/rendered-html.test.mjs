@@ -109,6 +109,10 @@ test("offers lightweight San Francisco atmosphere backgrounds in the prototype p
   assert.match(prototype, /PORTFOLIO_ATMOSPHERES\.map/);
   assert.match(prototype, /aria-label="Portfolio background atmosphere"/);
   assert.match(prototype, /onAtmosphereChange\(id\)/);
+  assert.match(atmospheres, /id: "grid", label: "Studio card grid"/);
+  assert.match(prototype, /Studio card grid overrides the selected environment background/);
+  assert.match(css, /\.site-shell\[data-atmosphere="grid"\]\[data-environment-style\]\s*\{[\s\S]*?background-color:\s*#ffffff;[\s\S]*?background-size:\s*40px 40px;/);
+  assert.match(css, /\.site-shell\[data-atmosphere="grid"\] \.hero-meadow__style-atmosphere\s*\{[^}]*opacity:\s*0;/);
   assert.match(css, /\.site-shell\[data-atmosphere="night"\]\s*\{[^}]*--ink:\s*#f5f2e9/);
   assert.match(css, /html\[data-atmosphere="night"\] \.smiley-cursor__asset/);
   assert.doesNotMatch(css, /@keyframes[^}]*rain/i);
@@ -178,6 +182,7 @@ test("scopes the dark ASCII terminal theme and restores the normal tokens outsid
   assert.match(css, /html\[data-environment-style="ascii-terminal"\] \.meadow-settings__panel/);
   assert.match(css, /html\[data-environment-style="ascii-terminal"\] \.philip-toggle__switch/);
   assert.match(css, /html\[data-environment-style="ascii-terminal"\] \.alamo-weather/);
+  assert.match(css, /html\[data-atmosphere="grid"\]\[data-environment-style="ascii-terminal"\]\s*\{[\s\S]*?--paper:\s*#ffffff;[\s\S]*?--ink:\s*#65625f;/);
   assert.doesNotMatch(css, /:root\s*\{[^}]*--paper:\s*#0d100f/);
 });
 

@@ -183,6 +183,9 @@ export function MeadowSettings({
                 </button>
               ))}
             </div>
+            <p className="meadow-settings__note">
+              Studio card grid overrides the selected environment background while keeping its meadow and tree.
+            </p>
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-work-grid`}>
