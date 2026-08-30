@@ -3972,6 +3972,7 @@ em {
   --meadow-height-scale: 1;
   --living-meadow-scale-y: 0.84;
   --meadow-height-offset: 0px;
+  --cypress-viewport-lift: clamp(0px, calc(20vw - 288px), 132px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
   --cyclist-character-size: clamp(66px, 5.6vw, 80px);
   --backpacker-character-width: clamp(70px, 6vw, 85px);
@@ -4784,7 +4785,11 @@ em {
 }
 
 .hero-meadow[data-meadow-variant="living"] > .cypress-tree {
-  bottom: calc(clamp(68px, 7.35vw, 110px) + var(--meadow-height-offset));
+  bottom: calc(
+    clamp(68px, 7.35vw, 110px)
+    + var(--meadow-height-offset)
+    + var(--cypress-viewport-lift)
+  );
 }
 
 .hero-meadow > .cypress-tree .cypress-tree__ground-shadow {

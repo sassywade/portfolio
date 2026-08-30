@@ -365,6 +365,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow__visual--flat\s*\{/);
   assert.match(css, /--flat-meadow-color:\s*#6f8d45/);
   assert.match(css, /--flat-meadow-height:\s*clamp\(86px, 11svh, 122px\)/);
+  assert.match(css, /--cypress-viewport-lift:\s*clamp\(0px, calc\(20vw - 288px\), 132px\)/);
   assert.match(css, /transform:\s*translateX\(-50%\) scaleY\(var\(--living-meadow-scale-y\)\)/);
   assert.match(css, /transform:\s*scaleY\(var\(--meadow-height-scale\)\)/);
   assert.match(css, /\.meadow-settings__height input\s*\{/);
@@ -377,7 +378,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
   assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*11px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
-  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\(clamp\(68px, 7\.35vw, 110px\) \+ var\(--meadow-height-offset\)\)/);
+  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\([\s\S]*?clamp\(68px, 7\.35vw, 110px\)[\s\S]*?var\(--meadow-height-offset\)[\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?\);/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*z-index:\s*3;[^}]*radial-gradient\(/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*mix-blend-mode:\s*multiply/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);
