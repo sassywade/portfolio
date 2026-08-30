@@ -105,7 +105,6 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
 
   return (
     <div className="cypress-tree" data-cypress-tree data-tree-asset={assetUrl}>
-      <div className="cypress-tree__ground-shadow" aria-hidden="true" />
       <div className="cypress-tree__stage">
         <canvas
           ref={canvasRef}

@@ -4189,6 +4189,7 @@ em {
   --living-meadow-scale-y: 0.84;
   --meadow-height-offset: 0px;
   --cypress-viewport-lift: clamp(0px, calc(20vw - 288px), 132px);
+  --cypress-root-overlap: clamp(16px, 1.4vw, 24px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
   --cyclist-character-size: clamp(66px, 5.6vw, 80px);
   --backpacker-character-width: clamp(70px, 6vw, 85px);
@@ -5006,34 +5007,8 @@ em {
     + var(--meadow-height-offset)
     + var(--cypress-viewport-lift)
     - 10px
+    - var(--cypress-root-overlap)
   );
-}
-
-.hero-meadow > .cypress-tree .cypress-tree__ground-shadow {
-  position: absolute;
-  z-index: 3;
-  right: 48%;
-  bottom: 6.2%;
-  width: 132%;
-  height: 10.5%;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at 92% 50%,
-    rgba(34, 43, 24, 0.3) 0%,
-    rgba(34, 43, 24, 0.2) 13%,
-    rgba(34, 43, 24, 0.09) 38%,
-    transparent 72%
-  );
-  filter: blur(4px);
-  mix-blend-mode: multiply;
-  opacity: 0.72;
-  pointer-events: none;
-  transform: rotate(2.5deg) skewX(-13deg);
-  transform-origin: 92% 50%;
-}
-
-.hero-meadow[data-meadow-variant="flat"] > .cypress-tree .cypress-tree__ground-shadow {
-  opacity: 0.52;
 }
 
 .hero-meadow > .cypress-tree .cypress-tree__stage {
@@ -6322,11 +6297,6 @@ html[data-hero-highlights="true"] .pranathi-bio .hero-inline-action:focus-visibl
 .hero-meadow[data-environment-style="voxel"] .meadow__curated-flat-image,
 .hero-meadow[data-environment-style="voxel"] .cypress-tree__canvas {
   image-rendering: pixelated;
-}
-
-.hero-meadow[data-environment-style="whiteboard"] > .cypress-tree .cypress-tree__ground-shadow,
-.hero-meadow[data-environment-style="ascii-terminal"] > .cypress-tree .cypress-tree__ground-shadow {
-  opacity: 0.22;
 }
 
 .site-shell[data-environment-style="risograph"] {

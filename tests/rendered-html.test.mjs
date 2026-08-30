@@ -375,7 +375,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD/);
   assert.match(tree, /sessionStorage\.getItem\(WELCOME_BREEZE_SESSION_KEY\)/);
   assert.match(tree, /direction: currentWind\.direction < 0 \? -1 : 1/);
-  assert.match(tree, /className="cypress-tree__ground-shadow" aria-hidden="true"/);
+  assert.doesNotMatch(tree, /cypress-tree__ground-shadow/);
   assert.doesNotMatch(tree, /cypress-tree__controls|useState/);
   assert.doesNotMatch(tree, /cypress-tree__root-transition/);
   assert.doesNotMatch(tree, /cypress-tree__root-bank/);
@@ -507,10 +507,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
   assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*11px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
-  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\([\s\S]*?clamp\(68px, 7\.35vw, 110px\)[\s\S]*?var\(--meadow-height-offset\)[\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?\);/);
+  assert.match(css, /--cypress-root-overlap:\s*clamp\(16px, 1\.4vw, 24px\)/);
+  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\([\s\S]*?clamp\(68px, 7\.35vw, 110px\)[\s\S]*?var\(--meadow-height-offset\)[\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?- var\(--cypress-root-overlap\)[\s\S]*?\);/);
   assert.match(css, /var\(--cypress-viewport-lift\)\s*-\s*10px/);
-  assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*z-index:\s*3;[^}]*radial-gradient\(/);
-  assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*mix-blend-mode:\s*multiply/);
+  assert.doesNotMatch(css, /\.cypress-tree__ground-shadow\s*\{/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);
   assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*z-index:\s*2;/);
   assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*clip-path:\s*polygon\(/);
