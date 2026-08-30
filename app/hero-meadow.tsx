@@ -4,7 +4,7 @@ import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { AlamoWeather } from "./alamo-weather";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type MeadowVariant } from "./meadow";
-import { MeadowPrototypeControls } from "./meadow-prototype-controls";
+import { MeadowSettings } from "./meadow-prototype-controls";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
@@ -142,17 +142,20 @@ export function HeroMeadow() {
       <CypressTree
         wind={wind}
         isPlaying={sceneIsPlaying}
-        onWindChange={updateWind}
-        onPlayingChange={setIsPlaying}
       />
-      <MeadowPrototypeControls
+      <MeadowSettings
         variant={meadowVariant}
         flatColor={flatMeadowColor}
+        wind={wind}
+        isPlaying={isPlaying}
+        isVisible={isSceneVisible}
         onVariantChange={setMeadowVariant}
         onFlatColorChange={(color) => {
           setFlatMeadowColor(color);
           setMeadowVariant("flat");
         }}
+        onWindChange={updateWind}
+        onPlayingChange={setIsPlaying}
       />
       <AlamoWeather onWindUpdate={setWind} />
     </div>

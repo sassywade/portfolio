@@ -5151,3 +5151,247 @@ em {
     font-size: 9px;
   }
 }
+
+/* One quiet gear now contains both meadow and wind prototype controls. */
+.meadow-settings {
+  position: fixed;
+  z-index: 80;
+  top: clamp(24px, 3.5vw, 42px);
+  right: clamp(20px, 3.5vw, 52px);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.075em;
+  pointer-events: auto;
+  text-transform: uppercase;
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.meadow-settings[data-scene-visible="false"] {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.meadow-settings button,
+.meadow-settings input {
+  font: inherit;
+}
+
+.meadow-settings__gear {
+  appearance: none;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  place-items: center;
+  border: 1px solid rgba(36, 35, 33, 0.16);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 22px rgba(36, 35, 33, 0.08);
+  color: #66635d;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  font-family: system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1;
+  transition: border-color 180ms ease, color 180ms ease, transform 220ms cubic-bezier(.22,.7,.2,1);
+}
+
+.meadow-settings__gear:hover,
+.meadow-settings__gear:focus-visible,
+.meadow-settings__gear[aria-expanded="true"] {
+  border-color: var(--acid);
+  color: var(--acid);
+  transform: rotate(18deg);
+}
+
+.meadow-settings__panel {
+  width: min(292px, calc(100vw - 32px));
+  max-height: calc(100svh - 92px);
+  margin-top: 10px;
+  overflow: auto;
+  border: 1px solid rgba(36, 35, 33, 0.16);
+  padding: 13px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 42px rgba(36, 35, 33, 0.13);
+  backdrop-filter: blur(16px);
+  animation: meadow-settings-enter 220ms cubic-bezier(.22,.7,.2,1) both;
+}
+
+@keyframes meadow-settings-enter {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.meadow-settings__head,
+.meadow-settings__section-head,
+.meadow-settings__color,
+.meadow-settings__color-control,
+.meadow-settings__wind-field > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.meadow-settings__head > div,
+.meadow-settings__section-head > div {
+  display: grid;
+  gap: 2px;
+}
+
+.meadow-settings__head > div > span {
+  color: var(--acid);
+}
+
+.meadow-settings small {
+  color: #908c84;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+}
+
+.meadow-settings__close,
+.meadow-settings__motion-toggle {
+  appearance: none;
+  border: 0;
+  padding: 3px 0;
+  background: transparent;
+  color: #77736b;
+  cursor: pointer;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.meadow-settings__close:hover,
+.meadow-settings__close:focus-visible,
+.meadow-settings__motion-toggle:hover,
+.meadow-settings__motion-toggle:focus-visible {
+  color: var(--acid);
+}
+
+.meadow-settings__section {
+  display: grid;
+  gap: 10px;
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(36, 35, 33, 0.12);
+}
+
+.meadow-settings__section h2 {
+  margin: 0;
+  color: #77736b;
+  font: inherit;
+}
+
+.meadow-settings__modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-settings__modes button {
+  appearance: none;
+  border: 0;
+  padding: 7px 8px;
+  background: transparent;
+  color: #77736b;
+  cursor: pointer;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.meadow-settings__modes button + button {
+  border-left: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-settings__modes button[aria-pressed="true"] {
+  background: var(--acid);
+  color: white;
+}
+
+.meadow-settings__color {
+  color: #77736b;
+}
+
+.meadow-settings__color-control output {
+  min-width: 54px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.meadow-settings__color input {
+  appearance: none;
+  width: 28px;
+  height: 21px;
+  border: 1px solid rgba(36, 35, 33, 0.2);
+  padding: 2px;
+  background: white;
+  cursor: pointer;
+}
+
+.meadow-settings__color input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.meadow-settings__color input::-webkit-color-swatch {
+  border: 0;
+}
+
+.meadow-settings__wind-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.meadow-settings__wind-field {
+  display: block;
+  color: #77736b;
+}
+
+.meadow-settings__wind-field output {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.meadow-settings__wind-field input {
+  display: block;
+  width: 100%;
+  height: 13px;
+  margin: 4px 0 0;
+  accent-color: var(--acid);
+  cursor: pointer;
+}
+
+.meadow-settings__modes button:focus-visible,
+.meadow-settings__color input:focus-visible,
+.meadow-settings__wind-field input:focus-visible {
+  outline: 1px solid var(--acid);
+  outline-offset: 2px;
+}
+
+@media (max-width: 580px) {
+  .meadow-settings {
+    top: 16px;
+    right: 16px;
+  }
+
+  .meadow-settings__gear {
+    width: 33px;
+    height: 33px;
+    font-size: 15px;
+  }
+
+  .meadow-settings__panel {
+    max-height: calc(100svh - 66px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meadow-settings__gear,
+  .meadow-settings__panel {
+    animation: none;
+    transition: none;
+  }
+}
