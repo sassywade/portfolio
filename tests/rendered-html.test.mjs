@@ -112,9 +112,8 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(hero, /<MeadowPrototypeControls/);
   assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
   assert.match(tree, /onPlayingChange\(!isPlaying\)/);
-  assert.match(tree, /cypress-tree__root-transition/);
-  assert.match(tree, /cypress-tree__root-shadow/);
-  assert.match(tree, /cypress-tree__root-bank/);
+  assert.doesNotMatch(tree, /cypress-tree__root-transition/);
+  assert.doesNotMatch(tree, /cypress-tree__root-bank/);
   assert.match(layerHost, /document\.querySelector<HTMLElement>\("\.hero-meadow"\)/);
   assert.match(layerHost, /window\.requestAnimationFrame/);
   assert.match(bike, /const FRAME_URLS = \[/);
@@ -168,9 +167,9 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\)/);
   assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
   assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
-  assert.match(css, /\.cypress-tree__root-transition\s*\{/);
+  assert.doesNotMatch(css, /\.cypress-tree__root-transition\s*\{/);
   assert.match(css, /width:\s*clamp\(260px, 24vw, 350px\)/);
-  assert.match(css, /@keyframes cypress-root-grass-sway/);
+  assert.doesNotMatch(css, /@keyframes cypress-root-grass-sway/);
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);

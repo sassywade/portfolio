@@ -63,21 +63,6 @@ export function CypressTree({ wind, isPlaying, onWindChange, onPlayingChange }: 
           className="cypress-tree__canvas"
           aria-label="Interactive Monterey cypress responding to wind"
         />
-        <div className="cypress-tree__root-transition" aria-hidden="true">
-          <span className="cypress-tree__root-shadow" />
-          <span className="cypress-tree__root-flare cypress-tree__root-flare--left" />
-          <span className="cypress-tree__root-flare cypress-tree__root-flare--right" />
-          <span className="cypress-tree__root-bank" />
-          <span className="cypress-tree__root-tuft cypress-tree__root-tuft--left">
-            <i /><i /><i /><i />
-          </span>
-          <span className="cypress-tree__root-tuft cypress-tree__root-tuft--center">
-            <i /><i /><i /><i />
-          </span>
-          <span className="cypress-tree__root-tuft cypress-tree__root-tuft--right">
-            <i /><i /><i /><i />
-          </span>
-        </div>
         <div
           className={`cypress-tree__controls${isExpanded ? "" : " is-collapsed"}`}
           aria-label="Meadow and cypress wind controls"
