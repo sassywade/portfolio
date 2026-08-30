@@ -3426,6 +3426,10 @@ em {
   opacity: 1;
 }
 
+.smiley-cursor.is-visible[data-hero-copy="near"] {
+  opacity: 0;
+}
+
 .smiley-cursor__direction {
   position: relative;
   width: 58px;
