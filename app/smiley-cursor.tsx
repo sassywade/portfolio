@@ -10,7 +10,7 @@ const IDLE_MISCHIEF_DELAY = 1500;
 const IDLE_APPROACH_DURATION = 950;
 const IDLE_CLOSE_DISTANCE = 46;
 const IDLE_HUFF_CYCLE = 1450;
-const IDLE_HUFF_STATES = ["light", "strong", "strained"] as const;
+const IDLE_HUFF_SEQUENCE = ["light", "light", "strong", "strong", "strong"] as const;
 const HAPPY_FLASH_DURATION = 560;
 
 const easeInOutCubic = (value: number) => (
@@ -107,7 +107,7 @@ export function SmileyCursor() {
         const huffElapsed = idleElapsed - IDLE_APPROACH_DURATION;
         const cycleIndex = Math.floor(huffElapsed / IDLE_HUFF_CYCLE);
         const cycleTime = huffElapsed % IDLE_HUFF_CYCLE;
-        const huffState = IDLE_HUFF_STATES[cycleIndex % IDLE_HUFF_STATES.length];
+        const huffState = IDLE_HUFF_SEQUENCE[cycleIndex] ?? "strained";
         const isPreparing = cycleTime < 240;
         const isBlowing = cycleTime >= 240 && cycleTime < 860;
         const isRecovering = cycleTime >= 860 && cycleTime < 1040;

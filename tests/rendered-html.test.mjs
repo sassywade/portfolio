@@ -90,7 +90,8 @@ test("keeps the living lawn, miniature cyclist, and cursor pet lightweight", asy
   assert.match(bike, /prefers-reduced-motion: reduce/);
   assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
   assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
-  assert.match(smiley, /const IDLE_HUFF_STATES = \["light", "strong", "strained"\]/);
+  assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
+  assert.match(smiley, /IDLE_HUFF_SEQUENCE\[cycleIndex\] \?\? "strained"/);
   assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
   assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
