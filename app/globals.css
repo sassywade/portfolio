@@ -5074,16 +5074,16 @@ em {
   display: flex;
   align-items: baseline;
   justify-content: flex-start;
-  gap: 46px;
+  gap: 32px;
   width: calc(100% - 128px);
   margin-inline: auto;
-  padding-top: 40px;
+  padding-top: 30px;
 }
 
 .site-header__wordmark,
 .site-header--pages .site-nav {
   font-family: var(--serif);
-  font-size: clamp(23px, 1.75vw, 28px);
+  font-size: clamp(17px, 1.3vw, 21px);
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: -0.035em;
@@ -5103,7 +5103,7 @@ em {
 }
 
 .site-header--pages .site-nav {
-  gap: 34px;
+  gap: 24px;
   color: #8f8f8f;
 }
 
@@ -5119,18 +5119,18 @@ em {
 
 @media (max-width: 680px) {
   .site-header--pages {
-    gap: 20px;
+    gap: 15px;
     width: calc(100% - 32px);
-    padding-top: 24px;
+    padding-top: 20px;
   }
 
   .site-header__wordmark,
   .site-header--pages .site-nav {
-    font-size: clamp(17px, 5vw, 20px);
+    font-size: clamp(15px, 4.2vw, 17px);
   }
 
   .site-header--pages .site-nav {
-    gap: 14px;
+    gap: 12px;
   }
 }
 

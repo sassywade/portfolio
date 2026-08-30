@@ -242,6 +242,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /width:\s*248px/);
   assert.doesNotMatch(css, /@keyframes cypress-root-grass-sway/);
   assert.match(css, /--portfolio-reading-width:\s*740px/);
+  assert.match(css, /\.site-header__wordmark,[\s\S]*?\.site-header--pages \.site-nav\s*\{[^}]*font-size:\s*clamp\(17px, 1\.3vw, 21px\)/);
+  assert.match(css, /\.site-header--pages\s*\{[^}]*gap:\s*32px;[^}]*padding-top:\s*30px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
