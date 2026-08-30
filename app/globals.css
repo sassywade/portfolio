@@ -3712,6 +3712,7 @@ em {
 
 /* Use the supplied drawings as the four cursor-pet frames. */
 .smiley-cursor {
+  --smiley-facing: 1;
   width: 88px;
   height: 50px;
 }
@@ -3719,8 +3720,9 @@ em {
 .smiley-cursor__direction {
   width: 88px;
   height: 50px;
-  transform: none;
+  transform: scaleX(var(--smiley-facing));
   transform-origin: 15px 21px;
+  transition: none;
 }
 
 .smiley-cursor__asset {
@@ -3795,7 +3797,7 @@ em {
   }
 }
 
-/* The pet keeps one fixed facing; only the breath state changes. */
+/* The full drawing flips after a delayed direction decision, preserving its width. */
 .smiley-cursor[data-state="idle"] .smiley-cursor__asset--idle {
   opacity: 1;
 }

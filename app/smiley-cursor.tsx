@@ -12,6 +12,10 @@ const IDLE_CLOSE_DISTANCE = 46;
 const IDLE_HUFF_CYCLE = 1450;
 const IDLE_HUFF_SEQUENCE = ["light", "light", "strong", "strong", "strong"] as const;
 const HAPPY_FLASH_DURATION = 560;
+const PET_FACE_ANCHOR_X = 15;
+const FACING_INTENT_THRESHOLD = 32;
+const FACING_CHANGE_DELAY = 240;
+const FACING_INTENT_MEMORY = 180;
 
 const easeInOutCubic = (value: number) => (
   value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
@@ -55,6 +59,14 @@ export function SmileyCursor() {
     let idleTimer: number | null = null;
     let idleStartedAt: number | null = null;
     let happyUntil = 0;
+    let facing: -1 | 1 = 1;
+    let facingIntent = 0;
+    let pendingFacing: -1 | 1 = 1;
+    let lastFacingInputTime = performance.now();
+    let facingTimer: number | null = null;
+
+    cursor.dataset.facing = "right";
+    cursor.style.setProperty("--smiley-facing", "1");
 
     const clearIdleTimer = () => {
       if (idleTimer !== null) {
@@ -74,6 +86,42 @@ export function SmileyCursor() {
     const stopHappyReaction = () => {
       happyUntil = 0;
       cursor.dataset.reaction = "off";
+    };
+
+    const clearFacingTimer = () => {
+      if (facingTimer !== null) {
+        window.clearTimeout(facingTimer);
+        facingTimer = null;
+      }
+    };
+
+    const queueFacingChange = (nextFacing: -1 | 1) => {
+      if (nextFacing === facing) {
+        clearFacingTimer();
+        pendingFacing = facing;
+        return;
+      }
+
+      if (pendingFacing === nextFacing && facingTimer !== null) return;
+
+      clearFacingTimer();
+      pendingFacing = nextFacing;
+      facingTimer = window.setTimeout(() => {
+        facingTimer = null;
+        if (pendingFacing !== nextFacing || isPastWork) return;
+
+        const intentStillMatches = nextFacing === 1
+          ? facingIntent > FACING_INTENT_THRESHOLD
+          : facingIntent < -FACING_INTENT_THRESHOLD;
+        if (!intentStillMatches) return;
+
+        facing = nextFacing;
+        facingIntent = 0;
+        pendingFacing = facing;
+        cursor.dataset.facing = facing === 1 ? "right" : "left";
+        cursor.style.setProperty("--smiley-facing", String(facing));
+        scheduleFrame();
+      }, FACING_CHANGE_DELAY);
     };
 
     const updatePetState = (timestamp: number) => {
@@ -178,7 +226,7 @@ export function SmileyCursor() {
       pointerY += (inputY - pointerY) * 0.14;
 
       currentFollowDistance += (nextFollowDistance - currentFollowDistance) * 0.06;
-      targetX = pointerX - 15 - currentFollowDistance + idleOffsetX;
+      targetX = pointerX - PET_FACE_ANCHOR_X - currentFollowDistance * facing + idleOffsetX;
       targetY = pointerY - 21 + idleOffsetY;
 
       currentX += (targetX - currentX) * positionEase;
@@ -285,7 +333,7 @@ export function SmileyCursor() {
         windStartedAt = null;
         cursor.dataset.state = "idle";
         cursor.dataset.wind = "off";
-        targetX = currentX = event.clientX - 15 - 82;
+        targetX = currentX = event.clientX - PET_FACE_ANCHOR_X - 82;
         targetY = currentY = event.clientY - 21;
         hasPointerPosition = true;
         cursor.classList.add("is-visible");
@@ -299,6 +347,17 @@ export function SmileyCursor() {
       const distance = Math.hypot(deltaX, deltaY);
 
       motionLevel = Math.max(motionLevel, Math.min(1, Math.max(0, (distance - 6) / 27)));
+      if (timestamp - lastFacingInputTime > FACING_INTENT_MEMORY) {
+        facingIntent = 0;
+      }
+      facingIntent = clamp(facingIntent + deltaX, -140, 140);
+      lastFacingInputTime = timestamp;
+      const nextFacing: -1 | 1 = facingIntent > FACING_INTENT_THRESHOLD
+        ? 1
+        : facingIntent < -FACING_INTENT_THRESHOLD
+          ? -1
+          : facing;
+      queueFacingChange(nextFacing);
       inputX = event.clientX;
       inputY = event.clientY;
       targetFollowDistance = 82 + Math.min(24, distance * 0.18);
@@ -312,6 +371,7 @@ export function SmileyCursor() {
     };
 
     const handlePointerLeave = () => {
+      clearFacingTimer();
       stopIdleMischief();
       stopHappyReaction();
       cursor.classList.remove("is-visible");
@@ -333,6 +393,7 @@ export function SmileyCursor() {
       window.removeEventListener("pointerout", handlePointerOut);
       window.removeEventListener("scroll", handleScroll);
       root.classList.remove("has-cursor-pet");
+      clearFacingTimer();
       clearIdleTimer();
       stopHappyReaction();
       if (frame !== null) {
@@ -342,7 +403,7 @@ export function SmileyCursor() {
   }, [pathname]);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" aria-hidden="true">
       <div className="smiley-cursor__direction">
         <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--smile" src="/pet/pet-smile.png" alt="" />

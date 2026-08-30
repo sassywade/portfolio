@@ -156,6 +156,14 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
   assert.match(smiley, /IDLE_HUFF_SEQUENCE\[cycleIndex\] \?\? "strained"/);
   assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
+  assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
+  assert.match(smiley, /const FACING_CHANGE_DELAY = 240/);
+  assert.match(smiley, /const FACING_INTENT_MEMORY = 180/);
+  assert.match(smiley, /facingIntent = clamp\(facingIntent \+ deltaX, -140, 140\)/);
+  assert.match(smiley, /queueFacingChange\(nextFacing\)/);
+  assert.match(smiley, /window\.setTimeout\(\(\) => \{/);
+  assert.match(smiley, /cursor\.dataset\.facing = facing === 1 \? "right" : "left"/);
+  assert.match(smiley, /currentFollowDistance \* facing/);
   assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
   assert.match(smiley, /cursor\.dataset\.reaction = "smile"/);
@@ -188,5 +196,7 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /@keyframes miniature-photographer-materialize/);
   assert.match(css, /@keyframes miniature-hiker-materialize/);
   assert.match(css, /@keyframes smiley-happy-glimpse/);
+  assert.match(css, /--smiley-facing:\s*1/);
+  assert.match(css, /transform:\s*scaleX\(var\(--smiley-facing\)\)/);
   assert.match(css, /pointer-events:\s*none/);
 });
