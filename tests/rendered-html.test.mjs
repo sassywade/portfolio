@@ -42,12 +42,13 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
-test("keeps the living lawn lightweight and synchronized with the cypress", async () => {
-  const [renderer, meadow, hero, tree, css] = await Promise.all([
+test("keeps the living lawn and cursor pet lightweight", async () => {
+  const [renderer, meadow, hero, tree, smiley, css] = await Promise.all([
     readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
@@ -67,6 +68,12 @@ test("keeps the living lawn lightweight and synchronized with the cypress", asyn
   assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{isPlaying\}/);
   assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
   assert.match(tree, /onPlayingChange\(!isPlaying\)/);
+  assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
+  assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
+  assert.match(smiley, /const IDLE_HUFF_STATES = \["light", "strong", "strained"\]/);
+  assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
+  assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
+  assert.match(smiley, /stopIdleMischief\(\)/);
   assert.match(css, /\.meadow__grass-canvas\s*\{/);
   assert.match(css, /pointer-events:\s*none/);
 });
