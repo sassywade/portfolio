@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 
+import type { AlamoStyleDefinition } from "./alamo-styles";
+
 type MeadowProps = {
   isPlaying: boolean;
   variant: MeadowVariant;
   flatTexture: FlatMeadowTexture;
   rollingMeadow: RollingMeadow;
+  environmentStyle: AlamoStyleDefinition;
 };
 
 export type MeadowVariant = "living" | "flat";
@@ -23,8 +26,15 @@ export const FLAT_MEADOW_TEXTURES = [
 ] as const;
 export type FlatMeadowTexture = (typeof FLAT_MEADOW_TEXTURES)[number]["id"];
 
-export function Meadow({ isPlaying, variant, flatTexture, rollingMeadow }: MeadowProps) {
+export function Meadow({
+  isPlaying,
+  variant,
+  flatTexture,
+  rollingMeadow,
+  environmentStyle,
+}: MeadowProps) {
   const texture = FLAT_MEADOW_TEXTURES.find(({ id }) => id === flatTexture) ?? FLAT_MEADOW_TEXTURES[0];
+  const isControlStyle = environmentStyle.id === "control";
 
   return (
     <div className="meadow" data-meadow data-meadow-variant={variant}>
@@ -34,18 +44,30 @@ export function Meadow({ isPlaying, variant, flatTexture, rollingMeadow }: Meado
         data-meadow-active={variant === "living" ? "true" : "false"}
         data-meadow-surface={variant === "living" ? "active" : "inactive"}
         data-rolling-meadow={rollingMeadow}
+        data-style-mode={isControlStyle ? "control" : "curated"}
       >
-        {ROLLING_MEADOWS.map(({ id, src }) => (
-          <img
-            className="meadow__image"
-            src={src}
-            alt=""
-            aria-hidden="true"
-            data-meadow-image-active={rollingMeadow === id ? "true" : "false"}
-            decoding="async"
-            key={id}
-          />
-        ))}
+        {isControlStyle
+          ? ROLLING_MEADOWS.map(({ id, src }) => (
+              <img
+                className="meadow__image"
+                src={src}
+                alt=""
+                aria-hidden="true"
+                data-meadow-image-active={rollingMeadow === id ? "true" : "false"}
+                decoding="async"
+                key={id}
+              />
+            ))
+          : environmentStyle.rollingSrc && (
+              <img
+                className="meadow__image meadow__image--curated"
+                src={environmentStyle.rollingSrc}
+                alt=""
+                aria-hidden="true"
+                data-meadow-image-active="true"
+                decoding="async"
+              />
+            )}
       </div>
       <div
         className="meadow__visual meadow__visual--flat"
@@ -54,12 +76,24 @@ export function Meadow({ isPlaying, variant, flatTexture, rollingMeadow }: Meado
         data-meadow-surface={variant === "flat" ? "active" : "inactive"}
         data-playing={isPlaying && variant === "flat" ? "true" : "false"}
         data-flat-texture={flatTexture}
+        data-style-mode={isControlStyle ? "control" : "curated"}
         aria-hidden="true"
       >
-        <div className="meadow__flat-field">
-          <img className="meadow__flat-image" src={texture.src} alt="" />
-          <span className="meadow__flat-tint" />
-        </div>
+        {isControlStyle
+          ? (
+              <div className="meadow__flat-field">
+                <img className="meadow__flat-image" src={texture.src} alt="" />
+                <span className="meadow__flat-tint" />
+              </div>
+            )
+          : environmentStyle.flatSrc && (
+              <img
+                className="meadow__curated-flat-image"
+                src={environmentStyle.flatSrc}
+                alt=""
+                decoding="async"
+              />
+            )}
       </div>
     </div>
   );

@@ -14,14 +14,19 @@ const WELCOME_BREEZE_DURATION = 1450;
 type CypressTreeProps = {
   wind: WindSettings;
   isPlaying: boolean;
+  assetUrl: string;
 };
 
-export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
+export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const treeRef = useRef<ReturnType<typeof createCypressTree> | null>(null);
-  const initialSettings = useRef({ wind, isPlaying });
   const latestWind = useRef(wind);
   const latestPlaying = useRef(isPlaying);
+
+  useEffect(() => {
+    latestWind.current = wind;
+    latestPlaying.current = isPlaying;
+  }, [wind, isPlaying]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,9 +35,9 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const tree = createCypressTree({
       canvas,
-      assetUrl: "/monterey-cypress.png",
-      wind: initialSettings.current.wind,
-      autoplay: initialSettings.current.isPlaying && !prefersReducedMotion,
+      assetUrl,
+      wind: latestWind.current,
+      autoplay: latestPlaying.current && !prefersReducedMotion,
     });
     treeRef.current = tree;
 
@@ -40,7 +45,7 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
       tree.destroy();
       treeRef.current = null;
     };
-  }, []);
+  }, [assetUrl]);
 
   useEffect(() => {
     latestWind.current = wind;
@@ -99,7 +104,7 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
   }, []);
 
   return (
-    <div className="cypress-tree" data-cypress-tree>
+    <div className="cypress-tree" data-cypress-tree data-tree-asset={assetUrl}>
       <div className="cypress-tree__ground-shadow" aria-hidden="true" />
       <div className="cypress-tree__stage">
         <canvas

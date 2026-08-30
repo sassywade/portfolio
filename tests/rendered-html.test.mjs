@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
@@ -112,6 +112,73 @@ test("offers lightweight San Francisco atmosphere backgrounds in the prototype p
   assert.match(css, /\.site-shell\[data-atmosphere="night"\]\s*\{[^}]*--ink:\s*#f5f2e9/);
   assert.match(css, /html\[data-atmosphere="night"\] \.smiley-cursor__asset/);
   assert.doesNotMatch(css, /@keyframes[^}]*rain/i);
+});
+
+test("offers all fifteen Alamo art directions plus the unchanged control in rolling and flat shapes", async () => {
+  const [styles, hero, meadow, prototype, tree, css] = await Promise.all([
+    readFile(new URL("../app/alamo-styles.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  const styleIds = [
+    "risograph",
+    "painterly-realism",
+    "ascii-terminal",
+    "cut-paper",
+    "grainy-editorial",
+    "lavender-dream",
+    "airy-watercolor",
+    "blue-duotone",
+    "golden-hour",
+    "vivid-surreal",
+    "cinematic-glow",
+    "soft-daylight",
+    "voxel",
+    "whiteboard",
+    "handmade-clay",
+  ];
+
+  assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 16);
+  assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
+  for (const id of styleIds) {
+    assert.match(styles, new RegExp(`id: "${id}"`));
+    for (const asset of ["rolling", "flat", "tree"]) {
+      assert.match(styles, new RegExp(`/alamo-styles/${id}/${asset}\\.png`));
+      await access(new URL(`../public/alamo-styles/${id}/${asset}.png`, import.meta.url));
+    }
+  }
+
+  assert.match(hero, /useState<AlamoStyle>\(DEFAULT_ALAMO_STYLE\)/);
+  assert.match(hero, /shell\.dataset\.environmentStyle = environmentStyle/);
+  assert.match(hero, /data-environment-style=\{environmentStyle\}/);
+  assert.match(hero, /environmentStyle=\{environment\}/);
+  assert.match(hero, /assetUrl=\{environment\.treeSrc\}/);
+  assert.match(meadow, /data-style-mode=\{isControlStyle \? "control" : "curated"\}/);
+  assert.match(meadow, /environmentStyle\.rollingSrc/);
+  assert.match(meadow, /environmentStyle\.flatSrc/);
+  assert.match(prototype, /aria-label="Alamo Square visual style"/);
+  assert.match(prototype, /ALAMO_STYLES\.map/);
+  assert.match(prototype, /Style and meadow shape are independent/);
+  assert.match(tree, /assetUrl: string/);
+  assert.match(tree, /createCypressTree\(\{[\s\S]*assetUrl,/);
+  assert.match(tree, /\}, \[assetUrl\]\)/);
+  assert.match(css, /\.meadow__visual--flat\[data-style-mode="curated"\]/);
+  assert.match(css, /--flat-style-scale-y/);
+});
+
+test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(css, /:root\s*\{[\s\S]*?--paper:\s*#ffffff;/);
+  assert.match(css, /html\[data-environment-style="ascii-terminal"\]\s*\{[\s\S]*?--paper:\s*#0d100f;/);
+  assert.match(css, /\.site-shell\[data-environment-style="ascii-terminal"\]/);
+  assert.match(css, /html\[data-environment-style="ascii-terminal"\] \.meadow-settings__panel/);
+  assert.match(css, /html\[data-environment-style="ascii-terminal"\] \.philip-toggle__switch/);
+  assert.match(css, /html\[data-environment-style="ascii-terminal"\] \.alamo-weather/);
+  assert.doesNotMatch(css, /:root\s*\{[^}]*--paper:\s*#0d100f/);
 });
 
 test("lets visitors toggle Philip from the top-right control", async () => {

@@ -1,6 +1,11 @@
 "use client";
 
 import { type CSSProperties, useEffect, useRef, useState } from "react";
+import {
+  DEFAULT_ALAMO_STYLE,
+  getAlamoStyle,
+  type AlamoStyle,
+} from "./alamo-styles";
 import { AlamoWeather } from "./alamo-weather";
 import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
@@ -31,6 +36,8 @@ export function HeroMeadow() {
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
   const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(3);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
+  const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
+  const environment = getAlamoStyle(environmentStyle);
 
   useEffect(() => {
     document.documentElement.dataset.topPetMode = topPetMode;
@@ -50,6 +57,20 @@ export function HeroMeadow() {
       delete document.documentElement.dataset.atmosphere;
     };
   }, [atmosphere]);
+
+  useEffect(() => {
+    const scene = sceneRef.current;
+    const shell = scene?.closest<HTMLElement>(".site-shell");
+    if (!shell) return;
+
+    shell.dataset.environmentStyle = environmentStyle;
+    document.documentElement.dataset.environmentStyle = environmentStyle;
+
+    return () => {
+      delete shell.dataset.environmentStyle;
+      delete document.documentElement.dataset.environmentStyle;
+    };
+  }, [environmentStyle]);
 
   useEffect(() => {
     document.documentElement.dataset.workColumns = String(workGridColumns);
@@ -196,6 +217,7 @@ export function HeroMeadow() {
     "--flat-meadow-color": flatMeadowColor,
     "--meadow-height-scale": (meadowHeight / 100).toFixed(2),
     "--living-meadow-scale-y": (0.84 * meadowHeight / 100).toFixed(3),
+    "--flat-style-scale-y": (0.48 * meadowHeight / 100).toFixed(3),
     "--meadow-height-offset": `${((meadowHeight - 100) * 1.45).toFixed(1)}px`,
   } as CSSProperties;
 
@@ -206,19 +228,25 @@ export function HeroMeadow() {
       data-scene-visible={isSceneVisible ? "true" : "false"}
       data-scroll-state="hero"
       data-meadow-variant={meadowVariant}
+      data-environment-style={environmentStyle}
+      data-style-atmosphere={environment.atmosphere}
       style={sceneStyle}
     >
+      <div className="hero-meadow__style-atmosphere" aria-hidden="true" />
       <Meadow
         isPlaying={sceneIsPlaying}
         variant={meadowVariant}
         flatTexture={flatMeadowTexture}
         rollingMeadow={rollingMeadow}
+        environmentStyle={environment}
       />
       <CypressTree
         wind={wind}
         isPlaying={sceneIsPlaying}
+        assetUrl={environment.treeSrc}
       />
       <MeadowSettings
+        environmentStyle={environmentStyle}
         atmosphere={atmosphere}
         workGridColumns={workGridColumns}
         variant={meadowVariant}
@@ -231,6 +259,7 @@ export function HeroMeadow() {
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
         onAtmosphereChange={setAtmosphere}
+        onEnvironmentStyleChange={setEnvironmentStyle}
         onWorkGridColumnsChange={setWorkGridColumns}
         onVariantChange={setMeadowVariant}
         onRollingMeadowChange={(nextMeadow) => {

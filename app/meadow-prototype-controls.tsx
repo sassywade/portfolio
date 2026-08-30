@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { ALAMO_STYLES, type AlamoStyle } from "./alamo-styles";
 import {
   PORTFOLIO_ATMOSPHERES,
   type PortfolioAtmosphere,
@@ -25,6 +26,7 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 ];
 
 type MeadowSettingsProps = {
+  environmentStyle: AlamoStyle;
   atmosphere: PortfolioAtmosphere;
   workGridColumns: WorkGridColumns;
   variant: MeadowVariant;
@@ -36,6 +38,7 @@ type MeadowSettingsProps = {
   wind: WindSettings;
   isPlaying: boolean;
   isVisible: boolean;
+  onEnvironmentStyleChange: (style: AlamoStyle) => void;
   onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
   onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
   onVariantChange: (variant: MeadowVariant) => void;
@@ -49,6 +52,7 @@ type MeadowSettingsProps = {
 };
 
 export function MeadowSettings({
+  environmentStyle,
   atmosphere,
   workGridColumns,
   variant,
@@ -60,6 +64,7 @@ export function MeadowSettings({
   wind,
   isPlaying,
   isVisible,
+  onEnvironmentStyleChange,
   onAtmosphereChange,
   onWorkGridColumnsChange,
   onVariantChange,
@@ -77,6 +82,7 @@ export function MeadowSettings({
   const [isExpanded, setIsExpanded] = useState(false);
   const rollingMeadowIndex = Math.max(0, ROLLING_MEADOWS.findIndex(({ id }) => id === rollingMeadow));
   const rollingMeadowOption = ROLLING_MEADOWS[rollingMeadowIndex];
+  const selectedEnvironment = ALAMO_STYLES.find(({ id }) => id === environmentStyle) ?? ALAMO_STYLES[0];
 
   const cycleRollingMeadow = (offset: number) => {
     const nextIndex = (rollingMeadowIndex + offset + ROLLING_MEADOWS.length) % ROLLING_MEADOWS.length;
@@ -244,6 +250,33 @@ export function MeadowSettings({
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-meadow`}>
             <h2 id={`${panelId}-meadow`}>Meadow lab</h2>
+            <label className="meadow-settings__style-picker">
+              <span>Environment style</span>
+              <span className="meadow-settings__style-select-wrap">
+                <span
+                  className="meadow-settings__style-preview"
+                  style={{
+                    backgroundImage: selectedEnvironment.rollingSrc
+                      ? `url(${selectedEnvironment.rollingSrc})`
+                      : "url(/meadow-ground.png)",
+                  }}
+                  aria-hidden="true"
+                />
+                <select
+                  value={environmentStyle}
+                  aria-label="Alamo Square visual style"
+                  data-environment-style-select
+                  onChange={(event) => onEnvironmentStyleChange(event.target.value as AlamoStyle)}
+                >
+                  {ALAMO_STYLES.map(({ id, label }) => (
+                    <option value={id} key={id}>{label}</option>
+                  ))}
+                </select>
+              </span>
+            </label>
+            <p className="meadow-settings__note">
+              Style and meadow shape are independent. Control keeps the original prototype variants.
+            </p>
             <div className="meadow-settings__modes" aria-label="Meadow style">
               <button
                 type="button"
@@ -276,67 +309,76 @@ export function MeadowSettings({
               />
             </label>
 
-            <div className="meadow-settings__rolling">
-              <span>Rolling meadow</span>
-              <div className="meadow-settings__rolling-preview" aria-hidden="true">
-                <span style={{ backgroundImage: `url(${rollingMeadowOption.src})` }} />
-              </div>
-              <div className="meadow-settings__rolling-cycle">
-                <button
-                  type="button"
-                  aria-label="Previous rolling meadow"
-                  data-cuelume-toggle="rolling-meadow"
-                  onClick={() => cycleRollingMeadow(-1)}
-                >
-                  ←
-                </button>
-                <output aria-live="polite">{rollingMeadowOption.label}</output>
-                <button
-                  type="button"
-                  aria-label="Next rolling meadow"
-                  data-cuelume-toggle="rolling-meadow"
-                  onClick={() => cycleRollingMeadow(1)}
-                >
-                  →
-                </button>
-              </div>
-              <small>{rollingMeadowIndex + 1} / {ROLLING_MEADOWS.length}</small>
-            </div>
+            {environmentStyle === "control" ? (
+              <>
+                <div className="meadow-settings__rolling">
+                  <span>Rolling meadow</span>
+                  <div className="meadow-settings__rolling-preview" aria-hidden="true">
+                    <span style={{ backgroundImage: `url(${rollingMeadowOption.src})` }} />
+                  </div>
+                  <div className="meadow-settings__rolling-cycle">
+                    <button
+                      type="button"
+                      aria-label="Previous rolling meadow"
+                      data-cuelume-toggle="rolling-meadow"
+                      onClick={() => cycleRollingMeadow(-1)}
+                    >
+                      ←
+                    </button>
+                    <output aria-live="polite">{rollingMeadowOption.label}</output>
+                    <button
+                      type="button"
+                      aria-label="Next rolling meadow"
+                      data-cuelume-toggle="rolling-meadow"
+                      onClick={() => cycleRollingMeadow(1)}
+                    >
+                      →
+                    </button>
+                  </div>
+                  <small>{rollingMeadowIndex + 1} / {ROLLING_MEADOWS.length}</small>
+                </div>
 
-            <div className="meadow-settings__texture">
-              <span>Flat texture</span>
-              <div className="meadow-settings__texture-options" aria-label="Flat meadow texture">
-                {FLAT_MEADOW_TEXTURES.map(({ id, label, src }) => (
-                  <button
-                    type="button"
-                    aria-pressed={flatTexture === id}
-                    data-cuelume-toggle="meadow-texture"
-                    onClick={() => onFlatTextureChange(id)}
-                    key={id}
-                  >
-                    <span
-                      className="meadow-settings__texture-thumb"
-                      style={{ backgroundImage: `url(${src})` }}
-                      aria-hidden="true"
+                <div className="meadow-settings__texture">
+                  <span>Flat texture</span>
+                  <div className="meadow-settings__texture-options" aria-label="Flat meadow texture">
+                    {FLAT_MEADOW_TEXTURES.map(({ id, label, src }) => (
+                      <button
+                        type="button"
+                        aria-pressed={flatTexture === id}
+                        data-cuelume-toggle="meadow-texture"
+                        onClick={() => onFlatTextureChange(id)}
+                        key={id}
+                      >
+                        <span
+                          className="meadow-settings__texture-thumb"
+                          style={{ backgroundImage: `url(${src})` }}
+                          aria-hidden="true"
+                        />
+                        <span>{label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <label className="meadow-settings__color">
+                  <span>Flat color</span>
+                  <span className="meadow-settings__color-control">
+                    <input
+                      type="color"
+                      value={flatColor}
+                      aria-label="Flat meadow color"
+                      onChange={(event) => onFlatColorChange(event.target.value)}
                     />
-                    <span>{label}</span>
-                  </button>
-                ))}
+                    <output>{flatColor.toUpperCase()}</output>
+                  </span>
+                </label>
+              </>
+            ) : (
+              <div className="meadow-settings__curated-summary">
+                <span>{selectedEnvironment.shortLabel}</span>
+                <small>Dedicated rolling meadow · flat meadow · animated cypress</small>
               </div>
-            </div>
-
-            <label className="meadow-settings__color">
-              <span>Flat color</span>
-              <span className="meadow-settings__color-control">
-                <input
-                  type="color"
-                  value={flatColor}
-                  aria-label="Flat meadow color"
-                  onChange={(event) => onFlatColorChange(event.target.value)}
-                />
-                <output>{flatColor.toUpperCase()}</output>
-              </span>
-            </label>
+            )}
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-wind`}>
