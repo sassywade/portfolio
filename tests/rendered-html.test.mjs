@@ -89,5 +89,8 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
   assert.match(css, /\.cypress-tree__root-transition\s*\{/);
   assert.match(css, /@keyframes cypress-root-grass-sway/);
+  assert.match(css, /--portfolio-reading-width:\s*740px/);
+  assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
+  assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /pointer-events:\s*none/);
 });
