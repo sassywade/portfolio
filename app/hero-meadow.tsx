@@ -59,11 +59,12 @@ export function HeroMeadow() {
 
     const calculateTarget = () => {
       viewportHeight = Math.max(1, window.visualViewport?.height ?? window.innerHeight);
-      const workTop = work.getBoundingClientRect().top;
-      const transitionStart = viewportHeight * 0.98;
-      const transitionEnd = viewportHeight * 0.5;
+      const scrollY = Math.max(0, window.scrollY);
+      const workTop = work.getBoundingClientRect().top + scrollY;
+      const transitionStart = Math.max(0, workTop - viewportHeight * 0.98);
+      const transitionEnd = Math.max(transitionStart + 1, workTop - viewportHeight * 0.5);
       const progress = clamp(
-        (transitionStart - workTop) / Math.max(1, transitionStart - transitionEnd),
+        (scrollY - transitionStart) / Math.max(1, transitionEnd - transitionStart),
         0,
         1,
       );

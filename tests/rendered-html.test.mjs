@@ -96,6 +96,8 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(prototype, /type="color"/);
   assert.match(prototype, />\s*Minimize\s*<\/button>/);
   assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
+  assert.match(hero, /const scrollY = Math\.max\(0, window\.scrollY\)/);
+  assert.match(hero, /const transitionStart = Math\.max\(0, workTop - viewportHeight \* 0\.98\)/);
   assert.match(hero, /--meadow-exit-y/);
   assert.match(hero, /window\.requestAnimationFrame\(animate\)/);
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
@@ -164,6 +166,7 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
   assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
   assert.match(css, /\.cypress-tree__root-transition\s*\{/);
+  assert.match(css, /width:\s*clamp\(260px, 24vw, 350px\)/);
   assert.match(css, /@keyframes cypress-root-grass-sway/);
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
