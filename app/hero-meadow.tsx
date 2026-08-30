@@ -10,6 +10,7 @@ import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const DEFAULT_FLAT_MEADOW_COLOR = "#6f8d45";
+export type WorkGridColumns = 2 | 3;
 
 export function HeroMeadow() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -26,6 +27,7 @@ export function HeroMeadow() {
   const [flatMeadowTexture, setFlatMeadowTexture] = useState<FlatMeadowTexture>("fine");
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
+  const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(3);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -40,6 +42,11 @@ export function HeroMeadow() {
       delete document.documentElement.dataset.atmosphere;
     };
   }, [atmosphere]);
+
+  useEffect(() => {
+    document.documentElement.dataset.workColumns = String(workGridColumns);
+    return () => delete document.documentElement.dataset.workColumns;
+  }, [workGridColumns]);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -174,6 +181,7 @@ export function HeroMeadow() {
       />
       <MeadowSettings
         atmosphere={atmosphere}
+        workGridColumns={workGridColumns}
         variant={meadowVariant}
         rollingMeadow={rollingMeadow}
         flatTexture={flatMeadowTexture}
@@ -182,6 +190,7 @@ export function HeroMeadow() {
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
         onAtmosphereChange={setAtmosphere}
+        onWorkGridColumnsChange={setWorkGridColumns}
         onVariantChange={setMeadowVariant}
         onRollingMeadowChange={(nextMeadow) => {
           setRollingMeadow(nextMeadow);

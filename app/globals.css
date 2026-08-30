@@ -4460,7 +4460,13 @@ em {
 }
 
 .pranathi-project-grid {
-  gap: 16px;
+  gap: clamp(46px, 4vw, 64px) clamp(24px, 2.2vw, 34px);
+}
+
+@media (min-width: 901px) {
+  html[data-work-columns="2"] .pranathi-project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .pranathi-project-grid .project-mockup {
@@ -4616,7 +4622,7 @@ em {
   }
 
   .pranathi-project-grid {
-    gap: 36px 16px;
+    gap: 46px 22px;
   }
 
   .simple-page {
@@ -4675,7 +4681,7 @@ em {
   }
 
   .pranathi-project-grid {
-    gap: 34px;
+    gap: 40px;
   }
 
   .simple-page {

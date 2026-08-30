@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { CaseStudyNav } from "../../case-study-nav";
 import { CaseStudyCarousel } from "../../case-study-carousel";
 import { CaseStudyMedia } from "../../case-study-media";
-import { caseStudies, projects } from "../../projects";
+import { caseStudies, placeholderCaseStudy, projects } from "../../projects";
 import { Reveal } from "../../reveal";
 import { Soundscape } from "../../soundscape";
 
@@ -91,9 +91,9 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const { slug } = await params;
   const projectIndex = projects.findIndex((item) => item.slug === slug);
   const project = projects[projectIndex];
-  const narrative = caseStudies[slug];
+  const narrative = caseStudies[slug] ?? placeholderCaseStudy;
 
-  if (!project || !narrative) notFound();
+  if (!project) notFound();
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
   const navItems = [

@@ -120,6 +120,27 @@ test("lets visitors toggle Philip from the top-right control", async () => {
   assert.match(css, /\.philip-toggle\[data-enabled="true"\] \.philip-toggle__knob/);
 });
 
+test("expands the work archive and offers two- or three-column layouts", async () => {
+  const [projects, caseStudy, hero, prototype, css] = await Promise.all([
+    readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 18);
+  assert.match(projects, /export const placeholderCaseStudy: CaseStudy/);
+  assert.match(caseStudy, /caseStudies\[slug\] \?\? placeholderCaseStudy/);
+  assert.match(hero, /useState<WorkGridColumns>\(3\)/);
+  assert.match(hero, /document\.documentElement\.dataset\.workColumns = String\(workGridColumns\)/);
+  assert.match(prototype, /aria-label="Work grid columns"/);
+  assert.match(prototype, /onWorkGridColumnsChange\(2\)/);
+  assert.match(prototype, /onWorkGridColumnsChange\(3\)/);
+  assert.match(css, /html\[data-work-columns="2"\] \.pranathi-project-grid/);
+  assert.match(css, /gap:\s*clamp\(46px, 4vw, 64px\) clamp\(24px, 2\.2vw, 34px\)/);
+});
+
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
   const [weather, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/alamo-weather.tsx", import.meta.url), "utf8"),

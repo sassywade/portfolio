@@ -14,6 +14,7 @@ import {
   type RollingMeadow,
 } from "./meadow";
 import type { WindKey, WindSettings } from "./wind";
+import type { WorkGridColumns } from "./hero-meadow";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },
@@ -24,6 +25,7 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 
 type MeadowSettingsProps = {
   atmosphere: PortfolioAtmosphere;
+  workGridColumns: WorkGridColumns;
   variant: MeadowVariant;
   rollingMeadow: RollingMeadow;
   flatTexture: FlatMeadowTexture;
@@ -32,6 +34,7 @@ type MeadowSettingsProps = {
   isPlaying: boolean;
   isVisible: boolean;
   onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
+  onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
   onVariantChange: (variant: MeadowVariant) => void;
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
   onFlatTextureChange: (texture: FlatMeadowTexture) => void;
@@ -42,6 +45,7 @@ type MeadowSettingsProps = {
 
 export function MeadowSettings({
   atmosphere,
+  workGridColumns,
   variant,
   rollingMeadow,
   flatTexture,
@@ -50,6 +54,7 @@ export function MeadowSettings({
   isPlaying,
   isVisible,
   onAtmosphereChange,
+  onWorkGridColumnsChange,
   onVariantChange,
   onRollingMeadowChange,
   onFlatTextureChange,
@@ -157,6 +162,33 @@ export function MeadowSettings({
                   <span>{label}</span>
                 </button>
               ))}
+            </div>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-work-grid`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-work-grid`}>Work grid</h2>
+                <small>Archive density</small>
+              </div>
+            </div>
+            <div className="meadow-settings__modes" aria-label="Work grid columns">
+              <button
+                type="button"
+                aria-pressed={workGridColumns === 2}
+                data-cuelume-toggle="layout"
+                onClick={() => onWorkGridColumnsChange(2)}
+              >
+                2 columns
+              </button>
+              <button
+                type="button"
+                aria-pressed={workGridColumns === 3}
+                data-cuelume-toggle="layout"
+                onClick={() => onWorkGridColumnsChange(3)}
+              >
+                3 columns
+              </button>
             </div>
           </section>
 
