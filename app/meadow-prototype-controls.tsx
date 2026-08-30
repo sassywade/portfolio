@@ -2,7 +2,13 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { FLAT_MEADOW_TEXTURES, type FlatMeadowTexture, type MeadowVariant } from "./meadow";
+import {
+  FLAT_MEADOW_TEXTURES,
+  ROLLING_MEADOWS,
+  type FlatMeadowTexture,
+  type MeadowVariant,
+  type RollingMeadow,
+} from "./meadow";
 import type { WindKey, WindSettings } from "./wind";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
@@ -14,12 +20,14 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 
 type MeadowSettingsProps = {
   variant: MeadowVariant;
+  rollingMeadow: RollingMeadow;
   flatTexture: FlatMeadowTexture;
   flatColor: string;
   wind: WindSettings;
   isPlaying: boolean;
   isVisible: boolean;
   onVariantChange: (variant: MeadowVariant) => void;
+  onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
   onFlatTextureChange: (texture: FlatMeadowTexture) => void;
   onFlatColorChange: (color: string) => void;
   onWindChange: (key: WindKey, value: number) => void;
@@ -28,12 +36,14 @@ type MeadowSettingsProps = {
 
 export function MeadowSettings({
   variant,
+  rollingMeadow,
   flatTexture,
   flatColor,
   wind,
   isPlaying,
   isVisible,
   onVariantChange,
+  onRollingMeadowChange,
   onFlatTextureChange,
   onFlatColorChange,
   onWindChange,
@@ -43,6 +53,13 @@ export function MeadowSettings({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const rollingMeadowIndex = Math.max(0, ROLLING_MEADOWS.findIndex(({ id }) => id === rollingMeadow));
+  const rollingMeadowOption = ROLLING_MEADOWS[rollingMeadowIndex];
+
+  const cycleRollingMeadow = (offset: number) => {
+    const nextIndex = (rollingMeadowIndex + offset + ROLLING_MEADOWS.length) % ROLLING_MEADOWS.length;
+    onRollingMeadowChange(ROLLING_MEADOWS[nextIndex].id);
+  };
 
   const closePanel = () => {
     setIsExpanded(false);
@@ -130,6 +147,33 @@ export function MeadowSettings({
               >
                 Flat
               </button>
+            </div>
+
+            <div className="meadow-settings__rolling">
+              <span>Rolling meadow</span>
+              <div className="meadow-settings__rolling-preview" aria-hidden="true">
+                <span style={{ backgroundImage: `url(${rollingMeadowOption.src})` }} />
+              </div>
+              <div className="meadow-settings__rolling-cycle">
+                <button
+                  type="button"
+                  aria-label="Previous rolling meadow"
+                  data-cuelume-toggle="rolling-meadow"
+                  onClick={() => cycleRollingMeadow(-1)}
+                >
+                  ←
+                </button>
+                <output aria-live="polite">{rollingMeadowOption.label}</output>
+                <button
+                  type="button"
+                  aria-label="Next rolling meadow"
+                  data-cuelume-toggle="rolling-meadow"
+                  onClick={() => cycleRollingMeadow(1)}
+                >
+                  →
+                </button>
+              </div>
+              <small>{rollingMeadowIndex + 1} / {ROLLING_MEADOWS.length}</small>
             </div>
 
             <div className="meadow-settings__texture">

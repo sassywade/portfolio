@@ -35,6 +35,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at Glean focused on proactive intelligence,\s*growth, and artifacts\. Previously, I designed at snap, and intuitive surgical\./);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
   assert.match(html, /class="meadow__image" src="\/meadow-ground\.png"/);
+  assert.match(html, /data-rolling-meadow="original"/);
   assert.match(html, /Checking the weather at Alamo Square/);
   assert.match(html, /Local time in San Francisco/);
   assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
@@ -72,8 +73,13 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
   assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);
   assert.match(meadow, /type MeadowVariant = "living" \| "flat"/);
+  assert.match(meadow, /type RollingMeadow/);
+  assert.match(meadow, /\/meadow-rolling-coastal\.png/);
+  assert.match(meadow, /\/meadow-rolling-golden\.png/);
+  assert.match(meadow, /\/meadow-rolling-wildflower\.png/);
+  assert.match(meadow, /\/meadow-rolling-foggy\.png/);
   assert.match(meadow, /type FlatMeadowTexture/);
-  assert.match(meadow, /className="meadow__image" src="\/meadow-ground\.png"/);
+  assert.match(meadow, /\{ id: "original", label: "Original", src: "\/meadow-ground\.png" \}/);
   assert.doesNotMatch(meadow, /createMeadowGrass|meadow__texture|meadow__grass-canvas/);
   assert.match(meadow, /data-meadow-surface=\{variant === "flat" \? "active" : "inactive"\}/);
   assert.match(meadow, /className="meadow__flat-field"/);
@@ -89,6 +95,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(prototype, /type="color"/);
   assert.match(prototype, /FLAT_MEADOW_TEXTURES\.map/);
   assert.match(prototype, /onFlatTextureChange\(id\)/);
+  assert.match(prototype, /cycleRollingMeadow/);
+  assert.match(prototype, /Previous rolling meadow/);
+  assert.match(prototype, /Next rolling meadow/);
   assert.match(prototype, /windFields\.map/);
   assert.match(prototype, /onPlayingChange\(!isPlaying\)/);
   assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
@@ -99,7 +108,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.match(hero, /data-scene-visible/);
-  assert.match(hero, /<Meadow isPlaying=\{sceneIsPlaying\} variant=\{meadowVariant\} flatTexture=\{flatMeadowTexture\} \/>/);
+  assert.match(hero, /rollingMeadow=\{rollingMeadow\}/);
+  assert.match(hero, /useState<RollingMeadow>\("original"\)/);
   assert.match(hero, /useState<FlatMeadowTexture>\("fine"\)/);
   assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{sceneIsPlaying\}/);
   assert.match(hero, /DEFAULT_FLAT_MEADOW_COLOR/);

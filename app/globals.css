@@ -3907,7 +3907,12 @@ em {
   z-index: 0;
   display: block;
   object-fit: contain;
-  transition: opacity 360ms ease;
+  opacity: 0;
+  transition: opacity 520ms cubic-bezier(.22,.7,.2,1);
+}
+
+.meadow__image[data-meadow-image-active="true"] {
+  opacity: 1;
 }
 
 .cypress-tree {
@@ -5337,6 +5342,70 @@ em {
   color: #77736b;
 }
 
+.meadow-settings__rolling {
+  display: grid;
+  gap: 6px;
+  color: #77736b;
+}
+
+.meadow-settings__rolling-preview {
+  position: relative;
+  height: 56px;
+  overflow: hidden;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+  background: #fafafa;
+}
+
+.meadow-settings__rolling-preview span {
+  position: absolute;
+  inset: 0;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.meadow-settings__rolling-cycle {
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+  align-items: stretch;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-settings__rolling-cycle button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #77736b;
+  cursor: pointer;
+  font-size: 12px;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.meadow-settings__rolling-cycle button:first-child {
+  border-right: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-settings__rolling-cycle button:last-child {
+  border-left: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-settings__rolling-cycle button:hover,
+.meadow-settings__rolling-cycle button:focus-visible {
+  background: var(--acid);
+  color: white;
+}
+
+.meadow-settings__rolling-cycle output {
+  align-self: center;
+  padding: 7px 6px;
+  color: var(--ink);
+  text-align: center;
+}
+
+.meadow-settings__rolling > small {
+  justify-self: end;
+}
+
 .meadow-settings__texture {
   display: grid;
   gap: 6px;
@@ -5427,6 +5496,7 @@ em {
 }
 
 .meadow-settings__modes button:focus-visible,
+.meadow-settings__rolling-cycle button:focus-visible,
 .meadow-settings__texture-options button:focus-visible,
 .meadow-settings__color input:focus-visible,
 .meadow-settings__wind-field input:focus-visible {
