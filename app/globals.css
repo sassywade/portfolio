@@ -9,6 +9,13 @@
   --serif: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   --sans: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --top-pet-pull-y: 0px;
+  --top-pet-reveal-y: 0px;
+  --top-pet-strip-opacity: 0.5;
+  --top-pet-frame-0: 1;
+  --top-pet-frame-1: 0;
+  --top-pet-frame-2: 0;
+  --top-pet-frame-3: 0;
 }
 
 @theme inline {
@@ -33,6 +40,73 @@ body {
   font-family: var(--font-newsreader, var(--sans));
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Pulling past the top reveals Neel's increasingly unimpressed pet chorus. */
+.top-pet-pull {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: var(--top-pet-reveal-y);
+  overflow: hidden;
+  background: #fff;
+  opacity: 0;
+  contain: strict;
+  pointer-events: none;
+  will-change: height, opacity;
+}
+
+html[data-top-pet-active="true"] .top-pet-pull {
+  opacity: 1;
+}
+
+.top-pet-pull__strip,
+.top-pet-pull__frame {
+  position: absolute;
+  inset: 0;
+}
+
+.top-pet-pull__strip {
+  opacity: var(--top-pet-strip-opacity);
+  will-change: opacity;
+}
+
+.top-pet-pull__frame {
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: max(100vw, 1440px) auto;
+  opacity: var(--top-pet-frame-opacity);
+  will-change: opacity;
+}
+
+html[data-top-pet-active="true"] body {
+  overscroll-behavior-y: none;
+}
+
+html[data-top-pet-active="true"] .site-header--pages,
+html[data-top-pet-active="true"] .pranathi-intro--home,
+html[data-top-pet-active="true"] .pranathi-work,
+html[data-top-pet-active="true"] .meadow-settings {
+  transform: translate3d(0, var(--top-pet-pull-y), 0);
+  will-change: transform;
+}
+
+html[data-top-pet-active="true"] .hero-meadow {
+  top: var(--top-pet-pull-y);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-pet-pull,
+  .top-pet-pull__strip,
+  .top-pet-pull__frame,
+  .site-header--pages,
+  .pranathi-intro--home,
+  .pranathi-work,
+  .meadow-settings {
+    transition: none !important;
+  }
 }
 
 a {

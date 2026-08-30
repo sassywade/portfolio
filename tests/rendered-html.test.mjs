@@ -47,8 +47,32 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /Release miniature Neel with a camera onto the meadow/);
   assert.match(html, /class="backpack-word"/);
   assert.match(html, /Release miniature Neel backpacking onto the meadow/);
+  assert.match(html, /class="top-pet-pull"/);
   assert.doesNotMatch(html, /Meadow and cypress wind controls|Open secret meadow prototype picker/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
+});
+
+test("keeps the top-edge pet chorus elastic, progressive, and lightweight", async () => {
+  const [topPull, css] = await Promise.all([
+    readFile(new URL("../app/top-pet-pull.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(topPull, /\/top-pets\/top-pets-neutral\.png/);
+  assert.match(topPull, /\/top-pets\/top-pets-sad\.png/);
+  assert.match(topPull, /\/top-pets\/top-pets-angry\.png/);
+  assert.match(topPull, /\/top-pets\/top-pets-furious\.png/);
+  assert.match(topPull, /window\.scrollY > 0\.5/);
+  assert.match(topPull, /window\.addEventListener\("wheel", handleWheel, \{ passive: false \}\)/);
+  assert.match(topPull, /window\.addEventListener\("touchmove", handleTouchMove, \{ passive: false \}\)/);
+  assert.match(topPull, /const stripOpacity = 0\.5 \+ progress \* 0\.5/);
+  assert.match(topPull, /const framePosition = progress \* \(FRAME_COUNT - 1\)/);
+  assert.match(topPull, /springVelocity \+= -pullPosition \* 0\.12 \* step/);
+  assert.match(topPull, /window\.requestAnimationFrame\(springBack\)/);
+  assert.match(topPull, /prefers-reduced-motion: reduce/);
+  assert.match(css, /\.top-pet-pull\s*\{[^}]*position:\s*fixed[^}]*height:\s*var\(--top-pet-reveal-y\)/);
+  assert.match(css, /background-size:\s*max\(100vw, 1440px\) auto/);
+  assert.match(css, /translate3d\(0, var\(--top-pet-pull-y\), 0\)/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {

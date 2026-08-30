@@ -5,29 +5,33 @@ import { BackpackWalk } from "./backpack-walk";
 import { Soundscape } from "./soundscape";
 import { ProjectGrid } from "./project-card";
 import { SiteHeader } from "./site-header";
+import { TopPetPull } from "./top-pet-pull";
 
 export default function Home() {
   return (
-    <main className="site-shell page-enter" id="top">
-      <Soundscape />
-      <SiteHeader current="work" />
+    <>
+      <TopPetPull />
+      <main className="site-shell page-enter" id="top">
+        <Soundscape />
+        <SiteHeader current="work" />
 
-      <section className="pranathi-intro pranathi-intro--home" aria-labelledby="hero-title">
-        <p className="pranathi-name" id="hero-title">Neel Saswade</p>
-        <div className="pranathi-bio">
-          <p>
-            I&apos;m a product designer based in San Francisco. Currently, I work at Glean focused on proactive intelligence,
-            growth, and artifacts. Previously, I designed at snap, and intuitive surgical.
-          </p>
-          <p>In my free time I ride <BikeRide />, <PhotoDrop />, and go <BackpackWalk />.</p>
-        </div>
-        <HeroMeadow />
-      </section>
+        <section className="pranathi-intro pranathi-intro--home" aria-labelledby="hero-title">
+          <p className="pranathi-name" id="hero-title">Neel Saswade</p>
+          <div className="pranathi-bio">
+            <p>
+              I&apos;m a product designer based in San Francisco. Currently, I work at Glean focused on proactive intelligence,
+              growth, and artifacts. Previously, I designed at snap, and intuitive surgical.
+            </p>
+            <p>In my free time I ride <BikeRide />, <PhotoDrop />, and go <BackpackWalk />.</p>
+          </div>
+          <HeroMeadow />
+        </section>
 
-      <section className="pranathi-work" id="work" aria-labelledby="work-title">
-        <h2 className="sr-only" id="work-title">Work</h2>
-        <ProjectGrid />
-      </section>
-    </main>
+        <section className="pranathi-work" id="work" aria-labelledby="work-title">
+          <h2 className="sr-only" id="work-title">Work</h2>
+          <ProjectGrid />
+        </section>
+      </main>
+    </>
   );
 }
