@@ -99,10 +99,13 @@ export function BikeRide() {
 
     function trackY(localX: number) {
       const layerBounds = layer.getBoundingClientRect();
-      const meadow = document.querySelector<HTMLElement>(".meadow__visual");
+      const meadow = document.querySelector<HTMLElement>('[data-meadow-surface="active"]');
       if (!meadow) return layerBounds.height * 0.78;
 
       const meadowBounds = meadow.getBoundingClientRect();
+      if (meadow.dataset.meadowVariant === "flat") {
+        return meadowBounds.top + Math.min(4, meadowBounds.height * 0.03) - layerBounds.top;
+      }
       const clientX = layerBounds.left + localX;
       const normalizedX = clamp((clientX - meadowBounds.left) / Math.max(1, meadowBounds.width), 0, 1);
       const fallbackSurface = 0.79 + Math.sin(normalizedX * Math.PI) * 0.08;

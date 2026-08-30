@@ -3803,6 +3803,10 @@ em {
 /* Independent landscape layers, ready for future grass and tree interactions. */
 .hero-meadow {
   --meadow-render-width: max(100vw, 1280px);
+  --flat-meadow-color: #6f8d45;
+  --flat-meadow-height: clamp(118px, 17svh, 176px);
+  --flat-meadow-duration: 5.5s;
+  --flat-meadow-drift: 3px;
 }
 
 .meadow,
@@ -3823,9 +3827,99 @@ em {
   left: 50%;
   width: var(--meadow-render-width);
   aspect-ratio: 1672 / 941;
+  opacity: 0;
   transform: translateX(-50%) scaleY(0.84);
   transform-origin: bottom center;
   contain: layout paint;
+  transition: opacity 420ms ease;
+}
+
+.meadow__visual[data-meadow-active="true"] {
+  opacity: 1;
+}
+
+.meadow__visual--flat {
+  left: 0;
+  width: 100%;
+  height: var(--flat-meadow-height);
+  aspect-ratio: auto;
+  overflow: visible;
+  contain: layout;
+  transform: none;
+  transform-origin: bottom center;
+}
+
+.meadow__flat-field {
+  position: absolute;
+  inset: 0;
+  background: var(--flat-meadow-color);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--flat-meadow-color) 68%, white) 0%,
+    var(--flat-meadow-color) 18%,
+    color-mix(in srgb, var(--flat-meadow-color) 72%, #1d2e19) 100%
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--flat-meadow-color) 58%, white);
+}
+
+.meadow__flat-field::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 28%, rgba(255, 255, 255, 0.24) 0 0.7px, transparent 1.2px) 0 0 / 13px 17px,
+    radial-gradient(circle at 72% 62%, rgba(30, 49, 23, 0.3) 0 0.8px, transparent 1.4px) 0 0 / 17px 14px,
+    repeating-linear-gradient(103deg, transparent 0 10px, rgba(255, 255, 255, 0.07) 10px 11px, transparent 11px 21px);
+  content: "";
+  mix-blend-mode: soft-light;
+  opacity: 0.72;
+}
+
+.meadow__flat-blades {
+  position: absolute;
+  z-index: 2;
+  top: -17px;
+  right: -24px;
+  left: -24px;
+  display: block;
+  height: 48px;
+  background:
+    repeating-linear-gradient(101deg, transparent 0 7px, color-mix(in srgb, var(--flat-meadow-color) 72%, #24361f) 7px 8px, transparent 8px 14px),
+    repeating-linear-gradient(78deg, transparent 0 11px, color-mix(in srgb, var(--flat-meadow-color) 64%, white) 11px 12px, transparent 12px 20px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
+  transform-origin: center bottom;
+  animation: flat-meadow-sway var(--flat-meadow-duration) ease-in-out infinite;
+}
+
+.meadow__flat-blades--far {
+  opacity: 0.46;
+  animation-delay: -2.4s;
+}
+
+.meadow__flat-blades--near {
+  top: -11px;
+  height: 39px;
+  opacity: 0.7;
+  animation-delay: -0.8s;
+  animation-direction: alternate-reverse;
+}
+
+.meadow__flat-grain {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  background: repeating-linear-gradient(86deg, transparent 0 8px, rgba(19, 38, 15, 0.08) 8px 9px, transparent 9px 18px);
+  opacity: 0.7;
+}
+
+.meadow__visual--flat[data-playing="false"] .meadow__flat-blades {
+  animation-play-state: paused;
+}
+
+@keyframes flat-meadow-sway {
+  0%, 100% { transform: translate3d(-2px, 0, 0) skewX(-0.7deg); }
+  50% { transform: translate3d(var(--flat-meadow-drift), 0, 0) skewX(0.9deg); }
 }
 
 .meadow__image,
@@ -3883,6 +3977,175 @@ em {
   width: clamp(220px, 27vw, 440px);
   aspect-ratio: 556 / 493;
   contain: layout paint;
+  transition: bottom 420ms cubic-bezier(.22,.7,.2,1);
+}
+
+.hero-meadow[data-meadow-variant="flat"] .cypress-tree {
+  bottom: calc(var(--flat-meadow-height) - clamp(30px, 3.8vw, 52px));
+}
+
+.hero-meadow[data-meadow-variant="flat"] .cypress-tree__root-bank {
+  background: var(--flat-meadow-color);
+  background:
+    radial-gradient(circle at 17% 58%, rgba(255, 255, 255, 0.2) 0 2px, transparent 3px),
+    radial-gradient(circle at 69% 35%, rgba(35, 51, 27, 0.2) 0 1.5px, transparent 2.5px),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--flat-meadow-color) 72%, white) 0%,
+      var(--flat-meadow-color) 48%,
+      color-mix(in srgb, var(--flat-meadow-color) 74%, #20301b) 100%
+    );
+}
+
+/* A deliberately tucked-away control for comparing meadow prototypes. */
+.meadow-prototype {
+  position: absolute;
+  z-index: 5;
+  bottom: clamp(14px, 2vw, 28px);
+  left: clamp(14px, 2.2vw, 34px);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  pointer-events: auto;
+  text-transform: uppercase;
+}
+
+.meadow-prototype button,
+.meadow-prototype input {
+  font: inherit;
+}
+
+.meadow-prototype__launcher,
+.meadow-prototype--expanded {
+  border: 1px solid rgba(36, 35, 33, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 22px rgba(36, 35, 33, 0.09);
+  backdrop-filter: blur(12px);
+}
+
+.meadow-prototype__launcher {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  color: #77736b;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+}
+
+.meadow-prototype__launcher:hover,
+.meadow-prototype__launcher:focus-visible,
+.meadow-prototype__minimize:hover,
+.meadow-prototype__minimize:focus-visible {
+  border-color: #002fa7;
+  color: #002fa7;
+}
+
+.meadow-prototype__status {
+  width: 7px;
+  height: 7px;
+  border: 1px solid rgba(36, 35, 33, 0.2);
+  border-radius: 50%;
+}
+
+.meadow-prototype--expanded {
+  width: min(242px, calc(100vw - 28px));
+  padding: 10px 11px 11px;
+}
+
+.meadow-prototype__head,
+.meadow-prototype__color,
+.meadow-prototype__color-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.meadow-prototype__head > span {
+  color: #002fa7;
+}
+
+.meadow-prototype__minimize {
+  appearance: none;
+  border: 0;
+  padding: 3px 0;
+  background: transparent;
+  color: #77736b;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.meadow-prototype__panel {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.meadow-prototype__modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-prototype__modes button {
+  appearance: none;
+  border: 0;
+  padding: 7px 8px;
+  background: transparent;
+  color: #77736b;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.meadow-prototype__modes button + button {
+  border-left: 1px solid rgba(36, 35, 33, 0.15);
+}
+
+.meadow-prototype__modes button[aria-pressed="true"] {
+  background: #002fa7;
+  color: white;
+}
+
+.meadow-prototype__modes button:focus-visible,
+.meadow-prototype__color input:focus-visible {
+  outline: 1px solid #002fa7;
+  outline-offset: 2px;
+}
+
+.meadow-prototype__color {
+  color: #77736b;
+}
+
+.meadow-prototype__color-control output {
+  min-width: 54px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.meadow-prototype__color input {
+  appearance: none;
+  width: 28px;
+  height: 21px;
+  border: 1px solid rgba(36, 35, 33, 0.2);
+  padding: 2px;
+  background: white;
+  cursor: pointer;
+}
+
+.meadow-prototype__color input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.meadow-prototype__color input::-webkit-color-swatch {
+  border: 0;
 }
 
 .cypress-tree__canvas {
@@ -3912,6 +4175,7 @@ em {
 @media (max-width: 580px) {
   .hero-meadow {
     --meadow-render-width: 780px;
+    --flat-meadow-height: clamp(102px, 16svh, 132px);
   }
 
   .cypress-tree {
@@ -3919,10 +4183,16 @@ em {
     bottom: 70px;
     width: 220px;
   }
+
+  .meadow-prototype {
+    bottom: 12px;
+    left: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .meadow__texture {
+  .meadow__texture,
+  .meadow__flat-blades {
     animation: none;
   }
 }

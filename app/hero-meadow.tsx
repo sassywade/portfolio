@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { CypressTree } from "./cypress-tree";
-import { Meadow } from "./meadow";
+import { Meadow, type MeadowVariant } from "./meadow";
+import { MeadowPrototypeControls } from "./meadow-prototype-controls";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const DEFAULT_FLAT_MEADOW_COLOR = "#6f8d45";
 
 export function HeroMeadow() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -17,6 +19,8 @@ export function HeroMeadow() {
       : !window.matchMedia("(prefers-reduced-motion: reduce)").matches
   ));
   const [isSceneVisible, setIsSceneVisible] = useState(true);
+  const [meadowVariant, setMeadowVariant] = useState<MeadowVariant>("living");
+  const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -119,6 +123,11 @@ export function HeroMeadow() {
   };
 
   const sceneIsPlaying = isPlaying && isSceneVisible;
+  const sceneStyle = {
+    "--flat-meadow-color": flatMeadowColor,
+    "--flat-meadow-duration": `${(6.4 - wind.tempo * 2.8).toFixed(2)}s`,
+    "--flat-meadow-drift": `${(1.5 + wind.breeze * 5.5).toFixed(2)}px`,
+  } as CSSProperties;
 
   return (
     <div
@@ -126,13 +135,24 @@ export function HeroMeadow() {
       className="hero-meadow"
       data-scene-visible={isSceneVisible ? "true" : "false"}
       data-scroll-state="hero"
+      data-meadow-variant={meadowVariant}
+      style={sceneStyle}
     >
-      <Meadow wind={wind} isPlaying={sceneIsPlaying} />
+      <Meadow wind={wind} isPlaying={sceneIsPlaying} variant={meadowVariant} />
       <CypressTree
         wind={wind}
         isPlaying={sceneIsPlaying}
         onWindChange={updateWind}
         onPlayingChange={setIsPlaying}
+      />
+      <MeadowPrototypeControls
+        variant={meadowVariant}
+        flatColor={flatMeadowColor}
+        onVariantChange={setMeadowVariant}
+        onFlatColorChange={(color) => {
+          setFlatMeadowColor(color);
+          setMeadowVariant("flat");
+        }}
       />
     </div>
   );

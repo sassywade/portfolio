@@ -9,9 +9,12 @@ import type { WindSettings } from "./wind";
 type MeadowProps = {
   wind: WindSettings;
   isPlaying: boolean;
+  variant: MeadowVariant;
 };
 
-export function Meadow({ wind, isPlaying }: MeadowProps) {
+export type MeadowVariant = "living" | "flat";
+
+export function Meadow({ wind, isPlaying, variant }: MeadowProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const grassRef = useRef<ReturnType<typeof createMeadowGrass> | null>(null);
   const initialSettings = useRef({ wind, isPlaying });
@@ -39,15 +42,34 @@ export function Meadow({ wind, isPlaying }: MeadowProps) {
   }, [wind]);
 
   useEffect(() => {
-    grassRef.current?.setPlaying(isPlaying);
-  }, [isPlaying]);
+    grassRef.current?.setPlaying(isPlaying && variant === "living");
+  }, [isPlaying, variant]);
 
   return (
-    <div className="meadow" data-meadow>
-      <div className="meadow__visual">
+    <div className="meadow" data-meadow data-meadow-variant={variant}>
+      <div
+        className="meadow__visual meadow__visual--living"
+        data-meadow-variant="living"
+        data-meadow-active={variant === "living" ? "true" : "false"}
+        data-meadow-surface={variant === "living" ? "active" : "inactive"}
+      >
         <img className="meadow__image" src="/meadow-ground.png" alt="" />
         <div className="meadow__texture" />
         <canvas ref={canvasRef} className="meadow__grass-canvas" aria-hidden="true" data-grass-layer />
+      </div>
+      <div
+        className="meadow__visual meadow__visual--flat"
+        data-meadow-variant="flat"
+        data-meadow-active={variant === "flat" ? "true" : "false"}
+        data-meadow-surface={variant === "flat" ? "active" : "inactive"}
+        data-playing={isPlaying && variant === "flat" ? "true" : "false"}
+        aria-hidden="true"
+      >
+        <div className="meadow__flat-field">
+          <span className="meadow__flat-blades meadow__flat-blades--far" />
+          <span className="meadow__flat-blades meadow__flat-blades--near" />
+          <span className="meadow__flat-grain" />
+        </div>
       </div>
     </div>
   );
