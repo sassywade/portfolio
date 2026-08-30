@@ -2162,6 +2162,8 @@ em {
 
 .hero-meadow {
   --meadow-exit-y: 0px;
+  --meadow-exit-scale: 1;
+  --meadow-exit-opacity: 1;
   --meadow-scroll-progress: 0;
   position: fixed;
   z-index: 1;
@@ -2174,8 +2176,10 @@ em {
   backface-visibility: hidden;
   contain: layout paint;
   pointer-events: none;
-  transform: translate3d(-50%, var(--meadow-exit-y), 0);
-  will-change: transform;
+  opacity: var(--meadow-exit-opacity);
+  transform: translate3d(-50%, var(--meadow-exit-y), 0) scale(var(--meadow-exit-scale));
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
 }
 
 .hero-meadow[data-scene-visible="false"] {

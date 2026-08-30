@@ -130,7 +130,12 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(prototype, /onPlayingChange\(!isPlaying\)/);
   assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
   assert.match(hero, /const scrollY = Math\.max\(0, window\.scrollY\)/);
-  assert.match(hero, /const transitionStart = Math\.max\(0, workTop - viewportHeight \* 0\.98\)/);
+  assert.match(hero, /const transitionStart = Math\.max\(0, workTop - viewportHeight \* 1\.06\)/);
+  assert.match(hero, /const transitionEnd = Math\.max\(transitionStart \+ 1, workTop - viewportHeight \* 0\.2\)/);
+  assert.match(hero, /const smootherProgress = currentProgress \* currentProgress \* currentProgress/);
+  assert.match(hero, /const ceremonialProgress = Math\.pow\(smootherProgress, 1\.08\)/);
+  assert.match(hero, /--meadow-exit-scale/);
+  assert.match(hero, /--meadow-exit-opacity/);
   assert.match(hero, /--meadow-exit-y/);
   assert.match(hero, /window\.requestAnimationFrame\(animate\)/);
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
@@ -284,7 +289,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*z-index:\s*2;/);
   assert.match(css, /\.hero-meadow > \.bike-ride-layer,[\s\S]*?\.hero-meadow > \.backpack-walk-layer\s*\{[^}]*z-index:\s*5;/);
   assert.match(css, /\.hero-meadow\s*\{[\s\S]*position:\s*fixed/);
-  assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\)/);
+  assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\) scale\(var\(--meadow-exit-scale\)\)/);
+  assert.match(css, /transform-origin:\s*50% 100%/);
   assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
   assert.doesNotMatch(css, /\.cypress-tree__root-transition\s*\{/);
   assert.match(css, /width:\s*clamp\(240px, 22vw, 322px\)/);

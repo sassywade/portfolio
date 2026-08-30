@@ -45,9 +45,15 @@ export function HeroMeadow() {
 
     const commitProgress = (progress: number) => {
       currentProgress = clamp(progress, 0, 1);
-      const easedProgress = currentProgress * currentProgress * (3 - 2 * currentProgress);
-      const exitDistance = viewportHeight + Math.max(100, viewportHeight * 0.14);
-      scene.style.setProperty("--meadow-exit-y", `${(easedProgress * exitDistance).toFixed(2)}px`);
+      const smootherProgress = currentProgress * currentProgress * currentProgress
+        * (currentProgress * (currentProgress * 6 - 15) + 10);
+      const ceremonialProgress = Math.pow(smootherProgress, 1.08);
+      const exitDistance = viewportHeight + Math.max(120, viewportHeight * 0.18);
+      const fadeProgress = clamp((currentProgress - 0.72) / 0.28, 0, 1);
+      const softenedFade = fadeProgress * fadeProgress * (3 - 2 * fadeProgress);
+      scene.style.setProperty("--meadow-exit-y", `${(ceremonialProgress * exitDistance).toFixed(2)}px`);
+      scene.style.setProperty("--meadow-exit-scale", (1 - ceremonialProgress * 0.012).toFixed(4));
+      scene.style.setProperty("--meadow-exit-opacity", (1 - softenedFade * 0.14).toFixed(4));
       scene.style.setProperty("--meadow-scroll-progress", currentProgress.toFixed(4));
       scene.dataset.scrollState = currentProgress <= 0.002
         ? "hero"
@@ -64,8 +70,8 @@ export function HeroMeadow() {
       viewportHeight = Math.max(1, window.visualViewport?.height ?? window.innerHeight);
       const scrollY = Math.max(0, window.scrollY);
       const workTop = work.getBoundingClientRect().top + scrollY;
-      const transitionStart = Math.max(0, workTop - viewportHeight * 0.98);
-      const transitionEnd = Math.max(transitionStart + 1, workTop - viewportHeight * 0.5);
+      const transitionStart = Math.max(0, workTop - viewportHeight * 1.06);
+      const transitionEnd = Math.max(transitionStart + 1, workTop - viewportHeight * 0.2);
       const progress = clamp(
         (scrollY - transitionStart) / Math.max(1, transitionEnd - transitionStart),
         0,
@@ -85,7 +91,7 @@ export function HeroMeadow() {
 
       const delta = lastTime ? Math.min(48, now - lastTime) : 16;
       lastTime = now;
-      const follow = 1 - Math.exp(-delta / 105);
+      const follow = 1 - Math.exp(-delta / 190);
       const next = currentProgress + (targetProgress - currentProgress) * follow;
 
       if (Math.abs(targetProgress - next) <= 0.001) {
