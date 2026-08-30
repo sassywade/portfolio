@@ -3807,6 +3807,7 @@ em {
   --flat-meadow-height: clamp(118px, 17svh, 176px);
   --flat-meadow-duration: 5.5s;
   --flat-meadow-drift: 3px;
+  --miniature-character-height: clamp(82px, 7vw, 100px);
 }
 
 .meadow,
@@ -4889,7 +4890,8 @@ em {
   top: 0;
   left: 0;
   display: block;
-  width: clamp(52px, 4.6vw, 68px);
+  width: var(--miniature-character-height);
+  height: var(--miniature-character-height);
   aspect-ratio: 1;
   opacity: 0;
   transform-origin: center 89%;
@@ -4910,8 +4912,8 @@ em {
 
 .bike-rider__direction {
   --bike-direction: 1;
-  transform: scaleX(var(--bike-direction));
-  transform-origin: center;
+  transform: scale(1.14) scaleX(var(--bike-direction));
+  transform-origin: center 89%;
 }
 
 .bike-rider__sprite {
@@ -5041,7 +5043,8 @@ em {
   top: 0;
   left: 0;
   display: block;
-  width: clamp(62px, 5.6vw, 82px);
+  width: clamp(59px, 5.05vw, 72px);
+  height: var(--miniature-character-height);
   aspect-ratio: 1066 / 1479;
   opacity: 0;
   transform-origin: center 96.2%;
@@ -5143,7 +5146,8 @@ em {
   top: 0;
   left: 0;
   display: block;
-  width: clamp(58px, 5.2vw, 76px);
+  width: clamp(67px, 5.7vw, 81px);
+  height: var(--miniature-character-height);
   aspect-ratio: 586 / 720;
   opacity: 0;
   transform-origin: center 95.8%;

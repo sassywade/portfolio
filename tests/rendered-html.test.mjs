@@ -172,6 +172,11 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
+  assert.match(css, /--miniature-character-height:\s*clamp\(82px, 7vw, 100px\)/);
+  assert.match(css, /\.bike-rider\s*\{[^}]*width:\s*var\(--miniature-character-height\)[^}]*height:\s*var\(--miniature-character-height\)/);
+  assert.match(css, /\.bike-rider__direction\s*\{[^}]*transform:\s*scale\(1\.14\) scaleX\(var\(--bike-direction\)\)/);
+  assert.match(css, /\.mini-photographer\s*\{[^}]*height:\s*var\(--miniature-character-height\)/);
+  assert.match(css, /\.mini-hiker\s*\{[^}]*height:\s*var\(--miniature-character-height\)/);
   assert.match(css, /@keyframes miniature-bike-materialize/);
   assert.match(css, /@keyframes miniature-photographer-materialize/);
   assert.match(css, /@keyframes miniature-hiker-materialize/);
