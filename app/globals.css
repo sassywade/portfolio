@@ -4547,7 +4547,8 @@ em {
 
 /* A tiny cyclist falls from the copy, then treats the meadow as a track. */
 .bike-word,
-.photo-word {
+.photo-word,
+.backpack-word {
   appearance: none;
   position: relative;
   z-index: 6;
@@ -4574,13 +4575,17 @@ em {
 .bike-word[data-riding="true"],
 .photo-word:hover,
 .photo-word:focus-visible,
-.photo-word[data-photographing="true"] {
+.photo-word[data-photographing="true"],
+.backpack-word:hover,
+.backpack-word:focus-visible,
+.backpack-word[data-walking="true"] {
   color: #002fa7;
   text-decoration-color: #002fa7;
 }
 
 .bike-word:focus-visible,
-.photo-word:focus-visible {
+.photo-word:focus-visible,
+.backpack-word:focus-visible {
   outline: 1px solid #002fa7;
   outline-offset: 3px;
 }
@@ -4833,6 +4838,124 @@ em {
   .mini-photographer,
   .mini-photographer__shadow,
   .mini-photographer__sprite {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* A miniature backpacker drops from the copy, then walks the meadow's contours. */
+.backpack-walk-layer {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 50%;
+  display: block;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  contain: layout paint;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.mini-hiker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: clamp(58px, 5.2vw, 76px);
+  aspect-ratio: 586 / 720;
+  opacity: 0;
+  transform-origin: center 95.8%;
+  transition: opacity 150ms ease;
+  will-change: transform;
+}
+
+.backpack-walk-layer:not([data-phase="idle"]) .mini-hiker {
+  opacity: 1;
+}
+
+.mini-hiker__direction,
+.mini-hiker__sprite,
+.mini-hiker__shadow {
+  position: absolute;
+  display: block;
+}
+
+.mini-hiker__direction,
+.mini-hiker__sprite {
+  inset: 0;
+}
+
+.mini-hiker__direction {
+  --hiker-facing: 1;
+  transform: scaleX(var(--hiker-facing));
+  transform-origin: center;
+}
+
+.mini-hiker__sprite {
+  transform-origin: center 95.8%;
+}
+
+.mini-hiker__sprite img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 2px 1px rgba(35, 39, 20, 0.16));
+  user-select: none;
+}
+
+.mini-hiker__shadow {
+  right: 25%;
+  bottom: 1.2%;
+  left: 25%;
+  height: 2.8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(47, 61, 20, 0.3), rgba(47, 61, 20, 0) 72%);
+  opacity: 0;
+  transform: scaleX(0.82);
+  transition: opacity 180ms ease;
+}
+
+.backpack-walk-layer[data-phase="land"] .mini-hiker__shadow,
+.backpack-walk-layer[data-phase="walk"] .mini-hiker__shadow {
+  opacity: 1;
+}
+
+.backpack-walk-layer[data-phase="spawn"] .mini-hiker__sprite {
+  animation: miniature-hiker-materialize 220ms cubic-bezier(.22,.7,.2,1) both;
+}
+
+.backpack-walk-layer[data-phase="land"] .mini-hiker__sprite {
+  animation: miniature-hiker-touchdown 180ms ease-out both;
+}
+
+.mini-hiker[data-turning="true"] .mini-hiker__sprite {
+  animation: miniature-hiker-turn 240ms ease-in-out both;
+}
+
+@keyframes miniature-hiker-materialize {
+  from { opacity: 0; transform: scale(0.08) rotate(-5deg); }
+  72% { opacity: 1; }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes miniature-hiker-touchdown {
+  from { transform: translateY(-2px); }
+  to { transform: translateY(0); }
+}
+
+@keyframes miniature-hiker-turn {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-hiker,
+  .mini-hiker__shadow,
+  .mini-hiker__sprite {
     animation: none !important;
     transition: none !important;
   }

@@ -37,6 +37,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /Release miniature Neel on a bike onto the meadow/);
   assert.match(html, /class="photo-word"/);
   assert.match(html, /Release miniature Neel with a camera onto the meadow/);
+  assert.match(html, /class="backpack-word"/);
+  assert.match(html, /Release miniature Neel backpacking onto the meadow/);
   assert.match(html, /aria-label="Meadow and cypress wind controls"/);
   assert.match(html, />Breeze<output>0\.34<\/output>/);
   assert.match(html, />Gust<output>0\.52<\/output>/);
@@ -47,13 +49,14 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 });
 
 test("keeps the living lawn, miniature visitors, and cursor pet lightweight", async () => {
-  const [renderer, meadow, hero, tree, bike, photographer, smiley, css] = await Promise.all([
+  const [renderer, meadow, hero, tree, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/bike-ride.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/backpack-walk.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
@@ -98,6 +101,13 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(photographer, /window\.setTimeout/);
   assert.match(photographer, /new IntersectionObserver/);
   assert.match(photographer, /prefers-reduced-motion: reduce/);
+  assert.match(backpacker, /const FRAME_URLS = \[/);
+  assert.match(backpacker, /const WALK_FRAME_ORDER = \[/);
+  assert.match(backpacker, /surfaceByColumn/);
+  assert.match(backpacker, /window\.requestAnimationFrame\(frame\)/);
+  assert.match(backpacker, /direction \*= -1/);
+  assert.match(backpacker, /new IntersectionObserver/);
+  assert.match(backpacker, /prefers-reduced-motion: reduce/);
   assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
   assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
   assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
@@ -115,9 +125,10 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
-  assert.match(css, /\.bike-word,\s*\.photo-word\s*\{/);
+  assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
   assert.match(css, /@keyframes miniature-bike-materialize/);
   assert.match(css, /@keyframes miniature-photographer-materialize/);
+  assert.match(css, /@keyframes miniature-hiker-materialize/);
   assert.match(css, /@keyframes smiley-happy-glimpse/);
   assert.match(css, /pointer-events:\s*none/);
 });

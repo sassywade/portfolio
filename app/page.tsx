@@ -1,6 +1,7 @@
 import { HeroMeadow } from "./hero-meadow";
 import { BikeRide } from "./bike-ride";
 import { PhotoDrop } from "./photo-drop";
+import { BackpackWalk } from "./backpack-walk";
 import { Soundscape } from "./soundscape";
 import { ProjectGrid } from "./project-card";
 import { SiteHeader } from "./site-header";
@@ -19,7 +20,7 @@ export default function Home() {
             thoughtful product experiences with teams working on <span className="placeholder-mark">[something good]</span>.
             Previously, I designed at <span className="placeholder-mark">[company]</span> and <span className="placeholder-mark">[company]</span>.
           </p>
-          <p>In my free time I ride <BikeRide />, <PhotoDrop />, and go backpacking.</p>
+          <p>In my free time I ride <BikeRide />, <PhotoDrop />, and go <BackpackWalk />.</p>
         </div>
         <HeroMeadow />
       </section>
