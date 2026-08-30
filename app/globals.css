@@ -4518,3 +4518,189 @@ em {
     width: 240px;
   }
 }
+
+/* A tiny cyclist falls from the copy, then treats the meadow as a track. */
+.bike-word {
+  appearance: none;
+  position: relative;
+  z-index: 6;
+  margin: 0;
+  border: 0;
+  border-radius: 3px;
+  padding: 0 0.04em;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(0, 47, 167, 0.58);
+  text-underline-offset: 0.16em;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.bike-word:hover,
+.bike-word:focus-visible,
+.bike-word[data-riding="true"] {
+  color: #002fa7;
+  text-decoration-color: #002fa7;
+}
+
+.bike-word:focus-visible {
+  outline: 1px solid #002fa7;
+  outline-offset: 3px;
+}
+
+.bike-ride-layer {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 50%;
+  display: block;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  contain: layout paint;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.bike-rider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: clamp(52px, 4.6vw, 68px);
+  aspect-ratio: 1;
+  opacity: 0;
+  transform-origin: center 89%;
+  transition: opacity 150ms ease;
+  will-change: transform;
+}
+
+.bike-ride-layer:not([data-phase="idle"]) .bike-rider {
+  opacity: 1;
+}
+
+.bike-rider__direction,
+.bike-rider__sprite {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.bike-rider__direction {
+  --bike-direction: 1;
+  transform: scaleX(var(--bike-direction));
+  transform-origin: center;
+}
+
+.bike-rider__sprite {
+  transform-origin: center 89%;
+}
+
+.bike-rider__sprite img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 1px rgba(35, 39, 20, 0.16));
+  user-select: none;
+}
+
+.bike-rider__sprite::before,
+.bike-rider__sprite::after {
+  position: absolute;
+  z-index: 2;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #002fa7;
+  box-shadow: 12px -8px 0 rgba(0, 47, 167, 0.62), -10px 10px 0 rgba(151, 161, 41, 0.75);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bike-rider__sprite::before {
+  top: 22%;
+  left: 22%;
+}
+
+.bike-rider__sprite::after {
+  right: 23%;
+  bottom: 22%;
+  transform: rotate(90deg);
+}
+
+.bike-rider__shadow {
+  position: absolute;
+  right: 9%;
+  bottom: 6%;
+  left: 9%;
+  display: block;
+  height: 8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(47, 61, 20, 0.28), rgba(47, 61, 20, 0) 72%);
+  opacity: 0;
+  transform: scaleX(0.76);
+  transition: opacity 180ms ease;
+}
+
+.bike-ride-layer[data-phase="land"] .bike-rider__shadow,
+.bike-ride-layer[data-phase="ride"] .bike-rider__shadow {
+  opacity: 1;
+}
+
+.bike-ride-layer[data-phase="spawn"] .bike-rider__sprite {
+  animation: miniature-bike-materialize 220ms cubic-bezier(.22,.7,.2,1) both;
+}
+
+.bike-ride-layer[data-phase="spawn"] .bike-rider__sprite::before,
+.bike-ride-layer[data-phase="spawn"] .bike-rider__sprite::after {
+  animation: miniature-bike-sparkle 420ms ease-out both;
+}
+
+.bike-ride-layer[data-phase="land"] .bike-rider__sprite {
+  animation: miniature-bike-touchdown 170ms ease-out both;
+}
+
+.bike-rider[data-turning="true"] .bike-rider__sprite {
+  animation: miniature-bike-turn 260ms ease-in-out both;
+}
+
+@keyframes miniature-bike-materialize {
+  from { opacity: 0; transform: scale(0.08) rotate(-8deg); }
+  72% { opacity: 1; }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes miniature-bike-sparkle {
+  0%, 100% { opacity: 0; transform: scale(0.2); }
+  45% { opacity: 0.9; transform: scale(1); }
+}
+
+@keyframes miniature-bike-touchdown {
+  from { transform: translateY(-2px) scaleY(1); }
+  55% { transform: translateY(0) scaleY(0.96); }
+  to { transform: translateY(0) scaleY(1); }
+}
+
+@keyframes miniature-bike-turn {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-2px) rotate(-2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bike-rider,
+  .bike-rider__shadow,
+  .bike-rider__sprite,
+  .bike-rider__sprite::before,
+  .bike-rider__sprite::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

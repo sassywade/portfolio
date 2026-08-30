@@ -33,6 +33,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, />Neel Saswade</);
   assert.match(html, /class="meadow__grass-canvas"/);
   assert.match(html, /data-grass-layer="true"/);
+  assert.match(html, /class="bike-word"/);
+  assert.match(html, /Release miniature Neel on a bike onto the meadow/);
   assert.match(html, /aria-label="Meadow and cypress wind controls"/);
   assert.match(html, />Breeze<output>0\.34<\/output>/);
   assert.match(html, />Gust<output>0\.52<\/output>/);
@@ -42,12 +44,13 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
-test("keeps the living lawn and cursor pet lightweight", async () => {
-  const [renderer, meadow, hero, tree, smiley, css] = await Promise.all([
+test("keeps the living lawn, miniature cyclist, and cursor pet lightweight", async () => {
+  const [renderer, meadow, hero, tree, bike, smiley, css] = await Promise.all([
     readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/bike-ride.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
@@ -79,6 +82,12 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(tree, /cypress-tree__root-transition/);
   assert.match(tree, /cypress-tree__root-shadow/);
   assert.match(tree, /cypress-tree__root-bank/);
+  assert.match(bike, /const FRAME_URLS = \[/);
+  assert.match(bike, /surfaceByColumn/);
+  assert.match(bike, /window\.requestAnimationFrame\(frame\)/);
+  assert.match(bike, /direction \*= -1/);
+  assert.match(bike, /new IntersectionObserver/);
+  assert.match(bike, /prefers-reduced-motion: reduce/);
   assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
   assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
   assert.match(smiley, /const IDLE_HUFF_STATES = \["light", "strong", "strained"\]/);
@@ -92,5 +101,7 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
+  assert.match(css, /\.bike-word\s*\{/);
+  assert.match(css, /@keyframes miniature-bike-materialize/);
   assert.match(css, /pointer-events:\s*none/);
 });
