@@ -5,6 +5,11 @@ import { createCypressTree } from "./cypress-tree-renderer";
 import { type WindSettings } from "./wind";
 
 const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
+const WELCOME_BREEZE_SESSION_KEY = "neel-cypress-welcome-breeze";
+const WELCOME_BREEZE_DELAY = 1250;
+const STRONG_AMBIENT_WIND_THRESHOLD = 0.58;
+const WELCOME_BREEZE_STRENGTH = 0.46;
+const WELCOME_BREEZE_DURATION = 1450;
 
 type CypressTreeProps = {
   wind: WindSettings;
@@ -15,6 +20,8 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const treeRef = useRef<ReturnType<typeof createCypressTree> | null>(null);
   const initialSettings = useRef({ wind, isPlaying });
+  const latestWind = useRef(wind);
+  const latestPlaying = useRef(isPlaying);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,12 +43,46 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
   }, []);
 
   useEffect(() => {
+    latestWind.current = wind;
     treeRef.current?.setWind(wind);
   }, [wind]);
 
   useEffect(() => {
+    latestPlaying.current = isPlaying;
     treeRef.current?.setPlaying(isPlaying);
   }, [isPlaying]);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    try {
+      if (window.sessionStorage.getItem(WELCOME_BREEZE_SESSION_KEY) === "shown") return;
+    } catch {
+      // Storage can be unavailable in privacy-restricted contexts; the breeze can still run once.
+    }
+
+    const welcomeTimer = window.setTimeout(() => {
+      try {
+        window.sessionStorage.setItem(WELCOME_BREEZE_SESSION_KEY, "shown");
+      } catch {
+        // The animation is nonessential, so storage failure should never block it.
+      }
+
+      const tree = treeRef.current;
+      const currentWind = latestWind.current;
+      const ambientWind = Math.max(currentWind.breeze, currentWind.gust * 0.72);
+      if (!tree || !latestPlaying.current || ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD) return;
+
+      tree.applyGust({
+        direction: currentWind.direction < 0 ? -1 : 1,
+        strength: WELCOME_BREEZE_STRENGTH,
+        duration: WELCOME_BREEZE_DURATION,
+      });
+    }, WELCOME_BREEZE_DELAY);
+
+    return () => window.clearTimeout(welcomeTimer);
+  }, []);
 
   useEffect(() => {
     const handlePetGust = (event: Event) => {

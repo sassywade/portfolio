@@ -262,6 +262,13 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /portfolio:pet-blow-cypress/);
   assert.match(tree, /treeRef\.current\?\.applyGust/);
   assert.match(tree, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT, handlePetGust\)/);
+  assert.match(tree, /WELCOME_BREEZE_DELAY = 1250/);
+  assert.match(tree, /STRONG_AMBIENT_WIND_THRESHOLD = 0\.58/);
+  assert.match(tree, /WELCOME_BREEZE_STRENGTH = 0\.46/);
+  assert.match(tree, /Math\.max\(currentWind\.breeze, currentWind\.gust \* 0\.72\)/);
+  assert.match(tree, /ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD/);
+  assert.match(tree, /sessionStorage\.getItem\(WELCOME_BREEZE_SESSION_KEY\)/);
+  assert.match(tree, /direction: currentWind\.direction < 0 \? -1 : 1/);
   assert.match(tree, /className="cypress-tree__ground-shadow" aria-hidden="true"/);
   assert.doesNotMatch(tree, /cypress-tree__controls|useState/);
   assert.doesNotMatch(tree, /cypress-tree__root-transition/);
