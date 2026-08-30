@@ -32,7 +32,10 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /<title>Neel Saswade — Product designer<\/title>/i);
   assert.match(html, /class="site-header__wordmark"[^>]*>\s*Neel Saswade\s*<\/a>/);
   assert.match(html, />Neel Saswade</);
-  assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at Glean focused on proactive intelligence,\s*growth, and artifacts\. Previously, I designed at snap, and intuitive surgical\./);
+  assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at /);
+  assert.match(html, /hero-company--glean[^>]*href="https:\/\/www\.glean\.com\/"/);
+  assert.match(html, /hero-company--snap[^>]*href="https:\/\/www\.snap\.com\/"/);
+  assert.match(html, /hero-company--intuitive[^>]*href="https:\/\/www\.intuitive\.com\/"/);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
   assert.match(html, /class="meadow__image" src="\/meadow-ground\.png"/);
   assert.match(html, /data-rolling-meadow="original"/);
@@ -41,11 +44,11 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
   assert.match(html, /data-flat-texture="fine"/);
-  assert.match(html, /class="bike-word"/);
+  assert.match(html, /class="[^"]*\bbike-word\b[^"]*\bhero-hobby--bike\b/);
   assert.match(html, /Release miniature Neel on a bike onto the meadow/);
-  assert.match(html, /class="photo-word"/);
+  assert.match(html, /class="[^"]*\bphoto-word\b[^"]*\bhero-hobby--photo\b/);
   assert.match(html, /Release miniature Neel with a camera onto the meadow/);
-  assert.match(html, /class="backpack-word"/);
+  assert.match(html, /class="[^"]*\bbackpack-word\b[^"]*\bhero-hobby--backpack\b/);
   assert.match(html, /Release miniature Neel backpacking onto the meadow/);
   assert.match(html, /class="top-pet-pull"/);
   assert.doesNotMatch(html, /Meadow and cypress wind controls|Open secret meadow prototype picker/);

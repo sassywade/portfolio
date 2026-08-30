@@ -111,6 +111,185 @@ html[data-top-pet-active="true"] .hero-meadow {
   }
 }
 
+/* Inline hero actors: colorful enough to invite a click, quiet enough to stay editorial. */
+.hero-copy__rest,
+.hero-inline-action {
+  transition: opacity 220ms ease, color 220ms ease, background-color 220ms ease, transform 220ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.hero-inline-action {
+  --hero-actor-color: var(--acid);
+  --hero-actor-wash: rgba(0, 47, 167, 0.1);
+  position: relative;
+  z-index: 6;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.24em;
+  margin-inline: 0.02em;
+  border-radius: 0.34em;
+  padding: 0.01em 0.12em 0.025em;
+  background: linear-gradient(to top, var(--hero-actor-wash) 0 42%, transparent 42% 100%);
+  color: var(--hero-actor-color);
+  font-weight: 520;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hero-inline-action:hover,
+.hero-inline-action:focus-visible {
+  background-color: var(--hero-actor-wash);
+  transform: translateY(-1px);
+}
+
+.hero-inline-action:focus-visible {
+  outline: 1px solid var(--hero-actor-color);
+  outline-offset: 3px;
+}
+
+.pranathi-bio:has(.hero-inline-action:hover) .hero-copy__rest,
+.pranathi-bio:has(.hero-inline-action:focus-visible) .hero-copy__rest {
+  opacity: 0.3;
+}
+
+.pranathi-bio:has(.hero-inline-action:hover) .hero-inline-action,
+.pranathi-bio:has(.hero-inline-action:focus-visible) .hero-inline-action {
+  opacity: 0.38;
+}
+
+.pranathi-bio .hero-inline-action:hover,
+.pranathi-bio .hero-inline-action:focus-visible {
+  opacity: 1;
+}
+
+.pranathi-bio:has(.hero-inline-action:hover) .hero-inline-action:hover,
+.pranathi-bio:has(.hero-inline-action:focus-visible) .hero-inline-action:focus-visible {
+  opacity: 1;
+}
+
+.hero-company {
+  white-space: nowrap;
+}
+
+.hero-company__mark,
+.hero-hobby__mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 0.92em;
+  height: 0.92em;
+  transform: translateY(0.08em);
+}
+
+.hero-company__mark {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hero-company--glean {
+  --hero-actor-color: #343ced;
+  --hero-actor-wash: rgba(52, 60, 237, 0.11);
+}
+
+.hero-company--glean .hero-company__mark {
+  border-radius: 50%;
+  background-image: url("https://assets.glean.com/marketing/Assets/Brand%20Resources/Logo%20Icon%20Blue/GLN_logo-icon-Primary.svg");
+}
+
+.hero-company--snap {
+  --hero-actor-color: #776000;
+  --hero-actor-wash: rgba(255, 252, 0, 0.34);
+}
+
+.hero-company--snap .hero-company__mark {
+  width: 1.28em;
+  border-radius: 0.18em;
+  background-color: #fffc00;
+  background-image: url("https://images.ctfassets.net/dwtpq5hdcqjg/14K5u2ez1kiBJLpwYhMOOK/b6be28f5de463375a1ae43a8cfdca7fa/Snap_Inc_Logo_Fixed.svg");
+  background-size: 84% auto;
+}
+
+.hero-company--intuitive {
+  --hero-actor-color: #2e7381;
+  --hero-actor-wash: rgba(46, 115, 129, 0.12);
+}
+
+.hero-company--intuitive .hero-company__mark {
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.hero-company--intuitive .hero-company__mark::before {
+  content: "i";
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 0.78em;
+  font-style: italic;
+  font-weight: 650;
+  line-height: 1;
+  transform: translateY(-0.03em);
+}
+
+.hero-hobby {
+  gap: 0.18em;
+  text-decoration: none;
+}
+
+.hero-hobby__mark {
+  border-radius: 50%;
+  background: var(--hero-actor-wash);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.84em;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.hero-hobby--bike {
+  --hero-actor-color: #2458c6;
+  --hero-actor-wash: rgba(36, 88, 198, 0.13);
+}
+
+.hero-hobby--photo {
+  --hero-actor-color: #bd5538;
+  --hero-actor-wash: rgba(189, 85, 56, 0.13);
+}
+
+.hero-hobby--backpack {
+  --hero-actor-color: #567a35;
+  --hero-actor-wash: rgba(86, 122, 53, 0.14);
+}
+
+.bike-word:hover,
+.bike-word:focus-visible,
+.bike-word[data-riding="true"],
+.photo-word:hover,
+.photo-word:focus-visible,
+.photo-word[data-photographing="true"],
+.backpack-word:hover,
+.backpack-word:focus-visible,
+.backpack-word[data-walking="true"] {
+  color: var(--hero-actor-color);
+  text-decoration-color: transparent;
+}
+
+@media (hover: none) {
+  .hero-inline-action {
+    padding-inline: 0.08em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy__rest,
+  .hero-inline-action {
+    transition: none;
+  }
+
+  .hero-inline-action:hover,
+  .hero-inline-action:focus-visible {
+    transform: none;
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -5951,6 +6130,41 @@ em {
   .meadow-settings__gear,
   .meadow-settings__panel {
     animation: none;
+    transition: none;
+  }
+}
+
+/* Keep the actor treatment above the older hobby-button defaults. */
+.pranathi-bio .hero-inline-action {
+  margin-inline: 0.02em;
+  padding: 0.01em 0.12em 0.025em;
+  background: linear-gradient(to top, var(--hero-actor-wash) 0 42%, transparent 42% 100%);
+  color: var(--hero-actor-color);
+  text-decoration: none;
+  transition: opacity 220ms ease, color 220ms ease, background-color 220ms ease, transform 220ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.pranathi-bio .hero-inline-action:hover,
+.pranathi-bio .hero-inline-action:focus-visible {
+  background-color: var(--hero-actor-wash);
+  color: var(--hero-actor-color);
+  text-decoration: none;
+}
+
+.pranathi-bio .bike-word[data-riding="true"],
+.pranathi-bio .photo-word[data-photographing="true"],
+.pranathi-bio .backpack-word[data-walking="true"] {
+  color: var(--hero-actor-color);
+  text-decoration: none;
+}
+
+.pranathi-bio .hero-inline-action:focus-visible {
+  outline: 1px solid var(--hero-actor-color);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pranathi-bio .hero-inline-action {
     transition: none;
   }
 }

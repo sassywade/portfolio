@@ -340,13 +340,15 @@ export function PhotoDrop() {
       <button
         ref={buttonRef}
         type="button"
-        className="photo-word"
+        className="photo-word hero-inline-action hero-hobby hero-hobby--photo"
         data-photographing="false"
         data-cuelume-toggle="scan"
+        data-cuelume-hover="sparkle"
         aria-label="Release miniature Neel with a camera onto the meadow"
         onClick={() => launchRef.current()}
       >
-        photograph SF
+        <span className="hero-hobby__mark" aria-hidden="true">◉</span>
+        <span>photograph SF</span>
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" data-burst="false" aria-hidden="true">

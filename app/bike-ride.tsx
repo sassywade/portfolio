@@ -348,13 +348,15 @@ export function BikeRide() {
       <button
         ref={buttonRef}
         type="button"
-        className="bike-word"
+        className="bike-word hero-inline-action hero-hobby hero-hobby--bike"
         data-riding="false"
         data-cuelume-toggle="pulse"
+        data-cuelume-hover="sparkle"
         aria-label="Release miniature Neel on a bike onto the meadow"
         onClick={() => launchRef.current()}
       >
-        bikes
+        <span className="hero-hobby__mark" aria-hidden="true">↝</span>
+        <span>bikes</span>
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="bike-ride-layer" data-phase="idle" data-direction="right" data-terrain="level" aria-hidden="true">

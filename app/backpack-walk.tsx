@@ -332,13 +332,15 @@ export function BackpackWalk() {
       <button
         ref={buttonRef}
         type="button"
-        className="backpack-word"
+        className="backpack-word hero-inline-action hero-hobby hero-hobby--backpack"
         data-walking="false"
         data-cuelume-toggle="arrival"
+        data-cuelume-hover="sparkle"
         aria-label="Release miniature Neel backpacking onto the meadow"
         onClick={() => launchRef.current()}
       >
-        backpacking
+        <span className="hero-hobby__mark" aria-hidden="true">⌁</span>
+        <span>backpacking</span>
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" data-direction="left" aria-hidden="true">
