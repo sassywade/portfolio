@@ -3805,6 +3805,7 @@ em {
   z-index: 0;
   display: block;
   object-fit: contain;
+  transition: opacity 360ms ease;
 }
 
 .meadow__texture {
@@ -3818,14 +3819,25 @@ em {
   mix-blend-mode: multiply;
   opacity: 0.34;
   animation: meadow-texture-drift 20s linear infinite;
+  transition: opacity 360ms ease;
 }
 
 .meadow__grass-canvas {
   z-index: 2;
   display: block;
   contain: strict;
-  opacity: 0.96;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 360ms ease;
+}
+
+.meadow__visual.is-grass-live .meadow__image,
+.meadow__visual.is-grass-live .meadow__texture {
+  opacity: 0;
+}
+
+.meadow__visual.is-grass-live .meadow__grass-canvas {
+  opacity: 1;
 }
 
 .cypress-tree {

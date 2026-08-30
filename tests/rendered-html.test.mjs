@@ -55,11 +55,19 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(renderer, /const FRAME_INTERVAL = 1000 \/ 30/);
   assert.match(renderer, /surfaceByColumn/);
   assert.match(renderer, /sourceContext\.getImageData/);
+  assert.match(renderer, /type GrassTuft/);
+  assert.match(renderer, /buildPainterlyBase/);
+  assert.match(renderer, /buildTuftClusters/);
+  assert.match(renderer, /drawWindBands/);
+  assert.match(renderer, /globalCompositeOperation = "screen"/);
+  assert.match(renderer, /classList\.add\(READY_CLASS\)/);
   assert.match(renderer, /context\.quadraticCurveTo/);
   assert.match(renderer, /navigator\.hardwareConcurrency/);
   assert.match(renderer, /new IntersectionObserver/);
   assert.match(renderer, /new ResizeObserver/);
   assert.match(renderer, /document\.hidden/);
+  assert.doesNotMatch(renderer, /type Blade\s*=/);
+  assert.doesNotMatch(renderer, /edgeCount/);
   assert.doesNotMatch(renderer, /filter\s*=\s*["']blur|ctx\.filter\s*=\s*["']blur/i);
 
   assert.match(meadow, /createMeadowGrass/);
@@ -75,5 +83,6 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
   assert.match(smiley, /stopIdleMischief\(\)/);
   assert.match(css, /\.meadow__grass-canvas\s*\{/);
+  assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
   assert.match(css, /pointer-events:\s*none/);
 });
