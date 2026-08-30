@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { useMeadowLayerHost } from "./use-meadow-layer-host";
 
 const FRAME_URLS = [
   "/bike-rider-frame-1.png",
@@ -20,6 +22,7 @@ type RidePhase = "idle" | "spawn" | "drop" | "land" | "ride";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function BikeRide() {
+  const meadowHost = useMeadowLayerHost();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const layerRef = useRef<HTMLSpanElement>(null);
   const riderRef = useRef<HTMLSpanElement>(null);
@@ -288,7 +291,7 @@ export function BikeRide() {
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
     };
-  }, []);
+  }, [meadowHost]);
 
   return (
     <>
@@ -302,16 +305,19 @@ export function BikeRide() {
       >
         bikes
       </button>
-      <span ref={layerRef} className="bike-ride-layer" data-phase="idle" aria-hidden="true">
-        <span ref={riderRef} className="bike-rider" data-turning="false">
-          <span className="bike-rider__shadow" />
-          <span ref={directionRef} className="bike-rider__direction">
-            <span className="bike-rider__sprite">
-              <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+      {meadowHost ? createPortal(
+        <span ref={layerRef} className="bike-ride-layer" data-phase="idle" aria-hidden="true">
+          <span ref={riderRef} className="bike-rider" data-turning="false">
+            <span className="bike-rider__shadow" />
+            <span ref={directionRef} className="bike-rider__direction">
+              <span className="bike-rider__sprite">
+                <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+              </span>
             </span>
           </span>
-        </span>
-      </span>
+        </span>,
+        meadowHost,
+      ) : null}
     </>
   );
 }

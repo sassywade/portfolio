@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { useMeadowLayerHost } from "./use-meadow-layer-host";
 
 const FRAME_URLS = [
   "/photographer-frame-1.png",
@@ -30,6 +32,7 @@ type PhotoPhase = "idle" | "spawn" | "drop" | "land" | "shoot";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function PhotoDrop() {
+  const meadowHost = useMeadowLayerHost();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const layerRef = useRef<HTMLSpanElement>(null);
   const photographerRef = useRef<HTMLSpanElement>(null);
@@ -278,7 +281,7 @@ export function PhotoDrop() {
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
     };
-  }, []);
+  }, [meadowHost]);
 
   return (
     <>
@@ -292,14 +295,17 @@ export function PhotoDrop() {
       >
         photograph SF
       </button>
-      <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" aria-hidden="true">
-        <span ref={photographerRef} className="mini-photographer">
-          <span className="mini-photographer__shadow" />
-          <span className="mini-photographer__sprite">
-            <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+      {meadowHost ? createPortal(
+        <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" aria-hidden="true">
+          <span ref={photographerRef} className="mini-photographer">
+            <span className="mini-photographer__shadow" />
+            <span className="mini-photographer__sprite">
+              <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+            </span>
           </span>
-        </span>
-      </span>
+        </span>,
+        meadowHost,
+      ) : null}
     </>
   );
 }

@@ -52,12 +52,13 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 });
 
 test("keeps the living lawn, miniature visitors, and cursor pet lightweight", async () => {
-  const [renderer, meadow, prototype, hero, tree, bike, photographer, backpacker, smiley, css] = await Promise.all([
+  const [renderer, meadow, prototype, hero, tree, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/use-meadow-layer-host.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/bike-ride.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/backpack-walk.tsx", import.meta.url), "utf8"),
@@ -110,7 +111,11 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(tree, /cypress-tree__root-transition/);
   assert.match(tree, /cypress-tree__root-shadow/);
   assert.match(tree, /cypress-tree__root-bank/);
+  assert.match(layerHost, /document\.querySelector<HTMLElement>\("\.hero-meadow"\)/);
+  assert.match(layerHost, /window\.requestAnimationFrame/);
   assert.match(bike, /const FRAME_URLS = \[/);
+  assert.match(bike, /createPortal/);
+  assert.match(bike, /\}, \[meadowHost\]\)/);
   assert.match(bike, /surfaceByColumn/);
   assert.match(bike, /window\.requestAnimationFrame\(frame\)/);
   assert.match(bike, /direction \*= -1/);
@@ -119,6 +124,8 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(bike, /data-meadow-surface="active"/);
   assert.match(bike, /meadow\.dataset\.meadowVariant === "flat"/);
   assert.match(photographer, /const FRAME_URLS = \[/);
+  assert.match(photographer, /createPortal/);
+  assert.match(photographer, /\}, \[meadowHost\]\)/);
   assert.match(photographer, /const PHOTO_SEQUENCE = \[/);
   assert.match(photographer, /surfaceByColumn/);
   assert.match(photographer, /window\.requestAnimationFrame\(frame\)/);
@@ -127,6 +134,8 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(photographer, /prefers-reduced-motion: reduce/);
   assert.match(photographer, /data-meadow-surface="active"/);
   assert.match(backpacker, /const FRAME_URLS = \[/);
+  assert.match(backpacker, /createPortal/);
+  assert.match(backpacker, /\}, \[meadowHost\]\)/);
   assert.match(backpacker, /const WALK_FRAME_ORDER = \[/);
   assert.match(backpacker, /surfaceByColumn/);
   assert.match(backpacker, /window\.requestAnimationFrame\(frame\)/);

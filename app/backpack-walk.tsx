@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { useMeadowLayerHost } from "./use-meadow-layer-host";
 
 const FRAME_URLS = [
   "/backpacker-frame-1.png",
@@ -21,6 +23,7 @@ type WalkPhase = "idle" | "spawn" | "drop" | "land" | "walk";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function BackpackWalk() {
+  const meadowHost = useMeadowLayerHost();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const layerRef = useRef<HTMLSpanElement>(null);
   const hikerRef = useRef<HTMLSpanElement>(null);
@@ -303,7 +306,7 @@ export function BackpackWalk() {
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
     };
-  }, []);
+  }, [meadowHost]);
 
   return (
     <>
@@ -317,16 +320,19 @@ export function BackpackWalk() {
       >
         backpacking
       </button>
-      <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" aria-hidden="true">
-        <span ref={hikerRef} className="mini-hiker" data-turning="false">
-          <span className="mini-hiker__shadow" />
-          <span ref={directionRef} className="mini-hiker__direction">
-            <span className="mini-hiker__sprite">
-              <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+      {meadowHost ? createPortal(
+        <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" aria-hidden="true">
+          <span ref={hikerRef} className="mini-hiker" data-turning="false">
+            <span className="mini-hiker__shadow" />
+            <span ref={directionRef} className="mini-hiker__direction">
+              <span className="mini-hiker__sprite">
+                <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+              </span>
             </span>
           </span>
-        </span>
-      </span>
+        </span>,
+        meadowHost,
+      ) : null}
     </>
   );
 }
