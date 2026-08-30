@@ -211,7 +211,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /portfolio:pet-blow-photographer/);
   assert.match(smiley, /portfolio:pet-blow-cypress/);
   assert.match(smiley, /cypress: \{ layer: '\.hero-meadow\[data-scene-visible="true"\]', actor: "\.cypress-tree__canvas" \}/);
-  assert.match(smiley, /cypress: 110/);
+  assert.match(smiley, /cypress: 54/);
   assert.match(smiley, /cursor\.dataset\.miniature = "approach"/);
   assert.match(smiley, /cursor\.dataset\.miniature = "blow"/);
   assert.match(smiley, /new CustomEvent\(PET_BLOW_EVENT\[miniature\.kind\]/);

@@ -40,7 +40,7 @@ const MINIATURE_PROXIMITY: Record<MiniatureKind, number> = {
   backpacker: 86,
   cyclist: 98,
   photographer: 86,
-  cypress: 110,
+  cypress: 54,
 };
 
 const PET_BLOW_EVENT: Record<MiniatureKind, string> = {
