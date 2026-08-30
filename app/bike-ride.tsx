@@ -64,6 +64,9 @@ export function BikeRide() {
     let velocityY = 0;
     let direction = 1;
     let rideDistance = 0;
+    let currentSpeed = 0;
+    let smoothedGrade = 0;
+    let currentTrackAngle = 0;
     let currentFrame = 0;
     let turningUntil = 0;
 
@@ -138,6 +141,7 @@ export function BikeRide() {
       layer.dataset.phase = next;
       button.dataset.riding = next === "idle" ? "false" : "true";
       if (next === "idle") rider.dataset.turning = "false";
+      if (next === "idle") layer.dataset.terrain = "level";
     }
 
     function renderRider(angle = 0) {
@@ -169,6 +173,7 @@ export function BikeRide() {
       const size = riderSize();
       const layerWidth = layer.getBoundingClientRect().width;
       const ground = trackY(x) - size * RIDER_GROUND_RATIO;
+      const baseRideSpeed = clamp(layerWidth * 0.068, 60, 92);
 
       if (phase === "spawn" && now - phaseStarted >= SPAWN_DURATION) {
         velocityY = -18;
@@ -180,17 +185,20 @@ export function BikeRide() {
         if (y >= ground) {
           y = ground;
           velocityY = 0;
+          currentTrackAngle = trackAngle(x);
           setPhase("land", now);
         }
       } else if (phase === "land") {
         y = ground;
+        currentTrackAngle = trackAngle(x);
         if (now - phaseStarted >= LAND_DURATION) {
           rideDistance = 0;
+          currentSpeed = baseRideSpeed;
+          smoothedGrade = 0;
           setPhase("ride", now);
         }
       } else if (phase === "ride") {
         const margin = size * 0.54;
-        const speed = clamp(layerWidth * 0.068, 60, 92);
 
         if (turningUntil && now < turningUntil) {
           y = ground;
@@ -199,8 +207,26 @@ export function BikeRide() {
             turningUntil = 0;
             rider.dataset.turning = "false";
           }
-          x += direction * speed * deltaSeconds;
-          rideDistance += speed * deltaSeconds;
+
+          // Screen-space y grows downward, so a positive directional grade is a descent.
+          const travelGrade = clamp(Math.sin(currentTrackAngle) * direction, -0.34, 0.34);
+          const gradeFollow = 1 - Math.exp(-deltaSeconds / 0.26);
+          smoothedGrade += (travelGrade - smoothedGrade) * gradeFollow;
+          const rollingPull = (baseRideSpeed - currentSpeed) * 1.45;
+          const slopeGravity = smoothedGrade * 120;
+          currentSpeed = clamp(
+            currentSpeed + (rollingPull + slopeGravity) * deltaSeconds,
+            baseRideSpeed * 0.72,
+            baseRideSpeed * 1.32,
+          );
+          layer.dataset.terrain = smoothedGrade > 0.025
+            ? "downhill"
+            : smoothedGrade < -0.025
+              ? "uphill"
+              : "level";
+
+          x += direction * currentSpeed * deltaSeconds;
+          rideDistance += currentSpeed * deltaSeconds;
 
           if (x >= layerWidth - margin) {
             x = layerWidth - margin;
@@ -211,11 +237,12 @@ export function BikeRide() {
           }
 
           y = trackY(x) - size * RIDER_GROUND_RATIO;
+          currentTrackAngle = trackAngle(x);
           setFrame(Math.floor(rideDistance / 9));
         }
       }
 
-      renderRider(phase === "ride" || phase === "land" ? trackAngle(x) : 0);
+      renderRider(phase === "ride" || phase === "land" ? currentTrackAngle : 0);
       schedule();
     }
 
@@ -226,6 +253,9 @@ export function BikeRide() {
       lastTime = 0;
       turningUntil = 0;
       rideDistance = 0;
+      currentSpeed = 0;
+      smoothedGrade = 0;
+      currentTrackAngle = 0;
       direction = 1;
       setFrame(0);
 
@@ -241,8 +271,9 @@ export function BikeRide() {
 
       if (reducedMotion.matches) {
         y = trackY(x) - size * RIDER_GROUND_RATIO;
+        currentTrackAngle = trackAngle(x);
         setPhase("land");
-        renderRider(trackAngle(x));
+        renderRider(currentTrackAngle);
         reducedTimer = window.setTimeout(() => setPhase("idle"), 1800);
         return;
       }
@@ -271,7 +302,8 @@ export function BikeRide() {
         const size = riderSize();
         x = clamp(x, size * 0.54, layer.getBoundingClientRect().width - size * 0.54);
         y = trackY(x) - size * RIDER_GROUND_RATIO;
-        renderRider(trackAngle(x));
+        currentTrackAngle = trackAngle(x);
+        renderRider(currentTrackAngle);
       }
     });
     resizeObserver.observe(layer);
@@ -280,7 +312,8 @@ export function BikeRide() {
       prepareMeadowProfile();
       if (phase === "ride" || phase === "land") {
         y = trackY(x) - riderSize() * RIDER_GROUND_RATIO;
-        renderRider(trackAngle(x));
+        currentTrackAngle = trackAngle(x);
+        renderRider(currentTrackAngle);
       }
     };
     meadowImage.addEventListener("load", handleMeadowLoad);
@@ -323,7 +356,7 @@ export function BikeRide() {
         bikes
       </button>
       {meadowHost ? createPortal(
-        <span ref={layerRef} className="bike-ride-layer" data-phase="idle" data-direction="right" aria-hidden="true">
+        <span ref={layerRef} className="bike-ride-layer" data-phase="idle" data-direction="right" data-terrain="level" aria-hidden="true">
           <span ref={riderRef} className="bike-rider" data-turning="false">
             <span className="bike-rider__shadow" />
             <span ref={directionRef} className="bike-rider__direction">

@@ -135,6 +135,13 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(bike, /surfaceByColumn/);
   assert.match(bike, /window\.requestAnimationFrame\(frame\)/);
   assert.match(bike, /direction = nextDirection/);
+  assert.match(bike, /let currentSpeed = 0/);
+  assert.match(bike, /let smoothedGrade = 0/);
+  assert.match(bike, /const travelGrade = clamp\(Math\.sin\(currentTrackAngle\) \* direction, -0\.34, 0\.34\)/);
+  assert.match(bike, /const rollingPull = \(baseRideSpeed - currentSpeed\) \* 1\.45/);
+  assert.match(bike, /const slopeGravity = smoothedGrade \* 120/);
+  assert.match(bike, /baseRideSpeed \* 0\.72,[\s\S]*baseRideSpeed \* 1\.32/);
+  assert.match(bike, /layer\.dataset\.terrain = smoothedGrade > 0\.025/);
   assert.match(bike, /portfolio:pet-blow-cyclist/);
   assert.match(bike, /layer\.dataset\.direction = direction === 1 \? "right" : "left"/);
   assert.match(bike, /window\.addEventListener\(PET_BLOW_CYCLIST_EVENT, handlePetBlow\)/);
