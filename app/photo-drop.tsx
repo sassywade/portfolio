@@ -7,20 +7,20 @@ import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
 
 const FRAME_URLS = [
-  "/photographer-frame-1.png",
-  "/photographer-frame-2.png",
+  "/photographer-frame-1-corrected.png",
+  "/photographer-frame-2-corrected.png",
   "/photographer-frame-3.png",
   "/photographer-frame-4.png",
   "/photographer-frame-5.png",
 ] as const;
 
 const PHOTO_SEQUENCE = [
-  { frame: 0, duration: 680 },
-  { frame: 1, duration: 460 },
-  { frame: 2, duration: 540 },
-  { frame: 3, duration: 160 },
-  { frame: 2, duration: 220 },
-  { frame: 4, duration: 780 },
+  { frame: 0, minDuration: 980, maxDuration: 2100 },
+  { frame: 1, minDuration: 360, maxDuration: 680 },
+  { frame: 2, minDuration: 420, maxDuration: 720 },
+  { frame: 3, minDuration: 420, maxDuration: 560 },
+  { frame: 2, minDuration: 240, maxDuration: 380 },
+  { frame: 4, minDuration: 900, maxDuration: 1800 },
 ] as const;
 
 const SPAWN_DURATION = 220;
@@ -30,6 +30,7 @@ const PHOTOGRAPHER_GROUND_RATIO = 0.962;
 type PhotoPhase = "idle" | "spawn" | "drop" | "land" | "shoot";
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const randomDuration = (min: number, max: number) => Math.round(min + Math.random() * (max - min));
 
 export function PhotoDrop() {
   const meadowHost = useMeadowLayerHost();
@@ -149,7 +150,7 @@ export function PhotoDrop() {
       sequenceTimer = window.setTimeout(() => {
         sequenceIndex = (sequenceIndex + 1) % PHOTO_SEQUENCE.length;
         runPhotoStep();
-      }, step.duration);
+      }, randomDuration(step.minDuration, step.maxDuration));
     }
 
     function setPhase(next: PhotoPhase, now = performance.now()) {

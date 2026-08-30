@@ -130,6 +130,11 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(photographer, /createPortal/);
   assert.match(photographer, /\}, \[meadowHost\]\)/);
   assert.match(photographer, /const PHOTO_SEQUENCE = \[/);
+  assert.match(photographer, /photographer-frame-1-corrected\.png/);
+  assert.match(photographer, /photographer-frame-2-corrected\.png/);
+  assert.match(photographer, /\{ frame: 3, minDuration: 420, maxDuration: 560 \}/);
+  assert.match(photographer, /Math\.random\(\)/);
+  assert.match(photographer, /randomDuration\(step\.minDuration, step\.maxDuration\)/);
   assert.match(photographer, /surfaceByColumn/);
   assert.match(photographer, /window\.requestAnimationFrame\(frame\)/);
   assert.match(photographer, /window\.setTimeout/);
