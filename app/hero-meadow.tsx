@@ -2,6 +2,7 @@
 
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { AlamoWeather } from "./alamo-weather";
+import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type FlatMeadowTexture, type MeadowVariant, type RollingMeadow } from "./meadow";
 import { MeadowSettings } from "./meadow-prototype-controls";
@@ -24,6 +25,21 @@ export function HeroMeadow() {
   const [rollingMeadow, setRollingMeadow] = useState<RollingMeadow>("original");
   const [flatMeadowTexture, setFlatMeadowTexture] = useState<FlatMeadowTexture>("fine");
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
+  const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
+
+  useEffect(() => {
+    const scene = sceneRef.current;
+    const shell = scene?.closest<HTMLElement>(".site-shell");
+    if (!shell) return;
+
+    shell.dataset.atmosphere = atmosphere;
+    document.documentElement.dataset.atmosphere = atmosphere;
+
+    return () => {
+      delete shell.dataset.atmosphere;
+      delete document.documentElement.dataset.atmosphere;
+    };
+  }, [atmosphere]);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -157,6 +173,7 @@ export function HeroMeadow() {
         isPlaying={sceneIsPlaying}
       />
       <MeadowSettings
+        atmosphere={atmosphere}
         variant={meadowVariant}
         rollingMeadow={rollingMeadow}
         flatTexture={flatMeadowTexture}
@@ -164,6 +181,7 @@ export function HeroMeadow() {
         wind={wind}
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
+        onAtmosphereChange={setAtmosphere}
         onVariantChange={setMeadowVariant}
         onRollingMeadowChange={(nextMeadow) => {
           setRollingMeadow(nextMeadow);

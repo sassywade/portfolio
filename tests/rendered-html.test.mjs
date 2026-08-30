@@ -75,6 +75,29 @@ test("keeps the top-edge pet chorus elastic, progressive, and lightweight", asyn
   assert.match(css, /translate3d\(0, var\(--top-pet-pull-y\), 0\)/);
 });
 
+test("offers lightweight San Francisco atmosphere backgrounds in the prototype picker", async () => {
+  const [atmospheres, hero, prototype, css] = await Promise.all([
+    readFile(new URL("../app/atmospheres.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  for (const id of ["grid", "day", "sunny", "foggy", "sunrise", "sunset", "rainy", "night"]) {
+    assert.match(atmospheres, new RegExp(`id: "${id}"`));
+    assert.match(css, new RegExp(`data-atmosphere(?:-option)?="${id}"`));
+  }
+  assert.match(hero, /useState<PortfolioAtmosphere>\("grid"\)/);
+  assert.match(hero, /shell\.dataset\.atmosphere = atmosphere/);
+  assert.match(hero, /document\.documentElement\.dataset\.atmosphere = atmosphere/);
+  assert.match(prototype, /PORTFOLIO_ATMOSPHERES\.map/);
+  assert.match(prototype, /aria-label="Portfolio background atmosphere"/);
+  assert.match(prototype, /onAtmosphereChange\(id\)/);
+  assert.match(css, /\.site-shell\[data-atmosphere="night"\]\s*\{[^}]*--ink:\s*#f5f2e9/);
+  assert.match(css, /html\[data-atmosphere="night"\] \.smiley-cursor__asset/);
+  assert.doesNotMatch(css, /@keyframes[^}]*rain/i);
+});
+
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
   const [weather, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/alamo-weather.tsx", import.meta.url), "utf8"),

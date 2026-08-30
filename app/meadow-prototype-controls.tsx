@@ -3,6 +3,10 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
+  PORTFOLIO_ATMOSPHERES,
+  type PortfolioAtmosphere,
+} from "./atmospheres";
+import {
   FLAT_MEADOW_TEXTURES,
   ROLLING_MEADOWS,
   type FlatMeadowTexture,
@@ -19,6 +23,7 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 ];
 
 type MeadowSettingsProps = {
+  atmosphere: PortfolioAtmosphere;
   variant: MeadowVariant;
   rollingMeadow: RollingMeadow;
   flatTexture: FlatMeadowTexture;
@@ -26,6 +31,7 @@ type MeadowSettingsProps = {
   wind: WindSettings;
   isPlaying: boolean;
   isVisible: boolean;
+  onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
   onVariantChange: (variant: MeadowVariant) => void;
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
   onFlatTextureChange: (texture: FlatMeadowTexture) => void;
@@ -35,6 +41,7 @@ type MeadowSettingsProps = {
 };
 
 export function MeadowSettings({
+  atmosphere,
   variant,
   rollingMeadow,
   flatTexture,
@@ -42,6 +49,7 @@ export function MeadowSettings({
   wind,
   isPlaying,
   isVisible,
+  onAtmosphereChange,
   onVariantChange,
   onRollingMeadowChange,
   onFlatTextureChange,
@@ -127,6 +135,30 @@ export function MeadowSettings({
               Close
             </button>
           </div>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-atmosphere`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-atmosphere`}>Atmosphere</h2>
+                <small>San Francisco skies</small>
+              </div>
+            </div>
+            <div className="meadow-settings__atmospheres" aria-label="Portfolio background atmosphere">
+              {PORTFOLIO_ATMOSPHERES.map(({ id, label }) => (
+                <button
+                  type="button"
+                  aria-pressed={atmosphere === id}
+                  data-atmosphere-option={id}
+                  data-cuelume-toggle="bloom"
+                  onClick={() => onAtmosphereChange(id)}
+                  key={id}
+                >
+                  <span className="meadow-settings__atmosphere-swatch" aria-hidden="true" />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-meadow`}>
             <h2 id={`${panelId}-meadow`}>Meadow lab</h2>

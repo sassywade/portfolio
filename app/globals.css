@@ -127,6 +127,74 @@ a {
     linear-gradient(rgba(36, 35, 33, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(36, 35, 33, 0.035) 1px, transparent 1px);
   background-size: 40px 40px;
+  color: var(--ink);
+  transition: background-color 650ms cubic-bezier(.22,.7,.2,1), color 450ms ease;
+}
+
+.site-shell[data-atmosphere="day"] {
+  background-color: #dcecf2;
+  background-image: linear-gradient(180deg, #aad4e6 0%, #d9edf3 52%, #f4eee2 100%);
+  background-size: auto;
+}
+
+.site-shell[data-atmosphere="sunny"] {
+  background-color: #d9edf8;
+  background-image:
+    radial-gradient(circle at 82% 16%, rgba(255, 249, 194, 0.96) 0 3.5%, rgba(255, 246, 183, 0.42) 8%, transparent 21%),
+    linear-gradient(180deg, #8fc9ec 0%, #dff2fb 58%, #fff1cf 100%);
+  background-size: auto;
+}
+
+.site-shell[data-atmosphere="foggy"] {
+  background-color: #dfe2df;
+  background-image:
+    radial-gradient(ellipse at 18% 24%, rgba(255, 255, 255, 0.82), transparent 42%),
+    radial-gradient(ellipse at 76% 46%, rgba(255, 255, 255, 0.72), transparent 47%),
+    linear-gradient(180deg, #c7d1d1 0%, #e8e9e4 62%, #d9dbd4 100%);
+  background-size: auto;
+}
+
+.site-shell[data-atmosphere="sunrise"] {
+  background-color: #f5d7cf;
+  background-image:
+    radial-gradient(circle at 24% 72%, rgba(255, 232, 173, 0.86), transparent 18%),
+    linear-gradient(180deg, #bfcfe8 0%, #e8c9d7 48%, #f7c9ae 76%, #f8e4c7 100%);
+  background-size: auto;
+}
+
+.site-shell[data-atmosphere="sunset"] {
+  background-color: #e7b3a3;
+  background-image:
+    radial-gradient(circle at 74% 68%, rgba(255, 207, 128, 0.86), transparent 20%),
+    linear-gradient(180deg, #8f98c7 0%, #c895bd 40%, #ee9c91 72%, #f2c38e 100%);
+  background-size: auto;
+}
+
+.site-shell[data-atmosphere="rainy"] {
+  background-color: #aebac2;
+  background-image:
+    repeating-linear-gradient(108deg, transparent 0 18px, rgba(240, 248, 251, 0.24) 19px, transparent 20px 35px),
+    radial-gradient(ellipse at 20% 0%, rgba(70, 83, 94, 0.32), transparent 42%),
+    linear-gradient(180deg, #7d8f9c 0%, #afbcc4 55%, #d1d3cf 100%);
+  background-size: 64px 92px, auto, auto;
+}
+
+.site-shell[data-atmosphere="night"] {
+  --ink: #f5f2e9;
+  --muted: #c5c3bb;
+  --line: rgba(245, 242, 233, 0.18);
+  background-color: #111a2e;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 235, 0.82) 0 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(197, 218, 255, 0.58) 0 1px, transparent 1.3px),
+    radial-gradient(ellipse at 72% 88%, rgba(74, 98, 150, 0.34), transparent 42%),
+    linear-gradient(180deg, #0c1325 0%, #1d2a45 58%, #354462 100%);
+  background-position: 7px 12px, 38px 28px, 0 0, 0 0;
+  background-size: 74px 74px, 112px 112px, auto, auto;
+}
+
+html[data-atmosphere="night"] .smiley-cursor__asset {
+  filter: invert(1);
 }
 
 @keyframes editorial-enter {
@@ -5482,6 +5550,82 @@ em {
 
 .meadow-settings__rolling > small {
   justify-self: end;
+}
+
+.meadow-settings__atmospheres {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.meadow-settings__atmospheres button {
+  appearance: none;
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  border: 1px solid rgba(36, 35, 33, 0.14);
+  padding: 3px 3px 5px;
+  background: white;
+  color: #77736b;
+  cursor: pointer;
+  font-size: 6.5px;
+  letter-spacing: 0.035em;
+  line-height: 1.15;
+  text-align: left;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.meadow-settings__atmospheres button[aria-pressed="true"] {
+  border-color: var(--acid);
+  color: var(--acid);
+}
+
+.meadow-settings__atmosphere-swatch {
+  display: block;
+  height: 30px;
+  background: #fff;
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="grid"] .meadow-settings__atmosphere-swatch {
+  background-color: #fff;
+  background-image:
+    linear-gradient(rgba(36, 35, 33, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36, 35, 33, 0.08) 1px, transparent 1px);
+  background-size: 9px 9px;
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="day"] .meadow-settings__atmosphere-swatch {
+  background: linear-gradient(180deg, #aad4e6, #f4eee2);
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="sunny"] .meadow-settings__atmosphere-swatch {
+  background: radial-gradient(circle at 80% 20%, #fff7b9 0 8%, transparent 25%), linear-gradient(180deg, #8fc9ec, #fff1cf);
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="foggy"] .meadow-settings__atmosphere-swatch {
+  background: radial-gradient(ellipse at 30% 40%, white, transparent 58%), linear-gradient(180deg, #c7d1d1, #e8e9e4);
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="sunrise"] .meadow-settings__atmosphere-swatch {
+  background: linear-gradient(180deg, #bfcfe8, #e8c9d7 48%, #f8e4c7);
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="sunset"] .meadow-settings__atmosphere-swatch {
+  background: linear-gradient(180deg, #8f98c7, #ee9c91 68%, #f2c38e);
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="rainy"] .meadow-settings__atmosphere-swatch {
+  background: repeating-linear-gradient(108deg, transparent 0 6px, rgba(245, 251, 255, 0.42) 7px, transparent 8px 13px), linear-gradient(180deg, #7d8f9c, #d1d3cf);
+}
+
+.meadow-settings__atmospheres button[data-atmosphere-option="night"] .meadow-settings__atmosphere-swatch {
+  background: radial-gradient(circle, #fffde6 0 1px, transparent 1.3px) 3px 5px / 14px 14px, linear-gradient(180deg, #0c1325, #354462);
+}
+
+.meadow-settings__atmospheres button:focus-visible {
+  outline: 1px solid var(--acid);
+  outline-offset: 2px;
 }
 
 .meadow-settings__texture {
