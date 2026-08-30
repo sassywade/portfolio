@@ -26,6 +26,7 @@ export function HeroMeadow() {
   const [rollingMeadow, setRollingMeadow] = useState<RollingMeadow>("original");
   const [flatMeadowTexture, setFlatMeadowTexture] = useState<FlatMeadowTexture>("fine");
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
+  const [meadowHeight, setMeadowHeight] = useState(100);
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
   const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(3);
 
@@ -186,6 +187,9 @@ export function HeroMeadow() {
   const sceneIsPlaying = isPlaying && isSceneVisible;
   const sceneStyle = {
     "--flat-meadow-color": flatMeadowColor,
+    "--meadow-height-scale": (meadowHeight / 100).toFixed(2),
+    "--living-meadow-scale-y": (0.84 * meadowHeight / 100).toFixed(3),
+    "--meadow-height-offset": `${((meadowHeight - 100) * 1.45).toFixed(1)}px`,
   } as CSSProperties;
 
   return (
@@ -214,6 +218,7 @@ export function HeroMeadow() {
         rollingMeadow={rollingMeadow}
         flatTexture={flatMeadowTexture}
         flatColor={flatMeadowColor}
+        meadowHeight={meadowHeight}
         wind={wind}
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
@@ -232,6 +237,7 @@ export function HeroMeadow() {
           setFlatMeadowColor(color);
           setMeadowVariant("flat");
         }}
+        onMeadowHeightChange={setMeadowHeight}
         onWindChange={updateWind}
         onPlayingChange={setIsPlaying}
       />

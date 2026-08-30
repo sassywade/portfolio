@@ -204,6 +204,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(prototype, /type="color"/);
   assert.match(prototype, /FLAT_MEADOW_TEXTURES\.map/);
   assert.match(prototype, /onFlatTextureChange\(id\)/);
+  assert.match(prototype, /aria-label="Meadow height"/);
+  assert.match(prototype, /onMeadowHeightChange\(Number\(event\.target\.value\)\)/);
   assert.match(prototype, /cycleRollingMeadow/);
   assert.match(prototype, /Previous rolling meadow/);
   assert.match(prototype, /Next rolling meadow/);
@@ -232,6 +234,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /useState<FlatMeadowTexture>\("fine"\)/);
   assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{sceneIsPlaying\}/);
   assert.match(hero, /DEFAULT_FLAT_MEADOW_COLOR/);
+  assert.match(hero, /const \[meadowHeight, setMeadowHeight\] = useState\(100\)/);
+  assert.match(hero, /--meadow-height-scale/);
+  assert.match(hero, /--living-meadow-scale-y/);
+  assert.match(hero, /--meadow-height-offset/);
   assert.match(hero, /data-meadow-variant=\{meadowVariant\}/);
   assert.match(hero, /<MeadowSettings/);
   assert.match(hero, /isVisible=\{isSceneVisible\}/);
@@ -359,6 +365,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow__visual--flat\s*\{/);
   assert.match(css, /--flat-meadow-color:\s*#6f8d45/);
   assert.match(css, /--flat-meadow-height:\s*clamp\(86px, 11svh, 122px\)/);
+  assert.match(css, /transform:\s*translateX\(-50%\) scaleY\(var\(--living-meadow-scale-y\)\)/);
+  assert.match(css, /transform:\s*scaleY\(var\(--meadow-height-scale\)\)/);
+  assert.match(css, /\.meadow-settings__height input\s*\{/);
   assert.doesNotMatch(css, /\.meadow__flat-image\s*\{[^}]*mix-blend-mode:\s*luminosity/);
   assert.match(css, /\.meadow__flat-tint\s*\{[^}]*opacity:\s*0\.22/);
   assert.match(css, /\.meadow-settings__texture-options\s*\{/);
@@ -368,7 +377,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
   assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*11px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
-  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*clamp\(68px, 7\.35vw, 110px\)/);
+  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\(clamp\(68px, 7\.35vw, 110px\) \+ var\(--meadow-height-offset\)\)/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*z-index:\s*3;[^}]*radial-gradient\(/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*mix-blend-mode:\s*multiply/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);

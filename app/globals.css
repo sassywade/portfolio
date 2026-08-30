@@ -3969,6 +3969,9 @@ em {
   --meadow-render-width: max(100vw, 1280px);
   --flat-meadow-color: #6f8d45;
   --flat-meadow-height: clamp(86px, 11svh, 122px);
+  --meadow-height-scale: 1;
+  --living-meadow-scale-y: 0.84;
+  --meadow-height-offset: 0px;
   --miniature-character-height: clamp(82px, 7vw, 100px);
   --cyclist-character-size: clamp(66px, 5.6vw, 80px);
   --backpacker-character-width: clamp(70px, 6vw, 85px);
@@ -3994,7 +3997,7 @@ em {
   width: var(--meadow-render-width);
   aspect-ratio: 1672 / 941;
   opacity: 0;
-  transform: translateX(-50%) scaleY(0.84);
+  transform: translateX(-50%) scaleY(var(--living-meadow-scale-y));
   transform-origin: bottom center;
   contain: layout paint;
   transition: opacity 420ms ease;
@@ -4011,7 +4014,7 @@ em {
   aspect-ratio: auto;
   overflow: visible;
   contain: layout;
-  transform: none;
+  transform: scaleY(var(--meadow-height-scale));
   transform-origin: bottom center;
 }
 
@@ -4088,7 +4091,7 @@ em {
 }
 
 .hero-meadow[data-meadow-variant="flat"] .cypress-tree {
-  bottom: calc(var(--flat-meadow-height) - clamp(30px, 3.8vw, 52px));
+  bottom: calc(var(--flat-meadow-height) - clamp(30px, 3.8vw, 52px) + var(--meadow-height-offset));
 }
 
 /* A deliberately tucked-away control for comparing meadow prototypes. */
@@ -4781,7 +4784,7 @@ em {
 }
 
 .hero-meadow[data-meadow-variant="living"] > .cypress-tree {
-  bottom: clamp(68px, 7.35vw, 110px);
+  bottom: calc(clamp(68px, 7.35vw, 110px) + var(--meadow-height-offset));
 }
 
 .hero-meadow > .cypress-tree .cypress-tree__ground-shadow {
@@ -5548,6 +5551,7 @@ em {
 .meadow-settings__section-head,
 .meadow-settings__color,
 .meadow-settings__color-control,
+.meadow-settings__height > span,
 .meadow-settings__wind-field > span {
   display: flex;
   align-items: center;
@@ -5633,6 +5637,25 @@ em {
 
 .meadow-settings__color {
   color: #77736b;
+}
+
+.meadow-settings__height {
+  display: block;
+  color: #77736b;
+}
+
+.meadow-settings__height output {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.meadow-settings__height input {
+  display: block;
+  width: 100%;
+  height: 13px;
+  margin: 4px 0 0;
+  accent-color: var(--acid);
+  cursor: pointer;
 }
 
 .meadow-settings__rolling {
@@ -5868,6 +5891,7 @@ em {
 .meadow-settings__rolling-cycle button:focus-visible,
 .meadow-settings__texture-options button:focus-visible,
 .meadow-settings__color input:focus-visible,
+.meadow-settings__height input:focus-visible,
 .meadow-settings__wind-field input:focus-visible {
   outline: 1px solid var(--acid);
   outline-offset: 2px;

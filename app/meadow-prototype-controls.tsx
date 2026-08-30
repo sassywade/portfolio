@@ -30,6 +30,7 @@ type MeadowSettingsProps = {
   rollingMeadow: RollingMeadow;
   flatTexture: FlatMeadowTexture;
   flatColor: string;
+  meadowHeight: number;
   wind: WindSettings;
   isPlaying: boolean;
   isVisible: boolean;
@@ -39,6 +40,7 @@ type MeadowSettingsProps = {
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
   onFlatTextureChange: (texture: FlatMeadowTexture) => void;
   onFlatColorChange: (color: string) => void;
+  onMeadowHeightChange: (height: number) => void;
   onWindChange: (key: WindKey, value: number) => void;
   onPlayingChange: (isPlaying: boolean) => void;
 };
@@ -50,6 +52,7 @@ export function MeadowSettings({
   rollingMeadow,
   flatTexture,
   flatColor,
+  meadowHeight,
   wind,
   isPlaying,
   isVisible,
@@ -59,6 +62,7 @@ export function MeadowSettings({
   onRollingMeadowChange,
   onFlatTextureChange,
   onFlatColorChange,
+  onMeadowHeightChange,
   onWindChange,
   onPlayingChange,
 }: MeadowSettingsProps) {
@@ -212,6 +216,19 @@ export function MeadowSettings({
                 Flat
               </button>
             </div>
+
+            <label className="meadow-settings__height">
+              <span>Meadow height <output>{meadowHeight}%</output></span>
+              <input
+                type="range"
+                min="70"
+                max="130"
+                step="1"
+                value={meadowHeight}
+                aria-label="Meadow height"
+                onChange={(event) => onMeadowHeightChange(Number(event.target.value))}
+              />
+            </label>
 
             <div className="meadow-settings__rolling">
               <span>Rolling meadow</span>
