@@ -89,6 +89,8 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(meadow, /type MeadowVariant = "living" \| "flat"/);
   assert.match(meadow, /data-meadow-surface=\{variant === "flat" \? "active" : "inactive"\}/);
   assert.match(meadow, /className="meadow__flat-field"/);
+  assert.match(meadow, /src="\/flat-meadow-generated\.webp"/);
+  assert.match(meadow, /className="meadow__flat-tint"/);
   assert.match(meadow, /isPlaying && variant === "living"/);
   assert.match(prototype, /useState\(false\)/);
   assert.match(prototype, /Open secret meadow prototype picker/);
@@ -158,7 +160,8 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /\.meadow__grass-canvas\s*\{/);
   assert.match(css, /\.meadow__visual--flat\s*\{/);
   assert.match(css, /--flat-meadow-color:\s*#6f8d45/);
-  assert.match(css, /@keyframes flat-meadow-sway/);
+  assert.match(css, /\.meadow__flat-image\s*\{[^}]*mix-blend-mode:\s*luminosity/);
+  assert.match(css, /\.meadow__flat-tint\s*\{[^}]*background:\s*var\(--flat-meadow-color\)/);
   assert.match(css, /\.meadow-prototype\s*\{/);
   assert.match(css, /\.meadow-prototype__modes button\[aria-pressed="true"\]/);
   assert.match(css, /\.hero-meadow\s*\{[\s\S]*position:\s*fixed/);

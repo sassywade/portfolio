@@ -3805,8 +3805,6 @@ em {
   --meadow-render-width: max(100vw, 1280px);
   --flat-meadow-color: #6f8d45;
   --flat-meadow-height: clamp(118px, 17svh, 176px);
-  --flat-meadow-duration: 5.5s;
-  --flat-meadow-drift: 3px;
   --miniature-character-height: clamp(82px, 7vw, 100px);
 }
 
@@ -3853,74 +3851,45 @@ em {
 .meadow__flat-field {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   background: var(--flat-meadow-color);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--flat-meadow-color) 68%, white) 0%,
-    var(--flat-meadow-color) 18%,
-    color-mix(in srgb, var(--flat-meadow-color) 72%, #1d2e19) 100%
-  );
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--flat-meadow-color) 58%, white);
+  isolation: isolate;
 }
 
 .meadow__flat-field::before {
   position: absolute;
+  z-index: 3;
   inset: 0;
-  background:
-    radial-gradient(circle at 16% 28%, rgba(255, 255, 255, 0.24) 0 0.7px, transparent 1.2px) 0 0 / 13px 17px,
-    radial-gradient(circle at 72% 62%, rgba(30, 49, 23, 0.3) 0 0.8px, transparent 1.4px) 0 0 / 17px 14px,
-    repeating-linear-gradient(103deg, transparent 0 10px, rgba(255, 255, 255, 0.07) 10px 11px, transparent 11px 21px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 22%, rgba(23, 39, 18, 0.08));
   content: "";
-  mix-blend-mode: soft-light;
-  opacity: 0.72;
+  pointer-events: none;
 }
 
-.meadow__flat-blades {
+.meadow__flat-image,
+.meadow__flat-tint {
   position: absolute;
-  z-index: 2;
-  top: -17px;
-  right: -24px;
-  left: -24px;
   display: block;
-  height: 48px;
-  background:
-    repeating-linear-gradient(101deg, transparent 0 7px, color-mix(in srgb, var(--flat-meadow-color) 72%, #24361f) 7px 8px, transparent 8px 14px),
-    repeating-linear-gradient(78deg, transparent 0 11px, color-mix(in srgb, var(--flat-meadow-color) 64%, white) 11px 12px, transparent 12px 20px);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
-  transform-origin: center bottom;
-  animation: flat-meadow-sway var(--flat-meadow-duration) ease-in-out infinite;
+  pointer-events: none;
 }
 
-.meadow__flat-blades--far {
-  opacity: 0.46;
-  animation-delay: -2.4s;
-}
-
-.meadow__flat-blades--near {
-  top: -11px;
-  height: 39px;
-  opacity: 0.7;
-  animation-delay: -0.8s;
-  animation-direction: alternate-reverse;
-}
-
-.meadow__flat-grain {
-  position: absolute;
+.meadow__flat-image {
   z-index: 1;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
+  object-fit: cover;
+  object-position: center 54%;
+  filter: contrast(0.96) saturate(0.92);
+  mix-blend-mode: luminosity;
+}
+
+.meadow__flat-tint {
+  z-index: 2;
   inset: 0;
-  display: block;
-  background: repeating-linear-gradient(86deg, transparent 0 8px, rgba(19, 38, 15, 0.08) 8px 9px, transparent 9px 18px);
-  opacity: 0.7;
-}
-
-.meadow__visual--flat[data-playing="false"] .meadow__flat-blades {
-  animation-play-state: paused;
-}
-
-@keyframes flat-meadow-sway {
-  0%, 100% { transform: translate3d(-2px, 0, 0) skewX(-0.7deg); }
-  50% { transform: translate3d(var(--flat-meadow-drift), 0, 0) skewX(0.9deg); }
+  background: var(--flat-meadow-color);
+  mix-blend-mode: color;
+  opacity: 0.5;
 }
 
 .meadow__image,
@@ -4192,8 +4161,7 @@ em {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .meadow__texture,
-  .meadow__flat-blades {
+  .meadow__texture {
     animation: none;
   }
 }

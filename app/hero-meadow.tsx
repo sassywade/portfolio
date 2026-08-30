@@ -126,8 +126,6 @@ export function HeroMeadow() {
   const sceneIsPlaying = isPlaying && isSceneVisible;
   const sceneStyle = {
     "--flat-meadow-color": flatMeadowColor,
-    "--flat-meadow-duration": `${(6.4 - wind.tempo * 2.8).toFixed(2)}s`,
-    "--flat-meadow-drift": `${(1.5 + wind.breeze * 5.5).toFixed(2)}px`,
   } as CSSProperties;
 
   return (

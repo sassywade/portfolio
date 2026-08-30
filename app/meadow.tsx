@@ -66,9 +66,8 @@ export function Meadow({ wind, isPlaying, variant }: MeadowProps) {
         aria-hidden="true"
       >
         <div className="meadow__flat-field">
-          <span className="meadow__flat-blades meadow__flat-blades--far" />
-          <span className="meadow__flat-blades meadow__flat-blades--near" />
-          <span className="meadow__flat-grain" />
+          <img className="meadow__flat-image" src="/flat-meadow-generated.webp" alt="" />
+          <span className="meadow__flat-tint" />
         </div>
       </div>
     </div>
