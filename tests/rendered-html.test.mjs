@@ -179,13 +179,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
   assert.match(smiley, /IDLE_HUFF_SEQUENCE\[cycleIndex\] \?\? "strained"/);
   assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
-  assert.match(smiley, /const HERO_COPY_CLEARANCE = 24/);
-  assert.match(smiley, /\.pranathi-intro--home > \.pranathi-name, \.pranathi-intro--home > \.pranathi-bio/);
   assert.match(smiley, /const heroSection = document\.querySelector<HTMLElement>\("\.pranathi-intro--home"\)/);
   assert.match(smiley, /heroSection\.getBoundingClientRect\(\)\.bottom <= 0/);
-  assert.match(smiley, /const pointerIsNearHeroCopy =/);
-  assert.match(smiley, /cursor\.dataset\.heroCopy = isNearHeroCopy \? "near" : "clear"/);
-  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| isNearHeroCopy \|\| miniaturePhase !== "off"\) return/);
+  assert.doesNotMatch(smiley, /HERO_COPY_CLEARANCE|heroCopyTargets|isNearHeroCopy|data-hero-copy/);
+  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| miniaturePhase !== "off"\) return/);
   assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
   assert.match(smiley, /const FACING_CHANGE_DELAY = 240/);
   assert.match(smiley, /const FACING_INTENT_MEMORY = 180/);
@@ -259,7 +256,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /@keyframes miniature-photographer-materialize/);
   assert.match(css, /@keyframes miniature-hiker-materialize/);
   assert.match(css, /@keyframes smiley-happy-glimpse/);
-  assert.match(css, /\.smiley-cursor\.is-visible\[data-hero-copy="near"\]\s*\{[^}]*opacity:\s*0/);
+  assert.doesNotMatch(css, /data-hero-copy/);
   assert.match(css, /--smiley-facing:\s*1/);
   assert.match(css, /transform:\s*scaleX\(var\(--smiley-facing\)\)/);
   assert.match(css, /pointer-events:\s*none/);

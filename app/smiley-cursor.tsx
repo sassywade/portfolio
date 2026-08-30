@@ -13,7 +13,6 @@ const IDLE_HUFF_CYCLE = 1450;
 const IDLE_HUFF_SEQUENCE = ["light", "light", "strong", "strong", "strong"] as const;
 const HAPPY_FLASH_DURATION = 560;
 const PET_FACE_ANCHOR_X = 15;
-const HERO_COPY_CLEARANCE = 24;
 const FACING_INTENT_THRESHOLD = 32;
 const FACING_CHANGE_DELAY = 240;
 const FACING_INTENT_MEMORY = 180;
@@ -68,9 +67,6 @@ export function SmileyCursor() {
     const root = document.documentElement;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const hasFinePointer = window.matchMedia("(pointer: fine)");
-    const heroCopyTargets = Array.from(document.querySelectorAll<HTMLElement>(
-      ".pranathi-intro--home > .pranathi-name, .pranathi-intro--home > .pranathi-bio",
-    ));
     const heroSection = document.querySelector<HTMLElement>(".pranathi-intro--home");
 
     if (!cursor || pathname !== "/" || !hasFinePointer.matches || prefersReducedMotion.matches) {
@@ -98,7 +94,6 @@ export function SmileyCursor() {
     let previousFrameTime = performance.now();
     let hasPointerPosition = false;
     let isPastHero = false;
-    let isNearHeroCopy = false;
     let idleTimer: number | null = null;
     let idleStartedAt: number | null = null;
     let happyUntil = 0;
@@ -119,7 +114,6 @@ export function SmileyCursor() {
     cursor.dataset.backpacker = "off";
     cursor.dataset.miniature = "off";
     cursor.dataset.target = "none";
-    cursor.dataset.heroCopy = "clear";
     cursor.style.setProperty("--smiley-facing", "1");
 
     const clearIdleTimer = () => {
@@ -228,28 +222,6 @@ export function SmileyCursor() {
       cursor.dataset.target = "none";
     };
 
-    const pointerIsNearHeroCopy = (clientX: number, clientY: number) => heroCopyTargets.some((target) => {
-      const bounds = target.getBoundingClientRect();
-      const nearestX = clamp(clientX, bounds.left, bounds.right);
-      const nearestY = clamp(clientY, bounds.top, bounds.bottom);
-      return Math.hypot(clientX - nearestX, clientY - nearestY) <= HERO_COPY_CLEARANCE;
-    });
-
-    const syncHeroCopyProximity = (clientX: number, clientY: number) => {
-      const nextIsNearHeroCopy = pointerIsNearHeroCopy(clientX, clientY);
-      if (nextIsNearHeroCopy === isNearHeroCopy) return;
-
-      isNearHeroCopy = nextIsNearHeroCopy;
-      cursor.dataset.heroCopy = isNearHeroCopy ? "near" : "clear";
-
-      if (isNearHeroCopy) {
-        resetMiniatureInteraction();
-        clearFacingTimer();
-        stopIdleMischief();
-        stopHappyReaction();
-      }
-    };
-
     const chooseMiniatureFacing = (miniature: ActiveMiniature) => {
       if (miniature.kind === "backpacker" || miniature.kind === "cyclist") {
         return miniature.layer.dataset.direction === "right" ? -1 : 1;
@@ -265,11 +237,6 @@ export function SmileyCursor() {
     };
 
     const updateMiniatureInteraction = (timestamp: number) => {
-      if (isNearHeroCopy) {
-        if (miniaturePhase !== "off") resetMiniatureInteraction();
-        return;
-      }
-
       if (miniatureNeedsExit) {
         const previousTarget = activeMiniature(miniatureNeedsExit);
         if (!previousTarget || previousTarget.distance > MINIATURE_PROXIMITY[miniatureNeedsExit]) {
@@ -533,12 +500,12 @@ export function SmileyCursor() {
 
     const armIdleMischief = () => {
       clearIdleTimer();
-      if (!hasPointerPosition || isPastHero || isNearHeroCopy || miniaturePhase !== "off") return;
+      if (!hasPointerPosition || isPastHero || miniaturePhase !== "off") return;
 
       const remainingDelay = Math.max(0, IDLE_MISCHIEF_DELAY - (performance.now() - lastMoveTime));
       idleTimer = window.setTimeout(() => {
         idleTimer = null;
-        if (!hasPointerPosition || isPastHero || isNearHeroCopy) return;
+        if (!hasPointerPosition || isPastHero) return;
         idleStartedAt = performance.now();
         motionLevel = 0;
         windStartedAt = null;
@@ -551,10 +518,6 @@ export function SmileyCursor() {
 
     const handleScroll = () => {
       const nextIsPastHero = Boolean(heroSection && heroSection.getBoundingClientRect().bottom <= 0);
-
-      if (hasPointerPosition && !nextIsPastHero) {
-        syncHeroCopyProximity(inputX, inputY);
-      }
 
       if (nextIsPastHero === isPastHero) {
         return;
@@ -589,9 +552,7 @@ export function SmileyCursor() {
       }
 
       const timestamp = performance.now();
-      syncHeroCopyProximity(event.clientX, event.clientY);
-      const wasHuffing = !isNearHeroCopy
-        && idleStartedAt !== null
+      const wasHuffing = idleStartedAt !== null
         && timestamp - idleStartedAt >= IDLE_APPROACH_DURATION;
       stopIdleMischief();
 
@@ -686,7 +647,7 @@ export function SmileyCursor() {
   }, [pathname]);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" data-backpacker="off" data-miniature="off" data-target="none" data-hero-copy="clear" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" data-backpacker="off" data-miniature="off" data-target="none" aria-hidden="true">
       <div className="smiley-cursor__direction">
         <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--smile" src="/pet/pet-smile.png" alt="" />
