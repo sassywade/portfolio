@@ -203,6 +203,11 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /--meadow-exit-scale/);
   assert.match(hero, /--meadow-exit-opacity/);
   assert.match(hero, /--meadow-exit-y/);
+  assert.match(hero, /--meadow-layer-y/);
+  assert.match(hero, /--tree-layer-y/);
+  assert.match(hero, /--meadow-layer-opacity/);
+  assert.match(hero, /--tree-layer-opacity/);
+  assert.match(hero, /--meadow-dissolve-edge-/);
   assert.match(hero, /window\.requestAnimationFrame\(animate\)/);
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
@@ -353,6 +358,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*mix-blend-mode:\s*multiply/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);
   assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*z-index:\s*2;/);
+  assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*clip-path:\s*polygon\(/);
+  assert.match(css, /transform:\s*translate3d\(0, var\(--meadow-layer-y\), 0\)/);
+  assert.match(css, /transform:\s*translate3d\(0, var\(--tree-layer-y\), 0\)/);
   assert.match(css, /\.hero-meadow > \.bike-ride-layer,[\s\S]*?\.hero-meadow > \.backpack-walk-layer\s*\{[^}]*z-index:\s*5;/);
   assert.match(css, /\.hero-meadow\s*\{[\s\S]*position:\s*fixed/);
   assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\) scale\(var\(--meadow-exit-scale\)\)/);

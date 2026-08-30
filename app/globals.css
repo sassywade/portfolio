@@ -2235,6 +2235,20 @@ em {
   --meadow-exit-scale: 1;
   --meadow-exit-opacity: 1;
   --meadow-scroll-progress: 0;
+  --meadow-layer-y: 0px;
+  --tree-layer-y: 0px;
+  --meadow-layer-opacity: 1;
+  --tree-layer-opacity: 1;
+  --meadow-dissolve-blur: 0px;
+  --tree-dissolve-blur: 0px;
+  --meadow-dissolve-edge-1: -24%;
+  --meadow-dissolve-edge-2: -20%;
+  --meadow-dissolve-edge-3: -26%;
+  --meadow-dissolve-edge-4: -18%;
+  --meadow-dissolve-edge-5: -23%;
+  --meadow-dissolve-edge-6: -28%;
+  --meadow-dissolve-edge-7: -21%;
+  --meadow-dissolve-edge-8: -25%;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -4749,6 +4763,10 @@ em {
 .hero-meadow > .cypress-tree {
   z-index: auto;
   contain: none;
+  opacity: var(--tree-layer-opacity);
+  filter: blur(var(--tree-dissolve-blur));
+  transform: translate3d(0, var(--tree-layer-y), 0);
+  will-change: transform, opacity, filter;
 }
 
 .hero-meadow[data-meadow-variant="living"] > .cypress-tree {
@@ -4792,6 +4810,22 @@ em {
 
 .hero-meadow > .meadow {
   z-index: 2;
+  opacity: var(--meadow-layer-opacity);
+  filter: blur(var(--meadow-dissolve-blur));
+  clip-path: polygon(
+    0 var(--meadow-dissolve-edge-1),
+    14% var(--meadow-dissolve-edge-2),
+    29% var(--meadow-dissolve-edge-3),
+    43% var(--meadow-dissolve-edge-4),
+    57% var(--meadow-dissolve-edge-5),
+    71% var(--meadow-dissolve-edge-6),
+    86% var(--meadow-dissolve-edge-7),
+    100% var(--meadow-dissolve-edge-8),
+    100% 100%,
+    0 100%
+  );
+  transform: translate3d(0, var(--meadow-layer-y), 0);
+  will-change: transform, opacity, filter, clip-path;
 }
 
 .hero-meadow > .bike-ride-layer,
