@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { AlamoWeather } from "./alamo-weather";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type MeadowVariant } from "./meadow";
 import { MeadowPrototypeControls } from "./meadow-prototype-controls";
@@ -153,6 +154,7 @@ export function HeroMeadow() {
           setMeadowVariant("flat");
         }}
       />
+      <AlamoWeather onWindUpdate={setWind} />
     </div>
   );
 }

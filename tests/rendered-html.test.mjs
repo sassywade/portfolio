@@ -35,6 +35,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at Glean focused on proactive intelligence,\s*growth, and artifacts\. Previously, I designed at snap, and intuitive surgical\./);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
   assert.match(html, /class="meadow__image" src="\/meadow-ground\.png"/);
+  assert.match(html, /Checking the weather at Alamo Square/);
+  assert.match(html, /Local time in San Francisco/);
   assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
   assert.match(html, /Open secret meadow prototype picker/);
@@ -55,7 +57,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
-  const [meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
+  const [weather, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
+    readFile(new URL("../app/alamo-weather.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
@@ -69,6 +72,11 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
+  assert.match(weather, /api\.open-meteo\.com\/v1\/forecast/);
+  assert.match(weather, /temperature_2m%2Cwind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m/);
+  assert.match(weather, /const WEATHER_REFRESH_MS = 10 \* 60 \* 1000/);
+  assert.match(weather, /timeZone: "America\/Los_Angeles"/);
+  assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);
   assert.match(meadow, /type MeadowVariant = "living" \| "flat"/);
   assert.match(meadow, /className="meadow__image" src="\/meadow-ground\.png"/);
   assert.doesNotMatch(meadow, /createMeadowGrass|meadow__texture|meadow__grass-canvas/);
@@ -94,6 +102,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /DEFAULT_FLAT_MEADOW_COLOR/);
   assert.match(hero, /data-meadow-variant=\{meadowVariant\}/);
   assert.match(hero, /<MeadowPrototypeControls/);
+  assert.match(hero, /<AlamoWeather onWindUpdate=\{setWind\} \/>/);
   assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
   assert.match(tree, /portfolio:pet-blow-cypress/);
   assert.match(tree, /treeRef\.current\?\.applyGust/);
@@ -105,6 +114,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(treeRenderer, /const gustEnvelope =/);
   assert.match(treeRenderer, /const petDrive = petGust\.direction/);
   assert.match(treeRenderer, /const dynamicMaxAngle = bone\.maxAngle/);
+  assert.match(treeRenderer, /const naturalDirection = Number\.isFinite\(wind\.direction\)/);
+  assert.match(treeRenderer, /naturalDirection \* \(\(0\.006/);
   assert.match(treeRenderer, /const petLeafPush = petGust\.direction/);
   assert.match(treeRenderer, /function applyGust\(values\)/);
   assert.match(treeRenderer, /running \|\| petGust\.duration > 0/);

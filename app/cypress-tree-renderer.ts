@@ -3,7 +3,7 @@
 
 const global = typeof window !== "undefined" ? window : undefined;
 
-  const DEFAULTS = { breeze: 0.34, gust: 0.52, elasticity: 0.38, tempo: 0.31 };
+  const DEFAULTS = { breeze: 0.34, gust: 0.52, elasticity: 0.38, tempo: 0.31, direction: 1 };
   const LEAF_GRID_X = 8;
   const LEAF_GRID_Y = 6;
   const LEAF_OFFSET_LIMIT = 0.0042;
@@ -227,6 +227,7 @@ export function createCypressTree(options) {
     function updatePhysics(deltaMs) {
       const dt = Math.min(0.035, Math.max(0.001, deltaMs / 1000));
       const time = elapsed * 0.001;
+      const naturalDirection = Number.isFinite(wind.direction) ? wind.direction : 1;
       if (petGust.duration > 0) petGust.elapsed += deltaMs;
       const gustProgress = petGust.duration > 0 ? petGust.elapsed / petGust.duration : 2;
       const gustAttack = clamp(gustProgress / 0.13, 0, 1);
@@ -241,7 +242,7 @@ export function createCypressTree(options) {
         const gustWave = Math.max(0, Math.sin(delayedTime * (0.64 + wind.tempo * 0.35) - bone.phase * 0.31));
         const gustPulse = Math.pow(gustWave, 6.0);
         const turbulence = 0.72 + 0.28 * Math.sin(delayedTime * bone.frequency * 2.35 + bone.phase * 1.7);
-        const naturalDrive = (0.006 + wind.breeze * 0.032 * bone.response) * swell * turbulence + wind.gust * gustPulse * 0.082 * bone.gust;
+        const naturalDrive = naturalDirection * ((0.006 + wind.breeze * 0.032 * bone.response) * swell * turbulence + wind.gust * gustPulse * 0.082 * bone.gust);
         const petTurbulence = 0.88 + Math.sin(time * 15.0 + bone.phase * 1.9) * 0.12;
         const petDrive = petGust.direction * petGust.strength * gustEnvelope * petTurbulence * (0.082 + bone.response * 0.068);
         const drive = naturalDrive + petDrive;
@@ -264,7 +265,7 @@ export function createCypressTree(options) {
         const flutter = Math.sin(localTime * (2.8 + wind.tempo * 1.5) + group.phase) * 0.5 + 0.5;
         const petLeafFlutter = 0.82 + Math.sin(time * 17.0 + group.phase * 1.4) * 0.18;
         const petLeafPush = petGust.direction * petGust.strength * gustEnvelope * petLeafFlutter * 0.00255 * group.response;
-        const targetX = (Math.sin(localTime * 1.35 + group.phase) * 0.00034 + wind.breeze * 0.00050 * flutter) * group.response + wind.gust * gustPulse * 0.00155 * group.response + petLeafPush;
+        const targetX = naturalDirection * ((Math.sin(localTime * 1.35 + group.phase) * 0.00034 + wind.breeze * 0.00050 * flutter) * group.response + wind.gust * gustPulse * 0.00155 * group.response) + petLeafPush;
         const targetY = Math.cos(localTime * 1.72 + group.phase * 1.2) * (0.00010 + wind.breeze * 0.00018) * group.response + gustPulse * 0.00024 * group.response + Math.abs(petLeafPush) * 0.16;
         const spring = group.stiffness * (1.08 - wind.elasticity * 0.16);
         const damping = group.damping * (1.04 - wind.elasticity * 0.10);
@@ -383,7 +384,13 @@ export function createCypressTree(options) {
     }
 
     function setPlaying(next) { running = Boolean(next); return running; }
-    function setWind(values) { Object.keys(DEFAULTS).forEach((key) => { if (values && Number.isFinite(Number(values[key]))) wind[key] = clamp(Number(values[key]), 0, 1); }); return { ...wind }; }
+    function setWind(values) {
+      ["breeze", "gust", "elasticity", "tempo"].forEach((key) => {
+        if (values && Number.isFinite(Number(values[key]))) wind[key] = clamp(Number(values[key]), 0, 1);
+      });
+      if (values && Number.isFinite(Number(values.direction))) wind.direction = clamp(Number(values.direction), -1, 1);
+      return { ...wind };
+    }
     function applyGust(values) {
       const next = values || {};
       petGust.direction = Number(next.direction) < 0 ? -1 : 1;
