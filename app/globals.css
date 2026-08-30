@@ -4990,6 +4990,7 @@ em {
     clamp(68px, 7.35vw, 110px)
     + var(--meadow-height-offset)
     + var(--cypress-viewport-lift)
+    - 10px
   );
 }
 
