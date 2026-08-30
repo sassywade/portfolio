@@ -6,7 +6,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-const IDLE_MISCHIEF_DELAY = 1500;
+const IDLE_MISCHIEF_DELAY = 2000;
 const IDLE_APPROACH_DURATION = 950;
 const IDLE_CLOSE_DISTANCE = 46;
 const IDLE_HUFF_CYCLE = 1450;

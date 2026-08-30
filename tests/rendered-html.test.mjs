@@ -250,7 +250,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(backpacker, /new IntersectionObserver/);
   assert.match(backpacker, /prefers-reduced-motion: reduce/);
   assert.match(backpacker, /data-meadow-surface="active"/);
-  assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
+  assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 2000/);
   assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
   assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
   assert.match(smiley, /IDLE_HUFF_SEQUENCE\[cycleIndex\] \?\? "strained"/);
