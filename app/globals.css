@@ -3806,7 +3806,7 @@ em {
 .hero-meadow {
   --meadow-render-width: max(100vw, 1280px);
   --flat-meadow-color: #6f8d45;
-  --flat-meadow-height: clamp(118px, 17svh, 176px);
+  --flat-meadow-height: clamp(86px, 11svh, 122px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
   --cyclist-character-size: clamp(66px, 5.6vw, 80px);
   --backpacker-character-width: clamp(70px, 6vw, 85px);
@@ -3885,8 +3885,7 @@ em {
   height: 106%;
   object-fit: cover;
   object-position: center 54%;
-  filter: contrast(0.96) saturate(0.92);
-  mix-blend-mode: luminosity;
+  filter: contrast(1.03) saturate(0.92);
 }
 
 .meadow__flat-tint {
@@ -3894,7 +3893,7 @@ em {
   inset: 0;
   background: var(--flat-meadow-color);
   mix-blend-mode: color;
-  opacity: 0.5;
+  opacity: 0.22;
 }
 
 .meadow__image {
@@ -4098,7 +4097,7 @@ em {
 @media (max-width: 580px) {
   .hero-meadow {
     --meadow-render-width: 780px;
-    --flat-meadow-height: clamp(102px, 16svh, 132px);
+    --flat-meadow-height: clamp(74px, 11svh, 96px);
   }
 
   .cypress-tree {
@@ -5338,6 +5337,46 @@ em {
   color: #77736b;
 }
 
+.meadow-settings__texture {
+  display: grid;
+  gap: 6px;
+  color: #77736b;
+}
+
+.meadow-settings__texture-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.meadow-settings__texture-options button {
+  appearance: none;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+  padding: 3px 3px 5px;
+  background: white;
+  color: #77736b;
+  cursor: pointer;
+  font-size: 7px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.meadow-settings__texture-options button[aria-pressed="true"] {
+  border-color: var(--acid);
+  color: var(--acid);
+}
+
+.meadow-settings__texture-thumb {
+  display: block;
+  width: 100%;
+  height: 34px;
+  background-position: center;
+  background-size: cover;
+}
+
 .meadow-settings__color-control output {
   min-width: 54px;
   color: var(--ink);
@@ -5388,6 +5427,7 @@ em {
 }
 
 .meadow-settings__modes button:focus-visible,
+.meadow-settings__texture-options button:focus-visible,
 .meadow-settings__color input:focus-visible,
 .meadow-settings__wind-field input:focus-visible {
   outline: 1px solid var(--acid);

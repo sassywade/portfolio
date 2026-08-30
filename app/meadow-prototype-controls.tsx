@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import type { MeadowVariant } from "./meadow";
+import { FLAT_MEADOW_TEXTURES, type FlatMeadowTexture, type MeadowVariant } from "./meadow";
 import type { WindKey, WindSettings } from "./wind";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
@@ -14,11 +14,13 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 
 type MeadowSettingsProps = {
   variant: MeadowVariant;
+  flatTexture: FlatMeadowTexture;
   flatColor: string;
   wind: WindSettings;
   isPlaying: boolean;
   isVisible: boolean;
   onVariantChange: (variant: MeadowVariant) => void;
+  onFlatTextureChange: (texture: FlatMeadowTexture) => void;
   onFlatColorChange: (color: string) => void;
   onWindChange: (key: WindKey, value: number) => void;
   onPlayingChange: (isPlaying: boolean) => void;
@@ -26,11 +28,13 @@ type MeadowSettingsProps = {
 
 export function MeadowSettings({
   variant,
+  flatTexture,
   flatColor,
   wind,
   isPlaying,
   isVisible,
   onVariantChange,
+  onFlatTextureChange,
   onFlatColorChange,
   onWindChange,
   onPlayingChange,
@@ -126,6 +130,28 @@ export function MeadowSettings({
               >
                 Flat
               </button>
+            </div>
+
+            <div className="meadow-settings__texture">
+              <span>Flat texture</span>
+              <div className="meadow-settings__texture-options" aria-label="Flat meadow texture">
+                {FLAT_MEADOW_TEXTURES.map(({ id, label, src }) => (
+                  <button
+                    type="button"
+                    aria-pressed={flatTexture === id}
+                    data-cuelume-toggle="meadow-texture"
+                    onClick={() => onFlatTextureChange(id)}
+                    key={id}
+                  >
+                    <span
+                      className="meadow-settings__texture-thumb"
+                      style={{ backgroundImage: `url(${src})` }}
+                      aria-hidden="true"
+                    />
+                    <span>{label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             <label className="meadow-settings__color">

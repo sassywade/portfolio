@@ -3,11 +3,20 @@
 type MeadowProps = {
   isPlaying: boolean;
   variant: MeadowVariant;
+  flatTexture: FlatMeadowTexture;
 };
 
 export type MeadowVariant = "living" | "flat";
+export const FLAT_MEADOW_TEXTURES = [
+  { id: "fine", label: "Fine cut", src: "/flat-meadow-fine.jpg" },
+  { id: "clover", label: "Soft clover", src: "/flat-meadow-clover.jpg" },
+  { id: "wind", label: "Windswept", src: "/flat-meadow-wind.jpg" },
+] as const;
+export type FlatMeadowTexture = (typeof FLAT_MEADOW_TEXTURES)[number]["id"];
 
-export function Meadow({ isPlaying, variant }: MeadowProps) {
+export function Meadow({ isPlaying, variant, flatTexture }: MeadowProps) {
+  const texture = FLAT_MEADOW_TEXTURES.find(({ id }) => id === flatTexture) ?? FLAT_MEADOW_TEXTURES[0];
+
   return (
     <div className="meadow" data-meadow data-meadow-variant={variant}>
       <div
@@ -24,10 +33,11 @@ export function Meadow({ isPlaying, variant }: MeadowProps) {
         data-meadow-active={variant === "flat" ? "true" : "false"}
         data-meadow-surface={variant === "flat" ? "active" : "inactive"}
         data-playing={isPlaying && variant === "flat" ? "true" : "false"}
+        data-flat-texture={flatTexture}
         aria-hidden="true"
       >
         <div className="meadow__flat-field">
-          <img className="meadow__flat-image" src="/flat-meadow-generated.webp" alt="" />
+          <img className="meadow__flat-image" src={texture.src} alt="" />
           <span className="meadow__flat-tint" />
         </div>
       </div>

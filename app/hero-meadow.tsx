@@ -3,7 +3,7 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { AlamoWeather } from "./alamo-weather";
 import { CypressTree } from "./cypress-tree";
-import { Meadow, type MeadowVariant } from "./meadow";
+import { Meadow, type FlatMeadowTexture, type MeadowVariant } from "./meadow";
 import { MeadowSettings } from "./meadow-prototype-controls";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 
@@ -21,6 +21,7 @@ export function HeroMeadow() {
   ));
   const [isSceneVisible, setIsSceneVisible] = useState(true);
   const [meadowVariant, setMeadowVariant] = useState<MeadowVariant>("living");
+  const [flatMeadowTexture, setFlatMeadowTexture] = useState<FlatMeadowTexture>("fine");
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
 
   useEffect(() => {
@@ -138,18 +139,23 @@ export function HeroMeadow() {
       data-meadow-variant={meadowVariant}
       style={sceneStyle}
     >
-      <Meadow isPlaying={sceneIsPlaying} variant={meadowVariant} />
+      <Meadow isPlaying={sceneIsPlaying} variant={meadowVariant} flatTexture={flatMeadowTexture} />
       <CypressTree
         wind={wind}
         isPlaying={sceneIsPlaying}
       />
       <MeadowSettings
         variant={meadowVariant}
+        flatTexture={flatMeadowTexture}
         flatColor={flatMeadowColor}
         wind={wind}
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
         onVariantChange={setMeadowVariant}
+        onFlatTextureChange={(texture) => {
+          setFlatMeadowTexture(texture);
+          setMeadowVariant("flat");
+        }}
         onFlatColorChange={(color) => {
           setFlatMeadowColor(color);
           setMeadowVariant("flat");

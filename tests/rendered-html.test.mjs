@@ -39,6 +39,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /Local time in San Francisco/);
   assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
+  assert.match(html, /data-flat-texture="fine"/);
   assert.match(html, /class="bike-word"/);
   assert.match(html, /Release miniature Neel on a bike onto the meadow/);
   assert.match(html, /class="photo-word"/);
@@ -71,11 +72,14 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
   assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);
   assert.match(meadow, /type MeadowVariant = "living" \| "flat"/);
+  assert.match(meadow, /type FlatMeadowTexture/);
   assert.match(meadow, /className="meadow__image" src="\/meadow-ground\.png"/);
   assert.doesNotMatch(meadow, /createMeadowGrass|meadow__texture|meadow__grass-canvas/);
   assert.match(meadow, /data-meadow-surface=\{variant === "flat" \? "active" : "inactive"\}/);
   assert.match(meadow, /className="meadow__flat-field"/);
-  assert.match(meadow, /src="\/flat-meadow-generated\.webp"/);
+  assert.match(meadow, /\/flat-meadow-fine\.jpg/);
+  assert.match(meadow, /\/flat-meadow-clover\.jpg/);
+  assert.match(meadow, /\/flat-meadow-wind\.jpg/);
   assert.match(meadow, /className="meadow__flat-tint"/);
   assert.match(prototype, /useState\(false\)/);
   assert.match(prototype, /Open meadow and wind settings/);
@@ -83,6 +87,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(prototype, /setPortalHost\(document\.body\)/);
   assert.match(prototype, /aria-pressed=\{variant === "flat"\}/);
   assert.match(prototype, /type="color"/);
+  assert.match(prototype, /FLAT_MEADOW_TEXTURES\.map/);
+  assert.match(prototype, /onFlatTextureChange\(id\)/);
   assert.match(prototype, /windFields\.map/);
   assert.match(prototype, /onPlayingChange\(!isPlaying\)/);
   assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
@@ -93,7 +99,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.match(hero, /data-scene-visible/);
-  assert.match(hero, /<Meadow isPlaying=\{sceneIsPlaying\} variant=\{meadowVariant\} \/>/);
+  assert.match(hero, /<Meadow isPlaying=\{sceneIsPlaying\} variant=\{meadowVariant\} flatTexture=\{flatMeadowTexture\} \/>/);
+  assert.match(hero, /useState<FlatMeadowTexture>\("fine"\)/);
   assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{sceneIsPlaying\}/);
   assert.match(hero, /DEFAULT_FLAT_MEADOW_COLOR/);
   assert.match(hero, /data-meadow-variant=\{meadowVariant\}/);
@@ -219,7 +226,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.doesNotMatch(css, /\.meadow__grass-canvas\s*\{|\.meadow__texture\s*\{|\.meadow__visual\.is-grass-live/);
   assert.match(css, /\.meadow__visual--flat\s*\{/);
   assert.match(css, /--flat-meadow-color:\s*#6f8d45/);
-  assert.match(css, /\.meadow__flat-image\s*\{[^}]*mix-blend-mode:\s*luminosity/);
+  assert.match(css, /--flat-meadow-height:\s*clamp\(86px, 11svh, 122px\)/);
+  assert.doesNotMatch(css, /\.meadow__flat-image\s*\{[^}]*mix-blend-mode:\s*luminosity/);
+  assert.match(css, /\.meadow__flat-tint\s*\{[^}]*opacity:\s*0\.22/);
+  assert.match(css, /\.meadow-settings__texture-options\s*\{/);
   assert.match(css, /\.meadow__flat-tint\s*\{[^}]*background:\s*var\(--flat-meadow-color\)/);
   assert.match(css, /\.meadow-settings\s*\{/);
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
