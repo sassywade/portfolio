@@ -15,6 +15,7 @@ import {
 } from "./meadow";
 import type { WindKey, WindSettings } from "./wind";
 import type { WorkGridColumns } from "./hero-meadow";
+import type { TopPetMode } from "./top-pet";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },
@@ -31,6 +32,7 @@ type MeadowSettingsProps = {
   flatTexture: FlatMeadowTexture;
   flatColor: string;
   meadowHeight: number;
+  topPetMode: TopPetMode;
   wind: WindSettings;
   isPlaying: boolean;
   isVisible: boolean;
@@ -41,6 +43,7 @@ type MeadowSettingsProps = {
   onFlatTextureChange: (texture: FlatMeadowTexture) => void;
   onFlatColorChange: (color: string) => void;
   onMeadowHeightChange: (height: number) => void;
+  onTopPetModeChange: (mode: TopPetMode) => void;
   onWindChange: (key: WindKey, value: number) => void;
   onPlayingChange: (isPlaying: boolean) => void;
 };
@@ -53,6 +56,7 @@ export function MeadowSettings({
   flatTexture,
   flatColor,
   meadowHeight,
+  topPetMode,
   wind,
   isPlaying,
   isVisible,
@@ -63,6 +67,7 @@ export function MeadowSettings({
   onFlatTextureChange,
   onFlatColorChange,
   onMeadowHeightChange,
+  onTopPetModeChange,
   onWindChange,
   onPlayingChange,
 }: MeadowSettingsProps) {
@@ -194,6 +199,47 @@ export function MeadowSettings({
                 3 columns
               </button>
             </div>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-top-pull`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-top-pull`}>Hidden faces</h2>
+                <small>Pull deliberately past the top</small>
+              </div>
+              <button
+                type="button"
+                className="meadow-settings__motion-toggle"
+                aria-pressed={topPetMode !== "off"}
+                data-cuelume-toggle="motion"
+                onClick={() => onTopPetModeChange(topPetMode === "off" ? "quiet" : "off")}
+              >
+                {topPetMode === "off" ? "Off" : "On"}
+              </button>
+            </div>
+            <div className="meadow-settings__modes" aria-label="Hidden face pull style">
+              <button
+                type="button"
+                aria-pressed={topPetMode === "quiet"}
+                disabled={topPetMode === "off"}
+                data-cuelume-toggle="bloom"
+                onClick={() => onTopPetModeChange("quiet")}
+              >
+                Quiet
+              </button>
+              <button
+                type="button"
+                aria-pressed={topPetMode === "reactive"}
+                disabled={topPetMode === "off"}
+                data-cuelume-toggle="motion"
+                onClick={() => onTopPetModeChange("reactive")}
+              >
+                Reactive
+              </button>
+            </div>
+            <p className="meadow-settings__note">
+              Quiet waits for a committed pull, then reveals only the calm row with no bounce.
+            </p>
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-meadow`}>

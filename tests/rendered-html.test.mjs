@@ -55,9 +55,11 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
-test("keeps the top-edge pet chorus elastic, progressive, and lightweight", async () => {
-  const [topPull, css] = await Promise.all([
+test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
+  const [topPull, topPet, prototype, css] = await Promise.all([
     readFile(new URL("../app/top-pet-pull.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/top-pet.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
@@ -68,14 +70,25 @@ test("keeps the top-edge pet chorus elastic, progressive, and lightweight", asyn
   assert.match(topPull, /window\.scrollY > 0\.5/);
   assert.match(topPull, /window\.addEventListener\("wheel", handleWheel, \{ passive: false \}\)/);
   assert.match(topPull, /window\.addEventListener\("touchmove", handleTouchMove, \{ passive: false \}\)/);
-  assert.match(topPull, /const stripOpacity = 0\.5 \+ progress \* 0\.5/);
+  assert.match(topPull, /QUIET_ARM_DISTANCE = 104/);
+  assert.match(topPull, /QUIET_RELEASE_DURATION = 520/);
+  assert.match(topPull, /const releaseQuietly = \(\) =>/);
+  assert.match(topPull, /mode === "quiet"\s*\? PET_STRIPS\.map\(\(_, index\) => index === 0 \? 1 : 0\)/);
+  assert.match(topPull, /0\.5 \+ progress \* 0\.32/);
+  assert.match(topPull, /mode === "off"/);
   assert.match(topPull, /const framePosition = progress \* \(FRAME_COUNT - 1\)/);
   assert.match(topPull, /springVelocity \+= -pullPosition \* 0\.12 \* step/);
   assert.match(topPull, /window\.requestAnimationFrame\(springBack\)/);
   assert.match(topPull, /prefers-reduced-motion: reduce/);
+  assert.match(topPet, /DEFAULT_TOP_PET_MODE: TopPetMode = "quiet"/);
+  assert.match(prototype, />Hidden faces</);
+  assert.match(prototype, /aria-label="Hidden face pull style"/);
+  assert.match(prototype, /onTopPetModeChange\(topPetMode === "off" \? "quiet" : "off"\)/);
   assert.match(css, /\.top-pet-pull\s*\{[^}]*position:\s*fixed[^}]*height:\s*var\(--top-pet-reveal-y\)/);
   assert.match(css, /background-size:\s*max\(100vw, 1440px\) auto/);
   assert.match(css, /translate3d\(0, var\(--top-pet-pull-y\), 0\)/);
+  assert.match(css, /html\[data-top-pet-mode="off"\] \.top-pet-pull/);
+  assert.match(css, /html\[data-top-pet-pull-style="quiet"\] \.top-pet-pull__frame:not\(:first-child\)/);
 });
 
 test("offers lightweight San Francisco atmosphere backgrounds in the prototype picker", async () => {

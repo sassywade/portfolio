@@ -2,6 +2,8 @@
 
 import { type CSSProperties, useEffect, useRef } from "react";
 
+import { DEFAULT_TOP_PET_MODE, type TopPetMode } from "./top-pet";
+
 const PET_STRIPS = [
   "/top-pets/top-pets-neutral.png",
   "/top-pets/top-pets-sad.png",
@@ -9,7 +11,12 @@ const PET_STRIPS = [
   "/top-pets/top-pets-furious.png",
 ] as const;
 
-const WHEEL_RELEASE_DELAY = 120;
+const REACTIVE_WHEEL_RELEASE_DELAY = 120;
+const QUIET_WHEEL_RELEASE_DELAY = 190;
+const QUIET_ARM_DISTANCE = 104;
+const QUIET_REVEAL_DISTANCE = 116;
+const QUIET_MAX_REVEAL = 68;
+const QUIET_RELEASE_DURATION = 520;
 const FRAME_COUNT = PET_STRIPS.length;
 
 type PetLayerStyle = CSSProperties & {
@@ -37,6 +44,14 @@ export function TopPetPull() {
     let touchStartY: number | null = null;
     let lastSpringTime = 0;
 
+    const getMode = (): TopPetMode => {
+      const mode = root.dataset.topPetMode;
+      if (mode === "off" || mode === "quiet" || mode === "reactive") return mode;
+      return DEFAULT_TOP_PET_MODE;
+    };
+
+    let activeMode = getMode();
+
     const maxPull = () => Math.min(190, Math.max(132, window.innerHeight * 0.22));
 
     const rubberBand = (distance: number) => {
@@ -44,21 +59,39 @@ export function TopPetPull() {
       return limit * (1 - Math.exp(-Math.max(0, distance) / (limit * 0.95)));
     };
 
-    const commit = (nextPosition: number) => {
+    const quietPull = (distance: number) => {
+      const progress = clamp(
+        (Math.max(0, distance) - QUIET_ARM_DISTANCE) / QUIET_REVEAL_DISTANCE,
+        0,
+        1,
+      );
+      const eased = 1 - Math.pow(1 - progress, 3);
+      return QUIET_MAX_REVEAL * eased;
+    };
+
+    const positionForRawPull = (mode: TopPetMode) => (
+      mode === "quiet" ? quietPull(rawPull) : rubberBand(rawPull)
+    );
+
+    const commit = (nextPosition: number, mode: TopPetMode = getMode()) => {
       pullPosition = Math.max(-14, nextPosition);
       const reveal = Math.max(0, pullPosition);
-      const progress = clamp(reveal / maxPull(), 0, 1);
-      const framePosition = progress * (FRAME_COUNT - 1);
-      const firstFrame = Math.floor(framePosition);
-      const secondFrame = Math.min(FRAME_COUNT - 1, firstFrame + 1);
-      const frameMix = framePosition - firstFrame;
-      const frameWeights = PET_STRIPS.map((_, index) => {
-        if (firstFrame === secondFrame) return index === firstFrame ? 1 : 0;
-        if (index === firstFrame) return 1 - frameMix;
-        if (index === secondFrame) return frameMix;
-        return 0;
-      });
-      const stripOpacity = 0.5 + progress * 0.5;
+      const progress = clamp(reveal / (mode === "quiet" ? QUIET_MAX_REVEAL : maxPull()), 0, 1);
+      const frameWeights = mode === "quiet"
+        ? PET_STRIPS.map((_, index) => index === 0 ? 1 : 0)
+        : PET_STRIPS.map((_, index) => {
+          const framePosition = progress * (FRAME_COUNT - 1);
+          const firstFrame = Math.floor(framePosition);
+          const secondFrame = Math.min(FRAME_COUNT - 1, firstFrame + 1);
+          const frameMix = framePosition - firstFrame;
+          if (firstFrame === secondFrame) return index === firstFrame ? 1 : 0;
+          if (index === firstFrame) return 1 - frameMix;
+          if (index === secondFrame) return frameMix;
+          return 0;
+        });
+      const stripOpacity = mode === "quiet"
+        ? 0.5 + progress * 0.32
+        : 0.5 + progress * 0.5;
 
       root.style.setProperty("--top-pet-pull-y", `${pullPosition.toFixed(2)}px`);
       root.style.setProperty("--top-pet-reveal-y", `${reveal.toFixed(2)}px`);
@@ -69,6 +102,10 @@ export function TopPetPull() {
 
       if (reveal > 0.2) {
         root.dataset.topPetActive = "true";
+        root.dataset.topPetPullStyle = mode;
+      } else {
+        delete root.dataset.topPetActive;
+        delete root.dataset.topPetPullStyle;
       }
     };
 
@@ -86,6 +123,7 @@ export function TopPetPull() {
       root.style.setProperty("--top-pet-frame-3", "0");
       delete root.dataset.topPetActive;
       delete root.dataset.topPetPulling;
+      delete root.dataset.topPetPullStyle;
     };
 
     const cancelSpring = () => {
@@ -93,6 +131,32 @@ export function TopPetPull() {
       window.cancelAnimationFrame(springFrame);
       springFrame = 0;
       lastSpringTime = 0;
+    };
+
+    const releaseQuietly = () => {
+      cancelSpring();
+      const startPosition = Math.max(0, pullPosition);
+      if (startPosition <= 0.1) {
+        finish();
+        return;
+      }
+
+      const started = performance.now();
+      const easeBack = (now: number) => {
+        const progress = clamp((now - started) / QUIET_RELEASE_DURATION, 0, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        commit(startPosition * (1 - eased), "quiet");
+
+        if (progress >= 1) {
+          springFrame = 0;
+          finish();
+          return;
+        }
+
+        springFrame = window.requestAnimationFrame(easeBack);
+      };
+
+      springFrame = window.requestAnimationFrame(easeBack);
     };
 
     const release = () => {
@@ -106,6 +170,11 @@ export function TopPetPull() {
         return;
       }
 
+      if (activeMode === "quiet") {
+        releaseQuietly();
+        return;
+      }
+
       cancelSpring();
       springVelocity = 0;
 
@@ -116,7 +185,7 @@ export function TopPetPull() {
         lastSpringTime = now;
         springVelocity += -pullPosition * 0.12 * step;
         springVelocity *= Math.pow(0.74, step);
-        commit(pullPosition + springVelocity * step);
+        commit(pullPosition + springVelocity * step, "reactive");
 
         if (Math.abs(pullPosition) < 0.12 && Math.abs(springVelocity) < 0.12) {
           springFrame = 0;
@@ -132,11 +201,16 @@ export function TopPetPull() {
 
     const scheduleRelease = () => {
       window.clearTimeout(releaseTimer);
-      releaseTimer = window.setTimeout(release, WHEEL_RELEASE_DELAY);
+      const delay = activeMode === "quiet"
+        ? QUIET_WHEEL_RELEASE_DELAY
+        : REACTIVE_WHEEL_RELEASE_DELAY;
+      releaseTimer = window.setTimeout(release, delay);
     };
 
     const handleWheel = (event: WheelEvent) => {
       if (event.ctrlKey || window.scrollY > 0.5) return;
+      const mode = getMode();
+      if (mode === "off") return;
       const modeScale = event.deltaMode === WheelEvent.DOM_DELTA_LINE
         ? 16
         : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
@@ -147,9 +221,10 @@ export function TopPetPull() {
       if (delta < 0) {
         event.preventDefault();
         cancelSpring();
+        activeMode = mode;
         root.dataset.topPetPulling = "true";
         rawPull = clamp(rawPull - delta, 0, 1200);
-        commit(rubberBand(rawPull));
+        commit(positionForRawPull(mode), mode);
         scheduleRelease();
         return;
       }
@@ -158,7 +233,7 @@ export function TopPetPull() {
         event.preventDefault();
         cancelSpring();
         rawPull = Math.max(0, rawPull - delta * 1.35);
-        commit(rubberBand(rawPull));
+        commit(positionForRawPull(activeMode), activeMode);
         if (rawPull <= 0.5) release();
         else scheduleRelease();
       }
@@ -166,6 +241,9 @@ export function TopPetPull() {
 
     const handleTouchStart = (event: TouchEvent) => {
       if (window.scrollY > 0.5 || event.touches.length !== 1) return;
+      const mode = getMode();
+      if (mode === "off") return;
+      activeMode = mode;
       touchStartY = event.touches[0].clientY;
       rawPull = 0;
       cancelSpring();
@@ -178,7 +256,7 @@ export function TopPetPull() {
       event.preventDefault();
       root.dataset.topPetPulling = "true";
       rawPull = clamp(distance * 1.15, 0, 1200);
-      commit(rubberBand(rawPull));
+      commit(positionForRawPull(activeMode), activeMode);
     };
 
     const handleTouchEnd = () => {
@@ -194,7 +272,18 @@ export function TopPetPull() {
       finish();
     };
 
+    const modeObserver = new MutationObserver(() => {
+      const nextMode = getMode();
+      if (nextMode === activeMode) return;
+      activeMode = nextMode;
+      cancelSpring();
+      window.clearTimeout(releaseTimer);
+      touchStartY = null;
+      finish();
+    });
+
     finish();
+    modeObserver.observe(root, { attributes: true, attributeFilter: ["data-top-pet-mode"] });
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
@@ -211,6 +300,7 @@ export function TopPetPull() {
       window.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("touchcancel", handleTouchEnd);
       window.removeEventListener("scroll", handleScroll);
+      modeObserver.disconnect();
       finish();
     };
   }, []);

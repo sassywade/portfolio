@@ -6,6 +6,7 @@ import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type FlatMeadowTexture, type MeadowVariant, type RollingMeadow } from "./meadow";
 import { MeadowSettings } from "./meadow-prototype-controls";
+import { DEFAULT_TOP_PET_MODE, type TopPetMode } from "./top-pet";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
@@ -29,6 +30,12 @@ export function HeroMeadow() {
   const [meadowHeight, setMeadowHeight] = useState(100);
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
   const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(3);
+  const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
+
+  useEffect(() => {
+    document.documentElement.dataset.topPetMode = topPetMode;
+    return () => delete document.documentElement.dataset.topPetMode;
+  }, [topPetMode]);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -219,6 +226,7 @@ export function HeroMeadow() {
         flatTexture={flatMeadowTexture}
         flatColor={flatMeadowColor}
         meadowHeight={meadowHeight}
+        topPetMode={topPetMode}
         wind={wind}
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
@@ -238,6 +246,7 @@ export function HeroMeadow() {
           setMeadowVariant("flat");
         }}
         onMeadowHeightChange={setMeadowHeight}
+        onTopPetModeChange={setTopPetMode}
         onWindChange={updateWind}
         onPlayingChange={setIsPlaying}
       />
