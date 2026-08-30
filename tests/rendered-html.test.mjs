@@ -36,7 +36,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
   assert.match(html, /class="meadow__image" src="\/meadow-ground\.png"/);
   assert.match(html, /data-rolling-meadow="original"/);
-  assert.match(html, /Checking the weather at Alamo Square/);
+  assert.match(html, /Checking the wind at Alamo Square/);
   assert.match(html, /Local time in San Francisco/);
   assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
@@ -68,7 +68,11 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   ]);
 
   assert.match(weather, /api\.open-meteo\.com\/v1\/forecast/);
-  assert.match(weather, /temperature_2m%2Cwind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m/);
+  assert.match(weather, /wind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m/);
+  assert.doesNotMatch(weather, /temperature_2m|temperature:/);
+  assert.match(weather, /function describeAlamoWind/);
+  assert.match(weather, /There's a slight breeze at Alamo Square right now\./);
+  assert.match(weather, /describeAlamoWind\(conditions\)/);
   assert.match(weather, /const WEATHER_REFRESH_MS = 10 \* 60 \* 1000/);
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
   assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);

@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import type { WindSettings } from "./wind";
 
-const ALAMO_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=37.7764&longitude=-122.4345&current=temperature_2m%2Cwind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FLos_Angeles";
+const ALAMO_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=37.7764&longitude=-122.4345&current=wind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m&wind_speed_unit=mph&timezone=America%2FLos_Angeles";
 const WEATHER_REFRESH_MS = 10 * 60 * 1000;
 const CLOCK_REFRESH_MS = 15 * 1000;
 
 type AlamoConditions = {
   observedAt: string;
-  temperature: number;
   windSpeed: number;
   windDirection: number;
   windGusts: number;
@@ -18,7 +17,6 @@ type AlamoConditions = {
 type OpenMeteoResponse = {
   current?: {
     time?: string;
-    temperature_2m?: number;
     wind_speed_10m?: number;
     wind_direction_10m?: number;
     wind_gusts_10m?: number;
@@ -49,7 +47,6 @@ function parseConditions(payload: OpenMeteoResponse): AlamoConditions | null {
   const current = payload.current;
   if (
     !current
-    || !Number.isFinite(current.temperature_2m)
     || !Number.isFinite(current.wind_speed_10m)
     || !Number.isFinite(current.wind_direction_10m)
     || !Number.isFinite(current.wind_gusts_10m)
@@ -59,11 +56,21 @@ function parseConditions(payload: OpenMeteoResponse): AlamoConditions | null {
 
   return {
     observedAt: current.time ?? "",
-    temperature: Number(current.temperature_2m),
     windSpeed: Number(current.wind_speed_10m),
     windDirection: Number(current.wind_direction_10m),
     windGusts: Number(current.wind_gusts_10m),
   };
+}
+
+export function describeAlamoWind(conditions: AlamoConditions) {
+  const feltWind = Math.max(conditions.windSpeed, conditions.windGusts * 0.65);
+
+  if (feltWind < 2) return "It's calm at Alamo Square right now.";
+  if (feltWind < 6) return "There's a slight breeze at Alamo Square right now.";
+  if (feltWind < 10) return "There's a gentle breeze at Alamo Square right now.";
+  if (feltWind < 15) return "There's a steady breeze at Alamo Square right now.";
+  if (feltWind < 22) return "It's pretty windy at Alamo Square right now.";
+  return "It's very windy at Alamo Square right now.";
 }
 
 function cardinalDirection(degrees: number) {
@@ -134,10 +141,10 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
     >
       <span className="alamo-weather__primary">
         {conditions
-          ? `It is ${Math.round(conditions.temperature)}°F at Alamo Square.`
+          ? describeAlamoWind(conditions)
           : hasWeatherError
-            ? "Alamo Square weather is resting."
-            : "Checking the weather at Alamo Square…"}
+            ? "Alamo Square's wind is resting."
+            : "Checking the wind at Alamo Square…"}
       </span>
       <span className="alamo-weather__secondary">
         {now ? `${formatSanFranciscoTime(now)} in San Francisco` : "Local time in San Francisco"}
