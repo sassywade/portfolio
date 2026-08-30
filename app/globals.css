@@ -49,6 +49,10 @@ a {
   min-height: 100vh;
   overflow: hidden;
   background-color: var(--paper);
+  background-image:
+    linear-gradient(rgba(36, 35, 33, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36, 35, 33, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 @keyframes editorial-enter {
@@ -2036,7 +2040,22 @@ em {
 .pranathi-intro {
   width: min(100% - 64px, 860px);
   margin: 0 auto;
-  padding: clamp(190px, 28vh, 310px) 0 clamp(240px, 32vh, 360px);
+  padding: clamp(190px, 28vh, 310px) 0 clamp(100px, 12vh, 145px);
+}
+
+.pranathi-intro--home {
+  position: relative;
+  min-height: min(100vh, 900px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: clamp(155px, 24vh, 280px);
+}
+
+.pranathi-intro--home > .pranathi-name,
+.pranathi-intro--home > .pranathi-bio {
+  position: relative;
+  z-index: 2;
 }
 
 .pranathi-name {
@@ -2065,6 +2084,164 @@ em {
 
 .pranathi-bio p + p {
   margin-top: 48px;
+}
+
+.hero-meadow {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.hero-meadow__tree {
+  position: absolute;
+  z-index: 2;
+  right: -3%;
+  bottom: 13%;
+  width: 360px;
+  height: 520px;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 14px 0 rgba(41, 57, 38, 0.08));
+  transform: rotate(-1deg);
+}
+
+.hero-meadow__trunk {
+  position: absolute;
+  bottom: 0;
+  left: 48%;
+  width: 34px;
+  height: 76%;
+  background: linear-gradient(90deg, #493f2e, #867052 42%, #3c3829 76%);
+  clip-path: polygon(32% 100%, 8% 4%, 42% 0, 69% 5%, 100% 100%);
+}
+
+.hero-meadow__trunk::before,
+.hero-meadow__trunk::after {
+  position: absolute;
+  width: 250px;
+  height: 13px;
+  border-radius: 50%;
+  background: #514631;
+  content: "";
+}
+
+.hero-meadow__trunk::before {
+  top: 26%;
+  left: -108px;
+  transform: rotate(-17deg);
+}
+
+.hero-meadow__trunk::after {
+  top: 44%;
+  left: -84px;
+  transform: rotate(14deg);
+}
+
+.hero-meadow__canopy {
+  position: absolute;
+  left: 50%;
+  display: block;
+  background:
+    repeating-linear-gradient(164deg, rgba(194, 166, 83, 0.13) 0 3px, transparent 3px 8px),
+    linear-gradient(180deg, #536746 0%, #334b31 74%, #263c28 100%);
+  border-radius: 50%;
+  clip-path: polygon(50% 0, 73% 13%, 100% 29%, 78% 50%, 94% 66%, 63% 70%, 48% 100%, 29% 72%, 3% 78%, 20% 52%, 0 35%, 34% 17%);
+  transform: translateX(-50%);
+}
+
+.hero-meadow__canopy--top {
+  top: 0;
+  width: 54%;
+  height: 66px;
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.hero-meadow__canopy--upper {
+  top: 12%;
+  width: 79%;
+  height: 78px;
+  transform: translateX(-50%) rotate(2deg);
+}
+
+.hero-meadow__canopy--middle {
+  top: 27%;
+  width: 100%;
+  height: 90px;
+  transform: translateX(-50%) rotate(-1deg);
+}
+
+.hero-meadow__canopy--lower {
+  top: 44%;
+  width: 86%;
+  height: 74px;
+  transform: translateX(-50%) rotate(3deg);
+}
+
+.hero-meadow__canopy--base {
+  top: 59%;
+  width: 66%;
+  height: 58px;
+  transform: translateX(-50%) rotate(-4deg);
+}
+
+.hero-meadow__ground {
+  position: absolute;
+  z-index: 3;
+  right: -5%;
+  bottom: -1%;
+  left: -5%;
+  height: 34%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #4c6d3f 0%, #385b37 34%, #29482e 100%);
+  clip-path: polygon(0 12%, 9% 11%, 18% 18%, 28% 42%, 39% 71%, 47% 89%, 54% 84%, 63% 67%, 72% 48%, 77% 40%, 85% 42%, 92% 37%, 100% 34%, 100% 100%, 0 100%);
+}
+
+.hero-meadow__ground::before {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(104deg, transparent 0 7px, rgba(176, 184, 113, 0.14) 7px 8px, transparent 8px 17px),
+    linear-gradient(180deg, rgba(91, 117, 65, 0.28), transparent 38%);
+  content: "";
+  opacity: 0.68;
+}
+
+.hero-meadow__grass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-meadow__blade {
+  position: absolute;
+  bottom: 12%;
+  display: block;
+  width: 2px;
+  height: 26px;
+  border-radius: 100% 0 0 0;
+  background: rgba(195, 193, 116, 0.4);
+  transform: rotate(-8deg);
+  transform-origin: bottom center;
+  animation: meadow-blade-sway 4.8s ease-in-out infinite;
+}
+
+.hero-meadow__blade--1 { left: 4%; height: 29px; animation-delay: -0.6s; }
+.hero-meadow__blade--2 { left: 14%; height: 20px; animation-delay: -1.8s; transform: rotate(8deg); }
+.hero-meadow__blade--3 { left: 27%; height: 34px; animation-delay: -2.4s; }
+.hero-meadow__blade--4 { left: 39%; height: 18px; animation-delay: -3.2s; transform: rotate(11deg); }
+.hero-meadow__blade--5 { left: 53%; height: 28px; animation-delay: -1.2s; }
+.hero-meadow__blade--6 { left: 67%; height: 22px; animation-delay: -2.8s; transform: rotate(7deg); }
+.hero-meadow__blade--7 { left: 80%; height: 32px; animation-delay: -4s; }
+.hero-meadow__blade--8 { left: 93%; height: 23px; animation-delay: -0.9s; transform: rotate(10deg); }
+
+@keyframes meadow-blade-sway {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(-3deg) translateY(-1px); }
 }
 
 .pranathi-work {
@@ -2148,7 +2325,7 @@ em {
 @media (max-width: 900px) {
   .pranathi-intro {
     padding-top: 170px;
-    padding-bottom: 220px;
+    padding-bottom: 125px;
   }
 
   .pranathi-work,
@@ -2165,7 +2342,7 @@ em {
   .pranathi-intro {
     width: min(100% - 36px, 700px);
     padding-top: 132px;
-    padding-bottom: 170px;
+    padding-bottom: 105px;
   }
 
   .pranathi-name {
@@ -2179,6 +2356,16 @@ em {
 
   .pranathi-bio p + p {
     margin-top: 34px;
+  }
+
+  .hero-meadow__tree {
+    right: -27%;
+    bottom: 15%;
+    scale: 0.62;
+  }
+
+  .hero-meadow__ground {
+    height: 27%;
   }
 
   .pranathi-project-grid {
@@ -3360,22 +3547,17 @@ em {
 @keyframes compact-pop {
   0% {
     opacity: 0;
-    transform: translateY(8px) scale(0.985);
-  }
-
-  72% {
-    opacity: 1;
-    transform: translateY(-1px) scale(1.005);
+    transform: translateY(8px);
   }
 
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 .reveal[data-reveal-ready="true"] {
-  transform: translateY(18px) scale(0.985);
+  transform: translateY(18px);
   transition-timing-function: var(--compact-ease);
 }
 
@@ -3496,6 +3678,18 @@ em {
   }
 }
 
+@keyframes smiley-wind-breathe {
+  0%, 100% {
+    opacity: 0.86;
+    transform: translateX(0) scaleX(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(4px) scaleX(1);
+  }
+}
+
 @keyframes smiley-pet-breathe {
   0%, 100% {
     transform: translateY(0) scale(1);
@@ -3508,15 +3702,15 @@ em {
 
 /* Use the supplied drawings as the four cursor-pet frames. */
 .smiley-cursor {
-  width: 100px;
-  height: 56px;
+  width: 88px;
+  height: 50px;
 }
 
 .smiley-cursor__direction {
-  width: 100px;
-  height: 56px;
+  width: 88px;
+  height: 50px;
   transform: none;
-  transform-origin: 17px 24px;
+  transform-origin: 15px 21px;
 }
 
 .smiley-cursor__asset {
@@ -3525,7 +3719,7 @@ em {
   left: 0;
   display: block;
   width: auto;
-  height: 48px;
+  height: 42px;
   max-width: none;
   opacity: 0;
   pointer-events: none;
@@ -3541,24 +3735,20 @@ em {
 
 .smiley-cursor__face-frame {
   clip-path: inset(0 48% 0 0);
-  transform-origin: 17px 24px;
-  transition: transform 220ms var(--compact-ease), opacity 140ms ease;
+  transform-origin: 15px 21px;
+  transition: opacity 140ms ease;
 }
 
-.smiley-cursor[data-direction="left"] .smiley-cursor__face-frame {
-  transform: scaleX(-1);
+.smiley-cursor__face-frame.smiley-cursor__asset--idle {
+  clip-path: none;
 }
 
 .smiley-cursor__wind-frame {
   clip-path: inset(0 0 0 48%);
   opacity: 0;
   transform: scaleX(0.88);
-  transform-origin: 17px 24px;
+  transform-origin: 15px 21px;
   transition: opacity 180ms ease 120ms, transform 300ms var(--compact-ease) 120ms;
-}
-
-.smiley-cursor[data-direction="left"] .smiley-cursor__wind-frame {
-  transform: scaleX(-0.88);
 }
 
 .smiley-cursor[data-state="light"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--light,
@@ -3566,10 +3756,270 @@ em {
 .smiley-cursor[data-state="strained"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strained {
   opacity: 1;
   transform: scaleX(1);
+  animation: smiley-wind-breathe var(--smiley-wind-duration) var(--compact-ease) 120ms infinite both;
 }
 
-.smiley-cursor[data-direction="left"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--light,
-.smiley-cursor[data-direction="left"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strong,
-.smiley-cursor[data-direction="left"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strained {
-  transform: scaleX(-1);
+/* The pet keeps one fixed facing; only the breath state changes. */
+.smiley-cursor[data-state="idle"] .smiley-cursor__asset--idle {
+  opacity: 1;
+}
+
+/* Independent landscape layers, ready for future grass and tree interactions. */
+.hero-meadow {
+  --meadow-render-width: max(100vw, 1280px);
+}
+
+.meadow,
+.cypress-tree {
+  position: absolute;
+  pointer-events: none;
+}
+
+.meadow {
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+}
+
+.meadow__visual {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: var(--meadow-render-width);
+  aspect-ratio: 1672 / 941;
+  transform: translateX(-50%) scaleY(0.84);
+  transform-origin: bottom center;
+  contain: layout paint;
+}
+
+.meadow__image,
+.meadow__texture,
+.meadow__grass-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.meadow__image {
+  z-index: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.meadow__texture {
+  z-index: 1;
+  background:
+    radial-gradient(circle, rgba(235, 225, 142, 0.28) 0 0.7px, transparent 1.2px) 0 0 / 11px 13px,
+    repeating-linear-gradient(76deg, rgba(28, 48, 16, 0.11) 0 1px, transparent 1px 8px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(26, 43, 14, 0.16));
+  -webkit-mask: url("/meadow-ground.png") center / 100% 100% no-repeat;
+  mask: url("/meadow-ground.png") center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
+  opacity: 0.34;
+  animation: meadow-texture-drift 20s linear infinite;
+}
+
+.meadow__grass-canvas {
+  z-index: 2;
+  display: block;
+  contain: strict;
+  opacity: 0.96;
+  pointer-events: none;
+}
+
+.cypress-tree {
+  z-index: 2;
+  right: clamp(20px, 8vw, 128px);
+  bottom: clamp(70px, 9vw, 150px);
+  width: clamp(220px, 27vw, 440px);
+  aspect-ratio: 556 / 493;
+  contain: layout paint;
+}
+
+.cypress-tree__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 6px rgba(31, 38, 20, 0.08));
+  pointer-events: auto;
+}
+
+@keyframes meadow-texture-drift {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to { background-position: 28px 11px, -22px 0, 0 0; }
+}
+
+@media (max-width: 900px) {
+  .hero-meadow {
+    --meadow-render-width: max(100vw, 900px);
+  }
+
+  .cypress-tree {
+    right: -12px;
+    width: clamp(220px, 31vw, 300px);
+  }
+}
+
+@media (max-width: 580px) {
+  .hero-meadow {
+    --meadow-render-width: 780px;
+  }
+
+  .cypress-tree {
+    right: -22px;
+    bottom: 70px;
+    width: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meadow__texture {
+    animation: none;
+  }
+}
+
+/* The interactive cypress is a self-contained canvas island above the meadow layer. */
+.cypress-tree {
+  right: clamp(8px, 4vw, 64px);
+  bottom: clamp(42px, 7vw, 104px);
+  width: clamp(260px, 30vw, 420px);
+  aspect-ratio: auto;
+  animation: none;
+  pointer-events: none;
+  transform: none;
+}
+
+.cypress-tree__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1120 / 1405;
+  pointer-events: none;
+}
+
+.cypress-tree__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 6px rgba(31, 38, 20, 0.08));
+  pointer-events: auto;
+}
+
+.cypress-tree__controls {
+  position: absolute;
+  z-index: 3;
+  right: 10px;
+  bottom: 10px;
+  width: min(270px, calc(100% - 20px));
+  padding: 11px 12px 10px;
+  border: 1px solid rgba(36, 35, 33, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 25px rgba(36, 35, 33, 0.11);
+  color: var(--ink);
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
+}
+
+.cypress-tree__controls-head,
+.cypress-tree__field > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cypress-tree__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.cypress-tree__controls-head > span,
+.cypress-tree__field,
+.cypress-tree__toggle {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cypress-tree__controls-head > span {
+  color: #8d972b;
+}
+
+.cypress-tree__toggle {
+  appearance: none;
+  border: 1px solid rgba(36, 35, 33, 0.26);
+  padding: 5px 8px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+}
+
+.cypress-tree__toggle:hover,
+.cypress-tree__toggle:focus-visible {
+  border-color: #9caa25;
+  background: rgba(156, 170, 37, 0.08);
+  color: #758019;
+}
+
+.cypress-tree__controls.is-collapsed {
+  width: 160px;
+}
+
+.cypress-tree__fields[hidden] {
+  display: none;
+}
+
+.cypress-tree__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+
+.cypress-tree__field {
+  display: block;
+  color: #77736b;
+}
+
+.cypress-tree__field output {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.cypress-tree__field input {
+  display: block;
+  width: 100%;
+  height: 13px;
+  margin: 4px 0 0;
+  accent-color: #9caa25;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .cypress-tree {
+    right: -10px;
+    bottom: 60px;
+    width: clamp(260px, 34vw, 360px);
+  }
+}
+
+@media (max-width: 580px) {
+  .cypress-tree {
+    right: -30px;
+    bottom: 63px;
+    width: 270px;
+  }
+
+  .cypress-tree__controls {
+    right: 0;
+    left: 0;
+    bottom: 10px;
+    width: 270px;
+  }
 }

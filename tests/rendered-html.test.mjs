@@ -1,11 +1,6 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
-
-const developmentPreviewMeta =
-  /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
-const templateRoot = new URL("../", import.meta.url);
-const previewRoot = new URL("../app/_sites-preview/", import.meta.url);
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -28,64 +23,50 @@ async function render() {
   );
 }
 
-test("server-renders the starter loading skeleton", async () => {
+test("server-renders the portfolio meadow and shared wind study", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, developmentPreviewMeta);
-  assert.match(html, /<title>Your site is taking shape<\/title>/i);
-  assert.match(html, /Building your site/);
-  assert.match(html, /Your site is taking shape/);
-  assert.match(
-    html,
-    /Your first version will appear here automatically when it’s ready\./,
-  );
-  assert.doesNotMatch(html, /Codex/);
-  assert.match(html, /react-loading-skeleton/);
-  assert.match(html, /role="status"/);
+  assert.match(html, /<title>Neel Saswade — Product designer<\/title>/i);
+  assert.match(html, />Neel Saswade</);
+  assert.match(html, /class="meadow__grass-canvas"/);
+  assert.match(html, /data-grass-layer="true"/);
+  assert.match(html, /aria-label="Meadow and cypress wind controls"/);
+  assert.match(html, />Breeze<output>0\.34<\/output>/);
+  assert.match(html, />Gust<output>0\.52<\/output>/);
+  assert.match(html, />Elasticity<output>0\.38<\/output>/);
+  assert.match(html, />Gust rhythm<output>0\.31<\/output>/);
+  assert.match(html, />Minimize<\/button>/);
+  assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
-test("keeps the loading skeleton scoped and disposable", async () => {
-  const [preview, css, page, layout, packageJson, files] = await Promise.all([
-    readFile(new URL("SkeletonPreview.tsx", previewRoot), "utf8"),
-    readFile(new URL("preview.css", previewRoot), "utf8"),
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readdir(previewRoot),
+test("keeps the living lawn lightweight and synchronized with the cypress", async () => {
+  const [renderer, meadow, hero, tree, css] = await Promise.all([
+    readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.deepEqual(files.sort(), ["SkeletonPreview.tsx", "preview.css"]);
-  assert.match(preview, /from "react-loading-skeleton"/);
-  assert.match(preview, /baseColor="#eceae7"/);
-  assert.match(preview, /highlightColor="#f9f8f6"/);
-  assert.match(preview, /duration=\{2\.8\}/);
-  assert.match(preview, /sites-skeleton-search-placeholder/);
-  assert.match(packageJson, /"react-loading-skeleton": "3\.5\.0"/);
+  assert.match(renderer, /const FRAME_INTERVAL = 1000 \/ 30/);
+  assert.match(renderer, /surfaceByColumn/);
+  assert.match(renderer, /sourceContext\.getImageData/);
+  assert.match(renderer, /context\.quadraticCurveTo/);
+  assert.match(renderer, /navigator\.hardwareConcurrency/);
+  assert.match(renderer, /new IntersectionObserver/);
+  assert.match(renderer, /new ResizeObserver/);
+  assert.match(renderer, /document\.hidden/);
+  assert.doesNotMatch(renderer, /filter\s*=\s*["']blur|ctx\.filter\s*=\s*["']blur/i);
 
-  const shellIndex = preview.indexOf('className="sites-skeleton-shell"');
-  const statusIndex = preview.indexOf('className="sites-skeleton-status"');
-  assert.ok(shellIndex >= 0 && statusIndex > shellIndex);
-  assert.match(css, /position:\s*fixed/);
-  assert.match(css, /inset:\s*0/);
-  assert.match(css, /opacity:\s*0\.52/);
-  assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.doesNotMatch(css, /#020617|canvas|pets|progress/i);
-  assert.doesNotMatch(
-    preview,
-    /loading-spinner|status-mark|status-progress|canvas|cookie|random/i,
-  );
-
-  assert.match(page, /export const metadata:\s*Metadata/);
-  assert.match(page, /"codex-preview": "development"/);
-  assert.match(page, /<SkeletonPreview \/>/);
-  assert.match(layout, /title:\s*"Starter Project"/);
-  assert.doesNotMatch(layout, /codex-preview|_sites-preview|themeColor|\bViewport\b/);
-  assert.doesNotMatch(css, /(^|\s)(html|body)\s*\{/m);
-
-  await assert.rejects(
-    access(new URL("public/_sites-preview", templateRoot)),
-  );
+  assert.match(meadow, /createMeadowGrass/);
+  assert.match(meadow, /prefers-reduced-motion: reduce/);
+  assert.match(hero, /<Meadow wind=\{wind\} isPlaying=\{isPlaying\} \/>/);
+  assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{isPlaying\}/);
+  assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
+  assert.match(tree, /onPlayingChange\(!isPlaying\)/);
+  assert.match(css, /\.meadow__grass-canvas\s*\{/);
+  assert.match(css, /pointer-events:\s*none/);
 });

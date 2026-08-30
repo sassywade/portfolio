@@ -1,3 +1,4 @@
+import { HeroMeadow } from "./hero-meadow";
 import { Soundscape } from "./soundscape";
 import { ProjectGrid } from "./project-card";
 import { SiteHeader } from "./site-header";
@@ -18,6 +19,7 @@ export default function Home() {
           </p>
           <p>In my free time I ride bikes, photograph SF, and go backpacking.</p>
         </div>
+        <HeroMeadow />
       </section>
 
       <section className="pranathi-work" id="work" aria-labelledby="work-title">
