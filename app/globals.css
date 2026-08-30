@@ -4629,6 +4629,38 @@ em {
   }
 }
 
+/* Plant the cypress behind the hill crest while visitors continue across the foreground. */
+.hero-meadow > .cypress-tree {
+  z-index: auto;
+  contain: none;
+}
+
+.hero-meadow[data-meadow-variant="living"] > .cypress-tree {
+  bottom: clamp(56px, 6.5vw, 96px);
+}
+
+.hero-meadow > .cypress-tree .cypress-tree__stage {
+  z-index: auto;
+}
+
+.hero-meadow > .cypress-tree .cypress-tree__canvas {
+  z-index: 1;
+}
+
+.hero-meadow > .meadow {
+  z-index: 2;
+}
+
+.hero-meadow > .bike-ride-layer,
+.hero-meadow > .photo-drop-layer,
+.hero-meadow > .backpack-walk-layer {
+  z-index: 5;
+}
+
+.hero-meadow > .cypress-tree .cypress-tree__controls {
+  z-index: 7;
+}
+
 /* A tiny cyclist falls from the copy, then treats the meadow as a track. */
 .bike-word,
 .photo-word,

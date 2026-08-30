@@ -220,6 +220,12 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /\.meadow__flat-tint\s*\{[^}]*background:\s*var\(--flat-meadow-color\)/);
   assert.match(css, /\.meadow-prototype\s*\{/);
   assert.match(css, /\.meadow-prototype__modes button\[aria-pressed="true"\]/);
+  assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
+  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*clamp\(56px, 6\.5vw, 96px\)/);
+  assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);
+  assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*z-index:\s*2;/);
+  assert.match(css, /\.hero-meadow > \.bike-ride-layer,[\s\S]*?\.hero-meadow > \.backpack-walk-layer\s*\{[^}]*z-index:\s*5;/);
+  assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__controls\s*\{[^}]*z-index:\s*7;/);
   assert.match(css, /\.hero-meadow\s*\{[\s\S]*position:\s*fixed/);
   assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\)/);
   assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
