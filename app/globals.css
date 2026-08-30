@@ -3808,6 +3808,9 @@ em {
   --flat-meadow-color: #6f8d45;
   --flat-meadow-height: clamp(118px, 17svh, 176px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
+  --cyclist-character-size: clamp(66px, 5.6vw, 80px);
+  --backpacker-character-width: clamp(70px, 6vw, 85px);
+  --backpacker-character-height: clamp(86px, 7.35vw, 105px);
 }
 
 .meadow,
@@ -4680,8 +4683,8 @@ em {
   top: 0;
   left: 0;
   display: block;
-  width: var(--miniature-character-height);
-  height: var(--miniature-character-height);
+  width: var(--cyclist-character-size);
+  height: var(--cyclist-character-size);
   aspect-ratio: 1;
   opacity: 0;
   transform-origin: center 89%;
@@ -4936,8 +4939,8 @@ em {
   top: 0;
   left: 0;
   display: block;
-  width: clamp(67px, 5.7vw, 81px);
-  height: var(--miniature-character-height);
+  width: var(--backpacker-character-width);
+  height: var(--backpacker-character-height);
   aspect-ratio: 586 / 720;
   opacity: 0;
   transform-origin: center 95.8%;

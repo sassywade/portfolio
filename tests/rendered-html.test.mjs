@@ -226,10 +226,13 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
   assert.match(css, /--miniature-character-height:\s*clamp\(82px, 7vw, 100px\)/);
-  assert.match(css, /\.bike-rider\s*\{[^}]*width:\s*var\(--miniature-character-height\)[^}]*height:\s*var\(--miniature-character-height\)/);
+  assert.match(css, /--cyclist-character-size:\s*clamp\(66px, 5\.6vw, 80px\)/);
+  assert.match(css, /--backpacker-character-width:\s*clamp\(70px, 6vw, 85px\)/);
+  assert.match(css, /--backpacker-character-height:\s*clamp\(86px, 7\.35vw, 105px\)/);
+  assert.match(css, /\.bike-rider\s*\{[^}]*width:\s*var\(--cyclist-character-size\)[^}]*height:\s*var\(--cyclist-character-size\)/);
   assert.match(css, /\.bike-rider__direction\s*\{[^}]*transform:\s*scale\(1\.14\) scaleX\(var\(--bike-direction\)\)/);
   assert.match(css, /\.mini-photographer\s*\{[^}]*height:\s*var\(--miniature-character-height\)/);
-  assert.match(css, /\.mini-hiker\s*\{[^}]*height:\s*var\(--miniature-character-height\)/);
+  assert.match(css, /\.mini-hiker\s*\{[^}]*width:\s*var\(--backpacker-character-width\)[^}]*height:\s*var\(--backpacker-character-height\)/);
   assert.match(css, /@keyframes miniature-bike-materialize/);
   assert.match(css, /@keyframes miniature-photographer-materialize/);
   assert.match(css, /@keyframes miniature-hiker-materialize/);
