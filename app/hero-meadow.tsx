@@ -223,8 +223,10 @@ export function HeroMeadow() {
     "--flat-meadow-color": flatMeadowColor,
     "--meadow-height-scale": (meadowHeight / 100).toFixed(2),
     "--living-meadow-scale-y": (0.84 * meadowHeight / 100).toFixed(3),
-    "--flat-style-scale-y": (0.48 * meadowHeight / 100).toFixed(3),
     "--meadow-height-offset": `${((meadowHeight - 100) * 1.45).toFixed(1)}px`,
+    "--rolling-meadow-registration-y": `${environment.rollingGroundOffset}%`,
+    "--flat-meadow-registration-y": `${-environment.flatHorizon}%`,
+    "--cypress-root-registration-y": `${environment.treeRootOffset}%`,
   } as CSSProperties;
 
   return (

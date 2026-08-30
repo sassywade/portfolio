@@ -7,6 +7,9 @@ export const ALAMO_STYLES = [
     flatSrc: null,
     treeSrc: "/monterey-cypress.png",
     atmosphere: "control",
+    rollingGroundOffset: 0,
+    flatHorizon: 0,
+    treeRootOffset: 0,
   },
   {
     id: "risograph",
@@ -16,6 +19,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/risograph/flat.png",
     treeSrc: "/alamo-styles/risograph/tree.png",
     atmosphere: "paper",
+    rollingGroundOffset: 18,
+    flatHorizon: 58.26,
+    treeRootOffset: 3.71,
   },
   {
     id: "painterly-realism",
@@ -25,6 +31,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/painterly-realism/flat.png",
     treeSrc: "/alamo-styles/painterly-realism/tree.png",
     atmosphere: "daylight",
+    rollingGroundOffset: 15.05,
+    flatHorizon: 69.05,
+    treeRootOffset: 0.86,
   },
   {
     id: "ascii-terminal",
@@ -34,6 +43,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/ascii-terminal/flat.png",
     treeSrc: "/alamo-styles/ascii-terminal/tree.png",
     atmosphere: "terminal",
+    rollingGroundOffset: 13.89,
+    flatHorizon: 70.64,
+    treeRootOffset: -2.59,
   },
   {
     id: "cut-paper",
@@ -43,6 +55,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/cut-paper/flat.png",
     treeSrc: "/alamo-styles/cut-paper/tree.png",
     atmosphere: "paper",
+    rollingGroundOffset: 22.81,
+    flatHorizon: 62.83,
+    treeRootOffset: 4.25,
   },
   {
     id: "grainy-editorial",
@@ -52,6 +67,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/grainy-editorial/flat.png",
     treeSrc: "/alamo-styles/grainy-editorial/tree.png",
     atmosphere: "grain",
+    rollingGroundOffset: 10.17,
+    flatHorizon: 64.72,
+    treeRootOffset: -0.26,
   },
   {
     id: "lavender-dream",
@@ -61,6 +79,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/lavender-dream/flat.png",
     treeSrc: "/alamo-styles/lavender-dream/tree.png",
     atmosphere: "dream",
+    rollingGroundOffset: 9.49,
+    flatHorizon: 57.33,
+    treeRootOffset: -1.09,
   },
   {
     id: "airy-watercolor",
@@ -70,6 +91,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/airy-watercolor/flat.png",
     treeSrc: "/alamo-styles/airy-watercolor/tree.png",
     atmosphere: "watercolor",
+    rollingGroundOffset: 6.91,
+    flatHorizon: 53.85,
+    treeRootOffset: -0.33,
   },
   {
     id: "blue-duotone",
@@ -79,6 +103,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/blue-duotone/flat.png",
     treeSrc: "/alamo-styles/blue-duotone/tree.png",
     atmosphere: "blue",
+    rollingGroundOffset: 13.57,
+    flatHorizon: 60.87,
+    treeRootOffset: 0.69,
   },
   {
     id: "golden-hour",
@@ -88,6 +115,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/golden-hour/flat.png",
     treeSrc: "/alamo-styles/golden-hour/tree.png",
     atmosphere: "golden",
+    rollingGroundOffset: 6.31,
+    flatHorizon: 71.01,
+    treeRootOffset: -1.98,
   },
   {
     id: "vivid-surreal",
@@ -97,6 +127,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/vivid-surreal/flat.png",
     treeSrc: "/alamo-styles/vivid-surreal/tree.png",
     atmosphere: "surreal",
+    rollingGroundOffset: 20.4,
+    flatHorizon: 59.19,
+    treeRootOffset: 0.08,
   },
   {
     id: "cinematic-glow",
@@ -106,6 +139,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/cinematic-glow/flat.png",
     treeSrc: "/alamo-styles/cinematic-glow/tree.png",
     atmosphere: "cinematic",
+    rollingGroundOffset: 10.38,
+    flatHorizon: 70.14,
+    treeRootOffset: 0.35,
   },
   {
     id: "soft-daylight",
@@ -115,6 +151,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/soft-daylight/flat.png",
     treeSrc: "/alamo-styles/soft-daylight/tree.png",
     atmosphere: "glints",
+    rollingGroundOffset: 11.69,
+    flatHorizon: 75.96,
+    treeRootOffset: 0.42,
   },
   {
     id: "voxel",
@@ -124,6 +163,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/voxel/flat.png",
     treeSrc: "/alamo-styles/voxel/tree.png",
     atmosphere: "voxel",
+    rollingGroundOffset: 12.11,
+    flatHorizon: 71.87,
+    treeRootOffset: -1.84,
   },
   {
     id: "whiteboard",
@@ -133,6 +175,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/whiteboard/flat.png",
     treeSrc: "/alamo-styles/whiteboard/tree.png",
     atmosphere: "whiteboard",
+    rollingGroundOffset: 1.77,
+    flatHorizon: 73.19,
+    treeRootOffset: 0.42,
   },
   {
     id: "handmade-clay",
@@ -142,6 +187,9 @@ export const ALAMO_STYLES = [
     flatSrc: "/alamo-styles/handmade-clay/flat.png",
     treeSrc: "/alamo-styles/handmade-clay/tree.png",
     atmosphere: "clay",
+    rollingGroundOffset: 1.35,
+    flatHorizon: 69.66,
+    treeRootOffset: -1.43,
   },
 ] as const;
 

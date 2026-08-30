@@ -4188,6 +4188,9 @@ em {
   --meadow-height-scale: 1;
   --living-meadow-scale-y: 0.84;
   --meadow-height-offset: 0px;
+  --rolling-meadow-registration-y: 0%;
+  --flat-meadow-registration-y: 0%;
+  --cypress-root-registration-y: 0%;
   --cypress-viewport-lift: clamp(0px, calc(20vw - 288px), 132px);
   --cypress-root-overlap: clamp(16px, 1.4vw, 24px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
@@ -4296,6 +4299,10 @@ em {
 
 .meadow__image[data-meadow-image-active="true"] {
   opacity: 1;
+}
+
+.meadow__image--curated {
+  transform: translate3d(0, var(--rolling-meadow-registration-y), 0);
 }
 
 .cypress-tree {
@@ -5013,6 +5020,7 @@ em {
 
 .hero-meadow > .cypress-tree .cypress-tree__stage {
   z-index: auto;
+  transform: translate3d(0, var(--cypress-root-registration-y), 0);
 }
 
 .hero-meadow > .cypress-tree .cypress-tree__canvas {
@@ -6273,24 +6281,25 @@ html[data-hero-highlights="true"] .pranathi-bio .hero-inline-action:focus-visibl
 }
 
 .meadow__visual--flat[data-style-mode="curated"] {
-  left: 50%;
-  width: var(--meadow-render-width);
-  height: auto;
-  aspect-ratio: 1672 / 941;
+  left: 0;
+  width: 100%;
+  height: var(--flat-meadow-height);
+  aspect-ratio: auto;
   overflow: hidden;
   contain: layout paint;
-  transform: translateX(-50%) scaleY(var(--flat-style-scale-y));
+  transform: scaleY(var(--meadow-height-scale));
   transform-origin: bottom center;
 }
 
 .meadow__curated-flat-image {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 50%;
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: var(--meadow-render-width);
+  height: auto;
   pointer-events: none;
+  transform: translate3d(-50%, var(--flat-meadow-registration-y), 0);
 }
 
 .hero-meadow[data-environment-style="voxel"] .meadow__image,

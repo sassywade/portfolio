@@ -147,6 +147,9 @@ test("offers all fifteen Alamo art directions plus the unchanged control in roll
 
   assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 16);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
+  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 16);
+  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 16);
+  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 16);
   for (const id of styleIds) {
     assert.match(styles, new RegExp(`id: "${id}"`));
     for (const asset of ["rolling", "flat", "tree"]) {
@@ -160,6 +163,9 @@ test("offers all fifteen Alamo art directions plus the unchanged control in roll
   assert.match(hero, /data-environment-style=\{environmentStyle\}/);
   assert.match(hero, /environmentStyle=\{environment\}/);
   assert.match(hero, /assetUrl=\{environment\.treeSrc\}/);
+  assert.match(hero, /--rolling-meadow-registration-y/);
+  assert.match(hero, /--flat-meadow-registration-y/);
+  assert.match(hero, /--cypress-root-registration-y/);
   assert.match(meadow, /data-style-mode=\{isControlStyle \? "control" : "curated"\}/);
   assert.match(meadow, /environmentStyle\.rollingSrc/);
   assert.match(meadow, /environmentStyle\.flatSrc/);
@@ -169,8 +175,10 @@ test("offers all fifteen Alamo art directions plus the unchanged control in roll
   assert.match(tree, /assetUrl: string/);
   assert.match(tree, /createCypressTree\(\{[\s\S]*assetUrl,/);
   assert.match(tree, /\}, \[assetUrl\]\)/);
-  assert.match(css, /\.meadow__visual--flat\[data-style-mode="curated"\]/);
-  assert.match(css, /--flat-style-scale-y/);
+  assert.match(css, /\.meadow__image--curated\s*\{[^}]*translate3d\(0, var\(--rolling-meadow-registration-y\), 0\)/);
+  assert.match(css, /\.meadow__visual--flat\[data-style-mode="curated"\]\s*\{[^}]*height:\s*var\(--flat-meadow-height\)/);
+  assert.match(css, /\.meadow__curated-flat-image\s*\{[^}]*translate3d\(-50%, var\(--flat-meadow-registration-y\), 0\)/);
+  assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__stage\s*\{[^}]*translate3d\(0, var\(--cypress-root-registration-y\), 0\)/);
 });
 
 test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {
