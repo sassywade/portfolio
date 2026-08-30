@@ -5141,7 +5141,7 @@ em {
   gap: 2px;
   color: rgba(255, 255, 255, 0.94);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 10px;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.035em;
   line-height: 1.35;
@@ -5151,7 +5151,7 @@ em {
 }
 
 .alamo-weather__primary {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .alamo-weather__secondary {
@@ -5167,11 +5167,11 @@ em {
     right: 12px;
     bottom: 10px;
     max-width: 230px;
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .alamo-weather__primary {
-    font-size: 9px;
+    font-size: 10px;
   }
 }
 

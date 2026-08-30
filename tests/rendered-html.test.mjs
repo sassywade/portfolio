@@ -223,6 +223,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow__flat-tint\s*\{[^}]*background:\s*var\(--flat-meadow-color\)/);
   assert.match(css, /\.meadow-settings\s*\{/);
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
+  assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
+  assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*11px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
   assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*clamp\(56px, 6\.5vw, 96px\)/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*z-index:\s*3;[^}]*radial-gradient\(/);
