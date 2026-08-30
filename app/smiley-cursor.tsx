@@ -19,13 +19,14 @@ const FACING_INTENT_MEMORY = 180;
 const PET_BLOW_BACKPACKER_EVENT = "portfolio:pet-blow-backpacker";
 const PET_BLOW_CYCLIST_EVENT = "portfolio:pet-blow-cyclist";
 const PET_BLOW_PHOTOGRAPHER_EVENT = "portfolio:pet-blow-photographer";
+const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
 const MINIATURE_ARM_DELAY = 480;
 const MINIATURE_APPROACH_DURATION = 680;
 const MINIATURE_BLOW_TRIGGER_DELAY = 280;
 const MINIATURE_BLOW_DURATION = 1080;
 const MINIATURE_COOLDOWN = 1800;
 
-type MiniatureKind = "backpacker" | "cyclist" | "photographer";
+type MiniatureKind = "backpacker" | "cyclist" | "photographer" | "cypress";
 type MiniatureInteractionPhase = "off" | "arming" | "approach" | "blow";
 type ActiveMiniature = {
   kind: MiniatureKind;
@@ -39,12 +40,14 @@ const MINIATURE_PROXIMITY: Record<MiniatureKind, number> = {
   backpacker: 86,
   cyclist: 98,
   photographer: 86,
+  cypress: 110,
 };
 
 const PET_BLOW_EVENT: Record<MiniatureKind, string> = {
   backpacker: PET_BLOW_BACKPACKER_EVENT,
   cyclist: PET_BLOW_CYCLIST_EVENT,
   photographer: PET_BLOW_PHOTOGRAPHER_EVENT,
+  cypress: PET_BLOW_CYPRESS_EVENT,
 };
 
 const easeInOutCubic = (value: number) => (
@@ -178,6 +181,7 @@ export function SmileyCursor() {
         backpacker: { layer: '.backpack-walk-layer[data-phase="walk"]', actor: ".mini-hiker" },
         cyclist: { layer: '.bike-ride-layer[data-phase="ride"]', actor: ".bike-rider" },
         photographer: { layer: '.photo-drop-layer[data-phase="shoot"]', actor: ".mini-photographer" },
+        cypress: { layer: '.hero-meadow[data-scene-visible="true"]', actor: ".cypress-tree__canvas" },
       };
       const selector = selectors[kind];
       const layer = document.querySelector<HTMLElement>(selector.layer);
@@ -193,7 +197,7 @@ export function SmileyCursor() {
     };
 
     const nearestMiniature = () => {
-      const candidates = (["backpacker", "cyclist", "photographer"] as const)
+      const candidates = (["backpacker", "cyclist", "photographer", "cypress"] as const)
         .map(activeMiniature)
         .filter((candidate): candidate is ActiveMiniature => Boolean(
           candidate && candidate.distance <= MINIATURE_PROXIMITY[candidate.kind],
@@ -220,6 +224,10 @@ export function SmileyCursor() {
 
       const actorCenter = miniature.bounds.left + miniature.bounds.width * 0.5;
       const petCenter = currentX + PET_FACE_ANCHOR_X;
+      if (miniature.kind === "cypress") {
+        if (miniature.bounds.right >= window.innerWidth - 48) return 1;
+        if (miniature.bounds.left <= 48) return -1;
+      }
       return petCenter <= actorCenter ? 1 : -1;
     };
 
@@ -286,11 +294,16 @@ export function SmileyCursor() {
         const blowElapsed = timestamp - miniaturePhaseStarted;
         if (!miniatureBlowSent && blowElapsed >= MINIATURE_BLOW_TRIGGER_DELAY) {
           miniatureBlowSent = true;
-          const detail = miniature.kind === "photographer" ? undefined : { direction: miniatureFacing };
+          const detail = miniature.kind === "photographer"
+            ? undefined
+            : miniature.kind === "cypress"
+              ? { direction: miniatureFacing, strength: 1.16, duration: 1500 }
+              : { direction: miniatureFacing };
           window.dispatchEvent(new CustomEvent(PET_BLOW_EVENT[miniature.kind], { detail }));
         }
 
-        if (blowElapsed >= MINIATURE_BLOW_DURATION) {
+        const blowDuration = miniature.kind === "cypress" ? 1600 : MINIATURE_BLOW_DURATION;
+        if (blowElapsed >= blowDuration) {
           miniatureCooldownUntil = timestamp + MINIATURE_COOLDOWN;
           resetMiniatureInteraction(miniature.kind);
           lastMoveTime = timestamp;
@@ -304,8 +317,12 @@ export function SmileyCursor() {
       const miniature = activeMiniature(miniatureKind);
       if (!miniature) return null;
 
-      const gap = miniature.kind === "cyclist" ? 42 : 34;
-      const targetHeightRatio = miniature.kind === "photographer" ? 0.36 : 0.42;
+      const gap = miniature.kind === "cyclist" ? 42 : miniature.kind === "cypress" ? 30 : 34;
+      const targetHeightRatio = miniature.kind === "photographer"
+        ? 0.36
+        : miniature.kind === "cypress"
+          ? 0.40
+          : 0.42;
       const desiredFaceX = miniatureFacing === 1
         ? miniature.bounds.left - gap
         : miniature.bounds.right + gap;
@@ -332,7 +349,7 @@ export function SmileyCursor() {
       if (miniaturePhase === "blow") {
         cursor.dataset.idle = "off";
         cursor.dataset.reaction = "off";
-        cursor.dataset.state = "strong";
+        cursor.dataset.state = miniatureKind === "cypress" ? "strained" : "strong";
         cursor.dataset.wind = "on";
         windStartedAt = timestamp;
         return;

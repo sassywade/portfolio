@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { createCypressTree } from "./cypress-tree-renderer";
 import { type WindKey, type WindSettings } from "./wind";
 
+const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
+
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },
   { key: "gust", label: "Gust" },
@@ -50,6 +52,20 @@ export function CypressTree({ wind, isPlaying, onWindChange, onPlayingChange }: 
   useEffect(() => {
     treeRef.current?.setPlaying(isPlaying);
   }, [isPlaying]);
+
+  useEffect(() => {
+    const handlePetGust = (event: Event) => {
+      const detail = (event as CustomEvent<{ direction?: -1 | 1; strength?: number; duration?: number }>).detail;
+      treeRef.current?.applyGust({
+        direction: detail?.direction === -1 ? -1 : 1,
+        strength: detail?.strength ?? 1.16,
+        duration: detail?.duration ?? 1500,
+      });
+    };
+
+    window.addEventListener(PET_BLOW_CYPRESS_EVENT, handlePetGust);
+    return () => window.removeEventListener(PET_BLOW_CYPRESS_EVENT, handlePetGust);
+  }, []);
 
   const togglePlaying = () => {
     onPlayingChange(!isPlaying);

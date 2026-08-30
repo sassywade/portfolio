@@ -130,6 +130,7 @@ export function createCypressTree(options) {
     let boneAngles = new Float32Array(8);
     let frameHandle = 0;
     let destroyed = false;
+    const petGust = { direction: 1, strength: 0, elapsed: 0, duration: 0, settleDuration: 0 };
     const leafMotionData = new Uint8Array(LEAF_GRID_X * LEAF_GRID_Y * 4);
 
     function encodeSigned(value) { return Math.round(clamp(value / LEAF_OFFSET_LIMIT * 0.5 + 0.5, 0, 1) * 255); }
@@ -226,6 +227,13 @@ export function createCypressTree(options) {
     function updatePhysics(deltaMs) {
       const dt = Math.min(0.035, Math.max(0.001, deltaMs / 1000));
       const time = elapsed * 0.001;
+      if (petGust.duration > 0) petGust.elapsed += deltaMs;
+      const gustProgress = petGust.duration > 0 ? petGust.elapsed / petGust.duration : 2;
+      const gustAttack = clamp(gustProgress / 0.13, 0, 1);
+      const gustRelease = clamp((1 - gustProgress) / 0.24, 0, 1);
+      const gustEnvelope = gustProgress <= 1
+        ? gustAttack * gustRelease * (0.84 + Math.sin(gustProgress * Math.PI * 8.0) * 0.16)
+        : 0;
       bones.forEach((bone, index) => {
         const state = states[index];
         const delayedTime = time * (0.75 + wind.tempo * 0.70) - bone.delay;
@@ -233,13 +241,17 @@ export function createCypressTree(options) {
         const gustWave = Math.max(0, Math.sin(delayedTime * (0.64 + wind.tempo * 0.35) - bone.phase * 0.31));
         const gustPulse = Math.pow(gustWave, 6.0);
         const turbulence = 0.72 + 0.28 * Math.sin(delayedTime * bone.frequency * 2.35 + bone.phase * 1.7);
-        const drive = (0.006 + wind.breeze * 0.032 * bone.response) * swell * turbulence + wind.gust * gustPulse * 0.082 * bone.gust;
-        const target = clamp(drive, -bone.maxAngle, bone.maxAngle);
+        const naturalDrive = (0.006 + wind.breeze * 0.032 * bone.response) * swell * turbulence + wind.gust * gustPulse * 0.082 * bone.gust;
+        const petTurbulence = 0.88 + Math.sin(time * 15.0 + bone.phase * 1.9) * 0.12;
+        const petDrive = petGust.direction * petGust.strength * gustEnvelope * petTurbulence * (0.082 + bone.response * 0.068);
+        const drive = naturalDrive + petDrive;
+        const dynamicMaxAngle = bone.maxAngle * (1 + petGust.strength * gustEnvelope * 0.62);
+        const target = clamp(drive, -dynamicMaxAngle, dynamicMaxAngle);
         const stiffness = bone.stiffness * (1.18 - wind.elasticity * 0.38);
         const damping = bone.damping * (1.12 - wind.elasticity * 0.22);
         state.velocity += ((target - state.angle) * stiffness / bone.mass - state.velocity * damping) * dt;
-        state.angle = clamp(state.angle + state.velocity * dt, -bone.maxAngle, bone.maxAngle);
-        if (Math.abs(state.angle) >= bone.maxAngle * 0.995) state.velocity *= 0.72;
+        state.angle = clamp(state.angle + state.velocity * dt, -dynamicMaxAngle, dynamicMaxAngle);
+        if (Math.abs(state.angle) >= dynamicMaxAngle * 0.995) state.velocity *= 0.72;
         state.worldAngle = state.angle + (bone.parent >= 0 ? states[bone.parent].worldAngle * bone.inherit : 0);
         boneAngles[index] = state.worldAngle;
       });
@@ -250,8 +262,10 @@ export function createCypressTree(options) {
         const gustWave = Math.max(0, Math.sin(localTime * 0.72 - group.x * 2.3 + group.y * 1.4));
         const gustPulse = Math.pow(gustWave, 6.0);
         const flutter = Math.sin(localTime * (2.8 + wind.tempo * 1.5) + group.phase) * 0.5 + 0.5;
-        const targetX = (Math.sin(localTime * 1.35 + group.phase) * 0.00034 + wind.breeze * 0.00050 * flutter) * group.response + wind.gust * gustPulse * 0.00155 * group.response;
-        const targetY = Math.cos(localTime * 1.72 + group.phase * 1.2) * (0.00010 + wind.breeze * 0.00018) * group.response + gustPulse * 0.00024 * group.response;
+        const petLeafFlutter = 0.82 + Math.sin(time * 17.0 + group.phase * 1.4) * 0.18;
+        const petLeafPush = petGust.direction * petGust.strength * gustEnvelope * petLeafFlutter * 0.00255 * group.response;
+        const targetX = (Math.sin(localTime * 1.35 + group.phase) * 0.00034 + wind.breeze * 0.00050 * flutter) * group.response + wind.gust * gustPulse * 0.00155 * group.response + petLeafPush;
+        const targetY = Math.cos(localTime * 1.72 + group.phase * 1.2) * (0.00010 + wind.breeze * 0.00018) * group.response + gustPulse * 0.00024 * group.response + Math.abs(petLeafPush) * 0.16;
         const spring = group.stiffness * (1.08 - wind.elasticity * 0.16);
         const damping = group.damping * (1.04 - wind.elasticity * 0.10);
         state.velocityX += ((targetX - state.x) * spring - state.velocityX * damping) * dt;
@@ -260,6 +274,11 @@ export function createCypressTree(options) {
         state.y = clamp(state.y + state.velocityY * dt, -LEAF_OFFSET_LIMIT, LEAF_OFFSET_LIMIT);
       });
       updateLeafMotionTexture();
+      if (petGust.duration > 0 && petGust.elapsed >= petGust.duration + petGust.settleDuration) {
+        petGust.strength = 0;
+        petGust.duration = 0;
+        petGust.settleDuration = 0;
+      }
     }
 
     function createTreeMesh() {
@@ -365,6 +384,18 @@ export function createCypressTree(options) {
 
     function setPlaying(next) { running = Boolean(next); return running; }
     function setWind(values) { Object.keys(DEFAULTS).forEach((key) => { if (values && Number.isFinite(Number(values[key]))) wind[key] = clamp(Number(values[key]), 0, 1); }); return { ...wind }; }
+    function applyGust(values) {
+      const next = values || {};
+      petGust.direction = Number(next.direction) < 0 ? -1 : 1;
+      petGust.strength = clamp(Number(next.strength) || 1, 0.2, 1.35);
+      petGust.elapsed = 0;
+      petGust.duration = clamp(Number(next.duration) || 1450, 420, 2600);
+      petGust.settleDuration = 1800;
+      states.forEach((state, index) => {
+        state.velocity += petGust.direction * petGust.strength * (index === 0 ? 0.012 : 0.028 + index * 0.003);
+      });
+      return { ...petGust };
+    }
 
     try {
       gl = canvas.getContext('webgl', { alpha: true, antialias: true, preserveDrawingBuffer: false });
@@ -402,7 +433,7 @@ export function createCypressTree(options) {
       if (destroyed) return;
       const delta = Math.min(60, now - lastFrame);
       lastFrame = now;
-      if (running) { elapsed += delta; updatePhysics(delta); }
+      if (running || petGust.duration > 0) { elapsed += delta; updatePhysics(delta); }
       if (gl && texture) drawWebGL(); else drawFallback();
       frameHandle = global.requestAnimationFrame(frame);
     }
@@ -411,6 +442,7 @@ export function createCypressTree(options) {
     return {
       setWind,
       getWind: () => ({ ...wind }),
+      applyGust,
       setPlaying,
       play: () => setPlaying(true),
       pause: () => setPlaying(false),

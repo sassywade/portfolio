@@ -52,12 +52,13 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 });
 
 test("keeps the living lawn, miniature visitors, and cursor pet lightweight", async () => {
-  const [renderer, meadow, prototype, hero, tree, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
+  const [renderer, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/cypress-tree-renderer.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/use-meadow-layer-host.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/bike-ride.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8"),
@@ -111,9 +112,19 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(hero, /data-meadow-variant=\{meadowVariant\}/);
   assert.match(hero, /<MeadowPrototypeControls/);
   assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
+  assert.match(tree, /portfolio:pet-blow-cypress/);
+  assert.match(tree, /treeRef\.current\?\.applyGust/);
+  assert.match(tree, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT, handlePetGust\)/);
   assert.match(tree, /onPlayingChange\(!isPlaying\)/);
   assert.doesNotMatch(tree, /cypress-tree__root-transition/);
   assert.doesNotMatch(tree, /cypress-tree__root-bank/);
+  assert.match(treeRenderer, /const petGust = \{ direction: 1, strength: 0/);
+  assert.match(treeRenderer, /const gustEnvelope =/);
+  assert.match(treeRenderer, /const petDrive = petGust\.direction/);
+  assert.match(treeRenderer, /const dynamicMaxAngle = bone\.maxAngle/);
+  assert.match(treeRenderer, /const petLeafPush = petGust\.direction/);
+  assert.match(treeRenderer, /function applyGust\(values\)/);
+  assert.match(treeRenderer, /running \|\| petGust\.duration > 0/);
   assert.match(layerHost, /document\.querySelector<HTMLElement>\("\.hero-meadow"\)/);
   assert.match(layerHost, /window\.requestAnimationFrame/);
   assert.match(bike, /const FRAME_URLS = \[/);
@@ -180,16 +191,21 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(smiley, /const MINIATURE_ARM_DELAY = 480/);
   assert.match(smiley, /const MINIATURE_APPROACH_DURATION = 680/);
   assert.match(smiley, /const MINIATURE_BLOW_TRIGGER_DELAY = 280/);
-  assert.match(smiley, /type MiniatureKind = "backpacker" \| "cyclist" \| "photographer"/);
+  assert.match(smiley, /type MiniatureKind = "backpacker" \| "cyclist" \| "photographer" \| "cypress"/);
   assert.match(smiley, /activeMiniature/);
   assert.match(smiley, /nearestMiniature/);
   assert.match(smiley, /portfolio:pet-blow-backpacker/);
   assert.match(smiley, /portfolio:pet-blow-cyclist/);
   assert.match(smiley, /portfolio:pet-blow-photographer/);
+  assert.match(smiley, /portfolio:pet-blow-cypress/);
+  assert.match(smiley, /cypress: \{ layer: '\.hero-meadow\[data-scene-visible="true"\]', actor: "\.cypress-tree__canvas" \}/);
+  assert.match(smiley, /cypress: 110/);
   assert.match(smiley, /cursor\.dataset\.miniature = "approach"/);
   assert.match(smiley, /cursor\.dataset\.miniature = "blow"/);
   assert.match(smiley, /new CustomEvent\(PET_BLOW_EVENT\[miniature\.kind\]/);
-  assert.match(smiley, /detail = miniature\.kind === "photographer" \? undefined : \{ direction: miniatureFacing \}/);
+  assert.match(smiley, /miniature\.kind === "cypress"/);
+  assert.match(smiley, /\{ direction: miniatureFacing, strength: 1\.16, duration: 1500 \}/);
+  assert.match(smiley, /miniatureKind === "cypress" \? "strained" : "strong"/);
   assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
   assert.match(smiley, /cursor\.dataset\.reaction = "smile"/);
