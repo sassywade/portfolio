@@ -17,6 +17,7 @@ import {
 import type { WindKey, WindSettings } from "./wind";
 import type { WorkGridColumns } from "./hero-meadow";
 import type { TopPetMode } from "./top-pet";
+import { PhilipPickerToggle } from "./philip-toggle";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },
@@ -204,6 +205,16 @@ export function MeadowSettings({
               >
                 3 columns
               </button>
+            </div>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-philip`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-philip`}>Philip</h2>
+                <small>Cursor pet</small>
+              </div>
+              <PhilipPickerToggle />
             </div>
           </section>
 

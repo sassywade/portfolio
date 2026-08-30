@@ -181,10 +181,11 @@ test("scopes the dark ASCII terminal theme and restores the normal tokens outsid
   assert.doesNotMatch(css, /:root\s*\{[^}]*--paper:\s*#0d100f/);
 });
 
-test("lets visitors toggle Philip from the top-right control", async () => {
-  const [layout, philip, css] = await Promise.all([
+test("lets visitors toggle Philip from inside the prototype picker", async () => {
+  const [layout, philip, picker, css] = await Promise.all([
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/philip-toggle.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
@@ -197,7 +198,10 @@ test("lets visitors toggle Philip from the top-right control", async () => {
   assert.match(philip, /window\.localStorage\.setItem/);
   assert.match(philip, /isReady && isEnabled \? <SmileyCursor \/>/);
   assert.match(philip, /\/pet\/pet-idle\.png/);
-  assert.match(css, /\.philip-toggle\s*\{[^}]*position:\s*fixed;[^}]*right:/);
+  assert.match(picker, /<PhilipPickerToggle \/>/);
+  assert.match(picker, />Philip<\/h2>/);
+  assert.match(css, /\.philip-toggle\s*\{[^}]*position:\s*relative;/);
+  assert.doesNotMatch(css, /\.philip-toggle\s*\{[^}]*position:\s*fixed;/);
   assert.match(css, /\.philip-toggle:hover \.philip-toggle__tooltip/);
   assert.match(css, /\.philip-toggle:focus-within \.philip-toggle__tooltip/);
   assert.match(css, /\.philip-toggle\[data-enabled="true"\] \.philip-toggle__knob/);
