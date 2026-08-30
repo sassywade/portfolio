@@ -104,6 +104,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /portfolio:pet-blow-cypress/);
   assert.match(tree, /treeRef\.current\?\.applyGust/);
   assert.match(tree, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT, handlePetGust\)/);
+  assert.match(tree, /className="cypress-tree__ground-shadow" aria-hidden="true"/);
   assert.doesNotMatch(tree, /cypress-tree__controls|useState/);
   assert.doesNotMatch(tree, /cypress-tree__root-transition/);
   assert.doesNotMatch(tree, /cypress-tree__root-bank/);
@@ -227,6 +228,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
   assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*clamp\(56px, 6\.5vw, 96px\)/);
+  assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*z-index:\s*3;[^}]*radial-gradient\(/);
+  assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*mix-blend-mode:\s*multiply/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);
   assert.match(css, /\.hero-meadow > \.meadow\s*\{[^}]*z-index:\s*2;/);
   assert.match(css, /\.hero-meadow > \.bike-ride-layer,[\s\S]*?\.hero-meadow > \.backpack-walk-layer\s*\{[^}]*z-index:\s*5;/);

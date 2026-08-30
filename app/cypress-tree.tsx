@@ -59,6 +59,7 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
 
   return (
     <div className="cypress-tree" data-cypress-tree>
+      <div className="cypress-tree__ground-shadow" aria-hidden="true" />
       <div className="cypress-tree__stage">
         <canvas
           ref={canvasRef}

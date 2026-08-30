@@ -4601,6 +4601,33 @@ em {
   bottom: clamp(56px, 6.5vw, 96px);
 }
 
+.hero-meadow > .cypress-tree .cypress-tree__ground-shadow {
+  position: absolute;
+  z-index: 3;
+  right: 48%;
+  bottom: 6.2%;
+  width: 132%;
+  height: 10.5%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 92% 50%,
+    rgba(34, 43, 24, 0.3) 0%,
+    rgba(34, 43, 24, 0.2) 13%,
+    rgba(34, 43, 24, 0.09) 38%,
+    transparent 72%
+  );
+  filter: blur(4px);
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+  pointer-events: none;
+  transform: rotate(2.5deg) skewX(-13deg);
+  transform-origin: 92% 50%;
+}
+
+.hero-meadow[data-meadow-variant="flat"] > .cypress-tree .cypress-tree__ground-shadow {
+  opacity: 0.52;
+}
+
 .hero-meadow > .cypress-tree .cypress-tree__stage {
   z-index: auto;
 }
