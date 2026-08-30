@@ -4546,7 +4546,8 @@ em {
 }
 
 /* A tiny cyclist falls from the copy, then treats the meadow as a track. */
-.bike-word {
+.bike-word,
+.photo-word {
   appearance: none;
   position: relative;
   z-index: 6;
@@ -4570,12 +4571,16 @@ em {
 
 .bike-word:hover,
 .bike-word:focus-visible,
-.bike-word[data-riding="true"] {
+.bike-word[data-riding="true"],
+.photo-word:hover,
+.photo-word:focus-visible,
+.photo-word[data-photographing="true"] {
   color: #002fa7;
   text-decoration-color: #002fa7;
 }
 
-.bike-word:focus-visible {
+.bike-word:focus-visible,
+.photo-word:focus-visible {
   outline: 1px solid #002fa7;
   outline-offset: 3px;
 }
@@ -4726,6 +4731,108 @@ em {
   .bike-rider__sprite,
   .bike-rider__sprite::before,
   .bike-rider__sprite::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* A miniature photographer drops from the copy, lands, and keeps finding frames. */
+.photo-drop-layer {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 50%;
+  display: block;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  contain: layout paint;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.mini-photographer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: clamp(62px, 5.6vw, 82px);
+  aspect-ratio: 1066 / 1479;
+  opacity: 0;
+  transform-origin: center 96.2%;
+  transition: opacity 150ms ease;
+  will-change: transform;
+}
+
+.photo-drop-layer:not([data-phase="idle"]) .mini-photographer {
+  opacity: 1;
+}
+
+.mini-photographer__sprite,
+.mini-photographer__shadow {
+  position: absolute;
+  display: block;
+}
+
+.mini-photographer__sprite {
+  inset: 0;
+  transform-origin: center 96.2%;
+}
+
+.mini-photographer__sprite img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 2px 1px rgba(35, 39, 20, 0.16));
+  user-select: none;
+}
+
+.mini-photographer__shadow {
+  right: 31%;
+  bottom: 1.8%;
+  left: 31%;
+  height: 2.8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(47, 61, 20, 0.28), rgba(47, 61, 20, 0) 72%);
+  opacity: 0;
+  transform: scaleX(0.8);
+  transition: opacity 180ms ease;
+}
+
+.photo-drop-layer[data-phase="land"] .mini-photographer__shadow,
+.photo-drop-layer[data-phase="shoot"] .mini-photographer__shadow {
+  opacity: 1;
+}
+
+.photo-drop-layer[data-phase="spawn"] .mini-photographer__sprite {
+  animation: miniature-photographer-materialize 220ms cubic-bezier(.22,.7,.2,1) both;
+}
+
+.photo-drop-layer[data-phase="land"] .mini-photographer__sprite {
+  animation: miniature-photographer-touchdown 180ms ease-out both;
+}
+
+.photo-drop-layer[data-frame="3"] .mini-photographer__sprite img {
+  filter: drop-shadow(0 2px 1px rgba(35, 39, 20, 0.16)) drop-shadow(4px -5px 5px rgba(255, 218, 133, 0.42));
+}
+
+@keyframes miniature-photographer-materialize {
+  from { opacity: 0; transform: scale(0.08) rotate(-5deg); }
+  72% { opacity: 1; }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes miniature-photographer-touchdown {
+  from { transform: translateY(-2px); }
+  to { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-photographer,
+  .mini-photographer__shadow,
+  .mini-photographer__sprite {
     animation: none !important;
     transition: none !important;
   }

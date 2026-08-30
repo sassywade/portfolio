@@ -1,0 +1,302 @@
+"use client";
+
+/* eslint-disable @next/next/no-img-element */
+
+import { useEffect, useRef } from "react";
+
+const FRAME_URLS = [
+  "/photographer-frame-1.png",
+  "/photographer-frame-2.png",
+  "/photographer-frame-3.png",
+  "/photographer-frame-4.png",
+  "/photographer-frame-5.png",
+] as const;
+
+const PHOTO_SEQUENCE = [
+  { frame: 0, duration: 680 },
+  { frame: 1, duration: 460 },
+  { frame: 2, duration: 540 },
+  { frame: 3, duration: 160 },
+  { frame: 2, duration: 220 },
+  { frame: 4, duration: 780 },
+] as const;
+
+const SPAWN_DURATION = 220;
+const LAND_DURATION = 180;
+const PHOTOGRAPHER_GROUND_RATIO = 0.962;
+
+type PhotoPhase = "idle" | "spawn" | "drop" | "land" | "shoot";
+
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+export function PhotoDrop() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const layerRef = useRef<HTMLSpanElement>(null);
+  const photographerRef = useRef<HTMLSpanElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const launchRef = useRef<() => void>(() => undefined);
+
+  useEffect(() => {
+    const button = buttonRef.current;
+    const layer = layerRef.current;
+    const photographer = photographerRef.current;
+    const photographerImage = imageRef.current;
+    if (!button || !layer || !photographer || !photographerImage) return;
+
+    FRAME_URLS.forEach((src) => {
+      const preload = new Image();
+      preload.decoding = "async";
+      preload.src = src;
+    });
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const meadowImage = new Image();
+    meadowImage.decoding = "async";
+    meadowImage.src = "/meadow-ground.png";
+
+    let sourceWidth = 0;
+    let sourceHeight = 0;
+    let surfaceByColumn = new Float32Array(0);
+    let phase: PhotoPhase = "idle";
+    let phaseStarted = 0;
+    let frameHandle = 0;
+    let sequenceTimer = 0;
+    let reducedTimer = 0;
+    let lastTime = 0;
+    let inView = true;
+    let x = 0;
+    let y = 0;
+    let velocityY = 0;
+    let sequenceIndex = 0;
+
+    function prepareMeadowProfile() {
+      if (!meadowImage.naturalWidth || !meadowImage.naturalHeight) return;
+      const source = document.createElement("canvas");
+      source.width = meadowImage.naturalWidth;
+      source.height = meadowImage.naturalHeight;
+      const sourceContext = source.getContext("2d", { willReadFrequently: true });
+      if (!sourceContext) return;
+
+      sourceContext.drawImage(meadowImage, 0, 0);
+      try {
+        const pixels = sourceContext.getImageData(0, 0, source.width, source.height).data;
+        sourceWidth = source.width;
+        sourceHeight = source.height;
+        surfaceByColumn = new Float32Array(sourceWidth);
+
+        for (let sourceX = 0; sourceX < sourceWidth; sourceX += 1) {
+          let surface = Math.floor(sourceHeight * 0.52);
+          for (let sourceY = surface; sourceY < sourceHeight; sourceY += 1) {
+            if (pixels[(sourceY * sourceWidth + sourceX) * 4 + 3] > 28) {
+              surface = sourceY;
+              break;
+            }
+          }
+          surfaceByColumn[sourceX] = surface / sourceHeight;
+        }
+      } catch {
+        surfaceByColumn = new Float32Array(0);
+      }
+    }
+
+    function photographerSize() {
+      const styles = window.getComputedStyle(photographer);
+      return {
+        width: Number.parseFloat(styles.width) || 72,
+        height: Number.parseFloat(styles.height) || 100,
+      };
+    }
+
+    function trackY(localX: number) {
+      const layerBounds = layer.getBoundingClientRect();
+      const meadow = document.querySelector<HTMLElement>(".meadow__visual");
+      if (!meadow) return layerBounds.height * 0.78;
+
+      const meadowBounds = meadow.getBoundingClientRect();
+      const clientX = layerBounds.left + localX;
+      const normalizedX = clamp((clientX - meadowBounds.left) / Math.max(1, meadowBounds.width), 0, 1);
+      const fallbackSurface = 0.79 + Math.sin(normalizedX * Math.PI) * 0.08;
+      const sourceX = clamp(Math.round(normalizedX * Math.max(0, sourceWidth - 1)), 0, Math.max(0, sourceWidth - 1));
+      const surface = surfaceByColumn.length ? surfaceByColumn[sourceX] : fallbackSurface;
+      return meadowBounds.top + surface * meadowBounds.height - layerBounds.top;
+    }
+
+    function setFrame(index: number) {
+      const next = ((index % FRAME_URLS.length) + FRAME_URLS.length) % FRAME_URLS.length;
+      layer.dataset.frame = String(next);
+      if (photographerImage.getAttribute("src") !== FRAME_URLS[next]) {
+        photographerImage.src = FRAME_URLS[next];
+      }
+    }
+
+    function clearPhotoLoop() {
+      window.clearTimeout(sequenceTimer);
+      sequenceTimer = 0;
+    }
+
+    function runPhotoStep() {
+      clearPhotoLoop();
+      if (phase !== "shoot" || !inView || reducedMotion.matches) return;
+
+      const step = PHOTO_SEQUENCE[sequenceIndex];
+      setFrame(step.frame);
+      sequenceTimer = window.setTimeout(() => {
+        sequenceIndex = (sequenceIndex + 1) % PHOTO_SEQUENCE.length;
+        runPhotoStep();
+      }, step.duration);
+    }
+
+    function setPhase(next: PhotoPhase, now = performance.now()) {
+      phase = next;
+      phaseStarted = now;
+      layer.dataset.phase = next;
+      button.dataset.photographing = next === "idle" ? "false" : "true";
+      if (next !== "shoot") clearPhotoLoop();
+    }
+
+    function renderPhotographer() {
+      const { width } = photographerSize();
+      photographer.style.transform = `translate3d(${x - width * 0.5}px, ${y}px, 0)`;
+    }
+
+    function schedule() {
+      if (frameHandle || phase === "idle" || phase === "shoot" || !inView || reducedMotion.matches) return;
+      frameHandle = window.requestAnimationFrame(frame);
+    }
+
+    function frame(now: number) {
+      frameHandle = 0;
+      if (phase === "idle" || phase === "shoot" || !inView || reducedMotion.matches) return;
+
+      const deltaSeconds = lastTime ? Math.min(0.034, Math.max(0.001, (now - lastTime) / 1000)) : 0;
+      lastTime = now;
+      const { height } = photographerSize();
+      const ground = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
+
+      if (phase === "spawn" && now - phaseStarted >= SPAWN_DURATION) {
+        velocityY = -12;
+        setPhase("drop", now);
+      } else if (phase === "drop") {
+        const gravity = Math.max(980, layer.getBoundingClientRect().height * 2.15);
+        velocityY += gravity * deltaSeconds;
+        y += velocityY * deltaSeconds;
+        if (y >= ground) {
+          y = ground;
+          velocityY = 0;
+          setPhase("land", now);
+        }
+      } else if (phase === "land") {
+        y = ground;
+        if (now - phaseStarted >= LAND_DURATION) {
+          sequenceIndex = 0;
+          setPhase("shoot", now);
+          runPhotoStep();
+        }
+      }
+
+      renderPhotographer();
+      schedule();
+    }
+
+    function launch() {
+      window.cancelAnimationFrame(frameHandle);
+      window.clearTimeout(reducedTimer);
+      clearPhotoLoop();
+      frameHandle = 0;
+      lastTime = 0;
+      sequenceIndex = 0;
+      setFrame(0);
+
+      const layerBounds = layer.getBoundingClientRect();
+      const buttonBounds = button.getBoundingClientRect();
+      const { width, height } = photographerSize();
+      x = clamp(buttonBounds.left + buttonBounds.width * 0.5 - layerBounds.left, width * 0.5, layerBounds.width - width * 0.5);
+      y = buttonBounds.top + buttonBounds.height * 0.5 - layerBounds.top - height * 0.5;
+      velocityY = 0;
+
+      setPhase("idle");
+      void photographer.offsetWidth;
+
+      if (reducedMotion.matches) {
+        y = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
+        setPhase("shoot");
+        renderPhotographer();
+        reducedTimer = window.setTimeout(() => setPhase("idle"), 1800);
+        return;
+      }
+
+      setPhase("spawn");
+      renderPhotographer();
+      schedule();
+    }
+
+    launchRef.current = launch;
+
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (inView) {
+        lastTime = performance.now();
+        if (phase === "shoot") runPhotoStep();
+        else schedule();
+      } else {
+        window.cancelAnimationFrame(frameHandle);
+        frameHandle = 0;
+        clearPhotoLoop();
+      }
+    }, { rootMargin: "80px 0px" });
+    intersectionObserver.observe(layer);
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (phase === "land" || phase === "shoot") {
+        const { width, height } = photographerSize();
+        x = clamp(x, width * 0.5, layer.getBoundingClientRect().width - width * 0.5);
+        y = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
+        renderPhotographer();
+      }
+    });
+    resizeObserver.observe(layer);
+
+    const handleMeadowLoad = () => {
+      prepareMeadowProfile();
+      if (phase === "land" || phase === "shoot") {
+        y = trackY(x) - photographerSize().height * PHOTOGRAPHER_GROUND_RATIO;
+        renderPhotographer();
+      }
+    };
+    meadowImage.addEventListener("load", handleMeadowLoad);
+    if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
+
+    return () => {
+      launchRef.current = () => undefined;
+      window.cancelAnimationFrame(frameHandle);
+      window.clearTimeout(reducedTimer);
+      clearPhotoLoop();
+      intersectionObserver.disconnect();
+      resizeObserver.disconnect();
+      meadowImage.removeEventListener("load", handleMeadowLoad);
+    };
+  }, []);
+
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        type="button"
+        className="photo-word"
+        data-photographing="false"
+        aria-label="Release miniature Neel with a camera onto the meadow"
+        onClick={() => launchRef.current()}
+      >
+        photograph SF
+      </button>
+      <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" aria-hidden="true">
+        <span ref={photographerRef} className="mini-photographer">
+          <span className="mini-photographer__shadow" />
+          <span className="mini-photographer__sprite">
+            <img ref={imageRef} src={FRAME_URLS[0]} alt="" draggable={false} />
+          </span>
+        </span>
+      </span>
+    </>
+  );
+}
