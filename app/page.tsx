@@ -16,9 +16,8 @@ export default function Home() {
         <p className="pranathi-name" id="hero-title">Neel Saswade</p>
         <div className="pranathi-bio">
           <p>
-            I&apos;m a designer based in San Francisco. Currently, I&apos;m exploring
-            thoughtful product experiences with teams working on <span className="placeholder-mark">[something good]</span>.
-            Previously, I designed at <span className="placeholder-mark">[company]</span> and <span className="placeholder-mark">[company]</span>.
+            I&apos;m a product designer based in San Francisco. Currently, I work at Glean focused on proactive intelligence,
+            growth, and artifacts. Previously, I designed at snap, and intuitive surgical.
           </p>
           <p>In my free time I ride <BikeRide />, <PhotoDrop />, and go <BackpackWalk />.</p>
         </div>
