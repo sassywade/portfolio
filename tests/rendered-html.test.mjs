@@ -188,6 +188,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
   assert.match(smiley, /const FACING_CHANGE_DELAY = 240/);
   assert.match(smiley, /const FACING_INTENT_MEMORY = 180/);
+  assert.match(smiley, /const clamp = \(value: number, min: number, max: number\) => \(/);
+  assert.ok(smiley.indexOf("const clamp =") < smiley.indexOf("export function SmileyCursor"));
   assert.match(smiley, /facingIntent = clamp\(facingIntent \+ deltaX, -140, 140\)/);
   assert.match(smiley, /queueFacingChange\(nextFacing\)/);
   assert.match(smiley, /window\.setTimeout\(\(\) => \{/);

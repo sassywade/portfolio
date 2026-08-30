@@ -51,6 +51,10 @@ const PET_BLOW_EVENT: Record<MiniatureKind, string> = {
   cypress: PET_BLOW_CYPRESS_EVENT,
 };
 
+const clamp = (value: number, min: number, max: number) => (
+  Math.max(min, Math.min(max, value))
+);
+
 const easeInOutCubic = (value: number) => (
   value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
 );
