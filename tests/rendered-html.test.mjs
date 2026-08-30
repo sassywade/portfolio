@@ -30,6 +30,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Neel Saswade — Product designer<\/title>/i);
+  assert.match(html, /class="site-header__wordmark"[^>]*>\s*Neel Saswade\s*<\/a>/);
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at Glean focused on proactive intelligence,\s*growth, and artifacts\. Previously, I designed at snap, and intuitive surgical\./);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);

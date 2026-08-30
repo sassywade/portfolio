@@ -5041,3 +5041,68 @@ em {
     transition: none !important;
   }
 }
+
+/* Left-corner editorial menu, adapted to Neel's existing routes. */
+.site-header--pages {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 46px;
+  width: calc(100% - 128px);
+  margin-inline: auto;
+  padding-top: 40px;
+}
+
+.site-header__wordmark,
+.site-header--pages .site-nav {
+  font-family: var(--serif);
+  font-size: clamp(23px, 1.75vw, 28px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-transform: none;
+}
+
+.site-header__wordmark {
+  flex: 0 0 auto;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: opacity 180ms ease;
+}
+
+.site-header__wordmark:hover,
+.site-header__wordmark:focus-visible {
+  opacity: 0.62;
+}
+
+.site-header--pages .site-nav {
+  gap: 34px;
+  color: #8f8f8f;
+}
+
+.site-header--pages .site-nav a,
+.site-header--pages .site-nav a.is-active {
+  color: inherit;
+}
+
+.site-header--pages .site-nav a:hover,
+.site-header--pages .site-nav a:focus-visible {
+  color: var(--ink);
+}
+
+@media (max-width: 680px) {
+  .site-header--pages {
+    gap: 20px;
+    width: calc(100% - 32px);
+    padding-top: 24px;
+  }
+
+  .site-header__wordmark,
+  .site-header--pages .site-nav {
+    font-size: clamp(17px, 5vw, 20px);
+  }
+
+  .site-header--pages .site-nav {
+    gap: 14px;
+  }
+}

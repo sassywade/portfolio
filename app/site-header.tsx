@@ -13,6 +13,14 @@ const links = [
 export function SiteHeader({ current }: SiteHeaderProps) {
   return (
     <header className="site-header site-header--pages">
+      <Link
+        className="site-header__wordmark"
+        href="/"
+        aria-label="Neel Saswade, home"
+        data-cuelume-toggle="page"
+      >
+        Neel Saswade
+      </Link>
       <nav className="site-nav" aria-label="Main navigation">
         {links.map(([id, label, href]) => (
           <Link
