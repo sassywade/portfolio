@@ -91,8 +91,11 @@ test("keeps the living lawn, miniature cyclist, and cursor pet lightweight", asy
   assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
   assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
   assert.match(smiley, /const IDLE_HUFF_STATES = \["light", "strong", "strained"\]/);
+  assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
   assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
+  assert.match(smiley, /cursor\.dataset\.reaction = "smile"/);
+  assert.match(smiley, /\/pet\/pet-smile\.png/);
   assert.match(smiley, /stopIdleMischief\(\)/);
   assert.match(css, /\.meadow__grass-canvas\s*\{/);
   assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
@@ -103,5 +106,6 @@ test("keeps the living lawn, miniature cyclist, and cursor pet lightweight", asy
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /\.bike-word\s*\{/);
   assert.match(css, /@keyframes miniature-bike-materialize/);
+  assert.match(css, /@keyframes smiley-happy-glimpse/);
   assert.match(css, /pointer-events:\s*none/);
 });

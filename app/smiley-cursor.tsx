@@ -11,6 +11,7 @@ const IDLE_APPROACH_DURATION = 950;
 const IDLE_CLOSE_DISTANCE = 46;
 const IDLE_HUFF_CYCLE = 1450;
 const IDLE_HUFF_STATES = ["light", "strong", "strained"] as const;
+const HAPPY_FLASH_DURATION = 560;
 
 const easeInOutCubic = (value: number) => (
   value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
@@ -53,6 +54,7 @@ export function SmileyCursor() {
     let isPastWork = false;
     let idleTimer: number | null = null;
     let idleStartedAt: number | null = null;
+    let happyUntil = 0;
 
     const clearIdleTimer = () => {
       if (idleTimer !== null) {
@@ -69,10 +71,27 @@ export function SmileyCursor() {
       windStartedAt = null;
     };
 
+    const stopHappyReaction = () => {
+      happyUntil = 0;
+      cursor.dataset.reaction = "off";
+    };
+
     const updatePetState = (timestamp: number) => {
       const elapsed = Math.min(100, timestamp - previousFrameTime);
       previousFrameTime = timestamp;
       motionLevel *= Math.pow(0.94, Math.max(1, elapsed / 16.67));
+
+      if (timestamp < happyUntil) {
+        cursor.dataset.idle = "off";
+        cursor.dataset.state = "idle";
+        cursor.dataset.wind = "off";
+        windStartedAt = null;
+        return;
+      }
+
+      if (cursor.dataset.reaction === "smile") {
+        cursor.dataset.reaction = "off";
+      }
 
       if (idleStartedAt !== null) {
         const idleElapsed = timestamp - idleStartedAt;
@@ -175,6 +194,7 @@ export function SmileyCursor() {
         Math.abs(inputX - pointerX) > 0.2 ||
         Math.abs(inputY - pointerY) > 0.2 ||
         motionLevel > 0.01 ||
+        timestamp < happyUntil ||
         idleStartedAt !== null;
 
       if (stillSettling) {
@@ -220,6 +240,7 @@ export function SmileyCursor() {
 
       if (isPastWork) {
         stopIdleMischief();
+        stopHappyReaction();
         cursor.classList.remove("is-visible");
         if (frame !== null) {
           window.cancelAnimationFrame(frame);
@@ -243,7 +264,15 @@ export function SmileyCursor() {
       }
 
       const timestamp = performance.now();
+      const wasHuffing = idleStartedAt !== null && timestamp - idleStartedAt >= IDLE_APPROACH_DURATION;
       stopIdleMischief();
+
+      if (wasHuffing) {
+        happyUntil = timestamp + HAPPY_FLASH_DURATION;
+        cursor.dataset.reaction = "smile";
+        cursor.dataset.state = "idle";
+        cursor.dataset.wind = "off";
+      }
 
       if (!hasPointerPosition) {
         lastX = event.clientX;
@@ -284,6 +313,7 @@ export function SmileyCursor() {
 
     const handlePointerLeave = () => {
       stopIdleMischief();
+      stopHappyReaction();
       cursor.classList.remove("is-visible");
     };
 
@@ -304,6 +334,7 @@ export function SmileyCursor() {
       window.removeEventListener("scroll", handleScroll);
       root.classList.remove("has-cursor-pet");
       clearIdleTimer();
+      stopHappyReaction();
       if (frame !== null) {
         window.cancelAnimationFrame(frame);
       }
@@ -311,9 +342,10 @@ export function SmileyCursor() {
   }, [pathname]);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" aria-hidden="true">
       <div className="smiley-cursor__direction">
         <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
+        <img className="smiley-cursor__asset smiley-cursor__asset--smile" src="/pet/pet-smile.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--light smiley-cursor__face-frame" src="/pet/pet-light.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--light smiley-cursor__wind-frame" src="/pet/pet-light.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--strong smiley-cursor__face-frame" src="/pet/pet-strong.png" alt="" />

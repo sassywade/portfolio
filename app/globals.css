@@ -3743,6 +3743,12 @@ em {
   clip-path: none;
 }
 
+.smiley-cursor__asset--smile {
+  clip-path: none;
+  z-index: 2;
+  transition: none;
+}
+
 .smiley-cursor__wind-frame {
   clip-path: inset(0 0 0 48%);
   opacity: 0;
@@ -3757,6 +3763,26 @@ em {
   opacity: 1;
   transform: scaleX(1);
   animation: smiley-wind-breathe var(--smiley-wind-duration) var(--compact-ease) 120ms infinite both;
+}
+
+.smiley-cursor[data-reaction="smile"] .smiley-cursor__asset:not(.smiley-cursor__asset--smile) {
+  opacity: 0;
+  animation: none;
+  transition-delay: 0ms;
+}
+
+.smiley-cursor[data-reaction="smile"] .smiley-cursor__asset--smile {
+  animation: smiley-happy-glimpse 560ms ease-out both;
+}
+
+@keyframes smiley-happy-glimpse {
+  0%, 100% {
+    opacity: 0;
+  }
+
+  14%, 72% {
+    opacity: 1;
+  }
 }
 
 /* The pet keeps one fixed facing; only the breath state changes. */
