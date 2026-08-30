@@ -217,7 +217,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\)/);
   assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
   assert.doesNotMatch(css, /\.cypress-tree__root-transition\s*\{/);
-  assert.match(css, /width:\s*clamp\(260px, 24vw, 350px\)/);
+  assert.match(css, /width:\s*clamp\(240px, 22vw, 322px\)/);
+  assert.match(css, /width:\s*clamp\(238px, 31vw, 330px\)/);
+  assert.match(css, /width:\s*248px/);
   assert.doesNotMatch(css, /@keyframes cypress-root-grass-sway/);
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);

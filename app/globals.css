@@ -4114,7 +4114,7 @@ em {
 .cypress-tree {
   right: clamp(8px, 4vw, 64px);
   bottom: clamp(18px, 4.8vw, 70px);
-  width: clamp(260px, 24vw, 350px);
+  width: clamp(240px, 22vw, 322px);
   aspect-ratio: auto;
   animation: none;
   pointer-events: none;
@@ -4237,7 +4237,7 @@ em {
   .cypress-tree {
     right: -10px;
     bottom: 38px;
-    width: clamp(260px, 34vw, 360px);
+    width: clamp(238px, 31vw, 330px);
   }
 }
 
@@ -4245,7 +4245,7 @@ em {
   .cypress-tree {
     right: -30px;
     bottom: 40px;
-    width: 270px;
+    width: 248px;
   }
 
   .cypress-tree__controls {
