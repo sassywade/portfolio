@@ -56,8 +56,8 @@ a {
 }
 
 @keyframes editorial-enter {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes gentle-float {
@@ -2087,15 +2087,25 @@ em {
 }
 
 .hero-meadow {
-  position: absolute;
+  --meadow-exit-y: 0px;
+  --meadow-scroll-progress: 0;
+  position: fixed;
   z-index: 1;
   top: 0;
   left: 50%;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
+  height: 100svh;
   overflow: hidden;
+  backface-visibility: hidden;
+  contain: layout paint;
   pointer-events: none;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, var(--meadow-exit-y), 0);
+  will-change: transform;
+}
+
+.hero-meadow[data-scene-visible="false"] {
+  visibility: hidden;
 }
 
 .hero-meadow__tree {

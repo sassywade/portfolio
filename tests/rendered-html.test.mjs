@@ -81,8 +81,14 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
 
   assert.match(meadow, /createMeadowGrass/);
   assert.match(meadow, /prefers-reduced-motion: reduce/);
-  assert.match(hero, /<Meadow wind=\{wind\} isPlaying=\{isPlaying\} \/>/);
-  assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{isPlaying\}/);
+  assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
+  assert.match(hero, /--meadow-exit-y/);
+  assert.match(hero, /window\.requestAnimationFrame\(animate\)/);
+  assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
+  assert.match(hero, /prefers-reduced-motion: reduce/);
+  assert.match(hero, /data-scene-visible/);
+  assert.match(hero, /<Meadow wind=\{wind\} isPlaying=\{sceneIsPlaying\} \/>/);
+  assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{sceneIsPlaying\}/);
   assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
   assert.match(tree, /onPlayingChange\(!isPlaying\)/);
   assert.match(tree, /cypress-tree__root-transition/);
@@ -119,6 +125,9 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(smiley, /\/pet\/pet-smile\.png/);
   assert.match(smiley, /stopIdleMischief\(\)/);
   assert.match(css, /\.meadow__grass-canvas\s*\{/);
+  assert.match(css, /\.hero-meadow\s*\{[\s\S]*position:\s*fixed/);
+  assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\)/);
+  assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
   assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
   assert.match(css, /\.cypress-tree__root-transition\s*\{/);
   assert.match(css, /@keyframes cypress-root-grass-sway/);
