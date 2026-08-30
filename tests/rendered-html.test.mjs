@@ -207,6 +207,23 @@ test("lets visitors toggle Philip from inside the prototype picker", async () =>
   assert.match(css, /\.philip-toggle\[data-enabled="true"\] \.philip-toggle__knob/);
 });
 
+test("uses a linear editorial case-study template without navigation chrome", async () => {
+  const [page, css] = await Promise.all([
+    readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.doesNotMatch(page, /CaseStudyNav|case-study-topbar|case-breadcrumb/);
+  assert.match(page, /className="case-intro"/);
+  assert.match(page, /className="case-study-content"/);
+  assert.match(page, /className="case-section__copy"/);
+  assert.match(page, /className="case-section__visual"/);
+  assert.match(css, /Linear editorial case studies/);
+  assert.match(css, /\.case-study-shell \.case-study-frame\s*\{[^}]*width:\s*100%;[^}]*border-radius:\s*0;/);
+  assert.match(css, /\.case-study-shell \.case-section,[\s\S]*?display:\s*block;/);
+  assert.match(css, /\.case-study-shell \.case-section__copy\s*\{[^}]*max-width|\.case-study-shell \.case-section__copy\s*\{[^}]*width:/);
+});
+
 test("uses the supplied projects in the Play archive", async () => {
   const play = await readFile(new URL("../app/play/page.tsx", import.meta.url), "utf8");
 

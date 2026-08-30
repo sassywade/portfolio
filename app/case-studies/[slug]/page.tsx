@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { CaseStudyNav } from "../../case-study-nav";
 import { CaseStudyCarousel } from "../../case-study-carousel";
 import { CaseStudyMedia } from "../../case-study-media";
 import { caseStudies, placeholderCaseStudy, projects } from "../../projects";
@@ -96,22 +95,9 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   if (!project) notFound();
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
-  const navItems = [
-    ...narrative.sections.map(({ id, label }) => ({ id, label })),
-    { id: "reflection", label: "Reflection" },
-  ];
-
   return (
     <main className="case-study-shell page-enter">
       <Soundscape />
-      <header className="case-study-topbar">
-        <Link className="case-breadcrumb" href="/" data-cuelume-toggle="pulse">
-          <span>Work</span>
-          <b>→</b>
-          <span>{project.title}</span>
-        </Link>
-        <Link className="case-topbar-link" href="/" data-cuelume-toggle="pulse">All work ↗</Link>
-      </header>
 
       <div className="case-study-frame">
         <section className="case-intro" aria-labelledby="case-title">
@@ -184,8 +170,6 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           </Link>
         </Reveal>
       </div>
-
-      <CaseStudyNav items={navItems} />
     </main>
   );
 }
