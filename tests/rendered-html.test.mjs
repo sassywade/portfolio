@@ -76,6 +76,9 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{isPlaying\}/);
   assert.match(tree, /treeRef\.current\?\.setWind\(wind\)/);
   assert.match(tree, /onPlayingChange\(!isPlaying\)/);
+  assert.match(tree, /cypress-tree__root-transition/);
+  assert.match(tree, /cypress-tree__root-shadow/);
+  assert.match(tree, /cypress-tree__root-bank/);
   assert.match(smiley, /const IDLE_MISCHIEF_DELAY = 1500/);
   assert.match(smiley, /const IDLE_APPROACH_DURATION = 950/);
   assert.match(smiley, /const IDLE_HUFF_STATES = \["light", "strong", "strained"\]/);
@@ -84,5 +87,7 @@ test("keeps the living lawn and cursor pet lightweight", async () => {
   assert.match(smiley, /stopIdleMischief\(\)/);
   assert.match(css, /\.meadow__grass-canvas\s*\{/);
   assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
+  assert.match(css, /\.cypress-tree__root-transition\s*\{/);
+  assert.match(css, /@keyframes cypress-root-grass-sway/);
   assert.match(css, /pointer-events:\s*none/);
 });
