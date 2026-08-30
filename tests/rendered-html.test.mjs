@@ -33,8 +33,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at Glean focused on proactive intelligence,\s*growth, and artifacts\. Previously, I designed at snap, and intuitive surgical\./);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
-  assert.match(html, /class="meadow__grass-canvas"/);
-  assert.match(html, /data-grass-layer="true"/);
+  assert.match(html, /class="meadow__image" src="\/meadow-ground\.png"/);
+  assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
   assert.match(html, /Open secret meadow prototype picker/);
   assert.match(html, />Meadow lab<\/button>/);
@@ -53,9 +53,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
-test("keeps the living lawn, miniature visitors, and cursor pet lightweight", async () => {
-  const [renderer, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
-    readFile(new URL("../app/meadow-grass-renderer.ts", import.meta.url), "utf8"),
+test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
+  const [meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
@@ -69,32 +68,13 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(renderer, /const FRAME_INTERVAL = 1000 \/ 30/);
-  assert.match(renderer, /surfaceByColumn/);
-  assert.match(renderer, /sourceContext\.getImageData/);
-  assert.match(renderer, /type GrassTuft/);
-  assert.match(renderer, /buildPainterlyBase/);
-  assert.match(renderer, /buildTuftClusters/);
-  assert.match(renderer, /drawWindBands/);
-  assert.match(renderer, /globalCompositeOperation = "screen"/);
-  assert.match(renderer, /classList\.add\(READY_CLASS\)/);
-  assert.match(renderer, /context\.quadraticCurveTo/);
-  assert.match(renderer, /navigator\.hardwareConcurrency/);
-  assert.match(renderer, /new IntersectionObserver/);
-  assert.match(renderer, /new ResizeObserver/);
-  assert.match(renderer, /document\.hidden/);
-  assert.doesNotMatch(renderer, /type Blade\s*=/);
-  assert.doesNotMatch(renderer, /edgeCount/);
-  assert.doesNotMatch(renderer, /filter\s*=\s*["']blur|ctx\.filter\s*=\s*["']blur/i);
-
-  assert.match(meadow, /createMeadowGrass/);
-  assert.match(meadow, /prefers-reduced-motion: reduce/);
   assert.match(meadow, /type MeadowVariant = "living" \| "flat"/);
+  assert.match(meadow, /className="meadow__image" src="\/meadow-ground\.png"/);
+  assert.doesNotMatch(meadow, /createMeadowGrass|meadow__texture|meadow__grass-canvas/);
   assert.match(meadow, /data-meadow-surface=\{variant === "flat" \? "active" : "inactive"\}/);
   assert.match(meadow, /className="meadow__flat-field"/);
   assert.match(meadow, /src="\/flat-meadow-generated\.webp"/);
   assert.match(meadow, /className="meadow__flat-tint"/);
-  assert.match(meadow, /isPlaying && variant === "living"/);
   assert.match(prototype, /useState\(false\)/);
   assert.match(prototype, /Open secret meadow prototype picker/);
   assert.match(prototype, /aria-pressed=\{variant === "flat"\}/);
@@ -108,7 +88,7 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.match(hero, /data-scene-visible/);
-  assert.match(hero, /<Meadow wind=\{wind\} isPlaying=\{sceneIsPlaying\} variant=\{meadowVariant\} \/>/);
+  assert.match(hero, /<Meadow isPlaying=\{sceneIsPlaying\} variant=\{meadowVariant\} \/>/);
   assert.match(hero, /wind=\{wind\}[\s\S]*isPlaying=\{sceneIsPlaying\}/);
   assert.match(hero, /DEFAULT_FLAT_MEADOW_COLOR/);
   assert.match(hero, /data-meadow-variant=\{meadowVariant\}/);
@@ -220,7 +200,7 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(smiley, /cursor\.dataset\.reaction = "smile"/);
   assert.match(smiley, /\/pet\/pet-smile\.png/);
   assert.match(smiley, /stopIdleMischief\(\)/);
-  assert.match(css, /\.meadow__grass-canvas\s*\{/);
+  assert.doesNotMatch(css, /\.meadow__grass-canvas\s*\{|\.meadow__texture\s*\{|\.meadow__visual\.is-grass-live/);
   assert.match(css, /\.meadow__visual--flat\s*\{/);
   assert.match(css, /--flat-meadow-color:\s*#6f8d45/);
   assert.match(css, /\.meadow__flat-image\s*\{[^}]*mix-blend-mode:\s*luminosity/);
@@ -236,7 +216,6 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(css, /\.hero-meadow\s*\{[\s\S]*position:\s*fixed/);
   assert.match(css, /transform:\s*translate3d\(-50%, var\(--meadow-exit-y\), 0\)/);
   assert.match(css, /\.hero-meadow\[data-scene-visible="false"\]/);
-  assert.match(css, /\.meadow__visual\.is-grass-live \.meadow__image/);
   assert.doesNotMatch(css, /\.cypress-tree__root-transition\s*\{/);
   assert.match(css, /width:\s*clamp\(260px, 24vw, 350px\)/);
   assert.doesNotMatch(css, /@keyframes cypress-root-grass-sway/);

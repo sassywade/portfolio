@@ -137,7 +137,7 @@ export function HeroMeadow() {
       data-meadow-variant={meadowVariant}
       style={sceneStyle}
     >
-      <Meadow wind={wind} isPlaying={sceneIsPlaying} variant={meadowVariant} />
+      <Meadow isPlaying={sceneIsPlaying} variant={meadowVariant} />
       <CypressTree
         wind={wind}
         isPlaying={sceneIsPlaying}

@@ -3894,9 +3894,7 @@ em {
   opacity: 0.5;
 }
 
-.meadow__image,
-.meadow__texture,
-.meadow__grass-canvas {
+.meadow__image {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -3908,38 +3906,6 @@ em {
   display: block;
   object-fit: contain;
   transition: opacity 360ms ease;
-}
-
-.meadow__texture {
-  z-index: 1;
-  background:
-    radial-gradient(circle, rgba(235, 225, 142, 0.28) 0 0.7px, transparent 1.2px) 0 0 / 11px 13px,
-    repeating-linear-gradient(76deg, rgba(28, 48, 16, 0.11) 0 1px, transparent 1px 8px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(26, 43, 14, 0.16));
-  -webkit-mask: url("/meadow-ground.png") center / 100% 100% no-repeat;
-  mask: url("/meadow-ground.png") center / 100% 100% no-repeat;
-  mix-blend-mode: multiply;
-  opacity: 0.34;
-  animation: meadow-texture-drift 20s linear infinite;
-  transition: opacity 360ms ease;
-}
-
-.meadow__grass-canvas {
-  z-index: 2;
-  display: block;
-  contain: strict;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 360ms ease;
-}
-
-.meadow__visual.is-grass-live .meadow__image,
-.meadow__visual.is-grass-live .meadow__texture {
-  opacity: 0;
-}
-
-.meadow__visual.is-grass-live .meadow__grass-canvas {
-  opacity: 1;
 }
 
 .cypress-tree {
@@ -4115,11 +4081,6 @@ em {
   pointer-events: auto;
 }
 
-@keyframes meadow-texture-drift {
-  from { background-position: 0 0, 0 0, 0 0; }
-  to { background-position: 28px 11px, -22px 0, 0 0; }
-}
-
 @media (max-width: 900px) {
   .hero-meadow {
     --meadow-render-width: max(100vw, 900px);
@@ -4146,12 +4107,6 @@ em {
   .meadow-prototype {
     bottom: 12px;
     left: 12px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .meadow__texture {
-    animation: none;
   }
 }
 
