@@ -80,7 +80,7 @@ test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
   assert.match(topPull, /springVelocity \+= -pullPosition \* 0\.12 \* step/);
   assert.match(topPull, /window\.requestAnimationFrame\(springBack\)/);
   assert.match(topPull, /prefers-reduced-motion: reduce/);
-  assert.match(topPet, /DEFAULT_TOP_PET_MODE: TopPetMode = "quiet"/);
+  assert.match(topPet, /DEFAULT_TOP_PET_MODE: TopPetMode = "off"/);
   assert.match(prototype, />Hidden faces</);
   assert.match(prototype, /aria-label="Hidden face pull style"/);
   assert.match(prototype, /onTopPetModeChange\(topPetMode === "off" \? "quiet" : "off"\)/);
