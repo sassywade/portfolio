@@ -120,6 +120,16 @@ test("lets visitors toggle Philip from the top-right control", async () => {
   assert.match(css, /\.philip-toggle\[data-enabled="true"\] \.philip-toggle__knob/);
 });
 
+test("uses the supplied projects in the Play archive", async () => {
+  const play = await readFile(new URL("../app/play/page.tsx", import.meta.url), "utf8");
+
+  for (const title of ["Passport", "Mental health app", "Logitech", "Adobe", "Microsoft"]) {
+    assert.match(play, new RegExp(`"${title}"`));
+  }
+  assert.equal((play.match(/\["\d{2}",/g) ?? []).length, 5);
+  assert.doesNotMatch(play, /Tiny type studies|Weekend camera roll|Things in progress/);
+});
+
 test("expands the work archive and offers two- or three-column layouts", async () => {
   const [projects, projectCard, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
