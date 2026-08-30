@@ -31,8 +31,6 @@ export function SmileyCursor() {
     let currentY = 0;
     let springVelocityX = 0;
     let springVelocityY = 0;
-    let targetAngle = 0;
-    let currentAngle = 0;
     let targetBlow = 0;
     let currentBlow = 0;
     let hasPointerPosition = false;
@@ -47,15 +45,8 @@ export function SmileyCursor() {
       currentY += springVelocityY;
       currentBlow += (nextBlow - currentBlow) * 0.18;
 
-      const angleDelta = Math.atan2(
-        Math.sin(targetAngle - currentAngle),
-        Math.cos(targetAngle - currentAngle),
-      );
-      currentAngle += angleDelta * 0.28;
-
       cursor.style.setProperty("--smiley-x", `${currentX}px`);
       cursor.style.setProperty("--smiley-y", `${currentY}px`);
-      cursor.style.setProperty("--smiley-angle", `${currentAngle}rad`);
       cursor.style.setProperty("--smiley-air-opacity", `${currentBlow}`);
       cursor.style.setProperty(
         "--smiley-wind-opacity",
@@ -109,8 +100,8 @@ export function SmileyCursor() {
         lastY = event.clientY;
         lastTime = timestamp;
         lastMoveTime = timestamp;
-        targetX = currentX = event.clientX - 20 - 34;
-        targetY = currentY = event.clientY - 28;
+        targetX = currentX = event.clientX - 17 - 30;
+        targetY = currentY = event.clientY - 24;
         hasPointerPosition = true;
         cursor.classList.add("is-visible");
         scheduleFrame();
@@ -122,12 +113,13 @@ export function SmileyCursor() {
       const velocity = distance / elapsed;
       const intensity = Math.min(0.72, Math.max(0, (velocity - 0.12) / 2.15));
 
-      if (distance > 0.5) {
-        targetAngle = Math.atan2(event.clientY - lastY, event.clientX - lastX);
+      if (Math.abs(event.clientX - lastX) > 0.5) {
+        cursor.dataset.direction = event.clientX - lastX >= 0 ? "right" : "left";
       }
-      const followDistance = 34 + intensity * 18;
-      targetX = event.clientX - 20 - Math.cos(targetAngle) * followDistance;
-      targetY = event.clientY - 28 - Math.sin(targetAngle) * followDistance;
+      const followDistance = 30 + intensity * 16;
+      const direction = cursor.dataset.direction === "left" ? -1 : 1;
+      targetX = event.clientX - 17 - direction * followDistance;
+      targetY = event.clientY - 24;
       targetBlow = intensity;
       lastX = event.clientX;
       lastY = event.clientY;
@@ -163,7 +155,7 @@ export function SmileyCursor() {
   }, []);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-direction="right" aria-hidden="true">
       <div className="smiley-cursor__direction">
         <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--light smiley-cursor__face-frame" src="/pet/pet-light.png" alt="" />

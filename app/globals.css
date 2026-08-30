@@ -3508,15 +3508,15 @@ em {
 
 /* Use the supplied drawings as the four cursor-pet frames. */
 .smiley-cursor {
-  width: 116px;
-  height: 64px;
+  width: 100px;
+  height: 56px;
 }
 
 .smiley-cursor__direction {
-  width: 116px;
-  height: 64px;
+  width: 100px;
+  height: 56px;
   transform: none;
-  transform-origin: 20px 28px;
+  transform-origin: 17px 24px;
 }
 
 .smiley-cursor__asset {
@@ -3525,7 +3525,7 @@ em {
   left: 0;
   display: block;
   width: auto;
-  height: 56px;
+  height: 48px;
   max-width: none;
   opacity: 0;
   pointer-events: none;
@@ -3541,19 +3541,35 @@ em {
 
 .smiley-cursor__face-frame {
   clip-path: inset(0 48% 0 0);
+  transform-origin: 17px 24px;
+  transition: transform 220ms var(--compact-ease), opacity 140ms ease;
+}
+
+.smiley-cursor[data-direction="left"] .smiley-cursor__face-frame {
+  transform: scaleX(-1);
 }
 
 .smiley-cursor__wind-frame {
   clip-path: inset(0 0 0 48%);
   opacity: 0;
-  transform: translateX(-8px) scaleX(0.88) rotate(var(--smiley-angle));
-  transform-origin: 20px 28px;
+  transform: scaleX(0.88);
+  transform-origin: 17px 24px;
   transition: opacity 180ms ease 120ms, transform 300ms var(--compact-ease) 120ms;
+}
+
+.smiley-cursor[data-direction="left"] .smiley-cursor__wind-frame {
+  transform: scaleX(-0.88);
 }
 
 .smiley-cursor[data-state="light"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--light,
 .smiley-cursor[data-state="strong"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strong,
 .smiley-cursor[data-state="strained"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strained {
   opacity: 1;
-  transform: translateX(0) scaleX(1) rotate(var(--smiley-angle));
+  transform: scaleX(1);
+}
+
+.smiley-cursor[data-direction="left"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--light,
+.smiley-cursor[data-direction="left"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strong,
+.smiley-cursor[data-direction="left"][data-wind="on"] .smiley-cursor__wind-frame.smiley-cursor__asset--strained {
+  transform: scaleX(-1);
 }
