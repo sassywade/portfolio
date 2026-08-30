@@ -121,15 +121,20 @@ test("lets visitors toggle Philip from the top-right control", async () => {
 });
 
 test("expands the work archive and offers two- or three-column layouts", async () => {
-  const [projects, caseStudy, hero, prototype, css] = await Promise.all([
+  const [projects, projectCard, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/project-card.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 18);
+  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 17);
+  assert.match(projects, /title: "Glean homepage"/);
+  assert.match(projects, /title: "Glean proactive intelligence"/);
+  assert.match(projects, /title: "Telestrations"/);
+  assert.match(projectCard, /className="project-card__title"/);
   assert.match(projects, /export const placeholderCaseStudy: CaseStudy/);
   assert.match(caseStudy, /caseStudies\[slug\] \?\? placeholderCaseStudy/);
   assert.match(hero, /useState<WorkGridColumns>\(3\)/);

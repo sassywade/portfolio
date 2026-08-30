@@ -12,6 +12,7 @@ export function ProjectCard({ project }: { project: Project }) {
         data-cuelume-toggle="pulse"
       >
         <ProjectMockup theme={project.theme} />
+        <span className="project-card__title">{project.title}</span>
       </a>
     </Reveal>
   );

@@ -37,7 +37,7 @@ export const projects: Project[] = [
   {
     number: "01",
     slug: "signal-noise",
-    title: "Signal / noise",
+    title: "Glean homepage",
     description: "A calmer way to make sense of a busy product.",
     category: "Product design",
     year: "2025",
@@ -46,7 +46,7 @@ export const projects: Project[] = [
   {
     number: "02",
     slug: "field-notes",
-    title: "Field notes",
+    title: "Glean proactive intelligence",
     description: "A visual identity for people who make things slowly.",
     category: "Brand + direction",
     year: "2024",
@@ -55,7 +55,7 @@ export const projects: Project[] = [
   {
     number: "03",
     slug: "the-archive",
-    title: "The archive",
+    title: "Glean onboarding",
     description: "Turning a collection of stories into a place to wander.",
     category: "Digital experience",
     year: "2024",
@@ -64,7 +64,7 @@ export const projects: Project[] = [
   {
     number: "04",
     slug: "common-ground",
-    title: "Common ground",
+    title: "Glean artifacts",
     description: "Tools for making space around the important conversations.",
     category: "Product design",
     year: "2023",
@@ -73,7 +73,7 @@ export const projects: Project[] = [
   {
     number: "05",
     slug: "soft-systems",
-    title: "Soft systems",
+    title: "Agent traceability",
     description: "A flexible toolkit for a distinctly human service.",
     category: "Strategy + design",
     year: "2023",
@@ -82,7 +82,7 @@ export const projects: Project[] = [
   {
     number: "06",
     slug: "afterimage",
-    title: "Afterimage",
+    title: "Artifact skins",
     description: "A small study in memory, motion, and the everyday.",
     category: "Experiments",
     year: "2022",
@@ -91,7 +91,7 @@ export const projects: Project[] = [
   {
     number: "07",
     slug: "ambient-search",
-    title: "Ambient search",
+    title: "Editing artifacts",
     description: "Placeholder case study for a quieter search experience.",
     category: "Concept placeholder",
     year: "2026",
@@ -100,7 +100,7 @@ export const projects: Project[] = [
   {
     number: "08",
     slug: "side-streets",
-    title: "Side streets",
+    title: "Company vision",
     description: "Placeholder case study about navigating the city differently.",
     category: "Concept placeholder",
     year: "2026",
@@ -109,7 +109,7 @@ export const projects: Project[] = [
   {
     number: "09",
     slug: "tiny-rituals",
-    title: "Tiny rituals",
+    title: "Starter kit",
     description: "Placeholder case study for small, repeatable moments.",
     category: "Concept placeholder",
     year: "2026",
@@ -118,7 +118,7 @@ export const projects: Project[] = [
   {
     number: "10",
     slug: "slow-signal",
-    title: "Slow signal",
+    title: "Self serve setup",
     description: "Placeholder case study for patient, proactive software.",
     category: "Concept placeholder",
     year: "2026",
@@ -127,7 +127,7 @@ export const projects: Project[] = [
   {
     number: "11",
     slug: "field-guide",
-    title: "Field guide",
+    title: "Insights",
     description: "Placeholder case study for an adaptable creative toolkit.",
     category: "Concept placeholder",
     year: "2026",
@@ -136,7 +136,7 @@ export const projects: Project[] = [
   {
     number: "12",
     slug: "good-neighbor",
-    title: "Good neighbor",
+    title: "Diff review",
     description: "Placeholder case study for a more useful local network.",
     category: "Concept placeholder",
     year: "2026",
@@ -145,7 +145,7 @@ export const projects: Project[] = [
   {
     number: "13",
     slug: "after-hours",
-    title: "After hours",
+    title: "Podcast",
     description: "Placeholder case study for ideas made after work.",
     category: "Concept placeholder",
     year: "2026",
@@ -154,7 +154,7 @@ export const projects: Project[] = [
   {
     number: "14",
     slug: "home-ground",
-    title: "Home ground",
+    title: "Actions platform",
     description: "Placeholder case study about belonging and place.",
     category: "Concept placeholder",
     year: "2026",
@@ -163,7 +163,7 @@ export const projects: Project[] = [
   {
     number: "15",
     slug: "soft-launch",
-    title: "Soft launch",
+    title: "Treasure",
     description: "Placeholder case study for thoughtful product beginnings.",
     category: "Concept placeholder",
     year: "2026",
@@ -172,7 +172,7 @@ export const projects: Project[] = [
   {
     number: "16",
     slug: "pocket-studio",
-    title: "Pocket studio",
+    title: "NFTs as Lenses",
     description: "Placeholder case study for making wherever you are.",
     category: "Concept placeholder",
     year: "2026",
@@ -181,20 +181,11 @@ export const projects: Project[] = [
   {
     number: "17",
     slug: "drift",
-    title: "Drift",
+    title: "Telestrations",
     description: "Placeholder case study for wandering through information.",
     category: "Concept placeholder",
     year: "2026",
     theme: "archive",
-  },
-  {
-    number: "18",
-    slug: "sunday-systems",
-    title: "Sunday systems",
-    description: "Placeholder case study for lightweight personal routines.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "signal",
   },
 ];
 

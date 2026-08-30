@@ -4488,6 +4488,17 @@ em {
   border-radius: 12px;
 }
 
+.pranathi-project-grid .project-card__title {
+  display: block;
+  margin-top: 14px;
+  color: var(--ink);
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: clamp(14px, 1.1vw, 16px);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.25;
+}
+
 .simple-page {
   width: min(100% - 48px, var(--portfolio-reading-width));
   padding: clamp(135px, 20vh, 220px) 0 170px;
