@@ -147,7 +147,11 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(backpacker, /const WALK_FRAME_ORDER = \[/);
   assert.match(backpacker, /surfaceByColumn/);
   assert.match(backpacker, /window\.requestAnimationFrame\(frame\)/);
-  assert.match(backpacker, /direction \*= -1/);
+  assert.match(backpacker, /direction = nextDirection/);
+  assert.match(backpacker, /portfolio:pet-blow-backpacker/);
+  assert.match(backpacker, /layer\.dataset\.direction = direction === 1 \? "right" : "left"/);
+  assert.match(backpacker, /window\.addEventListener\(PET_BLOW_BACKPACKER_EVENT, handlePetBlow\)/);
+  assert.match(backpacker, /beginTurn\(performance\.now\(\), nextDirection\)/);
   assert.match(backpacker, /new IntersectionObserver/);
   assert.match(backpacker, /prefers-reduced-motion: reduce/);
   assert.match(backpacker, /data-meadow-surface="active"/);
@@ -164,6 +168,15 @@ test("keeps the living lawn, miniature visitors, and cursor pet lightweight", as
   assert.match(smiley, /window\.setTimeout\(\(\) => \{/);
   assert.match(smiley, /cursor\.dataset\.facing = facing === 1 \? "right" : "left"/);
   assert.match(smiley, /currentFollowDistance \* facing/);
+  assert.match(smiley, /const BACKPACKER_ARM_DELAY = 480/);
+  assert.match(smiley, /const BACKPACKER_APPROACH_DURATION = 680/);
+  assert.match(smiley, /const BACKPACKER_BLOW_REVERSAL_DELAY = 280/);
+  assert.match(smiley, /activeBackpacker/);
+  assert.match(smiley, /pointerIsNearBackpacker/);
+  assert.match(smiley, /cursor\.dataset\.backpacker = "approach"/);
+  assert.match(smiley, /cursor\.dataset\.backpacker = "blow"/);
+  assert.match(smiley, /new CustomEvent\(PET_BLOW_BACKPACKER_EVENT/);
+  assert.match(smiley, /detail: \{ direction: backpackerFacing \}/);
   assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
   assert.match(smiley, /cursor\.dataset\.reaction = "smile"/);

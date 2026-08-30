@@ -16,6 +16,15 @@ const PET_FACE_ANCHOR_X = 15;
 const FACING_INTENT_THRESHOLD = 32;
 const FACING_CHANGE_DELAY = 240;
 const FACING_INTENT_MEMORY = 180;
+const PET_BLOW_BACKPACKER_EVENT = "portfolio:pet-blow-backpacker";
+const BACKPACKER_PROXIMITY = 86;
+const BACKPACKER_ARM_DELAY = 480;
+const BACKPACKER_APPROACH_DURATION = 680;
+const BACKPACKER_BLOW_REVERSAL_DELAY = 280;
+const BACKPACKER_BLOW_DURATION = 1080;
+const BACKPACKER_COOLDOWN = 1800;
+
+type BackpackerInteractionPhase = "off" | "arming" | "approach" | "blow";
 
 const easeInOutCubic = (value: number) => (
   value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
@@ -64,8 +73,15 @@ export function SmileyCursor() {
     let pendingFacing: -1 | 1 = 1;
     let lastFacingInputTime = performance.now();
     let facingTimer: number | null = null;
+    let backpackerPhase: BackpackerInteractionPhase = "off";
+    let backpackerPhaseStarted = 0;
+    let backpackerFacing: -1 | 1 = 1;
+    let backpackerBlowSent = false;
+    let backpackerNeedsExit = false;
+    let backpackerCooldownUntil = 0;
 
     cursor.dataset.facing = "right";
+    cursor.dataset.backpacker = "off";
     cursor.style.setProperty("--smiley-facing", "1");
 
     const clearIdleTimer = () => {
@@ -124,10 +140,146 @@ export function SmileyCursor() {
       }, FACING_CHANGE_DELAY);
     };
 
+    const setFacingImmediately = (nextFacing: -1 | 1) => {
+      clearFacingTimer();
+      facing = nextFacing;
+      facingIntent = 0;
+      pendingFacing = nextFacing;
+      cursor.dataset.facing = nextFacing === 1 ? "right" : "left";
+      cursor.style.setProperty("--smiley-facing", String(nextFacing));
+    };
+
+    const activeBackpacker = () => {
+      const layer = document.querySelector<HTMLElement>('.backpack-walk-layer[data-phase="walk"]');
+      const hiker = layer?.querySelector<HTMLElement>(".mini-hiker");
+      if (!layer || !hiker) return null;
+
+      const bounds = hiker.getBoundingClientRect();
+      if (bounds.width <= 0 || bounds.height <= 0) return null;
+      return { layer, hiker, bounds };
+    };
+
+    const pointerIsNearBackpacker = (bounds: DOMRect) => {
+      if (!hasPointerPosition) return false;
+      const nearestX = clamp(inputX, bounds.left, bounds.right);
+      const nearestY = clamp(inputY, bounds.top, bounds.bottom);
+      return Math.hypot(inputX - nearestX, inputY - nearestY) <= BACKPACKER_PROXIMITY;
+    };
+
+    const resetBackpackerInteraction = (needsExit = false) => {
+      backpackerPhase = "off";
+      backpackerPhaseStarted = 0;
+      backpackerBlowSent = false;
+      backpackerNeedsExit = needsExit;
+      cursor.dataset.backpacker = "off";
+    };
+
+    const updateBackpackerInteraction = (timestamp: number) => {
+      const backpacker = activeBackpacker();
+      const isNear = Boolean(backpacker && pointerIsNearBackpacker(backpacker.bounds));
+
+      if (backpackerNeedsExit) {
+        if (!isNear) backpackerNeedsExit = false;
+        return;
+      }
+
+      if (backpackerPhase === "off") {
+        if (!backpacker || !isNear || timestamp < backpackerCooldownUntil) return;
+        backpackerPhase = "arming";
+        backpackerPhaseStarted = timestamp;
+        cursor.dataset.backpacker = "arming";
+        stopIdleMischief();
+        return;
+      }
+
+      if (!backpacker) {
+        resetBackpackerInteraction(true);
+        return;
+      }
+
+      if (backpackerPhase === "arming") {
+        if (!isNear) {
+          resetBackpackerInteraction();
+          lastMoveTime = timestamp;
+          armIdleMischief();
+          return;
+        }
+
+        if (timestamp - backpackerPhaseStarted >= BACKPACKER_ARM_DELAY) {
+          const isWalkingRight = backpacker.layer.dataset.direction === "right";
+          backpackerFacing = isWalkingRight ? -1 : 1;
+          setFacingImmediately(backpackerFacing);
+          stopIdleMischief();
+          stopHappyReaction();
+          backpackerPhase = "approach";
+          backpackerPhaseStarted = timestamp;
+          cursor.dataset.backpacker = "approach";
+        }
+        return;
+      }
+
+      if (backpackerPhase === "approach" && timestamp - backpackerPhaseStarted >= BACKPACKER_APPROACH_DURATION) {
+        backpackerPhase = "blow";
+        backpackerPhaseStarted = timestamp;
+        backpackerBlowSent = false;
+        cursor.dataset.backpacker = "blow";
+        return;
+      }
+
+      if (backpackerPhase === "blow") {
+        const blowElapsed = timestamp - backpackerPhaseStarted;
+        if (!backpackerBlowSent && blowElapsed >= BACKPACKER_BLOW_REVERSAL_DELAY) {
+          backpackerBlowSent = true;
+          window.dispatchEvent(new CustomEvent(PET_BLOW_BACKPACKER_EVENT, {
+            detail: { direction: backpackerFacing },
+          }));
+        }
+
+        if (blowElapsed >= BACKPACKER_BLOW_DURATION) {
+          backpackerCooldownUntil = timestamp + BACKPACKER_COOLDOWN;
+          resetBackpackerInteraction(true);
+          lastMoveTime = timestamp;
+          armIdleMischief();
+        }
+      }
+    };
+
+    const backpackerTargetPosition = () => {
+      if (backpackerPhase !== "approach" && backpackerPhase !== "blow") return null;
+      const backpacker = activeBackpacker();
+      if (!backpacker) return null;
+
+      const desiredFaceX = backpackerFacing === 1
+        ? backpacker.bounds.left - 34
+        : backpacker.bounds.right + 34;
+      return {
+        x: clamp(desiredFaceX, 24, window.innerWidth - 24) - PET_FACE_ANCHOR_X,
+        y: backpacker.bounds.top + backpacker.bounds.height * 0.42 - 21,
+      };
+    };
+
     const updatePetState = (timestamp: number) => {
       const elapsed = Math.min(100, timestamp - previousFrameTime);
       previousFrameTime = timestamp;
       motionLevel *= Math.pow(0.94, Math.max(1, elapsed / 16.67));
+
+      if (backpackerPhase === "approach") {
+        cursor.dataset.idle = "off";
+        cursor.dataset.reaction = "off";
+        cursor.dataset.state = "idle";
+        cursor.dataset.wind = "off";
+        windStartedAt = null;
+        return;
+      }
+
+      if (backpackerPhase === "blow") {
+        cursor.dataset.idle = "off";
+        cursor.dataset.reaction = "off";
+        cursor.dataset.state = "strong";
+        cursor.dataset.wind = "on";
+        windStartedAt = timestamp;
+        return;
+      }
 
       if (timestamp < happyUntil) {
         cursor.dataset.idle = "off";
@@ -220,17 +372,25 @@ export function SmileyCursor() {
         }
       }
 
+      updateBackpackerInteraction(timestamp);
       updatePetState(timestamp);
 
       pointerX += (inputX - pointerX) * 0.14;
       pointerY += (inputY - pointerY) * 0.14;
 
       currentFollowDistance += (nextFollowDistance - currentFollowDistance) * 0.06;
-      targetX = pointerX - PET_FACE_ANCHOR_X - currentFollowDistance * facing + idleOffsetX;
-      targetY = pointerY - 21 + idleOffsetY;
+      const backpackerTarget = backpackerTargetPosition();
+      if (backpackerTarget) {
+        targetX = backpackerTarget.x;
+        targetY = backpackerTarget.y;
+        positionEase = backpackerPhase === "approach" ? 0.058 : 0.085;
+      } else {
+        targetX = pointerX - PET_FACE_ANCHOR_X - currentFollowDistance * facing + idleOffsetX;
+        targetY = pointerY - 21 + idleOffsetY;
+      }
 
       currentX += (targetX - currentX) * positionEase;
-      currentY += (targetY - currentY) * 0.075;
+      currentY += (targetY - currentY) * (backpackerTarget ? 0.065 : 0.075);
 
       cursor.style.setProperty("--smiley-x", `${currentX}px`);
       cursor.style.setProperty("--smiley-y", `${currentY}px`);
@@ -243,6 +403,7 @@ export function SmileyCursor() {
         Math.abs(inputY - pointerY) > 0.2 ||
         motionLevel > 0.01 ||
         timestamp < happyUntil ||
+        backpackerPhase !== "off" ||
         idleStartedAt !== null;
 
       if (stillSettling) {
@@ -260,7 +421,7 @@ export function SmileyCursor() {
 
     const armIdleMischief = () => {
       clearIdleTimer();
-      if (!hasPointerPosition || isPastWork) return;
+      if (!hasPointerPosition || isPastWork || backpackerPhase !== "off") return;
 
       const remainingDelay = Math.max(0, IDLE_MISCHIEF_DELAY - (performance.now() - lastMoveTime));
       idleTimer = window.setTimeout(() => {
@@ -287,6 +448,7 @@ export function SmileyCursor() {
       isPastWork = nextIsPastWork;
 
       if (isPastWork) {
+        resetBackpackerInteraction();
         stopIdleMischief();
         stopHappyReaction();
         cursor.classList.remove("is-visible");
@@ -352,12 +514,14 @@ export function SmileyCursor() {
       }
       facingIntent = clamp(facingIntent + deltaX, -140, 140);
       lastFacingInputTime = timestamp;
-      const nextFacing: -1 | 1 = facingIntent > FACING_INTENT_THRESHOLD
-        ? 1
-        : facingIntent < -FACING_INTENT_THRESHOLD
-          ? -1
-          : facing;
-      queueFacingChange(nextFacing);
+      if (backpackerPhase === "off" || backpackerPhase === "arming") {
+        const nextFacing: -1 | 1 = facingIntent > FACING_INTENT_THRESHOLD
+          ? 1
+          : facingIntent < -FACING_INTENT_THRESHOLD
+            ? -1
+            : facing;
+        queueFacingChange(nextFacing);
+      }
       inputX = event.clientX;
       inputY = event.clientY;
       targetFollowDistance = 82 + Math.min(24, distance * 0.18);
@@ -371,6 +535,7 @@ export function SmileyCursor() {
     };
 
     const handlePointerLeave = () => {
+      resetBackpackerInteraction();
       clearFacingTimer();
       stopIdleMischief();
       stopHappyReaction();
@@ -403,7 +568,7 @@ export function SmileyCursor() {
   }, [pathname]);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" data-backpacker="off" aria-hidden="true">
       <div className="smiley-cursor__direction">
         <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--smile" src="/pet/pet-smile.png" alt="" />

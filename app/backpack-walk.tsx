@@ -17,6 +17,7 @@ const SPAWN_DURATION = 220;
 const LAND_DURATION = 180;
 const TURN_DURATION = 240;
 const HIKER_GROUND_RATIO = 0.958;
+const PET_BLOW_BACKPACKER_EVENT = "portfolio:pet-blow-backpacker";
 
 type WalkPhase = "idle" | "spawn" | "drop" | "land" | "walk";
 
@@ -148,6 +149,7 @@ export function BackpackWalk() {
     }
 
     function setFacing() {
+      layer.dataset.direction = direction === 1 ? "right" : "left";
       directionNode.style.setProperty("--hiker-facing", String(direction === -1 ? 1 : -1));
     }
 
@@ -162,8 +164,8 @@ export function BackpackWalk() {
       frameHandle = window.requestAnimationFrame(frame);
     }
 
-    function beginTurn(now: number) {
-      direction *= -1;
+    function beginTurn(now: number, nextDirection = direction * -1) {
+      direction = nextDirection;
       turningUntil = now + TURN_DURATION;
       hiker.dataset.turning = "true";
       setFacing();
@@ -265,6 +267,22 @@ export function BackpackWalk() {
 
     launchRef.current = launch;
 
+    const handlePetBlow = (event: Event) => {
+      if (phase !== "walk" || reducedMotion.matches) return;
+
+      const requestedDirection = (event as CustomEvent<{ direction?: -1 | 1 }>).detail?.direction;
+      const nextDirection = requestedDirection === -1 || requestedDirection === 1
+        ? requestedDirection
+        : direction * -1;
+      if (nextDirection === direction) return;
+
+      beginTurn(performance.now(), nextDirection);
+      lastTime = performance.now();
+      schedule();
+    };
+
+    window.addEventListener(PET_BLOW_BACKPACKER_EVENT, handlePetBlow);
+
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       if (inView) {
@@ -302,6 +320,7 @@ export function BackpackWalk() {
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
       window.clearTimeout(reducedTimer);
+      window.removeEventListener(PET_BLOW_BACKPACKER_EVENT, handlePetBlow);
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
@@ -321,7 +340,7 @@ export function BackpackWalk() {
         backpacking
       </button>
       {meadowHost ? createPortal(
-        <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" aria-hidden="true">
+        <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" data-direction="left" aria-hidden="true">
           <span ref={hikerRef} className="mini-hiker" data-turning="false">
             <span className="mini-hiker__shadow" />
             <span ref={directionRef} className="mini-hiker__direction">
