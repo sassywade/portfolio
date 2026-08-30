@@ -8,7 +8,7 @@
   --acid: #002fa7;
   --serif: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   --sans: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
-  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --mono: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   --top-pet-pull-y: 0px;
   --top-pet-reveal-y: 0px;
   --top-pet-strip-opacity: 0.5;
@@ -37,9 +37,16 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-newsreader, var(--sans));
+  font-family: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
 /* A deliberate pull past the top reveals Neel's hidden pet chorus. */
@@ -260,7 +267,7 @@ html[data-top-pet-active="true"] .hero-meadow {
 .hero-hobby__mark {
   border-radius: 50%;
   background: var(--hero-actor-wash);
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
   font-size: 0.84em;
   font-weight: 600;
   line-height: 1;
@@ -5722,7 +5729,7 @@ em {
   color: #66635d;
   backdrop-filter: blur(12px);
   cursor: pointer;
-  font-family: system-ui, sans-serif;
+  font-family: inherit;
   font-size: 17px;
   line-height: 1;
   transition: border-color 180ms ease, color 180ms ease, transform 220ms cubic-bezier(.22,.7,.2,1);

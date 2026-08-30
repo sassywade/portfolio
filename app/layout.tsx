@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { Geist_Mono, Newsreader } from "next/font/google";
+import { Newsreader } from "next/font/google";
 import "./globals.css";
 import { PhilipToggle } from "./philip-toggle";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -67,9 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${newsreader.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${newsreader.variable} antialiased`}>
         {children}
         <PhilipToggle />
       </body>
