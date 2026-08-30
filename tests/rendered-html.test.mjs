@@ -368,6 +368,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.site-header--pages\s*\{[^}]*gap:\s*32px;[^}]*padding-top:\s*30px/);
   assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
   assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
+  assert.match(css, /min-height:\s*100svh/);
   assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
   assert.match(css, /--miniature-character-height:\s*clamp\(82px, 7vw, 100px\)/);
   assert.match(css, /--cyclist-character-size:\s*clamp\(66px, 5\.6vw, 80px\)/);

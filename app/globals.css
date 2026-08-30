@@ -4433,7 +4433,7 @@ em {
 }
 
 .pranathi-intro--home {
-  min-height: min(88vh, 790px);
+  min-height: 100svh;
   padding-top: clamp(128px, 19vh, 205px);
   padding-bottom: clamp(82px, 10vh, 112px);
 }
@@ -4616,7 +4616,7 @@ em {
   }
 
   .pranathi-intro--home {
-    min-height: min(86vh, 740px);
+    min-height: 100svh;
     padding-top: 120px;
     padding-bottom: 88px;
   }
@@ -4662,7 +4662,7 @@ em {
   }
 
   .pranathi-intro--home {
-    min-height: min(84vh, 700px);
+    min-height: 100svh;
     padding-top: 104px;
     padding-bottom: 78px;
   }
