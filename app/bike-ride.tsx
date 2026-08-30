@@ -16,6 +16,7 @@ const SPAWN_DURATION = 220;
 const LAND_DURATION = 170;
 const TURN_DURATION = 260;
 const RIDER_GROUND_RATIO = 0.89;
+const PET_BLOW_CYCLIST_EVENT = "portfolio:pet-blow-cyclist";
 
 type RidePhase = "idle" | "spawn" | "drop" | "land" | "ride";
 
@@ -142,6 +143,7 @@ export function BikeRide() {
     function renderRider(angle = 0) {
       const size = riderSize();
       rider.style.transform = `translate3d(${x - size * 0.5}px, ${y}px, 0) rotate(${angle}rad)`;
+      layer.dataset.direction = direction === 1 ? "right" : "left";
       directionNode.style.setProperty("--bike-direction", String(direction));
     }
 
@@ -150,10 +152,11 @@ export function BikeRide() {
       frameHandle = window.requestAnimationFrame(frame);
     }
 
-    function beginTurn(now: number) {
-      direction *= -1;
+    function beginTurn(now: number, nextDirection = direction * -1) {
+      direction = nextDirection;
       turningUntil = now + TURN_DURATION;
       rider.dataset.turning = "true";
+      layer.dataset.direction = direction === 1 ? "right" : "left";
       directionNode.style.setProperty("--bike-direction", String(direction));
     }
 
@@ -283,6 +286,19 @@ export function BikeRide() {
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
 
+    const handlePetBlow = (event: Event) => {
+      if (phase !== "ride" || reducedMotion.matches) return;
+      const requestedDirection = (event as CustomEvent<{ direction?: -1 | 1 }>).detail?.direction;
+      const nextDirection = requestedDirection === -1 || requestedDirection === 1
+        ? requestedDirection
+        : direction * -1;
+      if (nextDirection === direction) return;
+      beginTurn(performance.now(), nextDirection);
+      lastTime = performance.now();
+      schedule();
+    };
+    window.addEventListener(PET_BLOW_CYCLIST_EVENT, handlePetBlow);
+
     return () => {
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
@@ -290,6 +306,7 @@ export function BikeRide() {
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
+      window.removeEventListener(PET_BLOW_CYCLIST_EVENT, handlePetBlow);
     };
   }, [meadowHost]);
 
@@ -306,7 +323,7 @@ export function BikeRide() {
         bikes
       </button>
       {meadowHost ? createPortal(
-        <span ref={layerRef} className="bike-ride-layer" data-phase="idle" aria-hidden="true">
+        <span ref={layerRef} className="bike-ride-layer" data-phase="idle" data-direction="right" aria-hidden="true">
           <span ref={riderRef} className="bike-rider" data-turning="false">
             <span className="bike-rider__shadow" />
             <span ref={directionRef} className="bike-rider__direction">

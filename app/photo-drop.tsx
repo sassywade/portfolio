@@ -23,9 +23,24 @@ const PHOTO_SEQUENCE = [
   { frame: 4, minDuration: 900, maxDuration: 1800 },
 ] as const;
 
+const RAPID_BURST_SEQUENCE = [
+  { frame: 2, duration: 70 },
+  { frame: 3, duration: 110 },
+  { frame: 2, duration: 65 },
+  { frame: 3, duration: 110 },
+  { frame: 2, duration: 65 },
+  { frame: 3, duration: 110 },
+  { frame: 2, duration: 65 },
+  { frame: 3, duration: 110 },
+  { frame: 2, duration: 65 },
+  { frame: 3, duration: 130 },
+  { frame: 4, duration: 240 },
+] as const;
+
 const SPAWN_DURATION = 220;
 const LAND_DURATION = 180;
 const PHOTOGRAPHER_GROUND_RATIO = 0.962;
+const PET_BLOW_PHOTOGRAPHER_EVENT = "portfolio:pet-blow-photographer";
 
 type PhotoPhase = "idle" | "spawn" | "drop" | "land" | "shoot";
 
@@ -72,6 +87,8 @@ export function PhotoDrop() {
     let y = 0;
     let velocityY = 0;
     let sequenceIndex = 0;
+    let rapidBurstIndex = 0;
+    let isRapidBurst = false;
 
     function prepareMeadowProfile() {
       if (!meadowImage.naturalWidth || !meadowImage.naturalHeight) return;
@@ -145,6 +162,22 @@ export function PhotoDrop() {
       clearPhotoLoop();
       if (phase !== "shoot" || !inView || reducedMotion.matches) return;
 
+      if (isRapidBurst) {
+        const burstStep = RAPID_BURST_SEQUENCE[rapidBurstIndex];
+        setFrame(burstStep.frame);
+        sequenceTimer = window.setTimeout(() => {
+          rapidBurstIndex += 1;
+          if (rapidBurstIndex >= RAPID_BURST_SEQUENCE.length) {
+            rapidBurstIndex = 0;
+            isRapidBurst = false;
+            layer.dataset.burst = "false";
+            sequenceIndex = 4;
+          }
+          runPhotoStep();
+        }, burstStep.duration);
+        return;
+      }
+
       const step = PHOTO_SEQUENCE[sequenceIndex];
       setFrame(step.frame);
       sequenceTimer = window.setTimeout(() => {
@@ -158,7 +191,12 @@ export function PhotoDrop() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.photographing = next === "idle" ? "false" : "true";
-      if (next !== "shoot") clearPhotoLoop();
+      if (next !== "shoot") {
+        isRapidBurst = false;
+        rapidBurstIndex = 0;
+        layer.dataset.burst = "false";
+        clearPhotoLoop();
+      }
     }
 
     function renderPhotographer() {
@@ -212,6 +250,9 @@ export function PhotoDrop() {
       frameHandle = 0;
       lastTime = 0;
       sequenceIndex = 0;
+      rapidBurstIndex = 0;
+      isRapidBurst = false;
+      layer.dataset.burst = "false";
       setFrame(0);
 
       const layerBounds = layer.getBoundingClientRect();
@@ -273,6 +314,15 @@ export function PhotoDrop() {
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
 
+    const handlePetBlow = () => {
+      if (phase !== "shoot" || reducedMotion.matches) return;
+      isRapidBurst = true;
+      rapidBurstIndex = 0;
+      layer.dataset.burst = "true";
+      runPhotoStep();
+    };
+    window.addEventListener(PET_BLOW_PHOTOGRAPHER_EVENT, handlePetBlow);
+
     return () => {
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
@@ -281,6 +331,7 @@ export function PhotoDrop() {
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
+      window.removeEventListener(PET_BLOW_PHOTOGRAPHER_EVENT, handlePetBlow);
     };
   }, [meadowHost]);
 
@@ -297,7 +348,7 @@ export function PhotoDrop() {
         photograph SF
       </button>
       {meadowHost ? createPortal(
-        <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" aria-hidden="true">
+        <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" data-burst="false" aria-hidden="true">
           <span ref={photographerRef} className="mini-photographer">
             <span className="mini-photographer__shadow" />
             <span className="mini-photographer__sprite">

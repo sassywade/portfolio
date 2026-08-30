@@ -17,14 +17,35 @@ const FACING_INTENT_THRESHOLD = 32;
 const FACING_CHANGE_DELAY = 240;
 const FACING_INTENT_MEMORY = 180;
 const PET_BLOW_BACKPACKER_EVENT = "portfolio:pet-blow-backpacker";
-const BACKPACKER_PROXIMITY = 86;
-const BACKPACKER_ARM_DELAY = 480;
-const BACKPACKER_APPROACH_DURATION = 680;
-const BACKPACKER_BLOW_REVERSAL_DELAY = 280;
-const BACKPACKER_BLOW_DURATION = 1080;
-const BACKPACKER_COOLDOWN = 1800;
+const PET_BLOW_CYCLIST_EVENT = "portfolio:pet-blow-cyclist";
+const PET_BLOW_PHOTOGRAPHER_EVENT = "portfolio:pet-blow-photographer";
+const MINIATURE_ARM_DELAY = 480;
+const MINIATURE_APPROACH_DURATION = 680;
+const MINIATURE_BLOW_TRIGGER_DELAY = 280;
+const MINIATURE_BLOW_DURATION = 1080;
+const MINIATURE_COOLDOWN = 1800;
 
-type BackpackerInteractionPhase = "off" | "arming" | "approach" | "blow";
+type MiniatureKind = "backpacker" | "cyclist" | "photographer";
+type MiniatureInteractionPhase = "off" | "arming" | "approach" | "blow";
+type ActiveMiniature = {
+  kind: MiniatureKind;
+  layer: HTMLElement;
+  actor: HTMLElement;
+  bounds: DOMRect;
+  distance: number;
+};
+
+const MINIATURE_PROXIMITY: Record<MiniatureKind, number> = {
+  backpacker: 86,
+  cyclist: 98,
+  photographer: 86,
+};
+
+const PET_BLOW_EVENT: Record<MiniatureKind, string> = {
+  backpacker: PET_BLOW_BACKPACKER_EVENT,
+  cyclist: PET_BLOW_CYCLIST_EVENT,
+  photographer: PET_BLOW_PHOTOGRAPHER_EVENT,
+};
 
 const easeInOutCubic = (value: number) => (
   value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
@@ -73,15 +94,18 @@ export function SmileyCursor() {
     let pendingFacing: -1 | 1 = 1;
     let lastFacingInputTime = performance.now();
     let facingTimer: number | null = null;
-    let backpackerPhase: BackpackerInteractionPhase = "off";
-    let backpackerPhaseStarted = 0;
-    let backpackerFacing: -1 | 1 = 1;
-    let backpackerBlowSent = false;
-    let backpackerNeedsExit = false;
-    let backpackerCooldownUntil = 0;
+    let miniaturePhase: MiniatureInteractionPhase = "off";
+    let miniaturePhaseStarted = 0;
+    let miniatureKind: MiniatureKind | null = null;
+    let miniatureFacing: -1 | 1 = 1;
+    let miniatureBlowSent = false;
+    let miniatureNeedsExit: MiniatureKind | null = null;
+    let miniatureCooldownUntil = 0;
 
     cursor.dataset.facing = "right";
     cursor.dataset.backpacker = "off";
+    cursor.dataset.miniature = "off";
+    cursor.dataset.target = "none";
     cursor.style.setProperty("--smiley-facing", "1");
 
     const clearIdleTimer = () => {
@@ -149,112 +173,145 @@ export function SmileyCursor() {
       cursor.style.setProperty("--smiley-facing", String(nextFacing));
     };
 
-    const activeBackpacker = () => {
-      const layer = document.querySelector<HTMLElement>('.backpack-walk-layer[data-phase="walk"]');
-      const hiker = layer?.querySelector<HTMLElement>(".mini-hiker");
-      if (!layer || !hiker) return null;
+    const activeMiniature = (kind: MiniatureKind): ActiveMiniature | null => {
+      const selectors: Record<MiniatureKind, { layer: string; actor: string }> = {
+        backpacker: { layer: '.backpack-walk-layer[data-phase="walk"]', actor: ".mini-hiker" },
+        cyclist: { layer: '.bike-ride-layer[data-phase="ride"]', actor: ".bike-rider" },
+        photographer: { layer: '.photo-drop-layer[data-phase="shoot"]', actor: ".mini-photographer" },
+      };
+      const selector = selectors[kind];
+      const layer = document.querySelector<HTMLElement>(selector.layer);
+      const actor = layer?.querySelector<HTMLElement>(selector.actor);
+      if (!layer || !actor) return null;
 
-      const bounds = hiker.getBoundingClientRect();
+      const bounds = actor.getBoundingClientRect();
       if (bounds.width <= 0 || bounds.height <= 0) return null;
-      return { layer, hiker, bounds };
-    };
-
-    const pointerIsNearBackpacker = (bounds: DOMRect) => {
-      if (!hasPointerPosition) return false;
       const nearestX = clamp(inputX, bounds.left, bounds.right);
       const nearestY = clamp(inputY, bounds.top, bounds.bottom);
-      return Math.hypot(inputX - nearestX, inputY - nearestY) <= BACKPACKER_PROXIMITY;
+      const distance = hasPointerPosition ? Math.hypot(inputX - nearestX, inputY - nearestY) : Number.POSITIVE_INFINITY;
+      return { kind, layer, actor, bounds, distance };
     };
 
-    const resetBackpackerInteraction = (needsExit = false) => {
-      backpackerPhase = "off";
-      backpackerPhaseStarted = 0;
-      backpackerBlowSent = false;
-      backpackerNeedsExit = needsExit;
+    const nearestMiniature = () => {
+      const candidates = (["backpacker", "cyclist", "photographer"] as const)
+        .map(activeMiniature)
+        .filter((candidate): candidate is ActiveMiniature => Boolean(
+          candidate && candidate.distance <= MINIATURE_PROXIMITY[candidate.kind],
+        ));
+      candidates.sort((a, b) => a.distance - b.distance);
+      return candidates[0] ?? null;
+    };
+
+    const resetMiniatureInteraction = (needsExit: MiniatureKind | null = null) => {
+      miniaturePhase = "off";
+      miniaturePhaseStarted = 0;
+      miniatureBlowSent = false;
+      miniatureNeedsExit = needsExit;
+      miniatureKind = null;
       cursor.dataset.backpacker = "off";
+      cursor.dataset.miniature = "off";
+      cursor.dataset.target = "none";
     };
 
-    const updateBackpackerInteraction = (timestamp: number) => {
-      const backpacker = activeBackpacker();
-      const isNear = Boolean(backpacker && pointerIsNearBackpacker(backpacker.bounds));
+    const chooseMiniatureFacing = (miniature: ActiveMiniature) => {
+      if (miniature.kind === "backpacker" || miniature.kind === "cyclist") {
+        return miniature.layer.dataset.direction === "right" ? -1 : 1;
+      }
 
-      if (backpackerNeedsExit) {
-        if (!isNear) backpackerNeedsExit = false;
+      const actorCenter = miniature.bounds.left + miniature.bounds.width * 0.5;
+      const petCenter = currentX + PET_FACE_ANCHOR_X;
+      return petCenter <= actorCenter ? 1 : -1;
+    };
+
+    const updateMiniatureInteraction = (timestamp: number) => {
+      if (miniatureNeedsExit) {
+        const previousTarget = activeMiniature(miniatureNeedsExit);
+        if (!previousTarget || previousTarget.distance > MINIATURE_PROXIMITY[miniatureNeedsExit]) {
+          miniatureNeedsExit = null;
+        }
         return;
       }
 
-      if (backpackerPhase === "off") {
-        if (!backpacker || !isNear || timestamp < backpackerCooldownUntil) return;
-        backpackerPhase = "arming";
-        backpackerPhaseStarted = timestamp;
-        cursor.dataset.backpacker = "arming";
+      if (miniaturePhase === "off") {
+        const nearby = nearestMiniature();
+        if (!nearby || timestamp < miniatureCooldownUntil) return;
+        miniatureKind = nearby.kind;
+        miniaturePhase = "arming";
+        miniaturePhaseStarted = timestamp;
+        cursor.dataset.miniature = "arming";
+        cursor.dataset.target = nearby.kind;
+        cursor.dataset.backpacker = nearby.kind === "backpacker" ? "arming" : "off";
         stopIdleMischief();
         return;
       }
 
-      if (!backpacker) {
-        resetBackpackerInteraction(true);
+      const miniature = miniatureKind ? activeMiniature(miniatureKind) : null;
+      if (!miniature) {
+        resetMiniatureInteraction(miniatureKind);
         return;
       }
 
-      if (backpackerPhase === "arming") {
+      const isNear = miniature.distance <= MINIATURE_PROXIMITY[miniature.kind];
+      if (miniaturePhase === "arming") {
         if (!isNear) {
-          resetBackpackerInteraction();
+          resetMiniatureInteraction();
           lastMoveTime = timestamp;
           armIdleMischief();
           return;
         }
 
-        if (timestamp - backpackerPhaseStarted >= BACKPACKER_ARM_DELAY) {
-          const isWalkingRight = backpacker.layer.dataset.direction === "right";
-          backpackerFacing = isWalkingRight ? -1 : 1;
-          setFacingImmediately(backpackerFacing);
+        if (timestamp - miniaturePhaseStarted >= MINIATURE_ARM_DELAY) {
+          miniatureFacing = chooseMiniatureFacing(miniature);
+          setFacingImmediately(miniatureFacing);
           stopIdleMischief();
           stopHappyReaction();
-          backpackerPhase = "approach";
-          backpackerPhaseStarted = timestamp;
-          cursor.dataset.backpacker = "approach";
+          miniaturePhase = "approach";
+          miniaturePhaseStarted = timestamp;
+          cursor.dataset.miniature = "approach";
+          cursor.dataset.backpacker = miniature.kind === "backpacker" ? "approach" : "off";
         }
         return;
       }
 
-      if (backpackerPhase === "approach" && timestamp - backpackerPhaseStarted >= BACKPACKER_APPROACH_DURATION) {
-        backpackerPhase = "blow";
-        backpackerPhaseStarted = timestamp;
-        backpackerBlowSent = false;
-        cursor.dataset.backpacker = "blow";
+      if (miniaturePhase === "approach" && timestamp - miniaturePhaseStarted >= MINIATURE_APPROACH_DURATION) {
+        miniaturePhase = "blow";
+        miniaturePhaseStarted = timestamp;
+        miniatureBlowSent = false;
+        cursor.dataset.miniature = "blow";
+        cursor.dataset.backpacker = miniature.kind === "backpacker" ? "blow" : "off";
         return;
       }
 
-      if (backpackerPhase === "blow") {
-        const blowElapsed = timestamp - backpackerPhaseStarted;
-        if (!backpackerBlowSent && blowElapsed >= BACKPACKER_BLOW_REVERSAL_DELAY) {
-          backpackerBlowSent = true;
-          window.dispatchEvent(new CustomEvent(PET_BLOW_BACKPACKER_EVENT, {
-            detail: { direction: backpackerFacing },
-          }));
+      if (miniaturePhase === "blow") {
+        const blowElapsed = timestamp - miniaturePhaseStarted;
+        if (!miniatureBlowSent && blowElapsed >= MINIATURE_BLOW_TRIGGER_DELAY) {
+          miniatureBlowSent = true;
+          const detail = miniature.kind === "photographer" ? undefined : { direction: miniatureFacing };
+          window.dispatchEvent(new CustomEvent(PET_BLOW_EVENT[miniature.kind], { detail }));
         }
 
-        if (blowElapsed >= BACKPACKER_BLOW_DURATION) {
-          backpackerCooldownUntil = timestamp + BACKPACKER_COOLDOWN;
-          resetBackpackerInteraction(true);
+        if (blowElapsed >= MINIATURE_BLOW_DURATION) {
+          miniatureCooldownUntil = timestamp + MINIATURE_COOLDOWN;
+          resetMiniatureInteraction(miniature.kind);
           lastMoveTime = timestamp;
           armIdleMischief();
         }
       }
     };
 
-    const backpackerTargetPosition = () => {
-      if (backpackerPhase !== "approach" && backpackerPhase !== "blow") return null;
-      const backpacker = activeBackpacker();
-      if (!backpacker) return null;
+    const miniatureTargetPosition = () => {
+      if ((miniaturePhase !== "approach" && miniaturePhase !== "blow") || !miniatureKind) return null;
+      const miniature = activeMiniature(miniatureKind);
+      if (!miniature) return null;
 
-      const desiredFaceX = backpackerFacing === 1
-        ? backpacker.bounds.left - 34
-        : backpacker.bounds.right + 34;
+      const gap = miniature.kind === "cyclist" ? 42 : 34;
+      const targetHeightRatio = miniature.kind === "photographer" ? 0.36 : 0.42;
+      const desiredFaceX = miniatureFacing === 1
+        ? miniature.bounds.left - gap
+        : miniature.bounds.right + gap;
       return {
         x: clamp(desiredFaceX, 24, window.innerWidth - 24) - PET_FACE_ANCHOR_X,
-        y: backpacker.bounds.top + backpacker.bounds.height * 0.42 - 21,
+        y: miniature.bounds.top + miniature.bounds.height * targetHeightRatio - 21,
       };
     };
 
@@ -263,7 +320,7 @@ export function SmileyCursor() {
       previousFrameTime = timestamp;
       motionLevel *= Math.pow(0.94, Math.max(1, elapsed / 16.67));
 
-      if (backpackerPhase === "approach") {
+      if (miniaturePhase === "approach") {
         cursor.dataset.idle = "off";
         cursor.dataset.reaction = "off";
         cursor.dataset.state = "idle";
@@ -272,7 +329,7 @@ export function SmileyCursor() {
         return;
       }
 
-      if (backpackerPhase === "blow") {
+      if (miniaturePhase === "blow") {
         cursor.dataset.idle = "off";
         cursor.dataset.reaction = "off";
         cursor.dataset.state = "strong";
@@ -372,25 +429,25 @@ export function SmileyCursor() {
         }
       }
 
-      updateBackpackerInteraction(timestamp);
+      updateMiniatureInteraction(timestamp);
       updatePetState(timestamp);
 
       pointerX += (inputX - pointerX) * 0.14;
       pointerY += (inputY - pointerY) * 0.14;
 
       currentFollowDistance += (nextFollowDistance - currentFollowDistance) * 0.06;
-      const backpackerTarget = backpackerTargetPosition();
-      if (backpackerTarget) {
-        targetX = backpackerTarget.x;
-        targetY = backpackerTarget.y;
-        positionEase = backpackerPhase === "approach" ? 0.058 : 0.085;
+      const miniatureTarget = miniatureTargetPosition();
+      if (miniatureTarget) {
+        targetX = miniatureTarget.x;
+        targetY = miniatureTarget.y;
+        positionEase = miniaturePhase === "approach" ? 0.058 : 0.085;
       } else {
         targetX = pointerX - PET_FACE_ANCHOR_X - currentFollowDistance * facing + idleOffsetX;
         targetY = pointerY - 21 + idleOffsetY;
       }
 
       currentX += (targetX - currentX) * positionEase;
-      currentY += (targetY - currentY) * (backpackerTarget ? 0.065 : 0.075);
+      currentY += (targetY - currentY) * (miniatureTarget ? 0.065 : 0.075);
 
       cursor.style.setProperty("--smiley-x", `${currentX}px`);
       cursor.style.setProperty("--smiley-y", `${currentY}px`);
@@ -403,7 +460,7 @@ export function SmileyCursor() {
         Math.abs(inputY - pointerY) > 0.2 ||
         motionLevel > 0.01 ||
         timestamp < happyUntil ||
-        backpackerPhase !== "off" ||
+        miniaturePhase !== "off" ||
         idleStartedAt !== null;
 
       if (stillSettling) {
@@ -421,7 +478,7 @@ export function SmileyCursor() {
 
     const armIdleMischief = () => {
       clearIdleTimer();
-      if (!hasPointerPosition || isPastWork || backpackerPhase !== "off") return;
+      if (!hasPointerPosition || isPastWork || miniaturePhase !== "off") return;
 
       const remainingDelay = Math.max(0, IDLE_MISCHIEF_DELAY - (performance.now() - lastMoveTime));
       idleTimer = window.setTimeout(() => {
@@ -448,7 +505,7 @@ export function SmileyCursor() {
       isPastWork = nextIsPastWork;
 
       if (isPastWork) {
-        resetBackpackerInteraction();
+        resetMiniatureInteraction();
         stopIdleMischief();
         stopHappyReaction();
         cursor.classList.remove("is-visible");
@@ -514,7 +571,7 @@ export function SmileyCursor() {
       }
       facingIntent = clamp(facingIntent + deltaX, -140, 140);
       lastFacingInputTime = timestamp;
-      if (backpackerPhase === "off" || backpackerPhase === "arming") {
+      if (miniaturePhase === "off" || miniaturePhase === "arming") {
         const nextFacing: -1 | 1 = facingIntent > FACING_INTENT_THRESHOLD
           ? 1
           : facingIntent < -FACING_INTENT_THRESHOLD
@@ -535,7 +592,7 @@ export function SmileyCursor() {
     };
 
     const handlePointerLeave = () => {
-      resetBackpackerInteraction();
+      resetMiniatureInteraction();
       clearFacingTimer();
       stopIdleMischief();
       stopHappyReaction();
@@ -568,7 +625,7 @@ export function SmileyCursor() {
   }, [pathname]);
 
   return (
-    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" data-backpacker="off" aria-hidden="true">
+    <div className="smiley-cursor" ref={cursorRef} data-state="idle" data-wind="off" data-idle="off" data-reaction="off" data-facing="right" data-backpacker="off" data-miniature="off" data-target="none" aria-hidden="true">
       <div className="smiley-cursor__direction">
         <img className="smiley-cursor__asset smiley-cursor__asset--idle smiley-cursor__face-frame" src="/pet/pet-idle.png" alt="" />
         <img className="smiley-cursor__asset smiley-cursor__asset--smile" src="/pet/pet-smile.png" alt="" />
