@@ -98,6 +98,28 @@ test("offers lightweight San Francisco atmosphere backgrounds in the prototype p
   assert.doesNotMatch(css, /@keyframes[^}]*rain/i);
 });
 
+test("lets visitors toggle Philip from the top-right control", async () => {
+  const [layout, philip, css] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/philip-toggle.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(layout, /<PhilipToggle \/>/);
+  assert.doesNotMatch(layout, /<SmileyCursor \/>/);
+  assert.match(philip, /role="switch"/);
+  assert.match(philip, /aria-label="Toggle Philip"/);
+  assert.match(philip, /role="tooltip"/);
+  assert.match(philip, /portfolio:philip-enabled/);
+  assert.match(philip, /window\.localStorage\.setItem/);
+  assert.match(philip, /isReady && isEnabled \? <SmileyCursor \/>/);
+  assert.match(philip, /\/pet\/pet-idle\.png/);
+  assert.match(css, /\.philip-toggle\s*\{[^}]*position:\s*fixed;[^}]*right:/);
+  assert.match(css, /\.philip-toggle:hover \.philip-toggle__tooltip/);
+  assert.match(css, /\.philip-toggle:focus-within \.philip-toggle__tooltip/);
+  assert.match(css, /\.philip-toggle\[data-enabled="true"\] \.philip-toggle__knob/);
+});
+
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
   const [weather, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/alamo-weather.tsx", import.meta.url), "utf8"),

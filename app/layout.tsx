@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
-import { SmileyCursor } from "./smiley-cursor";
+import { PhilipToggle } from "./philip-toggle";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -71,7 +71,7 @@ export default function RootLayout({
         className={`${newsreader.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <SmileyCursor />
+        <PhilipToggle />
       </body>
     </html>
   );

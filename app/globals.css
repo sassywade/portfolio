@@ -88,6 +88,7 @@ html[data-top-pet-active="true"] body {
 html[data-top-pet-active="true"] .site-header--pages,
 html[data-top-pet-active="true"] .pranathi-intro--home,
 html[data-top-pet-active="true"] .pranathi-work,
+html[data-top-pet-active="true"] .philip-toggle,
 html[data-top-pet-active="true"] .meadow-settings {
   transform: translate3d(0, var(--top-pet-pull-y), 0);
   will-change: transform;
@@ -104,6 +105,7 @@ html[data-top-pet-active="true"] .hero-meadow {
   .site-header--pages,
   .pranathi-intro--home,
   .pranathi-work,
+  .philip-toggle,
   .meadow-settings {
     transition: none !important;
   }
@@ -5325,6 +5327,100 @@ em {
   }
 }
 
+/* Philip can quietly leave the meadow when a visitor wants less mischief. */
+.philip-toggle {
+  position: fixed;
+  z-index: 81;
+  top: clamp(24px, 3.5vw, 42px);
+  right: calc(clamp(20px, 3.5vw, 52px) + 48px);
+  opacity: 0;
+  pointer-events: auto;
+  transition: opacity 180ms ease, transform 450ms cubic-bezier(.22,.7,.2,1);
+}
+
+.philip-toggle[data-ready="true"] {
+  opacity: 1;
+}
+
+.philip-toggle__switch {
+  appearance: none;
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 36px;
+  border: 1px solid rgba(36, 35, 33, 0.16);
+  border-radius: 999px;
+  padding: 0;
+  background: rgba(101, 98, 95, 0.2);
+  box-shadow: 0 8px 22px rgba(36, 35, 33, 0.08);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: background-color 220ms ease, border-color 220ms ease;
+}
+
+.philip-toggle[data-enabled="true"] .philip-toggle__switch {
+  border-color: rgba(0, 47, 167, 0.42);
+  background: var(--acid);
+}
+
+.philip-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(36, 35, 33, 0.2);
+  transform: translateX(0);
+  transition: transform 300ms cubic-bezier(.22,.7,.2,1);
+}
+
+.philip-toggle[data-enabled="true"] .philip-toggle__knob {
+  transform: translateX(28px);
+}
+
+.philip-toggle__knob img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.philip-toggle__tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  width: max-content;
+  border: 1px solid rgba(36, 35, 33, 0.14);
+  padding: 5px 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 6px 18px rgba(36, 35, 33, 0.1);
+  color: #65625f;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.055em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  text-transform: uppercase;
+  transform: translate(-50%, -3px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.philip-toggle:hover .philip-toggle__tooltip,
+.philip-toggle:focus-within .philip-toggle__tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.philip-toggle__switch:focus-visible {
+  outline: 2px solid var(--acid);
+  outline-offset: 3px;
+}
+
 /* One quiet gear now contains both meadow and wind prototype controls. */
 .meadow-settings {
   position: fixed;
@@ -5727,6 +5823,30 @@ em {
 }
 
 @media (max-width: 580px) {
+  .philip-toggle {
+    top: 16px;
+    right: 59px;
+  }
+
+  .philip-toggle__switch {
+    width: 58px;
+    height: 33px;
+  }
+
+  .philip-toggle__knob {
+    width: 27px;
+    height: 27px;
+  }
+
+  .philip-toggle[data-enabled="true"] .philip-toggle__knob {
+    transform: translateX(27px);
+  }
+
+  .philip-toggle__knob img {
+    width: 21px;
+    height: 21px;
+  }
+
   .meadow-settings {
     top: 16px;
     right: 16px;
@@ -5744,6 +5864,10 @@ em {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .philip-toggle,
+  .philip-toggle__switch,
+  .philip-toggle__knob,
+  .philip-toggle__tooltip,
   .meadow-settings__gear,
   .meadow-settings__panel {
     animation: none;
