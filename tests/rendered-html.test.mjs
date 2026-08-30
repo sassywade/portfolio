@@ -171,9 +171,11 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
   assert.match(smiley, /const HERO_COPY_CLEARANCE = 24/);
   assert.match(smiley, /\.pranathi-intro--home > \.pranathi-name, \.pranathi-intro--home > \.pranathi-bio/);
+  assert.match(smiley, /const heroSection = document\.querySelector<HTMLElement>\("\.pranathi-intro--home"\)/);
+  assert.match(smiley, /heroSection\.getBoundingClientRect\(\)\.bottom <= 0/);
   assert.match(smiley, /const pointerIsNearHeroCopy =/);
   assert.match(smiley, /cursor\.dataset\.heroCopy = isNearHeroCopy \? "near" : "clear"/);
-  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastWork \|\| isNearHeroCopy \|\| miniaturePhase !== "off"\) return/);
+  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| isNearHeroCopy \|\| miniaturePhase !== "off"\) return/);
   assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
   assert.match(smiley, /const FACING_CHANGE_DELAY = 240/);
   assert.match(smiley, /const FACING_INTENT_MEMORY = 180/);

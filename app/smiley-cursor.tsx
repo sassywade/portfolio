@@ -67,6 +67,7 @@ export function SmileyCursor() {
     const heroCopyTargets = Array.from(document.querySelectorAll<HTMLElement>(
       ".pranathi-intro--home > .pranathi-name, .pranathi-intro--home > .pranathi-bio",
     ));
+    const heroSection = document.querySelector<HTMLElement>(".pranathi-intro--home");
 
     if (!cursor || pathname !== "/" || !hasFinePointer.matches || prefersReducedMotion.matches) {
       return;
@@ -92,7 +93,7 @@ export function SmileyCursor() {
     let windStartedAt: number | null = null;
     let previousFrameTime = performance.now();
     let hasPointerPosition = false;
-    let isPastWork = false;
+    let isPastHero = false;
     let isNearHeroCopy = false;
     let idleTimer: number | null = null;
     let idleStartedAt: number | null = null;
@@ -157,7 +158,7 @@ export function SmileyCursor() {
       pendingFacing = nextFacing;
       facingTimer = window.setTimeout(() => {
         facingTimer = null;
-        if (pendingFacing !== nextFacing || isPastWork) return;
+        if (pendingFacing !== nextFacing || isPastHero) return;
 
         const intentStillMatches = nextFacing === 1
           ? facingIntent > FACING_INTENT_THRESHOLD
@@ -528,12 +529,12 @@ export function SmileyCursor() {
 
     const armIdleMischief = () => {
       clearIdleTimer();
-      if (!hasPointerPosition || isPastWork || isNearHeroCopy || miniaturePhase !== "off") return;
+      if (!hasPointerPosition || isPastHero || isNearHeroCopy || miniaturePhase !== "off") return;
 
       const remainingDelay = Math.max(0, IDLE_MISCHIEF_DELAY - (performance.now() - lastMoveTime));
       idleTimer = window.setTimeout(() => {
         idleTimer = null;
-        if (!hasPointerPosition || isPastWork || isNearHeroCopy) return;
+        if (!hasPointerPosition || isPastHero || isNearHeroCopy) return;
         idleStartedAt = performance.now();
         motionLevel = 0;
         windStartedAt = null;
@@ -545,20 +546,19 @@ export function SmileyCursor() {
     };
 
     const handleScroll = () => {
-      const work = document.getElementById("work");
-      const nextIsPastWork = Boolean(work && work.getBoundingClientRect().bottom <= 0);
+      const nextIsPastHero = Boolean(heroSection && heroSection.getBoundingClientRect().bottom <= 0);
 
-      if (hasPointerPosition && !nextIsPastWork) {
+      if (hasPointerPosition && !nextIsPastHero) {
         syncHeroCopyProximity(inputX, inputY);
       }
 
-      if (nextIsPastWork === isPastWork) {
+      if (nextIsPastHero === isPastHero) {
         return;
       }
 
-      isPastWork = nextIsPastWork;
+      isPastHero = nextIsPastHero;
 
-      if (isPastWork) {
+      if (isPastHero) {
         resetMiniatureInteraction();
         stopIdleMischief();
         stopHappyReaction();
@@ -580,7 +580,7 @@ export function SmileyCursor() {
         return;
       }
 
-      if (isPastWork) {
+      if (isPastHero) {
         return;
       }
 
