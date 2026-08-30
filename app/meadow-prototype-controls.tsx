@@ -30,6 +30,7 @@ type MeadowSettingsProps = {
   environmentStyle: AlamoStyle;
   atmosphere: PortfolioAtmosphere;
   workGridColumns: WorkGridColumns;
+  heroHighlights: boolean;
   variant: MeadowVariant;
   rollingMeadow: RollingMeadow;
   flatTexture: FlatMeadowTexture;
@@ -42,6 +43,7 @@ type MeadowSettingsProps = {
   onEnvironmentStyleChange: (style: AlamoStyle) => void;
   onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
   onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
+  onHeroHighlightsChange: (isEnabled: boolean) => void;
   onVariantChange: (variant: MeadowVariant) => void;
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
   onFlatTextureChange: (texture: FlatMeadowTexture) => void;
@@ -56,6 +58,7 @@ export function MeadowSettings({
   environmentStyle,
   atmosphere,
   workGridColumns,
+  heroHighlights,
   variant,
   rollingMeadow,
   flatTexture,
@@ -68,6 +71,7 @@ export function MeadowSettings({
   onEnvironmentStyleChange,
   onAtmosphereChange,
   onWorkGridColumnsChange,
+  onHeroHighlightsChange,
   onVariantChange,
   onRollingMeadowChange,
   onFlatTextureChange,
@@ -206,6 +210,27 @@ export function MeadowSettings({
                 3 columns
               </button>
             </div>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-hero-highlights`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-hero-highlights`}>Hero highlights</h2>
+                <small>Playful click affordances</small>
+              </div>
+              <button
+                type="button"
+                className="meadow-settings__motion-toggle"
+                aria-pressed={heroHighlights}
+                data-cuelume-toggle="bloom"
+                onClick={() => onHeroHighlightsChange(!heroHighlights)}
+              >
+                {heroHighlights ? "On" : "Off"}
+              </button>
+            </div>
+            <p className="meadow-settings__note">
+              Adds color, company marks, and focused hover states to the clickable hero text.
+            </p>
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-philip`}>

@@ -35,6 +35,7 @@ export function HeroMeadow() {
   const [meadowHeight, setMeadowHeight] = useState(100);
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
   const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(3);
+  const [heroHighlights, setHeroHighlights] = useState(false);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
   const environment = getAlamoStyle(environmentStyle);
@@ -76,6 +77,11 @@ export function HeroMeadow() {
     document.documentElement.dataset.workColumns = String(workGridColumns);
     return () => delete document.documentElement.dataset.workColumns;
   }, [workGridColumns]);
+
+  useEffect(() => {
+    document.documentElement.dataset.heroHighlights = heroHighlights ? "true" : "false";
+    return () => delete document.documentElement.dataset.heroHighlights;
+  }, [heroHighlights]);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -249,6 +255,7 @@ export function HeroMeadow() {
         environmentStyle={environmentStyle}
         atmosphere={atmosphere}
         workGridColumns={workGridColumns}
+        heroHighlights={heroHighlights}
         variant={meadowVariant}
         rollingMeadow={rollingMeadow}
         flatTexture={flatMeadowTexture}
@@ -261,6 +268,7 @@ export function HeroMeadow() {
         onAtmosphereChange={setAtmosphere}
         onEnvironmentStyleChange={setEnvironmentStyle}
         onWorkGridColumnsChange={setWorkGridColumns}
+        onHeroHighlightsChange={setHeroHighlights}
         onVariantChange={setMeadowVariant}
         onRollingMeadowChange={(nextMeadow) => {
           setRollingMeadow(nextMeadow);

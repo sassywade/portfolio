@@ -207,6 +207,24 @@ test("lets visitors toggle Philip from inside the prototype picker", async () =>
   assert.match(css, /\.philip-toggle\[data-enabled="true"\] \.philip-toggle__knob/);
 });
 
+test("keeps colorful hero highlights optional and off by default", async () => {
+  const [hero, picker, css] = await Promise.all([
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(hero, /const \[heroHighlights, setHeroHighlights\] = useState\(false\)/);
+  assert.match(hero, /document\.documentElement\.dataset\.heroHighlights = heroHighlights \? "true" : "false"/);
+  assert.match(picker, />Hero highlights<\/h2>/);
+  assert.match(picker, /aria-pressed=\{heroHighlights\}/);
+  assert.match(picker, /onHeroHighlightsChange\(!heroHighlights\)/);
+  assert.match(css, /html\[data-hero-highlights="true"\] \.hero-inline-action/);
+  assert.match(css, /\.hero-company__mark,[\s\S]*?display:\s*none;/);
+  assert.match(css, /html\[data-hero-highlights="true"\] \.hero-company__mark/);
+  assert.match(css, /html\[data-hero-highlights="true"\] \.pranathi-bio:has/);
+});
+
 test("uses a linear editorial case-study template without navigation chrome", async () => {
   const [page, css] = await Promise.all([
     readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
