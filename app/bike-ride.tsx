@@ -350,6 +350,7 @@ export function BikeRide() {
         type="button"
         className="bike-word"
         data-riding="false"
+        data-cuelume-toggle="pulse"
         aria-label="Release miniature Neel on a bike onto the meadow"
         onClick={() => launchRef.current()}
       >

@@ -165,6 +165,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(layerHost, /document\.querySelector<HTMLElement>\("\.hero-meadow"\)/);
   assert.match(layerHost, /window\.requestAnimationFrame/);
   assert.match(bike, /const FRAME_URLS = \[/);
+  assert.match(bike, /data-cuelume-toggle="pulse"/);
   assert.match(bike, /createPortal/);
   assert.match(bike, /\}, \[meadowHost\]\)/);
   assert.match(bike, /surfaceByColumn/);
@@ -186,6 +187,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(bike, /data-meadow-surface="active"/);
   assert.match(bike, /meadow\.dataset\.meadowVariant === "flat"/);
   assert.match(photographer, /const FRAME_URLS = \[/);
+  assert.match(photographer, /data-cuelume-toggle="scan"/);
   assert.match(photographer, /createPortal/);
   assert.match(photographer, /\}, \[meadowHost\]\)/);
   assert.match(photographer, /const PHOTO_SEQUENCE = \[/);
@@ -206,6 +208,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(photographer, /prefers-reduced-motion: reduce/);
   assert.match(photographer, /data-meadow-surface="active"/);
   assert.match(backpacker, /const FRAME_URLS = \[/);
+  assert.match(backpacker, /data-cuelume-toggle="arrival"/);
   assert.match(backpacker, /createPortal/);
   assert.match(backpacker, /\}, \[meadowHost\]\)/);
   assert.match(backpacker, /const WALK_FRAME_ORDER = \[/);
@@ -274,7 +277,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
   assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*11px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
-  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*clamp\(56px, 6\.5vw, 96px\)/);
+  assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*clamp\(68px, 7\.35vw, 110px\)/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*z-index:\s*3;[^}]*radial-gradient\(/);
   assert.match(css, /\.cypress-tree__ground-shadow\s*\{[^}]*mix-blend-mode:\s*multiply/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__canvas\s*\{[^}]*z-index:\s*1;/);

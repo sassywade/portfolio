@@ -342,6 +342,7 @@ export function PhotoDrop() {
         type="button"
         className="photo-word"
         data-photographing="false"
+        data-cuelume-toggle="scan"
         aria-label="Release miniature Neel with a camera onto the meadow"
         onClick={() => launchRef.current()}
       >

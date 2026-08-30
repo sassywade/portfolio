@@ -334,6 +334,7 @@ export function BackpackWalk() {
         type="button"
         className="backpack-word"
         data-walking="false"
+        data-cuelume-toggle="arrival"
         aria-label="Release miniature Neel backpacking onto the meadow"
         onClick={() => launchRef.current()}
       >

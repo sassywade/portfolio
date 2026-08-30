@@ -4672,7 +4672,7 @@ em {
 }
 
 .hero-meadow[data-meadow-variant="living"] > .cypress-tree {
-  bottom: clamp(56px, 6.5vw, 96px);
+  bottom: clamp(68px, 7.35vw, 110px);
 }
 
 .hero-meadow > .cypress-tree .cypress-tree__ground-shadow {
