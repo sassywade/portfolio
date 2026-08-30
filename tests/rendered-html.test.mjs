@@ -216,7 +216,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /cursor\.dataset\.miniature = "blow"/);
   assert.match(smiley, /new CustomEvent\(PET_BLOW_EVENT\[miniature\.kind\]/);
   assert.match(smiley, /miniature\.kind === "cypress"/);
-  assert.match(smiley, /\{ direction: miniatureFacing, strength: 1\.16, duration: 1500 \}/);
+  assert.match(smiley, /\{ direction: miniatureFacing, strength: 0\.92, duration: 1500 \}/);
   assert.match(smiley, /miniatureKind === "cypress" \? "strained" : "strong"/);
   assert.match(smiley, /cursor\.dataset\.idle = "approach"/);
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);

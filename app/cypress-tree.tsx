@@ -48,7 +48,7 @@ export function CypressTree({ wind, isPlaying }: CypressTreeProps) {
       const detail = (event as CustomEvent<{ direction?: -1 | 1; strength?: number; duration?: number }>).detail;
       treeRef.current?.applyGust({
         direction: detail?.direction === -1 ? -1 : 1,
-        strength: detail?.strength ?? 1.16,
+        strength: detail?.strength ?? 0.92,
         duration: detail?.duration ?? 1500,
       });
     };

@@ -302,7 +302,7 @@ export function SmileyCursor() {
           const detail = miniature.kind === "photographer"
             ? undefined
             : miniature.kind === "cypress"
-              ? { direction: miniatureFacing, strength: 1.16, duration: 1500 }
+              ? { direction: miniatureFacing, strength: 0.92, duration: 1500 }
               : { direction: miniatureFacing };
           window.dispatchEvent(new CustomEvent(PET_BLOW_EVENT[miniature.kind], { detail }));
         }
