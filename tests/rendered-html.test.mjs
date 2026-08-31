@@ -215,11 +215,15 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(garden, /const MEADOW_PRIMARY = fixedMap\(String\.raw/);
-  assert.match(garden, /const CYPRESS_FOLIAGE = fixedMap\(String\.raw/);
-  assert.match(garden, /const STANDING_HAIR = fixedMap\(String\.raw[\s\S]*?▓▓▓▓▓/);
-  assert.match(garden, /const CYCLIST_BODY = fixedMap\(String\.raw[\s\S]*?▓▓▓▓▓▓/);
-  assert.match(garden, /The rider is filled, while the bicycle deliberately keeps its open wheels/);
+  assert.match(garden, /const MEADOW_PRIMARY = /);
+  assert.match(garden, /const CYPRESS_FOLIAGE = /);
+  assert.match(garden, /const CYPRESS_WOOD = /);
+  assert.match(garden, /const PIXEL_BACKPACKER = /);
+  assert.match(garden, /const PIXEL_STANDING = /);
+  assert.match(garden, /const PIXEL_CYCLIST = /);
+  assert.match(garden, /function PixelSprite/);
+  assert.match(garden, /h: "hair"/);
+  assert.match(garden, /b: "blue"/);
   assert.match(garden, /data-theme=\{theme\}/);
   assert.match(garden, /data-meadow-variant=\{variant\}/);
   assert.doesNotMatch(garden, /Math\.random|<img\b|requestAnimationFrame/);
@@ -239,6 +243,7 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
   assert.match(css, /\.ascii-garden\[data-theme="light"\]/);
   assert.match(css, /--ascii-underprint:\s*rgba\(142, 145, 79, 0\.115\)/);
   assert.match(css, /\.ascii-garden__tree\s*\{[\s\S]*?bottom:\s*var\(--ascii-tree-bottom-rolling\)/);
+  assert.match(css, /\.ascii-garden__pixel-sprite\s*\{[\s\S]*?display:\s*grid/);
   assert.match(css, /\.ascii-garden\[data-meadow-variant="flat"\] \.ascii-garden__ground/);
   assert.match(css, /html\[data-environment-style="ascii-garden"\]\[data-ascii-garden-theme="dark"\]/);
   assert.match(css, /html\[data-environment-style="ascii-garden"\]\[data-ascii-garden-theme="light"\]/);

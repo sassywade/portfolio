@@ -38,236 +38,36 @@ type DetailStyle = CSSProperties & {
   "--ascii-detail-size"?: string;
 };
 
-const fixedMap = (value: string) => value.replace(/^\n/, "").replace(/\n$/, "");
+type PixelSpriteStyle = CSSProperties & {
+  "--pixel-columns": number;
+  "--pixel-rows": number;
+};
 
-// These matrices are deliberately hand-authored and fixed. The two palettes
-// render the exact same cells, so changing theme never changes the scene.
-const MEADOW_PRIMARY = fixedMap(String.raw`
-  .   .  .   .   .  .   .  .   .   .  .   .  .   .  .   .   .  .   .  .   .  .   .   .  .   .  .   .  .   .   .  .   .  .   .   .  .   .  .   .  .   .   .
-.  .   .  ..  .   .  . ..  . .  .   . .. .  .  .   .  . .  .   . ..  .   . .   .  . ..  . .  .   .  . .  .   . ..  .  .  .   . .  .   .  .  . .  .   .  .
- .. . .. .  . .. . .  . . .. .  . .. . .  . .. . . .. . .  . .. .  .. . .  . .. . .  . .. . . .. .  . .. . .  . .. . .  . .. .  .. . .  . .. . .  . .. .
-. .. . . .. . . .. . .. . . .. . . .. . .. . . .. . . .. . .. . . .. . . .. . .. . . .. . . .. . .. . . .. . . .. . .. . . .. . . .. . .. . . .. . . ..
-.. . ... . .. ... . .. . ... . .. ... . .. . ... . .. ... . .. . ... . .. ... . .. . ... . .. ... . .. . ... . .. ... . .. . ... . .. ... . .. . ... . .. ...
-................................................................................................................................................................
-... .... ... ..... .... ... .... ..... ... .... ... ..... .... ... .... ..... ... .... ... ..... .... ... .... ..... ... .... ... ..... .... ... .... ..... ... ....
-................................................................................................................................................................
-.... ...... ..... ...... ...... ..... ...... ..... ...... ...... ..... ...... ..... ...... ...... ..... ...... ..... ...... ...... ..... ...... ..... ...... ...... ....
-................................................................................................................................................................
-`);
+// These fixed matrices are sampled once from the approved composition, then
+// committed as authored glyph maps. Nothing is generated or randomized in the
+// browser, so both palettes always render the exact same scene.
+const MEADOW_PRIMARY = "                                .yv                                        wv'.         v                          ;v                                    ;uyu'       'uwuYvw\n                 ,;             yuy                                        vyuy        vY.                                                            ;,'vw.;.'      vwvYuyu\n                 wu             vw.                                        yuwu;       yv                                                            ', .yv;,','     wuwVwuw.     .;,',;,;,;,;.;,;.\n        ' '      uw                                                      ,yuwuw,       vw                                               ;.           ,;.;.;,'.'   ;,;uyvwvyvyvy,yvyuyv;vyvyvyvyvyuy,;,;,\n,y,;,;,yvyvyv;,;vwuy,;,;                 '.'                             ' yuyv'       yu'                                      .'.     v'           ;,',;,;vy,y,;,yvyv;v;vyv;,y,yvy.;,y,yv;v;,y,yv; ;,\n;,;,;,'.;v;,;,;,;vy.yvyvyv;,y,;.'        ,wv                             .   .'        vw,                                      'vy    ,wv   .',yvy,yvw.yv;vy,yv;,;,y,;,;,;vy,; ;.;,',;,',;,;,; yuy, ,\n,; ;, v;.y.;,;,;.yv;,',y,;,;,y,yvwv;,;,'.yuy                            .' y, ,        yv                                        wu .'.;vwvyvyv;v;,;,;vy,;,;v',',;.y,y,;,w,;.;, , .y.;  ,;v;.;, ,yv; ;,\n , .; y,;,'.;,  ;v;,; ;,;,',',;,;v;,;vy,yvwu',;,'.                      '  uw.'.       vy                         '           '.wuwvwvyvyvy,;,;,y,;.;,; ;, ,; ; ;,    ','\n,' '  .;,y.;,',;,;v , vy,;,; yv;,;,;,;,',y,;,;,wvy,yvyv;               ;.  ;uw.'       y,                        'v'     ;vyvyvyu;,;v;,;vy.;, , ,;,',', ,  '  , , .y,;,wv',;. , .'.;.;  . ,' ;  .; ;  ,\n ,;,',;,',         v; ; ;. .'.;  v;,; ;.',;,',;vy,;v;vyv;vwuy,yvyv;    .   ,yv' ;      vy                        ,Yvyvyvy,;v;,;,;. v; ;.;,'    .   ,;.y, u ,; ;.      yuw        .\n   ;   wu;  , ,;,y. , ,         ,      ',y, .'vy,',',;v;.;vy,;,;,;vyvyv;vyvyvyv;,;     ;v'     ;,;,;.yvy,;,yvwvy,yuy,;,;,;,;v',;,y,;, ,;,;.; ;  ,','.'v vyv     ,  '  uwu'.;,;  , .' ;  , ,;v' ' '.  ;\n     .yvy     yv   ,  ',;v;,',;. v , ,y,',',  ;    ,'v;,;.;,;,',;,',;,;,;.yv;,;v;vy,yuyvyuy,yvyuyvyv;,yv;,;,;,;,',;v; ;, ,y.'   ;.  '  ,       .   . ,y yvy.; ;.;,       .;uy.             ,yv         ,\n.',  y.',;  ,  ' y, .   ,'v',y.    ' ;vyv;.' ; ;vy ;.; '.;,;   ;, ,y,' ;.',;,;,y,;,;,y,;vy,;,;,y.;,;,;,;,',',;,; ;v;,   , .yv; ;,'vw,' ;,;.' ;  ,; ; yv       . .      ;     ;   ' ;,  ;  .;Vw  .' ;\n            '  ,yu' ' '.;vwv', ,'.  ; ' yu;, ,'vwv  ',',;v', ,; ;.;.'uw ;.;.;,;v ,;.;,',;.; ',;,;,;, ,'  .;   '.     ,;. ,;v;. .;.  ' '. .    yuy   '.; ; ;  .;v; ',' '  . .' ;,      '    vwu' '. .  '\n ;  . ,',  ',;  uw, .;.'.'v; '         ;     ;.;Vw ; ;,y ;v;, .;,' y.yu',;,'. .;.;v ,;, .;,;  ,  ; ;.;.  ',y,y.; ',', .y  , ,; ;,'.y, ,;u;.', .y,;,y,',     , ,w,             vw.; ; y,         .'   ',\n     ,  ;  . . .wuy ; 'v;,',',;,',;  ,; ;,;. , ,;,y y,;v' 'v;,    ' ;  ,  ;. ,'uy.;,;,'.; ; ', ,;v; '  ,   , ,  wv .; ;        . . ,'   yv         ,y   '    ,'v; ;,y.;,  ; ;.;v     ,y ',',',  ;. .  '\n              ,      yv            '.         .y.  wuy ; ;,  ; wv .; ; ; ;,'. .Yu , , .'.;. .     . uy ;.;,;.;. vy ;.  ;v; '.  ; '.  ',      y,;,',;,;, , .  ;                    , ,;  . .;       ;  ,\n ,  ; yv ,  ;    ,' ;vy,' ; ', , , .; ;, , , .' ' ',yv'        vw '    .      ;uw,;  , .; y   ;.y.  yv   .;        .'.'.wv    '.;.',' '.;.;.;\n      ,;      ,;    ,;,                      ;. , ,' ;, ,',;, , , ,;, ,y,;,', ,;,;v .', vy.yvy, .;,; ; ;   ',;.;  ,;.',yuw  . ,;                 'v;,;,;.'.','.',',;.','.;, ,;,', ,;,;,',;,;.' ','\n ,' ;,  ; '. .  '  , , ,;  ,  ; ;,;. . vwv' ;,;v;  , ,;, .' ; '.; ', ,  ',y. .      ',    'v     .y   ;  ,y        . .' '  .; ' '  ,  '.; '.;, ,; y,y,;.','.'.y.'.',;,;,'v' ',y,; ;vyv;,;,;, . ,;,'\n                        vw,      y            .'.        ;,       .; ;  , vy ;,'. ,   , .;v;  ,;. .;    ,'   ;  .  ; ;. ,  ; yv          'vy            .;.;,',; ;.'.'.;,' '.'.'.','    .', ,' ','\n   ,' '. ,  yv . ,' ; ',yv  ;. ,yu;  . .; ;  ,     , ,;uy ',yv; ;.;,',  ' '. .  ' ' wv .' '  . . v'  . . ,yv;  .  ' '  ,y.; ;vy, ,' ;  , ,Yu  ', ,; ;   'v;,y,yv ,;,'v',yv ,;uyvyvy,' ; yvy yv;vyv;\n   '.    '       '. .  yVwu      ;,    '. .  ' ;vy ' '.yv .'vyv    ' ;  , ,' ;  , , vy ;, ,  ; ;  , .; ; ;uw,  ;  . ,  ; '. .  ' '. .  ' yVY.\n;,   ,  ;  , ,  ;  , .; ;.',  ; ', ,  ;  ,  ; ', ,' ;  , ,',wVw, ,  ; ;. ,  ; ;. ,;.; ;  , ,  ; ', ,  ; ;,;v ,' ;  , ,' ;  , ,  ; ', ,  ; ;. ,  ; ;. ,  ; ;. ,  ; ;. , .; ; ;. ,  ; ;. ,  ; ;, ,' ;  ,\n.'   '  .  ' '  .  ' '. .  '  . .' '  .  '  . .' '. .  ' '.',;,' '  . .' '  . .' ' '. .  ' '  . .' '  . .' ' '. .  ' '. .  ' '  .  ' '  . .' '  . .' '  . .' '  . .  ' '. . .' '  . .' '  . .' '. .  '\n";
+const CYPRESS_FOLIAGE = "\n                                                     v\n                                            ,;, .; ;vwuw. v;,'.     .\n                                            ;vYVYVYVyuwVwVY,yuy,'vyuY,;\n                                    ,;uwuwu;  ,'vyuYuwvwuwv ,yvYuyuyuwvyv'\n                   ,',     ,;,y.;v;v;,wuYvyv;,;.; yvwuwuwuwuYuwVyvwuYv'. ,;,;,;\n                   ;uYVwuy,wuYVYVYVYuwuyuyvwVYVYVwvy,y.;vyu;uyvwvwu;uwVYVYVYVy,\n                  ;  .yVYVyVYuwuyuwuYuYVYuYVYuw,yu;            .',wuYuwuyv\n              ,;. vwuwvyuYuYVYuYVwVYVwVwuwuwuw,yu ,',',;, ,;,yvy.;v;vy,y,;vyuyv;\n              'vYuwuwuYuwuwuwvwuwuwvy,yv;,;,;vyvy.wuwVYVyvYVYuyv;,; ;,yVwVYVYVYu;,\n         ;vwuwVwVyuwuwuyv;.                      ;v;v;,yvw ;uwuYVYu;,;,;  .'v;v;\n           uyuyvw,yv;vyvy,;, . vy.         ,',  ;  .; 'v;,wuYuwVwVy '\n            .y,',',      ','.'  ,y, ,;   'vy         y.;vwuyvyvwuw.\n                  y. ,'        vy  .  ;     ;v' ' ;vyVYVw,;,  'u;,y      vyuYVYVYVYVYvy\n                      ,  ;,'      ,;uwuwv'   ;vyVwVwuwvy.y,' ;vyvwv ,yvw.y,;,',y,y.y,\n                            ;uyuwuwuwuYu   ,yvwvw,y.;. ,',;.  'v;uwvYVYVwuyvy\n                    .;,  ;,;,YVYVYVw,wv; y,' yvy. ,;. u         .;vyuyuw.y\n                 v;uwuyvy,;,'. .;.'   yv .' '        ,;      ,y,;.               . v\n        ,;vyv;vyuyVYVYuYuy,          'u;   '.   ,   ,w,  ;v'.;v      y y.;v;vyvwvwuw,',\n        ;uYVYVYVYVYVYVwvy,y,          y,  y, .y,     v;v',      ;vyvwVYVwVwuYVYVYVYVwu;\n           yuyVYVwuwvyuwVYuYVwVwvy ;  v    y,;      ,w,      'vYuwuYVwvwvwvyuwvy,;.y,'\n           vwuwvYuwVYVYVwuwuYuyuwuYuy,wv;  .;.;   ;uy,         uwuYvwvyu;u' y  ,   .;,;\n           ;v;uYVyuwuwvyvyvyvy,wv',y.'Vwv   v;v v'vyv   ,;, v;v .yv'uyvy,;  ,  '\n        yuYVYuy,' y   ;.  ;v',       ,;.    ;,yv  wuyu;vwuYVYuwVwv; ',','  .\n         ;vwvy,' '.;,y,y,y  ,;        .;   ;v;,yVwuwuYVYuwuyVwuw,y. ,;      ,;vy,y,\n                  ',;vyvy,;v;v             uY.y,wvw,;vyu; y,y ', ,  '       ' ',yuwv\n                       ',y.'v;,;      v .  y,    ;,           .',;.\n                         ,;,;vy,;.    ;vy  u;.  'u; ;.      ',yv;,\n                               y,y     wv  ;,   ,w,;,       vw,\n                            'u; w.     vw, ,'.  ;vy,      ;,\n                             '  ,'  v;  u;,',y  , ,      ;,     .', ,\n                               .yv  ;v  wv;,;, ,y ;      v' ;vyuwuwuYuwvy.\n                                  .;,; ;,wuyvw.yuwuwuy.yuwvwVwuYVwVYuyvyv\n                       uyvyv         ,;,'.;,;, vyv'vwVYVwvwVYuwVwuwuYuwu'.'\n                      ,yu;v;         ',;,; ' ','uwVyuwuwvYuwuwvYvwVwuwuyuYuwuy,\n                      wvw,            ',',    ' yuy,' ;   ;. .;vyuwuwuwVwVYVYVwv\n                                         ;. ,y.       .       .;v', ,yvw,y,yv\n                                       ,;,;.;v',;    v;     y,  ','.;. . . .;\n                                        v;.;vy. .   vyv   .yv   ,y,'.\n                                        yv;v;vy    ,wVy 'v;\n                                         ;.;vy,;, .wv;,\n                     ,                   vyvyv  ; wvy.                                y  v\n                    ,yv                  'uwvw, .wuyv'                               ;Vy,w\n                ;,',wvy                  .yvy,  yuy y                               ',Yv',\n               ;.;,;v                    ;,y,; yv;.;,                               ,yu\n              ;,;,  y.   .               .;,  ;vy, ,\n              v;vy,  ;  vy               ;,y  ,wv .y\n               .y.y '.w,;                v;, ,yu  ;v\n                ,'.; yu;,;.'            ,;. ,yvw, ,;\n           .','vwv'uYv;,;.;,            y ;,;,' ;.;,\n           ;  .; y,yu;.;,y. v           ,'   '    .y,           ,yv vy,y y,;u;vy y yvyv;,y,;v\n          ',;vy, v;u' 'v .;,y        . vy.',;v',; ' ', uy,y w,;v;vy  vy  .;,y.y. v vyvy,;v;vy.y,\n           ;v;v ,;vy. .;, ,yvy ;u;vw,yvwvyu;vw,yv',;,w,'v;v'vyvy.y, ,y,; y,;v',; ; wv;v;v;,;v'v;\n        ;.yvyv',y,;v'v;,    '. .'  . ,  ;,;, , .; ' '.  ' ;   '. .'  .'     '  . . .  '  v u' '\nv;vwvw.yv  y.;.', ,' y,;,;v'v; ;v'v  ;.; 'v  '.;  ,',y.;,;  ,  y  ,  y,; y.'v .;   ;,;,  yvyuy ;\n; yv'v',y  v'vyv;.;v',yv;.;.;  ,;. . ,  w,y,    ;  .;  ,;.  ;   ',;  ,;.  ;,; y, ,  ;.;  ,;vyv;.\nv' ;.;                         yv;      .           .   .   .    '.   .        '              .\n  ;     ;  v','.;.;  ,;.  ;.;";
+const CYPRESS_WOOD = "\n\n\n\n\n                                                     . .\n                                                     |/(. .:.\n                                                       .\n                                                                    /\n                             / .  :. /\\.|/\\.:.:                  .  \\    .\n                 :.\\.\\.\\/\\//)/.\\/  //\\///\\/      //\\.\\.\\             \\./.\\/\\  .\n                   .:.  \\\\\\/\\  . .\\\\\\\\\\/\\.\\.\\\\\\/\\ \\ \\  .            \\\n               \\.        :/|||/\\ \\/|||   :(\\/:      /\\      /\\.\\\n                /  / /:.\\      .//\\//.)/ )/  /          \\.)//\n                       :\\       /\\\\ . .\\{\\    .  :.:.\\.\\{\\/:/\n                           .|      . / ||     \\/|.\\/||\\|: :/:  /\n                                .:/\\//)) : //://)/)////           /\\///  :\n                     .   . .:     :\\{/\\/ /\\/\\\\ .{\\\\ :{\\      /\\\\\\\\\\ :\n                                    .|/| \\((. .:(   .(|:/:/|(\\.\n                    :                 ))  \\): ///   )})})/\n                                      {\\/  \\\\\\{\\    \\\\                        /\\.: :\n                              :       ||\\  /(/|  |\\/|/              : :  /\\||||/ | /:.\n                .: :  .\\/  :/\\/\\.\\ \\. //)   /\\) )/)//             .\\//))/)/)/\\/:\n                : :/  \\   :.\\      .\\\\{{\\{  {{\\/  \\.                \\/\\\\ \\\\/:\n               :|\\/(/\\  /\\ :|         ((/||\\|(/:/ |\\/:       \\/   |||||| :.||\\.\\\n                \\ :///\\/ .)/\\/:       }}\\.)/\\/   /)/\\/:/\\/: :/\\/:/}):    ///)/\\/\n                       \\\\\\/ \\\\{\\      {{{  {/\\   {{\\ :.{       {\\{/\\\\\\\\\\/:\n                         /|. .\\(\\.    \\(|.||||   {| ||\\      /||:.\n                          /)/ /\\ //    /}/)})/  .})//       /\\/\n                            \\\\\\.: \\{:  /{\\{{\\{  {{\\.      \\{{\n                              |(   (|   |((( \\  {:|       (\\\n                               .\\))/))  :/)/\\/\\/)/)     \\//\n                                  \\{/{{ /|\\\\.\\\\\\\\\\. .   \\\\\n                                   .|(\\| ((|\\||/ /\n                                     \\))/)))//)/     \\////.\\/:/\n                                      {{\\{{{\\{{/  :.:/{|\\\\\\/{/\\\\\\\n                                       ( (((.|(:( /|/(((.     /(.:     : \\.:\n                                       //)/):))/\\   \\}/)    :///  \\///// . .\n                                       :\\{\\\\.\\\\\\/   \\{{{ \\/{{\\{{/:.\\\n                                        |{(|\\|(||  /(||(({(/|\n                                        /))/.:/\\. .//)/}.\n                                        \\{\\\\ .\\.{ \\/\\|\\\n                     \\/                  ((|/:  (|(|({.\n                     })                  )/):/  /)/ /\n                    .\\                   \\\\{/\\ \\{{\\\\/\n                   /({|                  (|(|(|||(:(:\n                   })}}))                )}) \\)}///)\n                  \\|{  \\:               :{{\\ \\{\\\\ \\\\\n                  {{                    |((|/(|\\/  (\n                  })                    )))//}}/). )\n                  /\\                   \\{{\\{{{{ { \\\\\\\n                                       .||\\|\\/: |/| |\n                                        .\n                                             .\n                                             :.\n                                             /)))\n\n                                         .\\|:/";
 
-const MEADOW_SECONDARY = fixedMap(String.raw`
-       '       ,          '       ,         '         ,        '          ,        '         ,         '       ,          '       ,         '         ,       '
-  ,        '        ,         '       ,          '        ,        '          ,       '          ,        '       ,           '       ,         '        ,
-      ;        ,        ;        ,         ;        ,         ;       ,          ;        ,         ;        ,         ;        ,         ;       ,        ;
- ,        ;        ,         ;       ,          ;       ,         ;        ,          ;       ,         ;         ,       ;          ,        ;        ,
-     '        ,         '        ,       '         ,         '       ,          '        ,        '         ,        '        ,        '         ,       '
-  ;       ,         ;       ,         ;        ,         ;       ,         ;         ,        ;       ,          ;       ,         ;        ,         ;
-       ,        '        ,         '        ,       '          ,       '         ,         '       ,         '        ,        '        ,          '
-  ,         ;       ,         ;        ,        ;         ,         ;       ,          ;       ,         ;       ,         ;       ,          ;
-      '         ,       '         ,         '        ,        '         ,        '          ,        '         ,         '        ,       '
-   ,       ;         ,       ;         ,        ;       ,          ;        ,        ;         ,        ;         ,       ;         ,
-`);
+const PIXEL_BACKPACKER = "\n\n\n                     rhhhi\n                    rhhhhh\n                    rhhhhi\n                    rsssr  rrrrr\n                     rrsr rrrrrrr\n                      rrssrrrrrrr\n                     riiiiirrrrrr\n                     riiiiirrrrrrr\n                     riiisirrrrrrr\n                     riiiisrrrrrrr\n                     rrsiirrrrrirr\n               rrr  ssrrrsrrrrrrrr\n               rrrrrrssrrrirrrrrrr\n                irsirrrrrrrrrrrrrr\n               ii   rrrirrrrrrrrr\n               ii   rriirrrrrrrr\n              ii     iiii iiii\n              ii     iiii iiii\n             ii     ii ii i  ii\n             ii      i    i   i\n             ii      i iiii   ii\n            ii      riiiii    ii\n            ii      rrrrri     ii\n           ii        rrsr       ii\n          iii        rrssrr     iii\n          ii         rrrrrr      ii\n         ii            rrrsr      ii\n         ii            rrrss h    ii\n        ii             rr rsssi    ii\n        i              rr  siii     ii\n       ii             iiiiiiri      ii\n       i              iiiiiii        ii\n                    rriiriii          i\n  s  r  r           rrrirr\n  r     r ii r  s  r  r rr sr r ss s  rr  r\n          ii r  r  r  r rr sr r ss r  rr  r  s\n                   r  r ss r    rr rh     i  s\n  r rr  r  r                              i  r\n             ih    r    rr r  r ss    rrr\n             ih    r    sr r  r rr    rrr r\n  r     s    i                  ii  r        r";
+const PIXEL_STANDING = "\n\n\n\n            iiii\n          hhhhhs\n         hhhhhrsr\n         hhhhsssr\n           rrrrr\n           iss\n          isssi\n          hisiii\n          siisss\n          rrirsii\n          siiiiii\n          srsssrri\n          rrsssrrr\n          iirrsiii\n          rririii\n          rriisii\n          iiirrii\n          iirrsii\n          iirrii\n          cciiii\n          ccccc\n          cccccc\n          cccccc\n          cccccc\n          ccccc\n          cbccc\n          bbccc\n          ccccc\n          ccbcc\n          ccccc\n          iiicii\n          iiiirisi\n          siiisisr\n                  ss\n           r      ss\n           r\n             r\n             r\n                  rr";
+const PIXEL_CYCLIST = "\n\n\n\n\n                             i\n                           iiiiii\n                           iiiiii\n                            ssrsr\n                      iiiiiiirssr\n                    iiibbbbbbbsr\n                    ibbbbbbbbb\n                  iibbbbbbbbbr\n                 iibbbbbbbbbbrr\n                 iibbbbbbbbbrrr\n                 ibbbbbbbbbrrrrsrrrii\n                 ii     iirr rrrrrrii\n                    ii   rsr  ri rri\n                   ii iirrsriiiiir\n                    ci  rrsr  iii   i\n                    cciirsr  iiii iiiiii\n             iiiiiiiiiiirsiici iiii    iii\n            iiii   iiiiissiiiiii ii    iii\n           ii     iiiiiissiii ii  iii ii ii\n           ii   iii   iiiiii  i     ii   ii\n          ii  iiiii   iiiiii  i iii iiii  i\n          ii iiiiiiiiiiiiii   iiii  i ii ii\n           ii iiii   iiiiiii  hi  i     ii\n           iiiiiii   iiiiiii   iiii   iiii       h\n            iii ii  ii          iiiiiiii    s ss\n         s    iiiiiiis r  rr r  i\n         s  r  iiiiiss r  rr r\n            r       rr          s  r     r\n\n                  s    h\n                    rr h";
 
-const CYPRESS_FOLIAGE = fixedMap(String.raw`
-                                  vvVVVVvv
-                         vvvVVVVVVVVVVVVVVVVvv
-                  vvvVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-           vvvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-       vvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-            vvvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvvvv
-                     vvvVVVVVVVVVVVVVVVVVVvvvv
-                              vvvvvv
-         vvvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-     vvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-          vvvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-                       vvvVVVVVVVVVVVVVVvvvv
-                                 vvv
-                vvvVVVVVVVVVVVVVVVVVVVVVVVVvv
-          vvvVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-               vvvVVVVVVVVVVVVVVVVVVVVVVVvv
-                            vvvVVVVvv
-                                    vv
-                     vvvVVVVVVVVVVVVVVVVVVVvv
-                vvvVVVVVVVVVVVVVVVVVVVVVVVVVVVvv
-                     vvvVVVVVVVVVVVVVVVVVvv
-                                vvvvv
-                         vvvVVVVVVVVVVVVvv
-                     vvvVVVVVVVVVVVVVVVVVVvv
-                           vvvVVVVVVvv
-`);
-
-const CYPRESS_FOLIAGE_SOFT = fixedMap(String.raw`
-                              .,,''..,,.
-                       .,,''..    .,,''..,,.
-                .,,''..  .,,''..  .,,''..   .,,.
-          .,,''..  .,,''..   .,,''..  .,,''..   .,,.
-      .,,''..  .,,''..  .,,''..   .,,''..  .,,''..
-           .,,''..  .,,''..  .,,''..    .,,.
-                  .,,''..  .,,''..,,.
-
-        .,,''..  .,,''..  .,,''..  .,,''..,,.
-    .,,''..  .,,''..  .,,''..   .,,''..   .,,.
-         .,,''..   .,,''..   .,,''..,,.
-                    .,,''..,,.
-
-              .,,''..   .,,''..  .,,''..,,.
-         .,,''..   .,,''..   .,,''..    .,,.
-              .,,''..  .,,''..,,.
-
-
-                  .,,''..   .,,''..  .,,''..,,.
-             .,,''..  .,,''..   .,,''..   .,,.
-                  .,,''..   .,,''..,,.
-
-                       .,,''..  .,,''..,,.
-                   .,,''..  .,,''..   .,,.
-                        .,,''..,,.
-`);
-
-const CYPRESS_WOOD = fixedMap(String.raw`
-
-
-
-
-                           /|          |\
-                       ___/ |          | \___
-                    __/     |          |     \__
-                            |\        /|
-                 ____      /| \      / |      ____
-              __/    \____/ |  \____/  |\____/    \__
-                         /   |    ||    |   \
-                        /    |    ||    |    \
-                  _____/    /|    ||    |\    \_____
-               __/         / |    ||    | \         \__
-                          /  |    ||    |  \
-                         /   |    ||    |   \
-                     ___/    |    ||    |    \___
-                   _/       /|    ||    |\       \_
-                          / |    ||    | \
-                         /  |    ||    |  \
-                   _____/   |    ||    |   \_____
-                __/        /|    ||    |\        \__
-                          / |    ||    | \
-                         /  |    ||    |  \
-                        /   |    ||    |   \
-                       /   /|    ||    |\   \
-                      /   / |    ||    | \   \
-                     /   /  |    ||    |  \   \
-                    /   /   |    ||    |   \   \
-                   /   /   /|    ||    |\   \   \
-                  /___/___/ |    ||    | \___\___\
-                     _..___/      ||      \___.._
-                  __/             ||             \__
-               __/________________||________________\__
-`);
-
-const BACKPACKER_INK = fixedMap(String.raw`
-      ▓▓▓
-     ▓o ▓
-      /|\
-   __/ | \__
-  /    |    \
- /     |     \
-       |
-      / \
-  ___/   \___
- /           \
-/             \
-   /       \
- _/         \_
-'             '
-`);
-
-const BACKPACKER_PACK = fixedMap(String.raw`
-
-         ▓▓
-        ▓▓▓▓
-       ▓▓▓▓▓
-       ▓▓▓▓▓
-        ▓▓▓
-`);
-
-const STANDING_INK = fixedMap(String.raw`
-
-
-     o
-     -
-   \___/
-    /|\
-   / | \
-     |
-     |
-    / \
-    | |
-    | |
-   _| |_
-  '   '
-`);
-
-const STANDING_HAIR = fixedMap(String.raw`
-   ▓▓▓▓▓
-  ▓▓▓▓▓▓▓
- ▓▓     ▓▓
- ▓       ▓
-`);
-
-const STANDING_PANTS = fixedMap(String.raw`
-
-
-
-
-
-
-
-
-
-    ║ ║
-    ║ ║
-    ║ ║
-    ║ ║
-`);
-
-// The rider is filled, while the bicycle deliberately keeps its open wheels,
-// frame, spokes, and negative space.
-const CYCLIST_BIKE = fixedMap(String.raw`
-            __
-        ___/  \__
-     __/  /--\   \
-   _/____/    \___\_
-  /      \____/      \
- (   o----\__/----o   )
-  \_/      /\      \_/
-        __/  \__
-`);
-
-const CYCLIST_BODY = fixedMap(String.raw`
-        ▓▓▓
-       ▓▓▓▓▓
-      ▓▓▓▓▓▓▓
-       ▓▓▓▓▓▓▓
-         ▓▓ ▓▓
-        ▓▓   ▓▓
-        ▓     ▓
-`);
-
-const CYCLIST_SKIN = fixedMap(String.raw`
-          ▒
-         ▒▒
-            ▒▒
-             ▒▒
-`);
 
 const DETAILS: Detail[] = [
-  { glyph: "Y\n|", tone: "olive", x: "8%", bottom: "21%" },
-  { glyph: ";)_", tone: "cyan", x: "17%", bottom: "28%" },
-  { glyph: "vYv\n\\|/", tone: "pink", x: "22%", bottom: "13%" },
-  { glyph: "(o)\n/|\\", tone: "pink", x: "39%", bottom: "7%" },
-  { glyph: ";)_", tone: "cyan", x: "57%", bottom: "30%" },
-  { glyph: "vvv\n^^^", tone: "blue", x: "65%", bottom: "17%" },
-  { glyph: "vYv\n/|\\", tone: "pink", x: "72%", bottom: "8%" },
-  { glyph: "(·)", tone: "cyan", x: "83%", bottom: "28%" },
-  { glyph: "Y\n|", tone: "olive", x: "92%", bottom: "13%" },
-  { glyph: "wYw\n\\|/", tone: "rust", x: "96%", bottom: "21%" },
+  { glyph: "Y\n|", tone: "olive", x: "8%", bottom: "20%" },
+  { glyph: ";)_", tone: "cyan", x: "16%", bottom: "27%" },
+  { glyph: "vYv\n\\|/", tone: "pink", x: "21%", bottom: "11%" },
+  { glyph: "(o)\n/|\\", tone: "pink", x: "31%", bottom: "7%" },
+  { glyph: "Y\n|", tone: "olive-soft", x: "43%", bottom: "18%" },
+  { glyph: ";)_", tone: "cyan", x: "57%", bottom: "28%" },
+  { glyph: "vvv\n^^^", tone: "blue", x: "65%", bottom: "15%" },
+  { glyph: "vYv\n/|\\", tone: "pink", x: "72%", bottom: "7%" },
+  { glyph: "(·)\n››", tone: "cyan", x: "79%", bottom: "23%" },
+  { glyph: "Y\n|", tone: "olive", x: "87%", bottom: "12%" },
+  { glyph: "wYw\n\\|/", tone: "rust", x: "94%", bottom: "20%" },
+  { glyph: "(·)\n››", tone: "olive-soft", x: "97%", bottom: "31%" },
 ];
 
 function GlyphStack({ className, layers }: { className: string; layers: GlyphLayer[] }) {
@@ -285,6 +85,50 @@ function GlyphStack({ className, layers }: { className: string; layers: GlyphLay
   );
 }
 
+const PIXEL_TONE_BY_GLYPH: Record<string, GlyphTone> = {
+  i: "ink",
+  r: "rust",
+  s: "skin",
+  h: "hair",
+  c: "cyan",
+  b: "blue",
+};
+
+function PixelSprite({ className, map }: { className: string; map: string }) {
+  const rows = map.split("\n");
+  const columns = Math.max(...rows.map((row) => row.length));
+  const cells = rows.flatMap((row, rowIndex) =>
+    [...row].flatMap((glyph, columnIndex) => {
+      const tone = PIXEL_TONE_BY_GLYPH[glyph];
+      if (!tone) return [];
+      return [{
+        column: columnIndex + 1,
+        row: rowIndex + 1,
+        tone,
+      }];
+    }),
+  );
+
+  return (
+    <span
+      className={"ascii-garden__pixel-sprite " + className}
+      style={{
+        "--pixel-columns": columns,
+        "--pixel-rows": rows.length,
+      } as PixelSpriteStyle}
+      aria-hidden="true"
+    >
+      {cells.map(({ column, row, tone }) => (
+        <i
+          className={"ascii-garden__pixel ascii-garden__tone--" + tone}
+          style={{ gridColumn: column, gridRow: row }}
+          key={row + "-" + column}
+        />
+      ))}
+    </span>
+  );
+}
+
 export function AsciiGarden({ theme, variant }: AsciiGardenProps) {
   return (
     <div
@@ -293,13 +137,12 @@ export function AsciiGarden({ theme, variant }: AsciiGardenProps) {
       data-theme={theme}
       data-meadow-variant={variant}
       role="img"
-      aria-label="An ASCII garden at Alamo Square with a Monterey cypress, a cyclist, a standing photographer, a backpacker, flowers, and small creatures."
+      aria-label="An authored ASCII garden at Alamo Square with a Monterey cypress, a cyclist, a standing photographer, a backpacker, flowers, and small creatures."
     >
       <GlyphStack
         className="ascii-garden__tree"
         layers={[
           { map: CYPRESS_FOLIAGE, tone: "olive" },
-          { map: CYPRESS_FOLIAGE_SOFT, tone: "olive-soft" },
           { map: CYPRESS_WOOD, tone: "rust" },
         ]}
       />
@@ -308,35 +151,21 @@ export function AsciiGarden({ theme, variant }: AsciiGardenProps) {
         <span className="ascii-garden__underprint" />
         <GlyphStack
           className="ascii-garden__terrain"
-          layers={[
-            { map: MEADOW_PRIMARY, tone: "olive" },
-            { map: MEADOW_SECONDARY, tone: "olive-soft" },
-          ]}
+          layers={[{ map: MEADOW_PRIMARY, tone: "olive" }]}
         />
       </div>
 
-      <GlyphStack
+      <PixelSprite
         className="ascii-garden__sprite ascii-garden__sprite--backpacker"
-        layers={[
-          { map: BACKPACKER_INK, tone: "ink" },
-          { map: BACKPACKER_PACK, tone: "rust" },
-        ]}
+        map={PIXEL_BACKPACKER}
       />
-      <GlyphStack
+      <PixelSprite
         className="ascii-garden__sprite ascii-garden__sprite--standing"
-        layers={[
-          { map: STANDING_INK, tone: "ink" },
-          { map: STANDING_HAIR, tone: "hair" },
-          { map: STANDING_PANTS, tone: "cyan" },
-        ]}
+        map={PIXEL_STANDING}
       />
-      <GlyphStack
+      <PixelSprite
         className="ascii-garden__sprite ascii-garden__sprite--cyclist"
-        layers={[
-          { map: CYCLIST_BIKE, tone: "ink" },
-          { map: CYCLIST_BODY, tone: "blue" },
-          { map: CYCLIST_SKIN, tone: "skin" },
-        ]}
+        map={PIXEL_CYCLIST}
       />
 
       <div className="ascii-garden__details" aria-hidden="true">
