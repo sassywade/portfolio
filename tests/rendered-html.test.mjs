@@ -55,6 +55,28 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
+test("pairs Newsreader display type with Geist Sans interface and reading type", async () => {
+  const [layout, css] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(layout, /import \{ Geist, Newsreader \} from "next\/font\/google"/);
+  assert.match(layout, /const geist = Geist\(\{[\s\S]*?variable: "--font-geist"/);
+  assert.match(layout, /className=\{`\$\{newsreader\.variable\} \$\{geist\.variable\} antialiased`\}/);
+  assert.match(css, /--serif:\s*var\(--font-newsreader, "Newsreader"\)/);
+  assert.match(css, /--sans:\s*var\(--font-geist, "Geist"\)/);
+  assert.match(css, /--mono:\s*var\(--font-geist, "Geist"\)/);
+  assert.match(css, /body\s*\{[^}]*font-family:\s*var\(--sans\)/);
+  assert.match(css, /\.pranathi-name\s*\{[^}]*font-family:\s*var\(--serif\)/);
+  assert.match(css, /\.pranathi-bio\s*\{[^}]*font-family:\s*var\(--serif\)/);
+  assert.match(css, /\.case-intro h1\s*\{[^}]*font-family:\s*var\(--serif\)/);
+  assert.match(css, /\.site-header__wordmark,[\s\S]*?\.site-header--pages \.site-nav\s*\{[^}]*font-family:\s*var\(--sans\)/);
+  assert.match(css, /\.about-copy p\s*\{[^}]*font-family:\s*var\(--sans\)/);
+  assert.match(css, /\.simple-page__copy p,[\s\S]*?\.simple-page__lede\s*\{[^}]*font-family:\s*var\(--sans\)/);
+  assert.match(css, /\.play-item p\s*\{[^}]*font-family:\s*var\(--sans\)/);
+});
+
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
   const [topPull, topPet, prototype, css] = await Promise.all([
     readFile(new URL("../app/top-pet-pull.tsx", import.meta.url), "utf8"),

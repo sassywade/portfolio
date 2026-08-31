@@ -7,8 +7,8 @@
   --line: rgba(36, 35, 33, 0.15);
   --acid: #002fa7;
   --serif: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
-  --sans: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
-  --mono: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  --sans: var(--font-geist, "Geist"), "Helvetica Neue", Arial, sans-serif;
+  --mono: var(--font-geist, "Geist"), "Helvetica Neue", Arial, sans-serif;
   --top-pet-pull-y: 0px;
   --top-pet-reveal-y: 0px;
   --top-pet-strip-opacity: 0.5;
@@ -37,7 +37,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-newsreader, "Newsreader"), "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  font-family: var(--sans);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
 }
@@ -2826,7 +2826,7 @@ em {
   max-width: 580px;
   margin: 38px 0 0;
   color: #373530;
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(20px, 2vw, 27px);
   letter-spacing: -0.025em;
   line-height: 1.5;
@@ -2912,7 +2912,7 @@ em {
 .about-copy p {
   margin: 0;
   color: #373530;
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 19px;
   line-height: 1.65;
 }
@@ -3158,7 +3158,7 @@ em {
 .simple-page__lede {
   margin: 0;
   color: #373530;
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(19px, 2vw, 24px);
   letter-spacing: -0.02em;
   line-height: 1.65;
@@ -3208,7 +3208,7 @@ em {
   max-width: 470px;
   margin: 8px 0 0;
   color: var(--muted);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 16px;
   line-height: 1.5;
 }
@@ -5489,7 +5489,7 @@ em {
 
 .site-header__wordmark,
 .site-header--pages .site-nav {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(17px, 1.3vw, 21px);
   font-weight: 400;
   line-height: 1.05;
