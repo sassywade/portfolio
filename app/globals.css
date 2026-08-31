@@ -4633,7 +4633,7 @@ em {
 
 @media (min-width: 1800px) and (min-height: 900px) {
   .hero-meadow {
-    --cypress-display-width: clamp(360px, min(20vw, 42svh), 520px);
+    --cypress-display-width: min(20vw, 46svh);
   }
 }
 

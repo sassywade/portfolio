@@ -585,7 +585,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /--flat-meadow-height:\s*clamp\(86px, 11svh, 122px\)/);
   assert.match(css, /--cypress-viewport-lift:\s*clamp\(0px, calc\(20vw - 288px\), 132px\)/);
   assert.match(css, /--cypress-display-width:\s*clamp\(240px, 22vw, 322px\)/);
-  assert.match(css, /@media \(min-width: 1800px\) and \(min-height: 900px\)\s*\{[\s\S]*?--cypress-display-width:\s*clamp\(360px, min\(20vw, 42svh\), 520px\)/);
+  assert.match(css, /@media \(min-width: 1800px\) and \(min-height: 900px\)\s*\{[\s\S]*?--cypress-display-width:\s*min\(20vw, 46svh\)/);
   assert.match(css, /\.cypress-tree\s*\{[^}]*width:\s*var\(--cypress-display-width\)/);
   assert.match(css, /transform:\s*translateX\(-50%\) scaleY\(var\(--living-meadow-scale-y\)\)/);
   assert.match(css, /transform:\s*scaleY\(var\(--meadow-height-scale\)\)/);
