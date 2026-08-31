@@ -4191,6 +4191,7 @@ em {
   --rolling-meadow-registration-y: 0%;
   --flat-meadow-registration-y: 0%;
   --cypress-root-registration-y: 0%;
+  --cypress-display-width: clamp(240px, 22vw, 322px);
   --cypress-viewport-lift: clamp(0px, calc(20vw - 288px), 132px);
   --cypress-root-overlap: clamp(16px, 1.4vw, 24px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
@@ -4511,7 +4512,7 @@ em {
 .cypress-tree {
   right: clamp(8px, 4vw, 64px);
   bottom: clamp(18px, 4.8vw, 70px);
-  width: clamp(240px, 22vw, 322px);
+  width: var(--cypress-display-width);
   aspect-ratio: auto;
   animation: none;
   pointer-events: none;
@@ -4628,6 +4629,12 @@ em {
   margin: 4px 0 0;
   accent-color: #9caa25;
   cursor: pointer;
+}
+
+@media (min-width: 1800px) and (min-height: 900px) {
+  .hero-meadow {
+    --cypress-display-width: clamp(360px, min(20vw, 42svh), 520px);
+  }
 }
 
 @media (max-width: 900px) {
