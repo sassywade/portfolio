@@ -208,7 +208,7 @@ export const ALAMO_STYLES = [
 export type AlamoStyle = (typeof ALAMO_STYLES)[number]["id"];
 export type AlamoStyleDefinition = (typeof ALAMO_STYLES)[number];
 
-export const DEFAULT_ALAMO_STYLE: AlamoStyle = "control";
+export const DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism";
 
 export function getAlamoStyle(style: AlamoStyle): AlamoStyleDefinition {
   return ALAMO_STYLES.find(({ id }) => id === style) ?? ALAMO_STYLES[0];

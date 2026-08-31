@@ -37,7 +37,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /hero-company--snap[^>]*href="https:\/\/www\.snap\.com\/"/);
   assert.match(html, /hero-company--intuitive[^>]*href="https:\/\/www\.intuitive\.com\/"/);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
-  assert.match(html, /class="meadow__image" src="\/meadow-ground\.png"/);
+  assert.match(html, /class="meadow__image meadow__image--curated" src="\/alamo-styles\/painterly-realism\/rolling\.png"/);
   assert.match(html, /data-rolling-meadow="original"/);
   assert.match(html, /Checking the wind at Alamo Square/);
   assert.match(html, /Local time in San Francisco/);
@@ -172,6 +172,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 17);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
   assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
+  assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
   assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 17);
   assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 17);
   assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 17);
@@ -184,6 +185,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   }
 
   assert.match(hero, /useState<AlamoStyle>\(DEFAULT_ALAMO_STYLE\)/);
+  assert.match(hero, /useState<MeadowVariant>\("living"\)/);
   assert.match(hero, /shell\.dataset\.environmentStyle = environmentStyle/);
   assert.match(hero, /data-environment-style=\{environmentStyle\}/);
   assert.match(hero, /environmentStyle=\{environment\}/);
