@@ -6,8 +6,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-const IDLE_MISCHIEF_DELAY = 2000;
+const IDLE_HUFF_DELAY = 5000;
 const IDLE_APPROACH_DURATION = 950;
+const IDLE_MISCHIEF_DELAY = IDLE_HUFF_DELAY - IDLE_APPROACH_DURATION;
 const IDLE_CLOSE_DISTANCE = 46;
 const IDLE_HUFF_CYCLE = 1450;
 const IDLE_HUFF_SEQUENCE = ["light", "light", "strong", "strong", "strong"] as const;
