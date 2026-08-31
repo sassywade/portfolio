@@ -14,11 +14,9 @@ const IDLE_HUFF_CYCLE = 1450;
 const IDLE_HUFF_SEQUENCE = ["light", "light", "strong", "strong", "strong"] as const;
 const HAPPY_FLASH_DURATION = 560;
 const PET_FACE_ANCHOR_X = 15;
-const FACING_GESTURE_DISTANCE = 84;
-const FACING_CHANGE_DELAY = 360;
-const FACING_GESTURE_GAP = 420;
-const FACING_DELTA_FLOOR = 2;
-const FACING_HORIZONTAL_TOLERANCE = 1.2;
+const FACING_INTENT_THRESHOLD = 32;
+const FACING_CHANGE_DELAY = 240;
+const FACING_INTENT_MEMORY = 180;
 const PET_BLOW_BACKPACKER_EVENT = "portfolio:pet-blow-backpacker";
 const PET_BLOW_CYCLIST_EVENT = "portfolio:pet-blow-cyclist";
 const PET_BLOW_PHOTOGRAPHER_EVENT = "portfolio:pet-blow-photographer";
@@ -101,10 +99,9 @@ export function SmileyCursor() {
     let idleStartedAt: number | null = null;
     let happyUntil = 0;
     let facing: -1 | 1 = 1;
-    let facingGestureDistance = 0;
-    let facingGestureDirection: -1 | 0 | 1 = 0;
+    let facingIntent = 0;
     let pendingFacing: -1 | 1 = 1;
-    let lastFacingGestureAt = performance.now();
+    let lastFacingInputTime = performance.now();
     let facingTimer: number | null = null;
     let miniaturePhase: MiniatureInteractionPhase = "off";
     let miniaturePhaseStarted = 0;
@@ -162,13 +159,13 @@ export function SmileyCursor() {
         facingTimer = null;
         if (pendingFacing !== nextFacing || isPastHero) return;
 
-        const gestureStillMatches = facingGestureDirection === nextFacing
-          && facingGestureDistance >= FACING_GESTURE_DISTANCE;
-        if (!gestureStillMatches) return;
+        const intentStillMatches = nextFacing === 1
+          ? facingIntent > FACING_INTENT_THRESHOLD
+          : facingIntent < -FACING_INTENT_THRESHOLD;
+        if (!intentStillMatches) return;
 
         facing = nextFacing;
-        facingGestureDistance = 0;
-        facingGestureDirection = 0;
+        facingIntent = 0;
         pendingFacing = facing;
         cursor.dataset.facing = facing === 1 ? "right" : "left";
         cursor.style.setProperty("--smiley-facing", String(facing));
@@ -179,8 +176,7 @@ export function SmileyCursor() {
     const setFacingImmediately = (nextFacing: -1 | 1) => {
       clearFacingTimer();
       facing = nextFacing;
-      facingGestureDistance = 0;
-      facingGestureDirection = 0;
+      facingIntent = 0;
       pendingFacing = nextFacing;
       cursor.dataset.facing = nextFacing === 1 ? "right" : "left";
       cursor.style.setProperty("--smiley-facing", String(nextFacing));
@@ -593,33 +589,18 @@ export function SmileyCursor() {
       const distance = Math.hypot(deltaX, deltaY);
 
       motionLevel = Math.max(motionLevel, Math.min(1, Math.max(0, (distance - 6) / 27)));
+      if (timestamp - lastFacingInputTime > FACING_INTENT_MEMORY) {
+        facingIntent = 0;
+      }
+      facingIntent = clamp(facingIntent + deltaX, -140, 140);
+      lastFacingInputTime = timestamp;
       if (miniaturePhase === "off" || miniaturePhase === "arming") {
-        const isIntentionalHorizontalMove = Math.abs(deltaX) >= FACING_DELTA_FLOOR
-          && Math.abs(deltaX) >= Math.abs(deltaY) * FACING_HORIZONTAL_TOLERANCE;
-
-        if (isIntentionalHorizontalMove) {
-          const gestureDirection: -1 | 1 = deltaX > 0 ? 1 : -1;
-          const gestureExpired = timestamp - lastFacingGestureAt > FACING_GESTURE_GAP;
-          const gestureChangedDirection = facingGestureDirection !== 0
-            && facingGestureDirection !== gestureDirection;
-
-          if (gestureExpired || gestureChangedDirection) {
-            clearFacingTimer();
-            pendingFacing = facing;
-            facingGestureDistance = 0;
-          }
-
-          facingGestureDirection = gestureDirection;
-          facingGestureDistance = Math.min(
-            FACING_GESTURE_DISTANCE * 1.5,
-            facingGestureDistance + Math.abs(deltaX),
-          );
-          lastFacingGestureAt = timestamp;
-
-          if (facingGestureDistance >= FACING_GESTURE_DISTANCE) {
-            queueFacingChange(gestureDirection);
-          }
-        }
+        const nextFacing: -1 | 1 = facingIntent > FACING_INTENT_THRESHOLD
+          ? 1
+          : facingIntent < -FACING_INTENT_THRESHOLD
+            ? -1
+            : facing;
+        queueFacingChange(nextFacing);
       }
       inputX = event.clientX;
       inputY = event.clientY;
