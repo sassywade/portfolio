@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { Geist, Newsreader } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import { PhilipToggle } from "./philip-toggle";
 
@@ -13,6 +13,12 @@ const newsreader = Newsreader({
 
 const geist = Geist({
   variable: "--font-geist",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -70,7 +76,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${newsreader.variable} ${geist.variable} antialiased`}>
+      <body className={`${newsreader.variable} ${geist.variable} ${geistMono.variable} antialiased`}>
         {children}
         <PhilipToggle />
       </body>

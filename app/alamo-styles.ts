@@ -48,6 +48,18 @@ export const ALAMO_STYLES = [
     treeRootOffset: -2.59,
   },
   {
+    id: "ascii-garden",
+    label: "ASCII Garden · live prototype",
+    shortLabel: "ASCII Garden",
+    rollingSrc: null,
+    flatSrc: null,
+    treeSrc: "/monterey-cypress.png",
+    atmosphere: "ascii-garden",
+    rollingGroundOffset: 0,
+    flatHorizon: 0,
+    treeRootOffset: 0,
+  },
+  {
     id: "cut-paper",
     label: "Warm cut paper",
     shortLabel: "Cut paper",

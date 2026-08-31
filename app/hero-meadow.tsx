@@ -7,6 +7,7 @@ import {
   type AlamoStyle,
 } from "./alamo-styles";
 import { AlamoWeather } from "./alamo-weather";
+import { AsciiGarden, type AsciiGardenTheme } from "./ascii-garden";
 import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type FlatMeadowTexture, type MeadowVariant, type RollingMeadow } from "./meadow";
@@ -21,6 +22,7 @@ export type WorkGridColumns = 2 | 3;
 export function HeroMeadow() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const sceneVisibleRef = useRef(true);
+  const previousAtmosphereRef = useRef<PortfolioAtmosphere>("grid");
   const [wind, setWind] = useState<WindSettings>(INITIAL_WIND);
   const [isPlaying, setIsPlaying] = useState(() => (
     typeof window === "undefined"
@@ -38,7 +40,9 @@ export function HeroMeadow() {
   const [heroHighlights, setHeroHighlights] = useState(false);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
+  const [asciiGardenTheme, setAsciiGardenTheme] = useState<AsciiGardenTheme>("dark");
   const environment = getAlamoStyle(environmentStyle);
+  const isAsciiGarden = environmentStyle === "ascii-garden";
 
   useEffect(() => {
     document.documentElement.dataset.topPetMode = topPetMode;
@@ -72,6 +76,25 @@ export function HeroMeadow() {
       delete document.documentElement.dataset.environmentStyle;
     };
   }, [environmentStyle]);
+
+  useEffect(() => {
+    const scene = sceneRef.current;
+    const shell = scene?.closest<HTMLElement>(".site-shell");
+
+    if (!isAsciiGarden) {
+      delete document.documentElement.dataset.asciiGardenTheme;
+      if (shell) delete shell.dataset.asciiGardenTheme;
+      return;
+    }
+
+    document.documentElement.dataset.asciiGardenTheme = asciiGardenTheme;
+    if (shell) shell.dataset.asciiGardenTheme = asciiGardenTheme;
+
+    return () => {
+      delete document.documentElement.dataset.asciiGardenTheme;
+      if (shell) delete shell.dataset.asciiGardenTheme;
+    };
+  }, [asciiGardenTheme, isAsciiGarden]);
 
   useEffect(() => {
     document.documentElement.dataset.workColumns = String(workGridColumns);
@@ -218,6 +241,28 @@ export function HeroMeadow() {
     setWind((current) => ({ ...current, [key]: value }));
   };
 
+  const handleEnvironmentStyleChange = (nextStyle: AlamoStyle) => {
+    if (nextStyle === environmentStyle) return;
+
+    if (nextStyle === "ascii-garden") {
+      previousAtmosphereRef.current = atmosphere;
+      if (atmosphere === "grid") {
+        setAtmosphere(asciiGardenTheme === "dark" ? "night" : "day");
+      }
+    } else if (environmentStyle === "ascii-garden") {
+      setAtmosphere(previousAtmosphereRef.current);
+    }
+
+    setEnvironmentStyle(nextStyle);
+  };
+
+  const handleAsciiGardenThemeChange = (nextTheme: AsciiGardenTheme) => {
+    setAsciiGardenTheme(nextTheme);
+    if (isAsciiGarden && atmosphere !== "grid") {
+      setAtmosphere(nextTheme === "dark" ? "night" : "day");
+    }
+  };
+
   const sceneIsPlaying = isPlaying && isSceneVisible;
   const sceneStyle = {
     "--flat-meadow-color": flatMeadowColor,
@@ -227,6 +272,13 @@ export function HeroMeadow() {
     "--rolling-meadow-registration-y": `${environment.rollingGroundOffset}%`,
     "--flat-meadow-registration-y": `${-environment.flatHorizon}%`,
     "--cypress-root-registration-y": `${environment.treeRootOffset}%`,
+    "--ascii-ground-height-rolling": `${(34 * meadowHeight / 100).toFixed(2)}svh`,
+    "--ascii-ground-height-flat": `${(18 * meadowHeight / 100).toFixed(2)}svh`,
+    "--ascii-tree-bottom-rolling": `${(19.6 * meadowHeight / 100).toFixed(2)}svh`,
+    "--ascii-tree-bottom-flat": `${(15.6 * meadowHeight / 100).toFixed(2)}svh`,
+    "--ascii-actor-left-bottom": `${(14.4 * meadowHeight / 100).toFixed(2)}svh`,
+    "--ascii-actor-center-bottom": `${(13.1 * meadowHeight / 100).toFixed(2)}svh`,
+    "--ascii-actor-right-bottom": `${(20.1 * meadowHeight / 100).toFixed(2)}svh`,
   } as CSSProperties;
 
   return (
@@ -237,24 +289,32 @@ export function HeroMeadow() {
       data-scroll-state="hero"
       data-meadow-variant={meadowVariant}
       data-environment-style={environmentStyle}
+      data-ascii-garden-theme={isAsciiGarden ? asciiGardenTheme : undefined}
       data-style-atmosphere={environment.atmosphere}
       style={sceneStyle}
     >
       <div className="hero-meadow__style-atmosphere" aria-hidden="true" />
-      <Meadow
-        isPlaying={sceneIsPlaying}
-        variant={meadowVariant}
-        flatTexture={flatMeadowTexture}
-        rollingMeadow={rollingMeadow}
-        environmentStyle={environment}
-      />
-      <CypressTree
-        wind={wind}
-        isPlaying={sceneIsPlaying}
-        assetUrl={environment.treeSrc}
-      />
+      {isAsciiGarden ? (
+        <AsciiGarden theme={asciiGardenTheme} variant={meadowVariant} />
+      ) : (
+        <>
+          <Meadow
+            isPlaying={sceneIsPlaying}
+            variant={meadowVariant}
+            flatTexture={flatMeadowTexture}
+            rollingMeadow={rollingMeadow}
+            environmentStyle={environment}
+          />
+          <CypressTree
+            wind={wind}
+            isPlaying={sceneIsPlaying}
+            assetUrl={environment.treeSrc}
+          />
+        </>
+      )}
       <MeadowSettings
         environmentStyle={environmentStyle}
+        asciiGardenTheme={asciiGardenTheme}
         atmosphere={atmosphere}
         workGridColumns={workGridColumns}
         heroHighlights={heroHighlights}
@@ -268,7 +328,8 @@ export function HeroMeadow() {
         isPlaying={isPlaying}
         isVisible={isSceneVisible}
         onAtmosphereChange={setAtmosphere}
-        onEnvironmentStyleChange={setEnvironmentStyle}
+        onEnvironmentStyleChange={handleEnvironmentStyleChange}
+        onAsciiGardenThemeChange={handleAsciiGardenThemeChange}
         onWorkGridColumnsChange={setWorkGridColumns}
         onHeroHighlightsChange={setHeroHighlights}
         onVariantChange={setMeadowVariant}

@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ALAMO_STYLES, type AlamoStyle } from "./alamo-styles";
+import type { AsciiGardenTheme } from "./ascii-garden";
 import {
   PORTFOLIO_ATMOSPHERES,
   type PortfolioAtmosphere,
@@ -28,6 +29,7 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 
 type MeadowSettingsProps = {
   environmentStyle: AlamoStyle;
+  asciiGardenTheme: AsciiGardenTheme;
   atmosphere: PortfolioAtmosphere;
   workGridColumns: WorkGridColumns;
   heroHighlights: boolean;
@@ -41,6 +43,7 @@ type MeadowSettingsProps = {
   isPlaying: boolean;
   isVisible: boolean;
   onEnvironmentStyleChange: (style: AlamoStyle) => void;
+  onAsciiGardenThemeChange: (theme: AsciiGardenTheme) => void;
   onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
   onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
   onHeroHighlightsChange: (isEnabled: boolean) => void;
@@ -56,6 +59,7 @@ type MeadowSettingsProps = {
 
 export function MeadowSettings({
   environmentStyle,
+  asciiGardenTheme,
   atmosphere,
   workGridColumns,
   heroHighlights,
@@ -69,6 +73,7 @@ export function MeadowSettings({
   isPlaying,
   isVisible,
   onEnvironmentStyleChange,
+  onAsciiGardenThemeChange,
   onAtmosphereChange,
   onWorkGridColumnsChange,
   onHeroHighlightsChange,
@@ -294,6 +299,7 @@ export function MeadowSettings({
               <span className="meadow-settings__style-select-wrap">
                 <span
                   className="meadow-settings__style-preview"
+                  data-environment-style-preview={selectedEnvironment.id}
                   style={{
                     backgroundImage: selectedEnvironment.rollingSrc
                       ? `url(${selectedEnvironment.rollingSrc})`
@@ -316,6 +322,29 @@ export function MeadowSettings({
             <p className="meadow-settings__note">
               Style and meadow shape are independent. Control keeps the original prototype variants.
             </p>
+            {environmentStyle === "ascii-garden" && (
+              <div className="meadow-settings__ascii-palette">
+                <span>ASCII palette</span>
+                <div className="meadow-settings__modes" aria-label="ASCII Garden palette">
+                  <button
+                    type="button"
+                    aria-pressed={asciiGardenTheme === "dark"}
+                    data-cuelume-toggle="palette"
+                    onClick={() => onAsciiGardenThemeChange("dark")}
+                  >
+                    Dark
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={asciiGardenTheme === "light"}
+                    data-cuelume-toggle="palette"
+                    onClick={() => onAsciiGardenThemeChange("light")}
+                  >
+                    Light
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="meadow-settings__modes" aria-label="Meadow style">
               <button
                 type="button"
@@ -412,6 +441,11 @@ export function MeadowSettings({
                   </span>
                 </label>
               </>
+            ) : environmentStyle === "ascii-garden" ? (
+              <div className="meadow-settings__curated-summary">
+                <span>ASCII Garden · checkpoint 1</span>
+                <small>Deterministic glyph meadow · fixed static sprites · paired palettes</small>
+              </div>
             ) : (
               <div className="meadow-settings__curated-summary">
                 <span>{selectedEnvironment.shortLabel}</span>
@@ -426,33 +460,41 @@ export function MeadowSettings({
                 <h2 id={`${panelId}-wind`}>Wind study</h2>
                 <small>Live Alamo baseline</small>
               </div>
-              <button
-                type="button"
-                className="meadow-settings__motion-toggle"
-                aria-pressed={isPlaying}
-                data-cuelume-toggle="motion"
-                onClick={() => onPlayingChange(!isPlaying)}
-              >
-                {isPlaying ? "Pause" : "Play"}
-              </button>
+              {environmentStyle !== "ascii-garden" && (
+                <button
+                  type="button"
+                  className="meadow-settings__motion-toggle"
+                  aria-pressed={isPlaying}
+                  data-cuelume-toggle="motion"
+                  onClick={() => onPlayingChange(!isPlaying)}
+                >
+                  {isPlaying ? "Pause" : "Play"}
+                </button>
+              )}
             </div>
 
-            <div className="meadow-settings__wind-fields">
-              {windFields.map(({ key, label }) => (
-                <label className="meadow-settings__wind-field" key={key}>
-                  <span>{label}<output>{wind[key].toFixed(2)}</output></span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={wind[key]}
-                    aria-label={label}
-                    onChange={(event) => onWindChange(key, Number(event.target.value))}
-                  />
-                </label>
-              ))}
-            </div>
+            {environmentStyle === "ascii-garden" ? (
+              <p className="meadow-settings__note">
+                This first checkpoint is intentionally still. Live branch wind and figure actions come next.
+              </p>
+            ) : (
+              <div className="meadow-settings__wind-fields">
+                {windFields.map(({ key, label }) => (
+                  <label className="meadow-settings__wind-field" key={key}>
+                    <span>{label}<output>{wind[key].toFixed(2)}</output></span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={wind[key]}
+                      aria-label={label}
+                      onChange={(event) => onWindChange(key, Number(event.target.value))}
+                    />
+                  </label>
+                ))}
+              </div>
+            )}
           </section>
         </aside>
       )}

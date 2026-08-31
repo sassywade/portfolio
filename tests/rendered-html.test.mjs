@@ -61,12 +61,14 @@ test("pairs Newsreader display type with Geist Sans interface and reading type",
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(layout, /import \{ Geist, Newsreader \} from "next\/font\/google"/);
+  assert.match(layout, /import \{ Geist, Geist_Mono, Newsreader \} from "next\/font\/google"/);
   assert.match(layout, /const geist = Geist\(\{[\s\S]*?variable: "--font-geist"/);
-  assert.match(layout, /className=\{`\$\{newsreader\.variable\} \$\{geist\.variable\} antialiased`\}/);
+  assert.match(layout, /const geistMono = Geist_Mono\(\{[\s\S]*?variable: "--font-geist-mono"/);
+  assert.match(layout, /className=\{`\$\{newsreader\.variable\} \$\{geist\.variable\} \$\{geistMono\.variable\} antialiased`\}/);
   assert.match(css, /--serif:\s*var\(--font-newsreader, "Newsreader"\)/);
   assert.match(css, /--sans:\s*var\(--font-geist, "Geist"\)/);
   assert.match(css, /--mono:\s*var\(--font-geist, "Geist"\)/);
+  assert.match(css, /--ascii-mono:\s*var\(--font-geist-mono, "Geist Mono"\)/);
   assert.match(css, /body\s*\{[^}]*font-family:\s*var\(--sans\)/);
   assert.match(css, /\.pranathi-name\s*\{[^}]*font-family:\s*var\(--serif\)/);
   assert.match(css, /\.pranathi-bio\s*\{[^}]*font-family:\s*var\(--serif\)/);
@@ -140,7 +142,7 @@ test("offers lightweight San Francisco atmosphere backgrounds in the prototype p
   assert.doesNotMatch(css, /@keyframes[^}]*rain/i);
 });
 
-test("offers all fifteen Alamo art directions plus the unchanged control in rolling and flat shapes", async () => {
+test("offers the original art directions, the unchanged control, and an isolated ASCII Garden prototype", async () => {
   const [styles, hero, meadow, prototype, tree, css] = await Promise.all([
     readFile(new URL("../app/alamo-styles.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
@@ -167,11 +169,12 @@ test("offers all fifteen Alamo art directions plus the unchanged control in roll
     "handmade-clay",
   ];
 
-  assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 16);
+  assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 17);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
-  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 16);
-  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 16);
-  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 16);
+  assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
+  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 17);
+  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 17);
+  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 17);
   for (const id of styleIds) {
     assert.match(styles, new RegExp(`id: "${id}"`));
     for (const asset of ["rolling", "flat", "tree"]) {
@@ -201,6 +204,45 @@ test("offers all fifteen Alamo art directions plus the unchanged control in roll
   assert.match(css, /\.meadow__visual--flat\[data-style-mode="curated"\]\s*\{[^}]*height:\s*var\(--flat-meadow-height\)/);
   assert.match(css, /\.meadow__curated-flat-image\s*\{[^}]*translate3d\(-50%, var\(--flat-meadow-registration-y\), 0\)/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__stage\s*\{[^}]*translate3d\(0, var\(--cypress-root-registration-y\), 0\)/);
+});
+
+test("renders ASCII Garden from fixed glyph maps with paired palettes and static filled sprites", async () => {
+  const [garden, hero, picker, layout, css] = await Promise.all([
+    readFile(new URL("../app/ascii-garden.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(garden, /const MEADOW_PRIMARY = fixedMap\(String\.raw/);
+  assert.match(garden, /const CYPRESS_FOLIAGE = fixedMap\(String\.raw/);
+  assert.match(garden, /const STANDING_HAIR = fixedMap\(String\.raw[\s\S]*?▓▓▓▓▓/);
+  assert.match(garden, /const CYCLIST_BODY = fixedMap\(String\.raw[\s\S]*?▓▓▓▓▓▓/);
+  assert.match(garden, /The rider is filled, while the bicycle deliberately keeps its open wheels/);
+  assert.match(garden, /data-theme=\{theme\}/);
+  assert.match(garden, /data-meadow-variant=\{variant\}/);
+  assert.doesNotMatch(garden, /Math\.random|<img\b|requestAnimationFrame/);
+
+  assert.match(hero, /useState<AsciiGardenTheme>\("dark"\)/);
+  assert.match(hero, /const isAsciiGarden = environmentStyle === "ascii-garden"/);
+  assert.match(hero, /<AsciiGarden theme=\{asciiGardenTheme\} variant=\{meadowVariant\} \/>/);
+  assert.match(hero, /previousAtmosphereRef\.current = atmosphere/);
+  assert.match(hero, /data-ascii-garden-theme=\{isAsciiGarden \? asciiGardenTheme : undefined\}/);
+  assert.match(picker, /aria-label="ASCII Garden palette"/);
+  assert.match(picker, /onAsciiGardenThemeChange\("dark"\)/);
+  assert.match(picker, /onAsciiGardenThemeChange\("light"\)/);
+  assert.match(picker, /This first checkpoint is intentionally still/);
+
+  assert.match(layout, /Geist_Mono/);
+  assert.match(css, /\.ascii-garden\s*\{[\s\S]*?contain:\s*strict/);
+  assert.match(css, /\.ascii-garden\[data-theme="light"\]/);
+  assert.match(css, /--ascii-underprint:\s*rgba\(142, 145, 79, 0\.115\)/);
+  assert.match(css, /\.ascii-garden__tree\s*\{[\s\S]*?bottom:\s*var\(--ascii-tree-bottom-rolling\)/);
+  assert.match(css, /\.ascii-garden\[data-meadow-variant="flat"\] \.ascii-garden__ground/);
+  assert.match(css, /html\[data-environment-style="ascii-garden"\]\[data-ascii-garden-theme="dark"\]/);
+  assert.match(css, /html\[data-environment-style="ascii-garden"\]\[data-ascii-garden-theme="light"\]/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden/);
 });
 
 test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {
