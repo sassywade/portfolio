@@ -328,23 +328,23 @@ test("keeps colorful hero highlights optional and off by default", async () => {
   assert.match(css, /html\[data-hero-highlights="true"\] \.pranathi-bio:has/);
 });
 
-test("uses the supplied case-study pages with floating work navigation", async () => {
+test("uses an immersive case-study hero with a persistent chapter rail", async () => {
   const [page, css] = await Promise.all([
     readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /CaseStudyNav/);
-  assert.match(page, /className="case-intro"/);
-  assert.match(page, /className="case-study-content"/);
-  assert.match(page, /case-brief-gallery/);
-  assert.match(page, /case-source-link/);
-  assert.match(page, /className="case-artifact/);
-  assert.match(css, /Supplied case-study archive/);
-  assert.match(css, /\.case-study-shell \.case-study-nav\s*\{/);
-  assert.match(css, /\.case-study-nav__items a\.is-active/);
-  assert.match(css, /\.case-study-shell \.case-section,[\s\S]*?display:\s*block;/);
-  assert.match(css, /\.case-study-shell \.case-section__copy\s*\{[^}]*max-width|\.case-study-shell \.case-section__copy\s*\{[^}]*width:/);
+  assert.match(page, /className="case-story-hero"/);
+  assert.match(page, /className="case-story-rail"/);
+  assert.match(page, /aria-label="Case study chapters"/);
+  assert.match(page, /className="case-story-content"/);
+  assert.match(page, /className="case-story-team"/);
+  assert.match(page, /className=\{`case-story-media/);
+  assert.doesNotMatch(page, /SiteHeader|CaseStudyNav|case-brief-gallery|case-source-link/);
+  assert.match(css, /Case studies: immersive opening/);
+  assert.match(css, /\.case-story-layout\s*\{[\s\S]*?grid-template-columns:\s*200px minmax\(0, 800px\)/);
+  assert.match(css, /\.case-story-rail\s*\{[\s\S]*?position:\s*sticky/);
+  assert.match(css, /\.case-story-media__frame\s*\{/);
 });
 
 test("uses the supplied projects in the Play archive", async () => {
@@ -390,7 +390,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectCard, /id="work-group-snap"/);
   assert.match(projectCard, /project\.category\.includes\("Snap"\)/);
   assert.match(projectCard, /project\.externalUrl \?\? `\/case-studies\/\$\{project\.slug\}`/);
-  assert.match(caseStudy, /CaseStudyNav/);
+  assert.match(caseStudy, /case-story-rail/);
+  assert.match(caseStudy, /case-story-media/);
   assert.match(caseStudy, /narrative\.artifacts/);
   assert.doesNotMatch(projects, /placeholderCaseStudy|Concept placeholder/);
   assert.match(hero, /useState<WorkGridColumns>\(2\)/);
