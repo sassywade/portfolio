@@ -36,7 +36,7 @@ export function HeroMeadow() {
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
   const [meadowHeight, setMeadowHeight] = useState(100);
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
-  const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(3);
+  const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(2);
   const [heroHighlights, setHeroHighlights] = useState(false);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);

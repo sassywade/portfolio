@@ -336,10 +336,11 @@ test("uses the supplied projects in the Play archive", async () => {
   assert.doesNotMatch(play, /Tiny type studies|Weekend camera roll|Things in progress/);
 });
 
-test("expands the work archive and offers two- or three-column layouts", async () => {
-  const [projects, projectCard, caseStudy, hero, prototype, css] = await Promise.all([
+test("groups the work archive into quiet Glean and Snap tiles", async () => {
+  const [projects, projectCard, projectMockup, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/project-card.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/project-mockup.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
@@ -350,16 +351,24 @@ test("expands the work archive and offers two- or three-column layouts", async (
   assert.match(projects, /title: "Glean homepage"/);
   assert.match(projects, /title: "Glean proactive intelligence"/);
   assert.match(projects, /title: "Telestrations"/);
-  assert.match(projectCard, /className="project-card__title"/);
+  assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
+  assert.match(projectMockup, /className="project-card__title"/);
+  assert.match(projectMockup, /snap-treasure\.png/);
+  assert.match(projectMockup, /snap-nfts-as-lenses\.png/);
+  assert.match(projectCard, /id="work-group-glean"/);
+  assert.match(projectCard, /id="work-group-snap"/);
+  assert.match(projectCard, /items\.slice\(0, 14\)/);
+  assert.match(projectCard, /items\.slice\(14\)/);
   assert.match(projects, /export const placeholderCaseStudy: CaseStudy/);
   assert.match(caseStudy, /caseStudies\[slug\] \?\? placeholderCaseStudy/);
-  assert.match(hero, /useState<WorkGridColumns>\(3\)/);
+  assert.match(hero, /useState<WorkGridColumns>\(2\)/);
   assert.match(hero, /document\.documentElement\.dataset\.workColumns = String\(workGridColumns\)/);
   assert.match(prototype, /aria-label="Work grid columns"/);
   assert.match(prototype, /onWorkGridColumnsChange\(2\)/);
   assert.match(prototype, /onWorkGridColumnsChange\(3\)/);
-  assert.match(css, /html\[data-work-columns="2"\] \.pranathi-project-grid/);
-  assert.match(css, /gap:\s*clamp\(46px, 4vw, 64px\) clamp\(24px, 2\.2vw, 34px\)/);
+  assert.match(css, /html\[data-work-columns="3"\] \.pranathi-project-grid/);
+  assert.match(css, /background:\s*#eeeeed/);
+  assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
