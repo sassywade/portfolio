@@ -4740,6 +4740,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 .work-groups {
   display: grid;
   gap: clamp(56px, 6vw, 76px);
+  padding-bottom: clamp(88px, 10vw, 144px);
 }
 
 .work-group {
@@ -5114,6 +5115,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 
   .work-groups {
     gap: 48px;
+    padding-bottom: 80px;
   }
 
   .work-group__brand {
