@@ -9850,9 +9850,9 @@ html[data-atmosphere="grid"] .ascii-garden {
 .about-page__identity .about-page__intro p {
   color: #373530;
   font-family: var(--serif);
-  font-size: clamp(15px, 1.2vw, 17px);
+  font-size: clamp(17px, 1.25vw, 18px);
   letter-spacing: -0.012em;
-  line-height: 1.6;
+  line-height: 1.58;
 }
 
 .about-page__identity .about-page__intro p + p {
