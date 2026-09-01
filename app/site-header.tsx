@@ -30,8 +30,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             data-cuelume-toggle="page"
             key={id}
           >
-            <span className="site-nav__label">{label}</span>
-            <span className="site-nav__label site-nav__label--hover" aria-hidden="true">{label}</span>
+            {label}
           </Link>
         ))}
       </nav>

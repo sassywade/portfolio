@@ -79,6 +79,14 @@ test("pairs Newsreader display type with Geist Sans interface and reading type",
   assert.match(css, /\.play-item p\s*\{[^}]*font-family:\s*var\(--sans\)/);
 });
 
+test("keeps the primary navigation labels static", async () => {
+  const header = await readFile(new URL("../app/site-header.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.doesNotMatch(header, /site-nav__label--hover/);
+  assert.doesNotMatch(css, /site-nav__label--hover/);
+});
+
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
   const [topPull, topPet, prototype, css] = await Promise.all([
     readFile(new URL("../app/top-pet-pull.tsx", import.meta.url), "utf8"),
