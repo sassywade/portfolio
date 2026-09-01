@@ -11094,6 +11094,28 @@ html[data-atmosphere="grid"] .ascii-garden {
   z-index: 0;
 }
 
+/* Snap work uses the supplied phone artwork, fully visible and nothing else. */
+.pranathi-project-grid .project-mockup.project-mockup--snap-work {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: clamp(10px, 1.25vw, 16px);
+  justify-content: flex-start;
+  padding: clamp(22px, 2.5vw, 30px) clamp(22px, 3vw, 32px) clamp(14px, 2vw, 20px);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: #f2f2f2;
+}
+
+.snap-work-image {
+  display: block;
+  flex: 1 1 auto;
+  width: auto;
+  max-width: min(72%, 368px);
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+}
+
 @media (min-width: 1080px) {
   .case-study-shell .case-study-frame {
     padding-left: 218px;

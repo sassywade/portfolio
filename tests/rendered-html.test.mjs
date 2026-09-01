@@ -379,7 +379,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
   assert.match(projectMockup, /project-mockup--placeholder/);
   assert.match(projectMockup, /project-placeholder__title/);
-  assert.doesNotMatch(projectMockup, /project\.cover\.src|project-work-image|<img/);
+  assert.match(projectMockup, /project\.category\.includes\("Snap"\)/);
+  assert.match(projectMockup, /className="snap-work-image"/);
+  assert.match(projectMockup, /src=\{project\.cover\.src\}/);
   assert.doesNotMatch(projectMockup, /project-card__title|project-card__caption|project-card__arrow|project-mockup__wash/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
