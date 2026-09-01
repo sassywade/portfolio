@@ -10121,6 +10121,11 @@ html[data-atmosphere="grid"] .ascii-garden {
   filter: brightness(0.94) saturate(0.86) contrast(0.97);
 }
 
+.film-photo--ride-day:hover .film-photo__image img,
+.film-photo--ride-day:focus-visible .film-photo__image img {
+  filter: brightness(0.94) saturate(0.86) contrast(0.97);
+}
+
 /* Keep the Lifemax row compact and centered, like a small stack of prints. */
 .about-page__gallery-track {
   align-items: center;
