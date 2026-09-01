@@ -374,6 +374,16 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(projectMockup, /className="project-card__title"/);
   assert.match(projectMockup, /snap-treasure\.png/);
   assert.match(projectMockup, /snap-nfts-as-lenses\.png/);
+  assert.match(
+    projects,
+    /techcrunch\.com\/2022\/07\/13\/snap-eyes-adding-nfts-as-ar-filters-in-snapchat/,
+  );
+  assert.match(projectCard, /project\.externalUrl/);
+  assert.match(projectCard, /target=\{isExternal \? "_blank" : undefined\}/);
+  assert.match(
+    projectCard,
+    /rel=\{isExternal \? "noopener noreferrer" : undefined\}/,
+  );
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
   assert.match(projectCard, /id="work-group-archive"/);

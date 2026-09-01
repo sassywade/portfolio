@@ -3,12 +3,21 @@ import { ProjectMockup } from "./project-mockup";
 import { Reveal } from "./reveal";
 
 export function ProjectCard({ project }: { project: Project }) {
+  const href = project.externalUrl ?? `/case-studies/${project.slug}`;
+  const isExternal = Boolean(project.externalUrl);
+
   return (
     <Reveal className="project-reveal">
       <a
         className="project-card"
-        href={`/case-studies/${project.slug}`}
-        aria-label={`Open ${project.title} case study`}
+        href={href}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        aria-label={
+          isExternal
+            ? `Open ${project.title} article in a new tab`
+            : `Open ${project.title} case study`
+        }
         data-cuelume-toggle="pulse"
       >
         <ProjectMockup project={project} />

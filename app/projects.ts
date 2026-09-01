@@ -14,6 +14,7 @@ export type Project = {
   category: string;
   year: string;
   theme: ProjectTheme;
+  externalUrl?: string;
 };
 
 export type CaseStudySection = {
@@ -177,6 +178,8 @@ export const projects: Project[] = [
     category: "Concept placeholder",
     year: "2026",
     theme: "field",
+    externalUrl:
+      "https://techcrunch.com/2022/07/13/snap-eyes-adding-nfts-as-ar-filters-in-snapchat/",
   },
 ];
 
