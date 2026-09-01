@@ -43,6 +43,7 @@ export function HeroMeadow() {
   const [asciiGardenTheme, setAsciiGardenTheme] = useState<AsciiGardenTheme>("dark");
   const environment = getAlamoStyle(environmentStyle);
   const isAsciiGarden = environmentStyle === "ascii-garden";
+  const isStudioStatic = environmentStyle === "studio-static";
 
   useEffect(() => {
     document.documentElement.dataset.topPetMode = topPetMode;
@@ -105,6 +106,30 @@ export function HeroMeadow() {
     document.documentElement.dataset.heroHighlights = heroHighlights ? "true" : "false";
     return () => delete document.documentElement.dataset.heroHighlights;
   }, [heroHighlights]);
+
+  useEffect(() => {
+    if (!isStudioStatic) return;
+
+    const interactiveCopy = document.querySelectorAll<HTMLElement>(
+      ".pranathi-intro--home .hero-inline-action",
+    );
+
+    interactiveCopy.forEach((element) => {
+      element.dataset.studioPreviousTabindex = element.getAttribute("tabindex") ?? "";
+      element.setAttribute("tabindex", "-1");
+      element.setAttribute("aria-disabled", "true");
+    });
+
+    return () => {
+      interactiveCopy.forEach((element) => {
+        const previousTabindex = element.dataset.studioPreviousTabindex;
+        if (previousTabindex) element.setAttribute("tabindex", previousTabindex);
+        else element.removeAttribute("tabindex");
+        element.removeAttribute("aria-disabled");
+        delete element.dataset.studioPreviousTabindex;
+      });
+    };
+  }, [isStudioStatic]);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -244,7 +269,17 @@ export function HeroMeadow() {
   const handleEnvironmentStyleChange = (nextStyle: AlamoStyle) => {
     if (nextStyle === environmentStyle) return;
 
-    if (nextStyle === "ascii-garden") {
+    if (nextStyle === "studio-static") {
+      previousAtmosphereRef.current = atmosphere;
+      setAtmosphere("grid");
+    } else if (environmentStyle === "studio-static") {
+      const previousAtmosphere = previousAtmosphereRef.current;
+      setAtmosphere(
+        nextStyle === "ascii-garden" && previousAtmosphere === "grid"
+          ? (asciiGardenTheme === "dark" ? "night" : "day")
+          : previousAtmosphere,
+      );
+    } else if (nextStyle === "ascii-garden") {
       previousAtmosphereRef.current = atmosphere;
       if (atmosphere === "grid") {
         setAtmosphere(asciiGardenTheme === "dark" ? "night" : "day");
@@ -294,7 +329,7 @@ export function HeroMeadow() {
       style={sceneStyle}
     >
       <div className="hero-meadow__style-atmosphere" aria-hidden="true" />
-      {isAsciiGarden ? (
+      {isStudioStatic ? null : isAsciiGarden ? (
         <AsciiGarden theme={asciiGardenTheme} variant={meadowVariant} />
       ) : (
         <>
@@ -350,7 +385,7 @@ export function HeroMeadow() {
         onWindChange={updateWind}
         onPlayingChange={setIsPlaying}
       />
-      <AlamoWeather onWindUpdate={setWind} />
+      {!isStudioStatic && <AlamoWeather onWindUpdate={setWind} />}
     </div>
   );
 }

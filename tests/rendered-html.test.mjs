@@ -169,13 +169,14 @@ test("offers the original art directions, the unchanged control, and an isolated
     "handmade-clay",
   ];
 
-  assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 17);
+  assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 18);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
+  assert.match(styles, /id: "studio-static"[\s\S]*label: "Studio · no meadow"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
-  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 17);
-  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 17);
-  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 17);
+  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 18);
+  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 18);
+  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 18);
   for (const id of styleIds) {
     assert.match(styles, new RegExp(`id: "${id}"`));
     for (const asset of ["rolling", "flat", "tree"]) {
@@ -186,6 +187,9 @@ test("offers the original art directions, the unchanged control, and an isolated
 
   assert.match(hero, /useState<AlamoStyle>\(DEFAULT_ALAMO_STYLE\)/);
   assert.match(hero, /useState<MeadowVariant>\("living"\)/);
+  assert.match(hero, /const isStudioStatic = environmentStyle === "studio-static"/);
+  assert.match(hero, /isStudioStatic \? null : isAsciiGarden/);
+  assert.match(hero, /!isStudioStatic && <AlamoWeather/);
   assert.match(hero, /shell\.dataset\.environmentStyle = environmentStyle/);
   assert.match(hero, /data-environment-style=\{environmentStyle\}/);
   assert.match(hero, /environmentStyle=\{environment\}/);
@@ -199,6 +203,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(prototype, /aria-label="Alamo Square visual style"/);
   assert.match(prototype, /ALAMO_STYLES\.map/);
   assert.match(prototype, /Style and meadow shape are independent/);
+  assert.match(prototype, /No meadow · no tree · no Philip · no miniature visitors/);
   assert.match(tree, /assetUrl: string/);
   assert.match(tree, /createCypressTree\(\{[\s\S]*assetUrl,/);
   assert.match(tree, /\}, \[assetUrl\]\)/);
@@ -206,6 +211,9 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(css, /\.meadow__visual--flat\[data-style-mode="curated"\]\s*\{[^}]*height:\s*var\(--flat-meadow-height\)/);
   assert.match(css, /\.meadow__curated-flat-image\s*\{[^}]*translate3d\(-50%, var\(--flat-meadow-registration-y\), 0\)/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__stage\s*\{[^}]*translate3d\(0, var\(--cypress-root-registration-y\), 0\)/);
+  assert.match(css, /html\[data-environment-style="studio-static"\] \.smiley-cursor/);
+  assert.match(css, /html\[data-environment-style="studio-static"\] \.pranathi-intro--home\s*\{[\s\S]*?min-height:\s*auto/);
+  assert.match(css, /html\[data-environment-style="studio-static"\] \.hero-inline-action\s*\{[\s\S]*?pointer-events:\s*none/);
 });
 
 test("renders ASCII Garden from fixed glyph maps with paired palettes and static filled sprites", async () => {

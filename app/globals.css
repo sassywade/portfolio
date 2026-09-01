@@ -4708,6 +4708,51 @@ em {
   width: min(100% - 48px, var(--portfolio-reading-width));
 }
 
+/* Studio prototype: the quiet text-and-work portfolio without the Alamo scene. */
+html[data-environment-style="studio-static"] .top-pet-pull,
+html[data-environment-style="studio-static"] .smiley-cursor,
+html[data-environment-style="studio-static"] .alamo-weather {
+  display: none !important;
+}
+
+html[data-environment-style="studio-static"][data-top-pet-active="true"] .site-header--pages,
+html[data-environment-style="studio-static"][data-top-pet-active="true"] .pranathi-intro--home,
+html[data-environment-style="studio-static"][data-top-pet-active="true"] .pranathi-work,
+html[data-environment-style="studio-static"][data-top-pet-active="true"] .meadow-settings {
+  transform: none;
+}
+
+html[data-environment-style="studio-static"] .pranathi-intro--home {
+  min-height: auto;
+  padding-top: clamp(150px, 19vh, 210px);
+  padding-bottom: clamp(120px, 15vh, 170px);
+}
+
+html[data-environment-style="studio-static"] .hero-inline-action {
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+  pointer-events: none;
+  cursor: text;
+}
+
+html[data-environment-style="studio-static"] .hero-company__mark,
+html[data-environment-style="studio-static"] .hero-hobby__mark,
+html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
+  display: none;
+}
+
+.meadow-settings__style-preview[data-environment-style-preview="studio-static"] {
+  background-color: #fff;
+  background-image:
+    linear-gradient(rgba(71, 69, 64, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(71, 69, 64, 0.055) 1px, transparent 1px) !important;
+  background-size: 10px 10px;
+}
+
 .work-groups {
   display: grid;
   gap: clamp(64px, 7vw, 96px);

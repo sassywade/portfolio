@@ -93,6 +93,7 @@ export function MeadowSettings({
   const rollingMeadowIndex = Math.max(0, ROLLING_MEADOWS.findIndex(({ id }) => id === rollingMeadow));
   const rollingMeadowOption = ROLLING_MEADOWS[rollingMeadowIndex];
   const selectedEnvironment = ALAMO_STYLES.find(({ id }) => id === environmentStyle) ?? ALAMO_STYLES[0];
+  const isStudioStatic = environmentStyle === "studio-static";
 
   const cycleRollingMeadow = (offset: number) => {
     const nextIndex = (rollingMeadowIndex + offset + ROLLING_MEADOWS.length) % ROLLING_MEADOWS.length;
@@ -301,7 +302,9 @@ export function MeadowSettings({
                   className="meadow-settings__style-preview"
                   data-environment-style-preview={selectedEnvironment.id}
                   style={{
-                    backgroundImage: selectedEnvironment.rollingSrc
+                    backgroundImage: isStudioStatic
+                      ? "none"
+                      : selectedEnvironment.rollingSrc
                       ? `url(${selectedEnvironment.rollingSrc})`
                       : "url(/meadow-ground.png)",
                   }}
@@ -320,7 +323,9 @@ export function MeadowSettings({
               </span>
             </label>
             <p className="meadow-settings__note">
-              Style and meadow shape are independent. Control keeps the original prototype variants.
+              {isStudioStatic
+                ? "A quiet portfolio-only view with the playful scene and interactions removed."
+                : "Style and meadow shape are independent. Control keeps the original prototype variants."}
             </p>
             {environmentStyle === "ascii-garden" && (
               <div className="meadow-settings__ascii-palette">
@@ -345,39 +350,48 @@ export function MeadowSettings({
                 </div>
               </div>
             )}
-            <div className="meadow-settings__modes" aria-label="Meadow style">
-              <button
-                type="button"
-                aria-pressed={variant === "living"}
-                data-cuelume-toggle="meadow"
-                onClick={() => onVariantChange("living")}
-              >
-                Living
-              </button>
-              <button
-                type="button"
-                aria-pressed={variant === "flat"}
-                data-cuelume-toggle="meadow"
-                onClick={() => onVariantChange("flat")}
-              >
-                Flat
-              </button>
-            </div>
+            {!isStudioStatic && (
+              <>
+                <div className="meadow-settings__modes" aria-label="Meadow style">
+                  <button
+                    type="button"
+                    aria-pressed={variant === "living"}
+                    data-cuelume-toggle="meadow"
+                    onClick={() => onVariantChange("living")}
+                  >
+                    Living
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={variant === "flat"}
+                    data-cuelume-toggle="meadow"
+                    onClick={() => onVariantChange("flat")}
+                  >
+                    Flat
+                  </button>
+                </div>
 
-            <label className="meadow-settings__height">
-              <span>Meadow height <output>{meadowHeight}%</output></span>
-              <input
-                type="range"
-                min="70"
-                max="130"
-                step="1"
-                value={meadowHeight}
-                aria-label="Meadow height"
-                onChange={(event) => onMeadowHeightChange(Number(event.target.value))}
-              />
-            </label>
+                <label className="meadow-settings__height">
+                  <span>Meadow height <output>{meadowHeight}%</output></span>
+                  <input
+                    type="range"
+                    min="70"
+                    max="130"
+                    step="1"
+                    value={meadowHeight}
+                    aria-label="Meadow height"
+                    onChange={(event) => onMeadowHeightChange(Number(event.target.value))}
+                  />
+                </label>
+              </>
+            )}
 
-            {environmentStyle === "control" ? (
+            {isStudioStatic ? (
+              <div className="meadow-settings__curated-summary">
+                <span>Studio portfolio</span>
+                <small>No meadow · no tree · no Philip · no miniature visitors</small>
+              </div>
+            ) : environmentStyle === "control" ? (
               <>
                 <div className="meadow-settings__rolling">
                   <span>Rolling meadow</span>
@@ -454,7 +468,7 @@ export function MeadowSettings({
             )}
           </section>
 
-          <section className="meadow-settings__section" aria-labelledby={`${panelId}-wind`}>
+          {!isStudioStatic && <section className="meadow-settings__section" aria-labelledby={`${panelId}-wind`}>
             <div className="meadow-settings__section-head">
               <div>
                 <h2 id={`${panelId}-wind`}>Wind study</h2>
@@ -495,7 +509,7 @@ export function MeadowSettings({
                 ))}
               </div>
             )}
-          </section>
+          </section>}
         </aside>
       )}
     </div>,

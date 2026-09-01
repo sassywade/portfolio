@@ -12,6 +12,18 @@ export const ALAMO_STYLES = [
     treeRootOffset: 0,
   },
   {
+    id: "studio-static",
+    label: "Studio · no meadow",
+    shortLabel: "Studio",
+    rollingSrc: null,
+    flatSrc: null,
+    treeSrc: "/monterey-cypress.png",
+    atmosphere: "control",
+    rollingGroundOffset: 0,
+    flatHorizon: 0,
+    treeRootOffset: 0,
+  },
+  {
     id: "risograph",
     label: "Risograph print",
     shortLabel: "Risograph",
