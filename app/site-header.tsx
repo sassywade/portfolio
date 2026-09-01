@@ -9,6 +9,7 @@ const links = [
   ["work", "Work", "/#work"],
   ["about", "About", "/about"],
   ["play", "Play", "/play"],
+  ["resume", "Resume", "/Neel-Saswade-Resume.pdf"],
 ] as const;
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -28,6 +29,8 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             href={href}
             className={current === id ? "is-active" : undefined}
             aria-current={current === id ? "page" : undefined}
+            target={id === "resume" ? "_blank" : undefined}
+            rel={id === "resume" ? "noopener noreferrer" : undefined}
             data-cuelume-toggle="page"
             key={id}
           >

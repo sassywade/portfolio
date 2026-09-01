@@ -84,6 +84,8 @@ test("keeps the primary navigation labels static", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.doesNotMatch(header, /next\/link/);
+  assert.match(header, /\["resume", "Resume", "\/Neel-Saswade-Resume\.pdf"\]/);
+  assert.match(header, /target=\{id === "resume" \? "_blank" : undefined\}/);
   assert.match(header, /<a[\s\S]*?href=\{href\}/);
   assert.match(header, /\["about", "About", "\/about"\]/);
   assert.doesNotMatch(header, /site-nav__label--hover/);
