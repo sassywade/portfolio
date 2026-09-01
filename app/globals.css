@@ -231,7 +231,7 @@ html[data-hero-highlights="true"] .hero-hobby__mark {
 
 .hero-company--glean .hero-company__mark {
   border-radius: 50%;
-  background-image: url("https://assets.glean.com/marketing/Assets/Brand%20Resources/Logo%20Icon%20Blue/GLN_logo-icon-Primary.svg");
+  background-image: url("/work/glean-logo.png");
 }
 
 .hero-company--snap {
