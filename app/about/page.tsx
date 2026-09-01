@@ -22,10 +22,6 @@ export default function AboutPage() {
                 className="about-page__portrait-image"
               />
             </div>
-            <div className="about-page__portrait-caption">
-              <span>portrait</span>
-              <strong>Neel Saswade</strong>
-            </div>
           </div>
           <div className="simple-page__copy about-page__intro">
             <p>
