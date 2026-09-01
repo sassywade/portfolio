@@ -3,14 +3,21 @@ import { ProjectMockup } from "./project-mockup";
 import { Reveal } from "./reveal";
 
 export function ProjectCard({ project }: { project: Project }) {
-  const href = `/case-studies/${project.slug}`;
+  const href = project.externalUrl ?? `/case-studies/${project.slug}`;
+  const isExternal = Boolean(project.externalUrl);
 
   return (
     <Reveal className="project-reveal">
       <a
         className="project-card"
         href={href}
-        aria-label={`Open ${project.title} case study`}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        aria-label={
+          isExternal
+            ? `Open ${project.title} article in a new tab`
+            : `Open ${project.title} case study`
+        }
         data-cuelume-toggle="pulse"
       >
         <ProjectMockup project={project} />
@@ -20,7 +27,8 @@ export function ProjectCard({ project }: { project: Project }) {
 }
 
 export function ProjectGrid({ items = projects }: { items?: Project[] }) {
-  const gleanProjects = items;
+  const gleanProjects = items.filter((project) => project.category.includes("Glean"));
+  const snapProjects = items.filter((project) => project.category.includes("Snap"));
 
   return (
     <div className="work-groups">
@@ -33,6 +41,18 @@ export function ProjectGrid({ items = projects }: { items?: Project[] }) {
           {gleanProjects.map((project) => <ProjectCard key={project.number} project={project} />)}
         </div>
       </section>
+
+      {snapProjects.length > 0 ? (
+        <section className="work-group" aria-labelledby="work-group-snap">
+          <h3 className="work-group__brand hero-company hero-company--snap" id="work-group-snap">
+            <span className="hero-company__mark" aria-hidden="true" />
+            <span>Snap</span>
+          </h3>
+          <div className="project-grid pranathi-project-grid">
+            {snapProjects.map((project) => <ProjectCard key={project.number} project={project} />)}
+          </div>
+        </section>
+      ) : null}
 
     </div>
   );

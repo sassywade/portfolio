@@ -357,7 +357,7 @@ test("uses the supplied projects in the Play archive", async () => {
   assert.doesNotMatch(play, /Tiny type studies|Weekend camera roll|Things in progress/);
 });
 
-test("groups the supplied case studies into quiet Glean tiles", async () => {
+test("groups the supplied case studies into quiet Glean and Snap tiles", async () => {
   const [projects, projectCard, projectMockup, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/project-card.tsx", import.meta.url), "utf8"),
@@ -368,7 +368,7 @@ test("groups the supplied case studies into quiet Glean tiles", async () => {
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 6);
+  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 8);
   for (const title of [
     "Agent observability",
     "Artifacts",
@@ -376,6 +376,8 @@ test("groups the supplied case studies into quiet Glean tiles", async () => {
     "Homepage redesign",
     "Psychic",
     "Workspace admin",
+    "Treasure",
+    "NFTs as Lenses",
   ]) {
     assert.match(projects, new RegExp(`title: "${title}"`));
   }
@@ -385,7 +387,9 @@ test("groups the supplied case studies into quiet Glean tiles", async () => {
   assert.match(projectMockup, /project\.cover\.src/);
   assert.match(projectMockup, /project-work-image/);
   assert.match(projectCard, /id="work-group-glean"/);
-  assert.doesNotMatch(projectCard, /id="work-group-snap"/);
+  assert.match(projectCard, /id="work-group-snap"/);
+  assert.match(projectCard, /project\.category\.includes\("Snap"\)/);
+  assert.match(projectCard, /project\.externalUrl \?\? `\/case-studies\/\$\{project\.slug\}`/);
   assert.match(caseStudy, /CaseStudyNav/);
   assert.match(caseStudy, /narrative\.artifacts/);
   assert.doesNotMatch(projects, /placeholderCaseStudy|Concept placeholder/);

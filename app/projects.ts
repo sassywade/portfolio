@@ -22,6 +22,7 @@ export type Project = {
   year: string;
   theme: ProjectTheme;
   cover: CaseStudyArtifact;
+  externalUrl?: string;
 };
 
 export type CaseStudySection = {
@@ -142,6 +143,37 @@ export const projects: Project[] = [
       alt: "Workspace admin case study brief cover",
       caption: "Getting Glean ready for work",
       kind: "brief",
+    },
+  },
+  {
+    number: "07",
+    slug: "soft-launch",
+    title: "Treasure",
+    description: "Exploring a more playful way to discover digital collectibles through Snap AR.",
+    category: "Product design · Snap",
+    year: "2022",
+    theme: "systems",
+    cover: {
+      src: "/work/snap-treasure.png",
+      alt: "Treasure augmented reality shopping experience on Snapchat",
+      caption: "Treasure",
+      kind: "screen",
+    },
+  },
+  {
+    number: "08",
+    slug: "pocket-studio",
+    title: "NFTs as Lenses",
+    description: "Bringing verified digital collectibles into Snapchat as augmented reality Lenses.",
+    category: "Product design · Snap",
+    year: "2022",
+    theme: "field",
+    externalUrl: "https://techcrunch.com/2022/07/13/snap-eyes-adding-nfts-as-ar-filters-in-snapchat/",
+    cover: {
+      src: "/work/snap-nfts-as-lenses.png",
+      alt: "NFT collectible shown as an augmented reality Lens in Snapchat",
+      caption: "NFTs as Lenses",
+      kind: "screen",
     },
   },
 ];
