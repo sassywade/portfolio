@@ -72,11 +72,11 @@ export function AboutPhotoGallery() {
       </section>
 
       {selectedPhoto && createPortal(
-        <div className="photo-lightbox" role="dialog" aria-modal="true" aria-labelledby="photo-lightbox-title">
+        <div className="photo-lightbox" role="dialog" aria-modal="true" aria-labelledby="photo-lightbox-title" onClick={() => setSelectedIndex(null)}>
           <button className="photo-lightbox__close" type="button" onClick={() => setSelectedIndex(null)} aria-label="Close photo viewer" ref={closeButtonRef}>
             <span>Close</span><strong aria-hidden="true">×</strong>
           </button>
-          <figure className="photo-lightbox__figure">
+          <figure className="photo-lightbox__figure" onClick={(event) => event.stopPropagation()}>
             <div className="photo-lightbox__visual">
               <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" />
             </div>
