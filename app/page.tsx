@@ -5,7 +5,6 @@ import { BackpackWalk } from "./backpack-walk";
 import { Soundscape } from "./soundscape";
 import { ProjectGrid } from "./project-card";
 import { SiteHeader } from "./site-header";
-import { SiteFooter } from "./site-footer";
 import { TopPetPull } from "./top-pet-pull";
 
 type CompanyLinkProps = {
@@ -69,7 +68,6 @@ export default function Home() {
           <ProjectGrid />
         </section>
 
-        <SiteFooter />
       </main>
     </>
   );
