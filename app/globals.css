@@ -10196,6 +10196,17 @@ html[data-atmosphere="grid"] .ascii-garden {
   transform: none;
 }
 
+/* The print caption is a single centered strip beneath the image, never a side column. */
+.photo-lightbox__figure figcaption {
+  display: block;
+}
+
+.photo-lightbox__figure h2,
+.photo-lightbox__figure figcaption p {
+  grid-column: auto;
+  width: 100%;
+}
+
 @media (max-width: 700px) {
   .about-page .simple-page {
     width: calc(100% - 32px);
