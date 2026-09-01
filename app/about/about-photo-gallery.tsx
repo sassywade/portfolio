@@ -30,7 +30,7 @@ const lifePhotos: PhotoSlot[] = [
 
 function FilmPhoto({ photo, onOpen }: { photo: PhotoSlot; onOpen: () => void }) {
   return (
-    <button className={`film-photo film-photo--${photo.orientation}`} type="button" onClick={onOpen} aria-label={`Open ${photo.title}`}>
+    <button className={`film-photo film-photo--${photo.orientation} film-photo--${photo.id}`} type="button" onClick={onOpen} aria-label={`Open ${photo.title}`}>
       <span className="film-photo__paper">
         <span className="film-photo__image">
           <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="(max-width: 700px) 22vw, 84px" />

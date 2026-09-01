@@ -10207,6 +10207,11 @@ html[data-atmosphere="grid"] .ascii-garden {
   width: 100%;
 }
 
+/* Bring the bright cycling frame back to a more natural, non-HDR look. */
+.film-photo--ride-day .film-photo__image img {
+  filter: brightness(0.94) saturate(0.86) contrast(0.97);
+}
+
 @media (max-width: 700px) {
   .about-page .simple-page {
     width: calc(100% - 32px);
