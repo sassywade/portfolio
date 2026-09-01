@@ -6363,7 +6363,6 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   bottom: calc(
     clamp(68px, 7.35vw, 110px)
     + var(--meadow-height-offset)
-    + var(--cypress-viewport-lift)
     - 2px
   );
   width: max-content;
