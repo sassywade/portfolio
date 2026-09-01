@@ -16,7 +16,7 @@ import {
   type RollingMeadow,
 } from "./meadow";
 import type { WindKey, WindSettings } from "./wind";
-import type { WorkGridColumns } from "./hero-meadow";
+import type { WorkGridColumns, WorkHandoff } from "./hero-meadow";
 import type { TopPetMode } from "./top-pet";
 import { PhilipPickerToggle } from "./philip-toggle";
 
@@ -32,6 +32,7 @@ type MeadowSettingsProps = {
   asciiGardenTheme: AsciiGardenTheme;
   atmosphere: PortfolioAtmosphere;
   workGridColumns: WorkGridColumns;
+  workHandoff: WorkHandoff;
   heroHighlights: boolean;
   variant: MeadowVariant;
   rollingMeadow: RollingMeadow;
@@ -46,6 +47,7 @@ type MeadowSettingsProps = {
   onAsciiGardenThemeChange: (theme: AsciiGardenTheme) => void;
   onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
   onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
+  onWorkHandoffChange: (handoff: WorkHandoff) => void;
   onHeroHighlightsChange: (isEnabled: boolean) => void;
   onVariantChange: (variant: MeadowVariant) => void;
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
@@ -62,6 +64,7 @@ export function MeadowSettings({
   asciiGardenTheme,
   atmosphere,
   workGridColumns,
+  workHandoff,
   heroHighlights,
   variant,
   rollingMeadow,
@@ -76,6 +79,7 @@ export function MeadowSettings({
   onAsciiGardenThemeChange,
   onAtmosphereChange,
   onWorkGridColumnsChange,
+  onWorkHandoffChange,
   onHeroHighlightsChange,
   onVariantChange,
   onRollingMeadowChange,
@@ -218,6 +222,34 @@ export function MeadowSettings({
               >
                 3 columns
               </button>
+            </div>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-work-handoff`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-work-handoff`}>Work handoff</h2>
+                <small>Hero-to-project transition</small>
+              </div>
+            </div>
+            <div className="meadow-settings__handoffs" aria-label="Work section handoff style">
+              {([
+                ["dissolve", "Current", "Meadow leaves; work stays in document flow."],
+                ["rising-tray", "Rising tray", "Work actively rises to meet the departing meadow."],
+                ["soft-overlap", "Soft overlap", "Work fades in early with a restrained lift."],
+                ["compact", "Compact", "A shorter, faster handoff with less runway."],
+              ] as const).map(([id, label, description]) => (
+                <button
+                  type="button"
+                  aria-pressed={workHandoff === id}
+                  data-cuelume-toggle="layout"
+                  onClick={() => onWorkHandoffChange(id)}
+                  key={id}
+                >
+                  <span>{label}</span>
+                  <small>{description}</small>
+                </button>
+              ))}
             </div>
           </section>
 

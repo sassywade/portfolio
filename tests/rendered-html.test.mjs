@@ -405,11 +405,18 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(projects, /export const placeholderCaseStudy: CaseStudy/);
   assert.match(caseStudy, /caseStudies\[slug\] \?\? placeholderCaseStudy/);
   assert.match(hero, /useState<WorkGridColumns>\(2\)/);
+  assert.match(hero, /useState<WorkHandoff>\("dissolve"\)/);
   assert.match(hero, /document\.documentElement\.dataset\.workColumns = String\(workGridColumns\)/);
+  assert.match(hero, /document\.documentElement\.dataset\.workHandoff = workHandoff/);
   assert.match(prototype, /aria-label="Work grid columns"/);
   assert.match(prototype, /onWorkGridColumnsChange\(2\)/);
   assert.match(prototype, /onWorkGridColumnsChange\(3\)/);
+  assert.match(prototype, /aria-label="Work section handoff style"/);
+  assert.match(prototype, /"rising-tray"/);
+  assert.match(prototype, /"soft-overlap"/);
+  assert.match(prototype, /"compact"/);
   assert.match(css, /html\[data-work-columns="3"\] \.pranathi-project-grid/);
+  assert.match(css, /html\[data-work-handoff="rising-tray"\] \.pranathi-work/);
   assert.match(css, /background:\s*#ececec/);
   assert.match(css, /\.hero-company--glean \.hero-company__mark \{[\s\S]*?background-image:\s*url\("\/work\/glean-logo\.png"\)/);
   assert.match(css, /\.hero-company--snap \.hero-company__mark \{[\s\S]*?background-image:\s*url\("\/work\/snap-logo\.png"\)/);

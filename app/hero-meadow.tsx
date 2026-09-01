@@ -18,6 +18,7 @@ import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const DEFAULT_FLAT_MEADOW_COLOR = "#6f8d45";
 export type WorkGridColumns = 2 | 3;
+export type WorkHandoff = "dissolve" | "rising-tray" | "soft-overlap" | "compact";
 
 export function HeroMeadow() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -37,6 +38,7 @@ export function HeroMeadow() {
   const [meadowHeight, setMeadowHeight] = useState(100);
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
   const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(2);
+  const [workHandoff, setWorkHandoff] = useState<WorkHandoff>("dissolve");
   const [heroHighlights, setHeroHighlights] = useState(false);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
@@ -101,6 +103,11 @@ export function HeroMeadow() {
     document.documentElement.dataset.workColumns = String(workGridColumns);
     return () => delete document.documentElement.dataset.workColumns;
   }, [workGridColumns]);
+
+  useEffect(() => {
+    document.documentElement.dataset.workHandoff = workHandoff;
+    return () => delete document.documentElement.dataset.workHandoff;
+  }, [workHandoff]);
 
   useEffect(() => {
     document.documentElement.dataset.heroHighlights = heroHighlights ? "true" : "false";
@@ -189,6 +196,29 @@ export function HeroMeadow() {
         );
       });
       scene.style.setProperty("--meadow-scroll-progress", currentProgress.toFixed(4));
+      const handoffDistance = Math.min(250, viewportHeight * 0.28);
+      const handoffProfiles: Record<WorkHandoff, { y: number; opacity: number; scale: number }> = {
+        dissolve: { y: 0, opacity: 1, scale: 1 },
+        "rising-tray": {
+          y: -handoffDistance * smootherProgress,
+          opacity: 1,
+          scale: 1,
+        },
+        "soft-overlap": {
+          y: -handoffDistance * 0.56 * smootherProgress,
+          opacity: 0.58 + smootherProgress * 0.42,
+          scale: 0.992 + smootherProgress * 0.008,
+        },
+        compact: {
+          y: -handoffDistance * 0.78 * clamp(smootherProgress * 1.32, 0, 1),
+          opacity: 1,
+          scale: 1,
+        },
+      };
+      const handoff = handoffProfiles[workHandoff];
+      work.style.setProperty("--work-handoff-y", `${handoff.y.toFixed(2)}px`);
+      work.style.setProperty("--work-handoff-opacity", handoff.opacity.toFixed(4));
+      work.style.setProperty("--work-handoff-scale", handoff.scale.toFixed(4));
       scene.dataset.scrollState = currentProgress <= 0.002
         ? "hero"
         : currentProgress >= 0.998
@@ -203,7 +233,7 @@ export function HeroMeadow() {
     const calculateTarget = () => {
       viewportHeight = Math.max(1, window.visualViewport?.height ?? window.innerHeight);
       const scrollY = Math.max(0, window.scrollY);
-      const workTop = work.getBoundingClientRect().top + scrollY;
+      const workTop = work.offsetTop;
       const transitionStart = Math.max(0, workTop - viewportHeight * 1.06);
       const transitionEnd = Math.max(transitionStart + 1, workTop - viewportHeight * 0.2);
       const progress = clamp(
@@ -259,8 +289,11 @@ export function HeroMeadow() {
       window.removeEventListener("resize", schedule);
       window.visualViewport?.removeEventListener("resize", schedule);
       reducedMotion.removeEventListener("change", schedule);
+      work.style.removeProperty("--work-handoff-y");
+      work.style.removeProperty("--work-handoff-opacity");
+      work.style.removeProperty("--work-handoff-scale");
     };
-  }, []);
+  }, [workHandoff]);
 
   const updateWind = (key: WindKey, value: number) => {
     setWind((current) => ({ ...current, [key]: value }));
@@ -352,6 +385,7 @@ export function HeroMeadow() {
         asciiGardenTheme={asciiGardenTheme}
         atmosphere={atmosphere}
         workGridColumns={workGridColumns}
+        workHandoff={workHandoff}
         heroHighlights={heroHighlights}
         variant={meadowVariant}
         rollingMeadow={rollingMeadow}
@@ -366,6 +400,7 @@ export function HeroMeadow() {
         onEnvironmentStyleChange={handleEnvironmentStyleChange}
         onAsciiGardenThemeChange={handleAsciiGardenThemeChange}
         onWorkGridColumnsChange={setWorkGridColumns}
+        onWorkHandoffChange={setWorkHandoff}
         onHeroHighlightsChange={setHeroHighlights}
         onVariantChange={setMeadowVariant}
         onRollingMeadowChange={(nextMeadow) => {
