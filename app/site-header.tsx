@@ -1,4 +1,5 @@
-import Link from "next/link";
+/* Vinext's client-side Link shim currently swallows these route clicks. */
+/* eslint-disable @next/next/no-html-link-for-pages */
 
 type SiteHeaderProps = {
   current?: "work" | "about" | "play";
@@ -13,17 +14,17 @@ const links = [
 export function SiteHeader({ current }: SiteHeaderProps) {
   return (
     <header className="site-header site-header--pages">
-      <Link
+      <a
         className="site-header__wordmark"
         href="/"
         aria-label="Neel Saswade, home"
         data-cuelume-toggle="page"
       >
         Neel Saswade
-      </Link>
+      </a>
       <nav className="site-nav" aria-label="Main navigation">
         {links.map(([id, label, href]) => (
-          <Link
+          <a
             href={href}
             className={current === id ? "is-active" : undefined}
             aria-current={current === id ? "page" : undefined}
@@ -31,7 +32,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             key={id}
           >
             {label}
-          </Link>
+          </a>
         ))}
       </nav>
     </header>

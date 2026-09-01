@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CaseStudyCarousel } from "../../case-study-carousel";
@@ -164,11 +163,11 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         </div>
 
         <Reveal className="next-project-reveal">
-          <Link className={`next-project next-project--${nextProject.theme}`} href={`/case-studies/${nextProject.slug}`} data-cuelume-toggle="pulse">
+          <a className={`next-project next-project--${nextProject.theme}`} href={`/case-studies/${nextProject.slug}`} data-cuelume-toggle="pulse">
             <span className="case-kicker">Next project / {nextProject.number}</span>
             <h2>{nextProject.title}</h2>
             <span className="next-project__link">Open study <b>↗</b></span>
-          </Link>
+          </a>
         </Reveal>
       </div>
       <SiteFooter />

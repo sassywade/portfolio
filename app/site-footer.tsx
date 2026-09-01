@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const footerYear = new Date().getFullYear();
 
 export function SiteFooter() {
@@ -38,8 +36,8 @@ export function SiteFooter() {
             <p className="pranathi-footer__label">
               Keep looking <span aria-hidden="true">↘</span>
             </p>
-            <Link href="/about">About</Link>
-            <Link href="/play">Play</Link>
+            <a href="/about">About</a>
+            <a href="/play">Play</a>
           </div>
         </div>
       </div>
