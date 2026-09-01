@@ -138,6 +138,51 @@ html[data-top-pet-active="true"] .hero-meadow {
   }
 }
 
+/* Keep lifted contact-sheet prints contained so their white frames stay visible. */
+.about-page__gallery-track .film-photo {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+}
+
+.about-page__gallery-track .film-photo__paper {
+  position: relative;
+  z-index: 1;
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid rgba(36, 35, 33, 0.14);
+  background: #fff;
+}
+
+.about-page__gallery-track .film-photo__image {
+  position: relative;
+  z-index: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.about-page__gallery-track .film-photo__image img {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-page__gallery-track .film-photo:hover,
+.about-page__gallery-track .film-photo:focus-visible {
+  z-index: 100;
+}
+
+.about-page__gallery-track .film-photo:hover .film-photo__paper,
+.about-page__gallery-track .film-photo:focus-visible .film-photo__paper {
+  z-index: 2;
+  border-color: rgba(36, 35, 33, 0.18);
+  box-shadow: 0 3px 8px rgba(54, 50, 43, 0.09);
+}
+
 /* Inline hero actors stay plain by default; the prototype picker can opt into color. */
 .hero-copy__rest,
 .hero-inline-action {
@@ -11576,6 +11621,28 @@ html[data-atmosphere="grid"] .ascii-garden {
 @media (prefers-reduced-motion: reduce) {
   .about-page__portrait-card {
     transition: none;
+  }
+}
+
+/* Final hover behavior for work tiles: quick, quiet, and position-only. */
+.pranathi-project-grid .project-card .project-mockup {
+  transition: transform 180ms var(--motion-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pranathi-project-grid .project-card:hover .project-mockup {
+    box-shadow: none;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pranathi-project-grid .project-card .project-mockup {
+    transition: none;
+  }
+
+  .pranathi-project-grid .project-card:hover .project-mockup {
+    transform: none;
   }
 }
 

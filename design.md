@@ -105,6 +105,8 @@ The grid is grouped by company. Glean appears first, followed by Snap. Cards con
 
 Until a graphic exists, the card remains a substantial gray placeholder. Never collapse a placeholder into a title floating in empty page space.
 
+On precise-pointer hover, the tile may lift by 4px with a fast, non-spring transition. Do not scale it, add a hover shadow, or animate the title separately. Reduced-motion users keep the tile stationary.
+
 ### Case studies
 
 Case studies are quiet, image-led narratives influenced by the clarity of Natalie Almosa and the structured storytelling of Caleb Wu without copying either site literally.
