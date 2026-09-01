@@ -4756,11 +4756,11 @@ em {
 .pranathi-project-grid .project-mockup {
   position: relative;
   display: grid;
-  aspect-ratio: 1.22;
+  aspect-ratio: 1.08;
   padding: 18px;
   overflow: hidden;
   border: 0;
-  border-radius: 10px;
+  border-radius: 28px;
   background: #ececec;
   place-items: center;
 }
@@ -4768,22 +4768,22 @@ em {
 .pranathi-project-grid .project-card__title {
   position: absolute;
   z-index: 2;
-  top: 16px;
-  right: 16px;
+  top: 24px;
+  right: 22px;
   bottom: auto;
-  left: 16px;
+  left: 22px;
   margin: 0;
-  color: #77736f;
+  color: #65625f;
   font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 450;
-  letter-spacing: -0.01em;
+  font-size: clamp(16px, 1.35vw, 20px);
+  font-weight: 480;
+  letter-spacing: -0.025em;
   line-height: 1.2;
   text-align: center;
 }
 
 .pranathi-project-grid .project-mockup--with-image {
-  padding: 44px 18px 14px;
+  padding: 62px 22px 18px;
 }
 
 .pranathi-project-grid .project-work-image {
@@ -4794,6 +4794,7 @@ em {
   margin: 0;
   object-fit: contain;
   filter: drop-shadow(0 10px 12px rgba(35, 34, 32, 0.08));
+  transition: transform 450ms cubic-bezier(.22,.7,.2,1);
 }
 
 .pranathi-project-grid .project-card .project-mockup {
@@ -4803,11 +4804,16 @@ em {
 .pranathi-project-grid .project-card:hover .project-mockup,
 .pranathi-project-grid .project-card:focus-visible .project-mockup {
   box-shadow: none;
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+}
+
+.pranathi-project-grid .project-card:hover .project-work-image,
+.pranathi-project-grid .project-card:focus-visible .project-work-image {
+  transform: translateY(-4px) scale(1.012);
 }
 
 .pranathi-project-grid .project-card:focus-visible {
-  border-radius: 10px;
+  border-radius: 28px;
   outline: 1px solid var(--acid);
   outline-offset: 4px;
 }
@@ -5021,6 +5027,14 @@ em {
   .pranathi-project-grid {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .pranathi-project-grid .project-mockup {
+    border-radius: 22px;
+  }
+
+  .pranathi-project-grid .project-card:focus-visible {
+    border-radius: 22px;
   }
 
   .work-groups {
