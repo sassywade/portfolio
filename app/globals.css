@@ -9256,6 +9256,252 @@ html[data-atmosphere="grid"] .ascii-garden {
   }
 }
 
+/* About page: a small personal note and one quiet row of photographs. */
+.about-page .simple-page {
+  width: min(100% - 64px, 860px);
+  padding-top: clamp(118px, 17vh, 176px);
+  padding-bottom: 120px;
+}
+
+.about-page .simple-page h1 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 2.5vw, 34px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.about-page__identity {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 248px;
+  align-items: start;
+  gap: clamp(42px, 8vw, 100px);
+  margin-top: 28px;
+}
+
+.about-page__portrait-card {
+  grid-column: 2;
+  grid-row: 1;
+  width: 248px;
+  padding: 7px 7px 10px;
+  border: 1px solid rgba(36, 35, 33, 0.08);
+  box-shadow: 0 7px 18px rgba(47, 45, 40, 0.05);
+  transform: rotate(1deg);
+}
+
+.about-page__portrait-photo {
+  min-height: 300px;
+}
+
+.about-page__portrait-caption {
+  padding-top: 7px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.about-page__portrait-caption strong {
+  font-weight: 400;
+}
+
+.about-page__identity .about-page__intro {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  max-width: 550px;
+  margin-top: 0;
+}
+
+.about-page__identity .about-page__intro p {
+  color: #373530;
+  font-family: var(--serif);
+  font-size: clamp(16px, 1.55vw, 20px);
+  letter-spacing: -0.012em;
+  line-height: 1.68;
+}
+
+.about-page__identity .about-page__intro p + p {
+  margin-top: 16px;
+}
+
+.about-page__gallery {
+  margin-top: clamp(82px, 10vw, 128px);
+  padding: 0;
+  border: 0;
+}
+
+.about-page__gallery > h2 {
+  margin: 0 0 24px;
+  color: var(--about-text);
+  font-family: var(--serif);
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.about-page__gallery-viewport {
+  margin: 0;
+  overflow: visible;
+}
+
+.about-page__gallery-track {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: max-content;
+  padding: 10px 0 18px;
+  overflow: visible;
+}
+
+.film-photo {
+  position: relative;
+  z-index: 0;
+  flex: 0 0 84px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transform: translateY(0);
+  transition: transform 230ms cubic-bezier(.22, .7, .2, 1), z-index 0ms linear 230ms;
+}
+
+.film-photo:nth-child(3n + 1) { transform: translateY(4px); }
+.film-photo:nth-child(3n + 2) { transform: translateY(0); }
+.film-photo:nth-child(3n) { transform: translateY(7px); }
+
+.film-photo__paper {
+  display: block;
+  padding: 4px;
+  border: 1px solid rgba(36, 35, 33, 0.10);
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(54, 50, 43, 0.08);
+}
+
+.film-photo__image,
+.film-photo--portrait .film-photo__image,
+.film-photo--landscape .film-photo__image {
+  display: block;
+  aspect-ratio: 0.72 / 1;
+}
+
+.film-photo--landscape { flex-basis: 84px; }
+.film-photo--landscape .film-photo__image { aspect-ratio: 1.1 / 1; }
+
+.film-photo__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film-photo:hover,
+.film-photo:focus-visible {
+  z-index: 2;
+  transform: translateY(-12px) scale(1.22);
+  outline: 0;
+  transition-delay: 0ms;
+}
+
+.film-photo:nth-child(3n + 1):hover,
+.film-photo:nth-child(3n + 1):focus-visible,
+.film-photo:nth-child(3n + 2):hover,
+.film-photo:nth-child(3n + 2):focus-visible,
+.film-photo:nth-child(3n):hover,
+.film-photo:nth-child(3n):focus-visible {
+  transform: translateY(-12px) scale(1.22);
+}
+
+.film-photo__caption { display: none; }
+
+.photo-lightbox {
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.photo-lightbox__figure {
+  max-width: min(480px, calc(100vw - 48px));
+}
+
+.photo-lightbox__visual {
+  max-height: 78vh;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(54, 50, 43, 0.14);
+}
+
+.photo-lightbox__visual img {
+  display: block;
+  max-height: 72vh;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.photo-lightbox__figure figcaption {
+  padding-top: 14px;
+  text-align: center;
+}
+
+.photo-lightbox__figure h2 {
+  margin: 0;
+  color: var(--about-text);
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.photo-lightbox__arrow,
+.photo-lightbox__counter { display: none; }
+
+.photo-lightbox__close {
+  color: var(--about-text);
+}
+
+@media (max-width: 700px) {
+  .about-page .simple-page {
+    width: calc(100% - 32px);
+    padding-top: 96px;
+    padding-bottom: 92px;
+  }
+
+  .about-page__identity {
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 22px;
+    margin-top: 24px;
+  }
+
+  .about-page__portrait-card {
+    width: 150px;
+  }
+
+  .about-page__portrait-photo {
+    min-height: 190px;
+  }
+
+  .about-page__identity .about-page__intro p {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .about-page__gallery {
+    margin-top: 76px;
+    overflow: hidden;
+  }
+
+  .about-page__gallery-track {
+    gap: 2px;
+    padding-bottom: 14px;
+  }
+
+  .film-photo,
+  .film-photo--landscape {
+    flex-basis: 66px;
+  }
+
+  .photo-lightbox__figure {
+    max-width: calc(100vw - 32px);
+  }
+}
+
 /* A small personality layer for the About page. The cards stay useful without JavaScript. */
 .about-page__current {
   margin-top: 116px;
