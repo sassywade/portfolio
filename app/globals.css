@@ -2305,6 +2305,63 @@ em {
   }
 }
 
+/* Keep the experience list as quiet and compact as the reference frame. */
+.about-page__experience {
+  margin-top: 88px;
+}
+
+.about-page__section-heading {
+  margin-bottom: 20px;
+  color: var(--about-text);
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.about-page__experience-row {
+  padding: 14px 0 16px;
+}
+
+.about-page__experience-heading h3,
+.about-page__experience-heading p {
+  font-size: 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.about-page__experience-period {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.about-page__experience-description {
+  margin-top: 5px;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+  .about-page__experience {
+    margin-top: 72px;
+  }
+
+  .about-page__section-heading {
+    font-size: 19px;
+  }
+
+  .about-page__experience-heading h3,
+  .about-page__experience-heading p {
+    font-size: 16px;
+  }
+
+  .about-page__experience-description {
+    font-size: 14px;
+  }
+}
+
 /* Compact experience list matching the About page reference frame. */
 .about-page__experience-list {
   border-top: 1px solid var(--line);
