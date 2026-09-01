@@ -139,7 +139,7 @@ export function AboutPhotoGallery() {
           <button className="photo-lightbox__close" type="button" onClick={closePhoto} aria-label="Close photo viewer" ref={closeButtonRef}>
             <span>Close</span><strong aria-hidden="true">×</strong>
           </button>
-          <figure className="photo-lightbox__figure" onClick={(event) => event.stopPropagation()}>
+          <figure className="photo-lightbox__figure">
             <div className="photo-lightbox__visual">
               <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" unoptimized priority />
             </div>
