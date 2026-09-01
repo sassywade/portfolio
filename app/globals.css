@@ -11037,3 +11037,19 @@ html[data-atmosphere="grid"] .ascii-garden {
     left: 10px !important;
   }
 }
+
+/* A tiny playful tilt for the profile card. */
+.about-page__portrait-card {
+  transition: transform 320ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.about-page__portrait-card:hover,
+.about-page__portrait-card:focus-within {
+  transform: rotate(-1.5deg) scale(1.015);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__portrait-card {
+    transition: none;
+  }
+}
