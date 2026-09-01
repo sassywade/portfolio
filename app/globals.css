@@ -10171,6 +10171,31 @@ html[data-atmosphere="grid"] .ascii-garden {
   color: var(--about-text);
 }
 
+/* Keep the Lifemax cards crisp on hover. The lift is playful, but the frame should not bloom. */
+.film-photo__paper {
+  box-shadow: 0 2px 6px rgba(54, 50, 43, 0.07);
+}
+
+.film-photo:hover,
+.film-photo:focus-visible,
+.film-photo:nth-child(n):hover,
+.film-photo:nth-child(n):focus-visible {
+  filter: none;
+  transform: translateY(-8px) scale(1.06);
+}
+
+.film-photo:hover .film-photo__paper,
+.film-photo:focus-visible .film-photo__paper {
+  box-shadow: 0 3px 8px rgba(54, 50, 43, 0.09);
+}
+
+.film-photo__image img,
+.film-photo:hover .film-photo__image img,
+.film-photo:focus-visible .film-photo__image img {
+  filter: none;
+  transform: none;
+}
+
 @media (max-width: 700px) {
   .about-page .simple-page {
     width: calc(100% - 32px);
