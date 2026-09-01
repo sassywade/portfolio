@@ -6233,48 +6233,69 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   }
 }
 
-/* Live Alamo Square conditions stay quiet at the meadow's lower edge. */
+/* The live Alamo Square breeze follows the hill beside the cypress. */
 .alamo-weather {
   position: absolute;
   z-index: 6;
-  right: clamp(18px, 2.8vw, 42px);
-  bottom: clamp(16px, 2.1vw, 30px);
-  display: grid;
-  justify-items: end;
-  gap: 2px;
-  color: rgba(255, 255, 255, 0.94);
-  font-family: var(--mono);
+  right: clamp(16px, 2.6vw, 42px);
+  bottom: calc(
+    clamp(68px, 7.35vw, 110px)
+    + var(--meadow-height-offset)
+    + var(--cypress-viewport-lift)
+    - 2px
+  );
+  width: max-content;
+  max-width: min(34vw, 360px);
+  color: color-mix(in srgb, var(--ink) 68%, transparent);
+  font-family: var(--sans);
   font-size: 10px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.035em;
+  letter-spacing: 0.018em;
   line-height: 1.35;
   pointer-events: none;
   text-align: right;
-  text-shadow: 0 1px 5px rgba(22, 31, 17, 0.55);
+  text-shadow: 0 1px 5px color-mix(in srgb, var(--paper) 88%, transparent);
+  white-space: nowrap;
 }
 
 .alamo-weather__primary {
+  display: block;
   font-size: 11px;
 }
 
-.alamo-weather__secondary {
-  opacity: 0.74;
+.alamo-weather__arc {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.alamo-weather__character {
+  display: inline-block;
+  transform-origin: 50% 100%;
 }
 
 .alamo-weather[data-weather-state="loading"] {
   opacity: 0.72;
 }
 
+.hero-meadow[data-meadow-variant="flat"] .alamo-weather {
+  bottom: calc(var(--flat-meadow-height) + var(--meadow-height-offset) - 1px);
+}
+
 @media (max-width: 580px) {
   .alamo-weather {
     right: 12px;
-    bottom: 10px;
-    max-width: 230px;
+    bottom: calc(70px + var(--meadow-height-offset));
+    max-width: calc(100vw - 24px);
     font-size: 9px;
   }
 
   .alamo-weather__primary {
-    font-size: 10px;
+    font-size: 9px;
+  }
+
+  .hero-meadow[data-meadow-variant="flat"] .alamo-weather {
+    bottom: calc(var(--flat-meadow-height) + var(--meadow-height-offset) - 1px);
   }
 }
 
