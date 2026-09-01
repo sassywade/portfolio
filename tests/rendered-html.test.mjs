@@ -432,6 +432,7 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(css, /\.work-group__brand \{[\s\S]*?font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /\.work-group__brand \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /\.work-group__brand \{[\s\S]*?font-weight:\s*600/);
+  assert.match(css, /\.work-group__brand \{[\s\S]*?margin:\s*0 0 clamp\(22px, 2vw, 28px\) 4px/);
   assert.match(css, /\.work-groups \{[\s\S]*?padding-bottom:\s*clamp\(88px, 10vw, 144px\)/);
   assert.match(css, /aspect-ratio:\s*1\.3/);
   assert.match(css, /border-radius:\s*20px/);

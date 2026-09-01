@@ -4752,7 +4752,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   align-items: center;
   gap: 8px;
   width: fit-content;
-  margin: 0 0 14px 4px;
+  margin: 0 0 clamp(22px, 2vw, 28px) 4px;
   color: var(--ink);
   font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(16px, 1.32vw, 19px);
@@ -5119,7 +5119,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   }
 
   .work-group__brand {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
   }
 
   .simple-page {
