@@ -378,8 +378,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
     "Artifacts",
     "Growth",
     "Homepage redesign",
-    "Psychic",
-    "Workspace admin",
+    "Proactive intelligence",
+    "Enterprise setup",
     "Treasure",
     "NFTs as Lenses",
   ]) {
@@ -393,6 +393,7 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.doesNotMatch(projectMockup, /project-card__title|project-card__caption|project-card__arrow|project-mockup__wash/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
+  assert.match(projectCard, /"homepage",[\s\S]*"psychic",[\s\S]*"artifacts",[\s\S]*"growth",[\s\S]*"agent-observability",[\s\S]*"workspace-admin-console-actions"/);
   assert.match(projectCard, /project\.category\.includes\("Snap"\)/);
   assert.match(projectCard, /project\.externalUrl \?\? `\/case-studies\/\$\{project\.slug\}`/);
   assert.match(caseStudy, /case-story-rail/);

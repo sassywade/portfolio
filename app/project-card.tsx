@@ -2,6 +2,15 @@ import { projects, type Project } from "./projects";
 import { ProjectMockup } from "./project-mockup";
 import { Reveal } from "./reveal";
 
+const gleanProjectOrder = [
+  "homepage",
+  "psychic",
+  "artifacts",
+  "growth",
+  "agent-observability",
+  "workspace-admin-console-actions",
+] as const;
+
 export function ProjectCard({ project }: { project: Project }) {
   const href = project.externalUrl ?? `/case-studies/${project.slug}`;
   const isExternal = Boolean(project.externalUrl);
@@ -27,7 +36,9 @@ export function ProjectCard({ project }: { project: Project }) {
 }
 
 export function ProjectGrid({ items = projects }: { items?: Project[] }) {
-  const gleanProjects = items.filter((project) => project.category.includes("Glean"));
+  const gleanProjects = items
+    .filter((project) => project.category.includes("Glean"))
+    .sort((a, b) => gleanProjectOrder.indexOf(a.slug as typeof gleanProjectOrder[number]) - gleanProjectOrder.indexOf(b.slug as typeof gleanProjectOrder[number]));
   const snapProjects = items.filter((project) => project.category.includes("Snap"));
 
   return (

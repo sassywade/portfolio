@@ -118,7 +118,7 @@ export const projects: Project[] = [
   {
     number: "05",
     slug: "psychic",
-    title: "Psychic",
+    title: "Proactive intelligence",
     description: "Designing relief before the work begins.",
     category: "Product concept · Glean",
     year: "2026",
@@ -133,7 +133,7 @@ export const projects: Project[] = [
   {
     number: "06",
     slug: "workspace-admin-console-actions",
-    title: "Workspace admin",
+    title: "Enterprise setup",
     description: "Designing the admin experience for setup, connectors, and actions.",
     category: "Product design · Glean",
     year: "2025",
