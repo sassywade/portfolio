@@ -25,7 +25,7 @@ const lifePhotos: PhotoSlot[] = [
   { id: "ride-through-the-grass", title: "Chasing the light", description: "Shenanigans in fort mason with the boy", alt: "Cyclist riding through a grassy field", orientation: "landscape", src: "/about/ride-through-the-grass.JPG" },
   { id: "high-country-friends", title: "Made it up here", description: "A high-country hike with a friend.", alt: "Two friends hiking in the mountains", orientation: "landscape", src: "/about/high-country-friends.JPG" },
   { id: "red-wall-bike", title: "Bike against a red wall", description: "My first bike :)", alt: "A road bike against a red wall", orientation: "portrait", src: "/about/red-wall-bike.JPG" },
-  { id: "san-francisco-from-above", title: "The city from above", description: "Looking out over the city from a grassy hillside.", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
+  { id: "san-francisco-from-above", title: "The city from above", description: "Exploring bernal heights with Kelly", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
 
 function FilmPhoto({ photo, index, onOpen }: { photo: PhotoSlot; index: number; onOpen: (trigger: HTMLButtonElement) => void }) {
