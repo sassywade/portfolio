@@ -4846,7 +4846,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   margin: 0;
   color: #65625f;
   font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(12px, 0.82vw, 14px);
+  font-size: clamp(14px, 0.95vw, 16px);
   font-weight: 470;
   letter-spacing: -0.015em;
   line-height: 1.2;
