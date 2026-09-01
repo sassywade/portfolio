@@ -34,6 +34,27 @@ export default function AboutPage() {
               still taking shape, where there&apos;s room to explore, try ideas, and
               make something people actually want to use.
             </p>
+            <nav className="about-page__socials" aria-label="Social links">
+              <a
+                href="https://x.com/neelsaswade"
+                target="_blank"
+                rel="noreferrer"
+                data-social="twitter"
+              >
+                Twitter
+              </a>
+              <a
+                href="https://www.linkedin.com/in/neelsaswade/"
+                target="_blank"
+                rel="noreferrer"
+                data-social="linkedin"
+              >
+                LinkedIn
+              </a>
+              <a href="mailto:neel.saswade@gmail.com" data-social="email">
+                Email
+              </a>
+            </nav>
           </div>
         </div>
 

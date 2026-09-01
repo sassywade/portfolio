@@ -2269,6 +2269,36 @@ em {
   transform: rotate(-1.5deg) scale(1.015);
 }
 
+.about-page__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.about-page__socials a {
+  color: var(--muted, #77736d);
+  font-family: var(--font-geist), Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.about-page__socials a:hover,
+.about-page__socials a:focus-visible {
+  color: var(--ink, #262522);
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__socials a {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .about-page__portrait-card {
     transition: none;
