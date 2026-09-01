@@ -178,15 +178,6 @@ export const projects: Project[] = [
     year: "2026",
     theme: "field",
   },
-  {
-    number: "17",
-    slug: "drift",
-    title: "Telestrations",
-    description: "Placeholder case study for wandering through information.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "archive",
-  },
 ];
 
 export const placeholderCaseStudy: CaseStudy = {

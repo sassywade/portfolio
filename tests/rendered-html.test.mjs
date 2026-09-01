@@ -355,7 +355,7 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 17);
+  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 16);
   for (const title of [
     "Homepage redesign",
     "Artifacts",
@@ -368,7 +368,8 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   ]) {
     assert.match(projects, new RegExp(`title: "${title}"`));
   }
-  assert.match(projects, /title: "Telestrations"/);
+  assert.doesNotMatch(projects, /title: "Telestrations"/);
+  assert.doesNotMatch(projects, /slug: "drift"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
   assert.match(projectMockup, /className="project-card__title"/);
   assert.match(projectMockup, /snap-treasure\.png/);
