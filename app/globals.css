@@ -9927,6 +9927,10 @@ html[data-atmosphere="grid"] .ascii-garden {
   margin-top: 0;
 }
 
+.about-page__identity .about-page__intro h1 {
+  margin-bottom: 28px;
+}
+
 .about-page__identity .about-page__intro p {
   color: #373530;
   font-family: var(--serif);

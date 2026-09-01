@@ -9,7 +9,6 @@ export default function AboutPage() {
       <Soundscape />
       <SiteHeader current="about" />
       <section className="simple-page" aria-labelledby="about-title">
-        <h1 id="about-title">Hello!</h1>
         <div className="about-page__identity">
           <div className="about-page__portrait-card" aria-label="Portrait photo slot">
             <div className="about-page__portrait-photo">
@@ -24,6 +23,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
+            <h1 id="about-title">Hello!</h1>
             <p>
               I&apos;m a product designer who likes figuring out how new technology can
               feel a little more natural to use.
