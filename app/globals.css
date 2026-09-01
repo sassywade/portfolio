@@ -9873,7 +9873,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 /* About page: a small personal note and one quiet row of photographs. */
 .about-page .simple-page {
   width: min(100% - 64px, 860px);
-  padding-top: clamp(118px, 17vh, 176px);
+  padding-top: clamp(102px, 15vh, 156px);
   padding-bottom: 120px;
 }
 
