@@ -6,6 +6,7 @@ import { CaseStudyCarousel } from "../../case-study-carousel";
 import { CaseStudyMedia } from "../../case-study-media";
 import { caseStudies, placeholderCaseStudy, projects } from "../../projects";
 import { Reveal } from "../../reveal";
+import { SiteFooter } from "../../site-footer";
 import { Soundscape } from "../../soundscape";
 
 type CaseStudyPageProps = {
@@ -170,6 +171,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           </Link>
         </Reveal>
       </div>
+      <SiteFooter />
     </main>
   );
 }

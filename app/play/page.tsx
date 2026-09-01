@@ -1,5 +1,6 @@
 import { Soundscape } from "../soundscape";
 import { SiteHeader } from "../site-header";
+import { SiteFooter } from "../site-footer";
 
 const experiments = [
   ["01", "Passport"],
@@ -30,6 +31,7 @@ export default function PlayPage() {
           ))}
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }

@@ -1,5 +1,8 @@
 import { Soundscape } from "../soundscape";
 import { SiteHeader } from "../site-header";
+import { AboutPhotoGallery } from "./about-photo-gallery";
+import { SiteFooter } from "../site-footer";
+import { NowPlaying } from "../spotify-now-playing";
 
 export default function AboutPage() {
   return (
@@ -9,25 +12,79 @@ export default function AboutPage() {
       <section className="simple-page" aria-labelledby="about-title">
         <p className="page-kicker">About</p>
         <h1 id="about-title">Hi, I&apos;m Neel.</h1>
-        <div className="simple-page__copy about-page__intro">
-          <p>
-            I&apos;m a product designer based in San Francisco. I think a lot about
-            what makes new technology feel easy to live with — how people
-            understand it, trust it, and find a reason to come back to it.
-          </p>
-          <p>
-            That&apos;s what pulled me into design. I like working across the whole
-            experience, from the idea and the mental model behind a product to
-            the small details that make it feel good once you know your way
-            around.
-          </p>
-          <p>
-            I also spent time at the Human–Robot Interaction Lab, where I got
-            interested in how people make sense of unfamiliar systems. I still
-            bring that lens to product work: start with the person, make the
-            system easier to understand, and keep the details thoughtful.
-          </p>
+        <div className="about-page__identity">
+          <div className="about-page__portrait-card" aria-label="Portrait photo slot">
+            <div className="about-page__portrait-photo">
+              <span className="about-page__portrait-initials">NS</span>
+              <span className="about-page__portrait-plus" aria-hidden="true">+</span>
+              <span className="about-page__portrait-placeholder">add portrait</span>
+            </div>
+            <div className="about-page__portrait-caption">
+              <span>portrait / 00</span>
+              <strong>your photo here</strong>
+            </div>
+          </div>
+          <div className="simple-page__copy about-page__intro">
+            <p>
+              I&apos;m a product designer based in San Francisco. I think a lot about
+              what makes new technology feel easy to live with — how people
+              understand it, trust it, and find a reason to come back to it.
+            </p>
+            <p>
+              That&apos;s what pulled me into design. I like working across the whole
+              experience, from the idea and the mental model behind a product to
+              the small details that make it feel good once you know your way
+              around.
+            </p>
+            <p>
+              I also spent time at the Human–Robot Interaction Lab, where I got
+              interested in how people make sense of unfamiliar systems. I still
+              bring that lens to product work: start with the person, make the
+              system easier to understand, and keep the details thoughtful.
+            </p>
+          </div>
         </div>
+
+        <section className="about-page__current" aria-labelledby="about-current-title">
+          <div className="about-page__current-heading">
+            <div>
+              <p className="about-page__label">A tiny status report</p>
+              <h2 id="about-current-title">A few things currently occupying my brain.</h2>
+            </div>
+            <span className="about-page__current-doodle" aria-hidden="true">✳</span>
+          </div>
+
+          <div className="about-page__current-grid">
+            <NowPlaying />
+
+            <article className="about-current-card about-current-card--reading" aria-labelledby="about-reading-title">
+              <div className="about-current-card__topline">
+                <span>currently reading</span>
+                <span>02 / 02</span>
+              </div>
+
+              <div className="about-current-card__main about-reading__main">
+                <div className="about-reading__cover" aria-hidden="true">
+                  <span className="about-reading__cover-kicker">red rising / 02</span>
+                  <strong>Golden<br />Son</strong>
+                  <span className="about-reading__cover-orbit" />
+                  <span className="about-reading__cover-author">Pierce Brown</span>
+                </div>
+
+                <div className="about-current-card__copy">
+                  <p className="about-current-card__status">chapter by chapter</p>
+                  <h2 id="about-reading-title">Golden Son</h2>
+                  <p>The second book in the Red Rising saga. More Mars, more schemes, more impossible decisions.</p>
+                </div>
+              </div>
+
+              <div className="about-current-card__footer about-reading__footer">
+                <span>bookmarked for the commute</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </article>
+          </div>
+        </section>
 
         <section className="about-page__experience" aria-labelledby="about-experience-title">
           <h2 id="about-experience-title" className="about-page__section-heading">
@@ -129,22 +186,9 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="about-page__interests" aria-labelledby="about-interests-title">
-          <div className="about-page__block">
-            <p className="about-page__label">Away from work</p>
-            <h2 id="about-interests-title">
-              Usually outside, with Daisy, or looking for something good to eat.
-            </h2>
-            <div className="about-page__tags" aria-label="Things Neel enjoys">
-              <span>cycling</span>
-              <span>backpacking</span>
-              <span>Daisy</span>
-              <span>food</span>
-              <span>travel</span>
-            </div>
-          </div>
-        </section>
+        <AboutPhotoGallery />
       </section>
+      <SiteFooter />
     </main>
   );
 }
