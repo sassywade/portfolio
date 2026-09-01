@@ -50,6 +50,8 @@ export default function AboutPage() {
           </div>
         </div>
 
+        <AboutPhotoGallery />
+
         <section className="about-page__current" aria-labelledby="about-current-title">
           <div className="about-page__current-heading">
             <div>
@@ -197,8 +199,6 @@ export default function AboutPage() {
             </article>
           </div>
         </section>
-
-        <AboutPhotoGallery />
       </section>
       <SiteFooter />
     </main>
