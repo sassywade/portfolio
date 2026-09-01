@@ -18,8 +18,22 @@ export function ProjectCard({ project }: { project: Project }) {
 }
 
 export function ProjectGrid({ items = projects }: { items?: Project[] }) {
-  const gleanProjects = items.slice(0, 14);
-  const snapProjects = items.slice(14);
+  const projectsBySlug = new Map(items.map((project) => [project.slug, project]));
+  const selectProjects = (slugs: string[]) =>
+    slugs.flatMap((slug) => {
+      const project = projectsBySlug.get(slug);
+      return project ? [project] : [];
+    });
+
+  const gleanProjects = selectProjects([
+    "signal-noise",
+    "common-ground",
+    "field-notes",
+    "the-archive",
+    "soft-systems",
+    "afterimage",
+  ]);
+  const snapProjects = selectProjects(["soft-launch", "pocket-studio"]);
 
   return (
     <div className="work-groups">

@@ -348,8 +348,18 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   ]);
 
   assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 17);
-  assert.match(projects, /title: "Glean homepage"/);
-  assert.match(projects, /title: "Glean proactive intelligence"/);
+  for (const title of [
+    "Homepage redesign",
+    "Artifacts",
+    "Proactive Intelligence",
+    "Growth",
+    "Agent observability",
+    "Enterprise setup",
+    "Treasure",
+    "NFTs as Lenses",
+  ]) {
+    assert.match(projects, new RegExp(`title: "${title}"`));
+  }
   assert.match(projects, /title: "Telestrations"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
   assert.match(projectMockup, /className="project-card__title"/);
@@ -357,8 +367,19 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(projectMockup, /snap-nfts-as-lenses\.png/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
-  assert.match(projectCard, /items\.slice\(0, 14\)/);
-  assert.match(projectCard, /items\.slice\(14\)/);
+  for (const slug of [
+    "signal-noise",
+    "common-ground",
+    "field-notes",
+    "the-archive",
+    "soft-systems",
+    "afterimage",
+    "soft-launch",
+    "pocket-studio",
+  ]) {
+    assert.match(projectCard, new RegExp(`"${slug}"`));
+  }
+  assert.doesNotMatch(projectCard, /"drift"/);
   assert.match(projects, /export const placeholderCaseStudy: CaseStudy/);
   assert.match(caseStudy, /caseStudies\[slug\] \?\? placeholderCaseStudy/);
   assert.match(hero, /useState<WorkGridColumns>\(2\)/);

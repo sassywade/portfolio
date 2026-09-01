@@ -37,7 +37,7 @@ export const projects: Project[] = [
   {
     number: "01",
     slug: "signal-noise",
-    title: "Glean homepage",
+    title: "Homepage redesign",
     description: "A calmer way to make sense of a busy product.",
     category: "Product design",
     year: "2025",
@@ -46,7 +46,7 @@ export const projects: Project[] = [
   {
     number: "02",
     slug: "field-notes",
-    title: "Glean proactive intelligence",
+    title: "Proactive Intelligence",
     description: "A visual identity for people who make things slowly.",
     category: "Brand + direction",
     year: "2024",
@@ -55,7 +55,7 @@ export const projects: Project[] = [
   {
     number: "03",
     slug: "the-archive",
-    title: "Glean onboarding",
+    title: "Growth",
     description: "Turning a collection of stories into a place to wander.",
     category: "Digital experience",
     year: "2024",
@@ -64,7 +64,7 @@ export const projects: Project[] = [
   {
     number: "04",
     slug: "common-ground",
-    title: "Glean artifacts",
+    title: "Artifacts",
     description: "Tools for making space around the important conversations.",
     category: "Product design",
     year: "2023",
@@ -73,7 +73,7 @@ export const projects: Project[] = [
   {
     number: "05",
     slug: "soft-systems",
-    title: "Agent traceability",
+    title: "Agent observability",
     description: "A flexible toolkit for a distinctly human service.",
     category: "Strategy + design",
     year: "2023",
@@ -82,7 +82,7 @@ export const projects: Project[] = [
   {
     number: "06",
     slug: "afterimage",
-    title: "Artifact skins",
+    title: "Enterprise setup",
     description: "A small study in memory, motion, and the everyday.",
     category: "Experiments",
     year: "2022",
