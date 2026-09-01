@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { CaseStudyCarousel } from "../../case-study-carousel";
-import { CaseStudyMedia } from "../../case-study-media";
-import { caseStudies, placeholderCaseStudy, projects } from "../../projects";
+import { CaseStudyNav } from "../../case-study-nav";
+import { projects, caseStudies, type CaseStudyArtifact } from "../../projects";
 import { Reveal } from "../../reveal";
 import { SiteFooter } from "../../site-footer";
+import { SiteHeader } from "../../site-header";
 import { Soundscape } from "../../soundscape";
+
+/* eslint-disable @next/next/no-img-element */
 
 type CaseStudyPageProps = {
   params: Promise<{ slug: string }>;
@@ -22,67 +24,18 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
 
   return {
     title: project ? `${project.title} — Neel Saswade` : "Case study — Neel Saswade",
-    description: project?.description ?? "A concept case study from Neel Saswade.",
+    description: project?.description ?? "A case study from Neel Saswade.",
   };
 }
 
-function CaseStudyVisual({
-  kind,
-  theme,
-}: {
-  kind: "research" | "system" | "prototype" | "gallery";
-  theme: string;
-}) {
+function ArtifactFigure({ artifact, className = "" }: { artifact: CaseStudyArtifact; className?: string }) {
   return (
-    <div className={`case-visual case-visual--${kind} case-visual-theme--${theme}`} aria-hidden="true">
-      {kind === "research" && (
-        <>
-          <span className="case-visual__eyebrow">research / field notes</span>
-          <div className="case-visual__research-lines">
-            <i /><i /><i /><i /><i />
-          </div>
-          <div className="case-visual__research-orbit" />
-          <span className="case-visual__research-note">what matters<br />becomes visible</span>
-        </>
-      )}
-      {kind === "system" && (
-        <>
-          <span className="case-visual__eyebrow">a small system</span>
-          <div className="case-visual__system-grid">
-            <i /><i /><i /><i /><i /><i />
-          </div>
-          <div className="case-visual__system-card">
-            <span>01</span>
-            <strong>Start<br /><em>here.</em></strong>
-            <small>one useful thing at a time</small>
-          </div>
-        </>
-      )}
-      {kind === "prototype" && (
-        <>
-          <span className="case-visual__eyebrow">prototype / 04</span>
-          <div className="case-visual__window">
-            <div className="case-visual__window-bar"><i /><i /><i /><span>working title</span></div>
-            <div className="case-visual__window-body">
-              <span className="case-visual__window-kicker">A clearer way forward</span>
-              <strong>Make the<br />next step<br /><em>obvious.</em></strong>
-              <div className="case-visual__window-button">Continue <b>↗</b></div>
-            </div>
-          </div>
-        </>
-      )}
-      {kind === "gallery" && (
-        <>
-          <span className="case-visual__eyebrow">collection / 001—006</span>
-          <div className="case-visual__poster">
-            <div className="case-visual__poster-circle" />
-            <div className="case-visual__poster-copy">a study<br /><em>in context</em></div>
-            <div className="case-visual__poster-lines"><i /><i /><i /></div>
-          </div>
-          <span className="case-visual__gallery-note">keep looking</span>
-        </>
-      )}
-    </div>
+    <figure className={`case-artifact ${className} case-artifact--${artifact.kind ?? "screen"}`}>
+      <div className="case-artifact__frame">
+        <img src={artifact.src} alt={artifact.alt} loading="lazy" />
+      </div>
+      <figcaption>{artifact.caption}</figcaption>
+    </figure>
   );
 }
 
@@ -90,22 +43,28 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const { slug } = await params;
   const projectIndex = projects.findIndex((item) => item.slug === slug);
   const project = projects[projectIndex];
-  const narrative = caseStudies[slug] ?? placeholderCaseStudy;
+  const narrative = caseStudies[slug];
 
-  if (!project) notFound();
+  if (!project || !narrative) notFound();
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
+
   return (
-    <main className="case-study-shell page-enter">
+    <main className={`case-study-shell case-study-shell--${project.theme} page-enter`}>
       <Soundscape />
+      <SiteHeader current="work" />
+      <CaseStudyNav items={projects} activeSlug={project.slug} />
 
       <div className="case-study-frame">
-        <section className="case-intro" aria-labelledby="case-title">
+        <section className="case-intro" id="top" aria-labelledby="case-title">
           <div className="case-intro__body">
             <div className={`case-swatch case-swatch--${project.theme}`} aria-hidden="true"><span /><span /></div>
             <p className="case-kicker">{narrative.collaborator} / {project.number}</p>
             <h1 id="case-title">{project.title}</h1>
             <p className="case-lede">{narrative.lede}</p>
+            <a className="case-source-link" href={narrative.sourcePdf} target="_blank" rel="noreferrer">
+              {narrative.sourceLabel} <span aria-hidden="true">↗</span>
+            </a>
           </div>
           <aside className="case-meta" aria-label="Project details">
             <div><span>Role</span><strong>{narrative.role}</strong></div>
@@ -115,56 +74,72 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         </section>
 
         <Reveal className="case-media-reveal">
-          <figure className={`case-hero-media case-hero-media--${project.theme}`}>
-            <div className="case-hero-media__halo" />
-            <div className="case-hero-display">
-              <span>{project.number} / concept preview</span>
-              <strong>{project.title}</strong>
-              <em>placeholder art direction</em>
+          <figure className={`case-hero-media case-hero-media--${project.theme} case-hero-media--${project.cover.kind ?? "screen"}`}>
+            <div className="case-hero-media__halo" aria-hidden="true" />
+            <div className="case-hero-frame">
+              <img src={project.cover.src} alt={project.cover.alt} />
             </div>
-            <figcaption>Visual placeholder — replace with project hero imagery.</figcaption>
+            <div className="case-hero-label">
+              <span>{project.number} / case study</span>
+              <strong>{project.cover.caption}</strong>
+            </div>
+            <figcaption>{project.cover.caption}</figcaption>
           </figure>
         </Reveal>
 
-        <div className={`case-hero-strip case-hero-strip--${project.theme}`} aria-label="Additional project imagery">
-          <div><span>placeholder / 01</span><strong>Context</strong></div>
-          <div><span>placeholder / 02</span><strong>Direction</strong></div>
+        <div className={`case-hero-strip case-hero-strip--${project.theme}`} aria-label="Case study overview">
+          <div><span>Scope</span><strong>{project.category}</strong></div>
+          <div><span>Source</span><strong>{narrative.artifacts.length} brief pages</strong></div>
+          <div><span>Read</span><strong>Process + outcome</strong></div>
         </div>
 
         <div className="case-study-content">
-        {narrative.sections.map((section, index) => (
-          <Reveal className={`case-section-reveal ${index % 2 ? "case-section-reveal--reverse" : ""}`} key={section.id}>
-            <section className={`case-section ${index === 0 ? "case-section--lead" : ""}`} id={section.id} aria-labelledby={`${section.id}-title`}>
-              <div className="case-section__copy">
-                <p className="case-kicker">{section.label}</p>
-                <h2 id={`${section.id}-title`}>{section.title}</h2>
-                <p>{section.body}</p>
+          {narrative.sections.map((section, index) => {
+            const artifact = section.artifact ?? narrative.artifacts[section.page ?? index % narrative.artifacts.length];
+
+            return (
+              <Reveal className={`case-section-reveal ${index % 2 ? "case-section-reveal--reverse" : ""}`} key={section.id}>
+                <section className={`case-section ${index === 0 ? "case-section--lead" : ""}`} id={section.id} aria-labelledby={`${section.id}-title`}>
+                  <div className="case-section__copy">
+                    <p className="case-kicker">{section.label}</p>
+                    <h2 id={`${section.id}-title`}>{section.title}</h2>
+                    <p>{section.body}</p>
+                  </div>
+                  <ArtifactFigure artifact={artifact} />
+                </section>
+              </Reveal>
+            );
+          })}
+
+          <Reveal>
+            <section className="case-brief-gallery" id="brief" aria-labelledby="brief-title">
+              <div className="case-brief-gallery__heading">
+                <div>
+                  <p className="case-kicker">The full brief</p>
+                  <h2 id="brief-title">The work, page by page.</h2>
+                </div>
+                <a className="case-source-link" href={narrative.sourcePdf} target="_blank" rel="noreferrer">
+                  Open PDF <span aria-hidden="true">↗</span>
+                </a>
               </div>
-              <figure className="case-section__visual" aria-label={`${section.label} visual placeholder`}>
-                <CaseStudyMedia label={section.label}>
-                  <CaseStudyVisual kind={section.visual} theme={project.theme} />
-                </CaseStudyMedia>
-                <figcaption>Visual placeholder / replace with project work</figcaption>
-              </figure>
+              <div className="case-brief-grid">
+                {narrative.artifacts.map((artifact) => <ArtifactFigure artifact={artifact} key={artifact.src} />)}
+              </div>
             </section>
           </Reveal>
-        ))}
 
-        <CaseStudyCarousel theme={project.theme} />
-
-        <Reveal>
-          <section className="case-reflection" id="reflection" aria-labelledby="reflection-title">
-            <p className="case-kicker">Key learnings</p>
-            <h2 id="reflection-title">The work got better when the answer got quieter.</h2>
-            <p>{narrative.reflection}</p>
-            <a href="mailto:hello@yourname.com" className="case-contact-link" data-cuelume-toggle="pulse">Want to talk about it? Say hello ↗</a>
-          </section>
-        </Reveal>
+          <Reveal>
+            <section className="case-reflection" id="reflection" aria-labelledby="reflection-title">
+              <p className="case-kicker">Key learning</p>
+              <h2 id="reflection-title">{narrative.reflection}</h2>
+              <a href="mailto:hello@yourname.com" className="case-contact-link">Want to talk about it? Say hello ↗</a>
+            </section>
+          </Reveal>
         </div>
 
         <Reveal className="next-project-reveal">
-          <a className={`next-project next-project--${nextProject.theme}`} href={`/case-studies/${nextProject.slug}`} data-cuelume-toggle="pulse">
-            <span className="case-kicker">Next project / {nextProject.number}</span>
+          <a className={`next-project next-project--${nextProject.theme}`} href={`/case-studies/${nextProject.slug}`}>
+            <span className="case-kicker">Next study / {nextProject.number}</span>
             <h2>{nextProject.title}</h2>
             <span className="next-project__link">Open study <b>↗</b></span>
           </a>

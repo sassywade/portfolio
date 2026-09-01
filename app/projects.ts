@@ -6,6 +6,13 @@ export type ProjectTheme =
   | "systems"
   | "afterimage";
 
+export type CaseStudyArtifact = {
+  src: string;
+  alt: string;
+  caption: string;
+  kind?: "screen" | "brief";
+};
+
 export type Project = {
   number: string;
   slug: string;
@@ -14,7 +21,7 @@ export type Project = {
   category: string;
   year: string;
   theme: ProjectTheme;
-  externalUrl?: string;
+  cover: CaseStudyArtifact;
 };
 
 export type CaseStudySection = {
@@ -22,7 +29,8 @@ export type CaseStudySection = {
   label: string;
   title: string;
   body: string;
-  visual: "research" | "system" | "prototype" | "gallery";
+  artifact?: CaseStudyArtifact;
+  page?: number;
 };
 
 export type CaseStudy = {
@@ -30,261 +38,346 @@ export type CaseStudy = {
   role: string;
   team: string[];
   collaborator: string;
+  sourcePdf: string;
+  sourceLabel: string;
+  artifacts: CaseStudyArtifact[];
   sections: CaseStudySection[];
   reflection: string;
 };
 
+const briefPages = (slug: string, title: string, count: number): CaseStudyArtifact[] =>
+  Array.from({ length: count }, (_, index) => ({
+    src: `/case-studies/${slug}/page-${String(index + 1).padStart(2, "0")}.png`,
+    alt: `${title} brief, page ${index + 1}`,
+    caption: `Brief page ${String(index + 1).padStart(2, "0")}`,
+    kind: "brief" as const,
+  }));
+
 export const projects: Project[] = [
   {
     number: "01",
-    slug: "signal-noise",
-    title: "Homepage redesign",
-    description: "A calmer way to make sense of a busy product.",
-    category: "Product design",
+    slug: "agent-observability",
+    title: "Agent observability",
+    description: "Making agent behavior understandable.",
+    category: "Product design · Glean",
     year: "2025",
     theme: "signal",
+    cover: {
+      src: "/case-studies/agent-observability/page-01.png",
+      alt: "Agent observability case study brief cover",
+      caption: "Making agent behavior understandable",
+      kind: "brief",
+    },
   },
   {
     number: "02",
-    slug: "field-notes",
-    title: "Proactive Intelligence",
-    description: "A visual identity for people who make things slowly.",
-    category: "Brand + direction",
-    year: "2024",
-    theme: "field",
+    slug: "artifacts",
+    title: "Artifacts",
+    description: "From zero to nearly 200K weekly active users.",
+    category: "Product design · Glean",
+    year: "2025",
+    theme: "ground",
+    cover: {
+      src: "/work/work-04.png",
+      alt: "Glean Edit with AI toolbar",
+      caption: "From generated response to editable work",
+      kind: "screen",
+    },
   },
   {
     number: "03",
-    slug: "the-archive",
+    slug: "growth",
     title: "Growth",
-    description: "Turning a collection of stories into a place to wander.",
-    category: "Digital experience",
-    year: "2024",
-    theme: "archive",
+    description: "Helping users move from trying Glean to returning to it.",
+    category: "Growth product design · Glean",
+    year: "2025",
+    theme: "field",
+    cover: {
+      src: "/work/work-03.png",
+      alt: "Glean onboarding experience",
+      caption: "Helping users reach value faster",
+      kind: "screen",
+    },
   },
   {
     number: "04",
-    slug: "common-ground",
-    title: "Artifacts",
-    description: "Tools for making space around the important conversations.",
-    category: "Product design",
-    year: "2023",
-    theme: "ground",
+    slug: "homepage",
+    title: "Homepage redesign",
+    description: "Simplifying the front door to Glean.",
+    category: "Product design · Glean",
+    year: "2025",
+    theme: "archive",
+    cover: {
+      src: "/work/work-01.png",
+      alt: "Glean homepage with personalized cards and composer",
+      caption: "A focused starting point",
+      kind: "screen",
+    },
   },
   {
     number: "05",
-    slug: "soft-systems",
-    title: "Agent observability",
-    description: "A flexible toolkit for a distinctly human service.",
-    category: "Strategy + design",
-    year: "2023",
-    theme: "systems",
+    slug: "psychic",
+    title: "Psychic",
+    description: "Designing relief before the work begins.",
+    category: "Product concept · Glean",
+    year: "2026",
+    theme: "afterimage",
+    cover: {
+      src: "/case-studies/psychic/page-01.png",
+      alt: "Psychic case study brief cover",
+      caption: "Designing relief before the work begins",
+      kind: "brief",
+    },
   },
   {
     number: "06",
-    slug: "afterimage",
-    title: "Enterprise setup",
-    description: "A small study in memory, motion, and the everyday.",
-    category: "Experiments",
-    year: "2022",
-    theme: "afterimage",
-  },
-  {
-    number: "07",
-    slug: "ambient-search",
-    title: "Editing artifacts",
-    description: "Placeholder case study for a quieter search experience.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "archive",
-  },
-  {
-    number: "08",
-    slug: "side-streets",
-    title: "Company vision",
-    description: "Placeholder case study about navigating the city differently.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "field",
-  },
-  {
-    number: "09",
-    slug: "tiny-rituals",
-    title: "Starter kit",
-    description: "Placeholder case study for small, repeatable moments.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "ground",
-  },
-  {
-    number: "10",
-    slug: "slow-signal",
-    title: "Self serve setup",
-    description: "Placeholder case study for patient, proactive software.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "signal",
-  },
-  {
-    number: "11",
-    slug: "field-guide",
-    title: "Insights",
-    description: "Placeholder case study for an adaptable creative toolkit.",
-    category: "Concept placeholder",
-    year: "2026",
+    slug: "workspace-admin-console-actions",
+    title: "Workspace admin",
+    description: "Designing the admin experience for setup, connectors, and actions.",
+    category: "Product design · Glean",
+    year: "2025",
     theme: "systems",
-  },
-  {
-    number: "12",
-    slug: "good-neighbor",
-    title: "Diff review",
-    description: "Placeholder case study for a more useful local network.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "afterimage",
-  },
-  {
-    number: "13",
-    slug: "after-hours",
-    title: "Podcast",
-    description: "Placeholder case study for ideas made after work.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "afterimage",
-  },
-  {
-    number: "14",
-    slug: "home-ground",
-    title: "Actions platform",
-    description: "Placeholder case study about belonging and place.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "ground",
-  },
-  {
-    number: "15",
-    slug: "soft-launch",
-    title: "Treasure",
-    description: "Placeholder case study for thoughtful product beginnings.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "systems",
-  },
-  {
-    number: "16",
-    slug: "pocket-studio",
-    title: "NFTs as Lenses",
-    description: "Placeholder case study for making wherever you are.",
-    category: "Concept placeholder",
-    year: "2026",
-    theme: "field",
-    externalUrl:
-      "https://techcrunch.com/2022/07/13/snap-eyes-adding-nfts-as-ar-filters-in-snapchat/",
+    cover: {
+      src: "/case-studies/workspace-admin-console-actions/page-01.png",
+      alt: "Workspace admin case study brief cover",
+      caption: "Getting Glean ready for work",
+      kind: "brief",
+    },
   },
 ];
 
-export const placeholderCaseStudy: CaseStudy = {
-  lede: "A placeholder story for work that is still taking shape.",
-  role: "Product design, interaction, prototyping",
-  team: ["1 designer", "Creative collaborators", "In progress"],
-  collaborator: "Concept placeholder",
-  sections: [
-    {
-      id: "context",
-      label: "Context",
-      title: "The real project story will live here.",
-      body: "This temporary section holds the pacing and structure of the case study until the final context, constraints, and outcomes are ready.",
-      visual: "research",
-    },
-    {
-      id: "direction",
-      label: "Direction",
-      title: "A flexible frame for decisions and iterations.",
-      body: "The layout is ready for process work, prototypes, and the design decisions that connect the problem to the final direction.",
-      visual: "system",
-    },
-    {
-      id: "outcome",
-      label: "Outcome",
-      title: "A clear landing place for the finished work.",
-      body: "Replace this placeholder with the final product experience, what changed, and the most useful thing learned along the way.",
-      visual: "prototype",
-    },
-  ],
-  reflection: "This is an honest placeholder case study and will be replaced as the work is documented.",
-};
+const agentBrief = briefPages("agent-observability", "Agent observability", 3);
+const artifactsBrief = briefPages("artifacts", "Artifacts", 4);
+const growthBrief = briefPages("growth", "Growth", 4);
+const homepageBrief = briefPages("homepage", "Homepage redesign", 4);
+const psychicBrief = briefPages("psychic", "Psychic", 3);
+const workspaceBrief = briefPages("workspace-admin-console-actions", "Workspace admin", 4);
 
 export const caseStudies: Record<string, CaseStudy> = {
-  "signal-noise": {
-    lede: "A clearer operating system for teams who have too much to keep track of.",
+  "agent-observability": {
+    lede: "A debugging experience built into how creators build agents.",
     role: "Product design, interaction, prototyping",
-    team: ["1 designer", "1 product partner", "2 engineers"],
-    collaborator: "Concept study",
+    team: ["Seema Jethani, Product", "Neil Dhruva, Product", "Megha Jhunjhunwala, Engineering", "Yuxing Zhou, Engineering", "Andy Welfle, Content Design"],
+    collaborator: "Glean · April-June 2025",
+    sourcePdf: "/case-studies/agent-observability/brief.pdf",
+    sourceLabel: "Open the Agent Observability brief",
+    artifacts: agentBrief,
     sections: [
-      { id: "problem", label: "The problem", title: "The important thing was getting lost in the noise.", body: "Signal started with a familiar feeling: every tool was technically working, but the work itself was harder to see. This concept study explores a calmer layer for finding what deserves attention now.", visual: "research" },
-      { id: "insight", label: "Insight", title: "People need a sense of now before they need another dashboard.", body: "Instead of adding more filters, the experience begins with a small set of meaningful signals. The design makes space for context, confidence, and the next useful action.", visual: "system" },
-      { id: "solution", label: "Solution", title: "A focused surface for the things that move work forward.", body: "The final direction brings status, conversation, and momentum into one quiet view. The visual system uses contrast sparingly so the hierarchy can do the talking.", visual: "prototype" },
+      {
+        id: "problem",
+        label: "The problem",
+        title: "Agents were a black box.",
+        body: "Creators could build an agent but had no reliable way to see why it behaved the way it did. When a run went wrong, the failure was buried in backend traces meant for engineers, not builders.",
+        page: 0,
+      },
+      {
+        id: "trace-view",
+        label: "The trace view",
+        title: "A trace view for steps, not latency.",
+        body: "I designed a step-by-step input and output view that shows the agent's behavior in sequence. Each step carries its own execution detail so creators can reason about what happened without leaving the builder.",
+        page: 1,
+      },
+      {
+        id: "preview",
+        label: "Inside preview",
+        title: "Debugging inside preview, not a separate trace URL.",
+        body: "The revised design moved debugging information directly into preview mode. Creators could test, inspect, search, and fix in the same place, with language and affordances that worked for both technical and non-technical audiences.",
+        page: 1,
+      },
+      {
+        id: "impact",
+        label: "The impact",
+        title: "A clearer path from failure to fix.",
+        body: "Debug mode reached GA for task-based agents across customer environments, with conversational-agent debugging following as tracing expanded across multiple runs of a single conversation.",
+        page: 2,
+      },
     ],
-    reflection: "The most successful part of this exercise was choosing what not to surface. Less information made the useful information feel more present.",
+    reflection: "The strongest part of the work was choosing a mental model creators could understand immediately: a sequence of steps, each close enough to inspect and fix.",
   },
-  "field-notes": {
-    lede: "A flexible identity for a small studio collecting good ideas in the real world.",
-    role: "Identity, art direction, editorial design",
-    team: ["1 designer", "1 founder", "Independent"],
-    collaborator: "Concept study",
+  artifacts: {
+    lede: "From zero to nearly 200K weekly active users.",
+    role: "Product design, Canvas and Artifacts",
+    team: ["Zane Homsi, Product Manager", "Ihsaan Patel, Engineering", "Mingtao Chen, Engineering", "Neel Saswade, Designer"],
+    collaborator: "Glean · six-month product arc",
+    sourcePdf: "/case-studies/artifacts/brief.pdf",
+    sourceLabel: "Open the Artifacts brief",
+    artifacts: artifactsBrief,
     sections: [
-      { id: "context", label: "Context", title: "The work was tactile. The identity needed to leave room for it.", body: "Field Notes began as a naming and visual language exercise for a studio with a deep respect for materials, makers, and the evidence of a human hand.", visual: "gallery" },
-      { id: "direction", label: "Direction", title: "Document the details. Let the system stay open.", body: "Rather than locking the brand into one perfect composition, the system works like a field journal: a repeatable set of labels, marks, and colors that can travel with the story.", visual: "system" },
-      { id: "toolkit", label: "Toolkit", title: "A little structure makes the irregularity feel intentional.", body: "The toolkit pairs a disciplined grid with loose image crops and notes from the margins. It gives the studio consistency without sanding away its point of view.", visual: "prototype" },
+      {
+        id: "core-experience",
+        label: "The core experience",
+        title: "From generated response to editable work.",
+        body: "Artifacts was expanding from a new Canvas experience into a broader way to create and shape work in Glean. The work tightened the transition from chat into Canvas, keeping context while giving the result a place to grow.",
+        artifact: { src: "/work/work-04.png", alt: "Glean contextual Edit with AI toolbar", caption: "Edit where the intent happens", kind: "screen" },
+      },
+      {
+        id: "edit-with-ai",
+        label: "Edit with AI",
+        title: "Edit where the intent happens.",
+        body: "A contextual toolbar brought AI actions directly to selected content. Custom prompts became the main path, while secondary formatting stayed close without competing with the work itself.",
+        page: 1,
+      },
+      {
+        id: "diff-and-queue",
+        label: "Review and apply",
+        title: "Make every change legible.",
+        body: "Diff view made AI edits reviewable in context. Queue Mode let users mark up several sections before asking Assistant to revise the document, then apply the result in one coherent pass.",
+        page: 2,
+      },
+      {
+        id: "impact",
+        label: "The impact",
+        title: "A system that made more kinds of work possible.",
+        body: "Canvas reached nearly 200K weekly active users within six months. The work also supported sharing, audio artifacts, autosave, streaming feedback, and the launch details that made the editor dependable during everyday use.",
+        page: 3,
+      },
     ],
-    reflection: "A good identity should feel more useful after the presentation than it did during it. This one is designed to be picked up and used.",
+    reflection: "The product became more valuable as the loop got tighter: select, describe the change, review it, and keep working in place.",
   },
-  "the-archive": {
-    lede: "A digital home for a growing collection of objects, stories, and small discoveries.",
-    role: "Experience design, information architecture",
-    team: ["1 designer", "1 curator", "2 developers"],
-    collaborator: "Concept study",
+  growth: {
+    lede: "Helping users move from trying Glean to returning to it.",
+    role: "Growth product design",
+    team: ["Arpit Agrawal, Product Manager", "Ben McMahan, Engineering", "Sarah Di, Engineering", "Edward Hwang, Engineering", "Neel Saswade, Designer"],
+    collaborator: "Glean · 25K to 1M+ WAU",
+    sourcePdf: "/case-studies/growth/brief.pdf",
+    sourceLabel: "Open the Growth brief",
+    artifacts: growthBrief,
     sections: [
-      { id: "question", label: "The question", title: "How do you browse a collection without flattening it?", body: "The Archive is a concept for a collection that keeps getting bigger. The challenge was to make discovery feel inviting while allowing each object to retain its own context.", visual: "research" },
-      { id: "structure", label: "Structure", title: "A directory can still feel like a place.", body: "We explored a layered index where filters feel more like invitations than controls. Each path through the collection is legible, but never quite predetermined.", visual: "gallery" },
-      { id: "experience", label: "Experience", title: "The best search result is a new direction.", body: "The visual language uses oversized typography and patient transitions to slow the pace just enough. The interaction rewards curiosity instead of demanding a perfect query.", visual: "prototype" },
+      {
+        id: "onboarding",
+        label: "Chat-first onboarding",
+        title: "Help people reach value faster.",
+        body: "I helped move onboarding from a search-first flow toward guided Chat, persona-based queries, follow-up actions, and Starter Kit content. The design focused on making the first useful moment easier to find.",
+        artifact: { src: "/work/work-03.png", alt: "Glean onboarding search experience", caption: "A clearer first question", kind: "screen" },
+      },
+      {
+        id: "keep-it",
+        label: "The Keep It page",
+        title: "Design the reason to return.",
+        body: "The Keep It redesign clarified the value of staying installed and made the next action easier to understand. Keep rate improved by about 9.09 percentage points.",
+        page: 1,
+      },
+      {
+        id: "starter-kit",
+        label: "Starter Kit",
+        title: "Teach Glean through work.",
+        body: "The Starter Kit used short tasks to help users find information, use Chat, discover expertise, and create something useful. Completion became a strong directional signal for Week 2 and longer-term retention.",
+        page: 1,
+      },
+      {
+        id: "system",
+        label: "The broader system",
+        title: "Make value visible at every return visit.",
+        body: "The broader Growth system included extension adoption, social proof, lifecycle email, homepage Chat discovery, artifact sharing, proactive cards, and activation dashboards. Glean grew from 25K to more than 1M weekly active users during this period.",
+        page: 2,
+      },
     ],
-    reflection: "Archives are not only about retrieval. They are about making the connection between two things feel like a small discovery.",
+    reflection: "The strongest Growth concepts began with a user action. Placement, hierarchy, and timing often mattered more than adding more copy.",
   },
-  "common-ground": {
-    lede: "A conversation tool designed around the space between listening and responding.",
-    role: "Product design, research, prototyping",
-    team: ["1 designer", "1 researcher", "2 engineers"],
-    collaborator: "Concept study",
+  homepage: {
+    lede: "Simplifying the front door to Glean.",
+    role: "Product design, interaction, prototyping",
+    team: ["Arpit Agrawal, Product Manager", "Ben McMahan, Engineering", "Sarah Di, Engineering", "Edward Hwang, Engineering", "Neel Saswade, Designer"],
+    collaborator: "Glean · Homepage redesign",
+    sourcePdf: "/case-studies/homepage/brief.pdf",
+    sourceLabel: "Open the Homepage brief",
+    artifacts: homepageBrief,
     sections: [
-      { id: "friction", label: "The friction", title: "The conversation ended before anyone felt heard.", body: "Common Ground looks at a meeting format where useful ideas were often lost in the pressure to keep moving. The first step was making room for a slower, more visible rhythm.", visual: "research" },
-      { id: "principle", label: "Principle", title: "Make the shared understanding visible.", body: "The concept turns notes, questions, and points of alignment into objects the group can shape together. It replaces the hidden document with a shared surface.", visual: "system" },
-      { id: "prototype", label: "Prototype", title: "A little more space changes the quality of the answer.", body: "The prototype uses deliberate pauses and calm states to keep the room from feeling rushed. The interface gets out of the way so the conversation can stay in front.", visual: "prototype" },
+      {
+        id: "old-homepage",
+        label: "The old homepage",
+        title: "The widget grid had become the starting point.",
+        body: "The previous homepage had accumulated widgets for calendar, announcements, feed activity, shortcuts, collections, and other destinations. Each surface had a reason to exist, but together they weakened the main path into Glean.",
+        page: 1,
+      },
+      {
+        id: "new-homepage",
+        label: "The new direction",
+        title: "One clear place to start.",
+        body: "The redesign replaced the widget grid with a unified composer, personalized cards, and a dedicated Company Corner. Core destinations stayed available through the product, while the homepage became easier to scan and act on.",
+        artifact: { src: "/work/work-01.png", alt: "Glean homepage with a personalized composer and cards", caption: "The redesigned homepage", kind: "screen" },
+      },
+      {
+        id: "impact",
+        label: "The impact",
+        title: "A calmer front door increased meaningful action.",
+        body: "The redesign increased chat sessions by 1.44 per user, combined sessions by 0.59 per user, and new-user activation by 1.3%.",
+        page: 2,
+      },
     ],
-    reflection: "Designing for conversation is mostly designing for the seconds people usually skip. Those seconds turned out to be the product.",
+    reflection: "The homepage got better when it stopped trying to be a map of the whole product and started acting like a useful first step.",
   },
-  "soft-systems": {
-    lede: "A small toolkit for teams building dependable rituals around creative work.",
-    role: "Strategy, product design, facilitation",
-    team: ["1 designer", "3 collaborators", "Independent"],
-    collaborator: "Concept study",
+  psychic: {
+    lede: "Designing relief before the work begins.",
+    role: "Product design, proactive intelligence",
+    team: ["Product, Engineering, Content", "Cross-functional design partners", "Neel Saswade, Designer"],
+    collaborator: "Glean · concept study · 2026",
+    sourcePdf: "/case-studies/psychic/brief.pdf",
+    sourceLabel: "Open the Psychic brief",
+    artifacts: psychicBrief,
     sections: [
-      { id: "context", label: "Context", title: "Every team has a process. Not every process helps.", body: "Soft Systems began with an interest in the invisible rituals that help a group make good work: how they start, decide, share, and reset.", visual: "gallery" },
-      { id: "principles", label: "Principles", title: "A system can be supportive without being strict.", body: "The design uses a set of lightweight patterns instead of a rigid framework. Each one gives the team a starting point, then gets out of the way.", visual: "system" },
-      { id: "kit", label: "The kit", title: "Small prompts. Better habits.", body: "The toolkit is made of simple cards, prompts, and check-ins that can be brought into the work at the right moment. It is intentionally useful before it is impressive.", visual: "prototype" },
+      {
+        id: "overview",
+        label: "Overview",
+        title: "A small amount of useful momentum.",
+        body: "Psychic was built to help people discover what Glean could do for them. Early versions surfaced tasks that were broad, ambiguous, and easy to miss; the design shifted toward a proactive work experience grounded in context, clear outcomes, and user control.",
+        page: 0,
+      },
+      {
+        id: "question",
+        label: "The question",
+        title: "How can coming back to work in Glean feel lighter?",
+        body: "A suggestion had to feel timely, specific, and connected to real work. It also had to leave the user feeling in control, offering a useful next move without pretending to know everything.",
+        page: 1,
+      },
+      {
+        id: "moment",
+        label: "The moment before",
+        title: "Design for the conditions around a task.",
+        body: "I started with signals around a task: a meeting later that day, a recent conversation, an unfinished document, or a teammate waiting for a response. These signals gave Psychic a chance to offer help at the moment it mattered.",
+        page: 2,
+      },
     ],
-    reflection: "The best toolkits are generous about interpretation. They give people enough shape to begin and enough freedom to make it theirs.",
+    reflection: "The work was less about deciding which task to show and more about designing the feeling of arriving in Glean with a useful next move already waiting.",
   },
-  afterimage: {
-    lede: "A visual study of how ordinary places stay with us after we have left them.",
-    role: "Art direction, motion, visual experiment",
-    team: ["1 designer", "1 camera", "A long walk"],
-    collaborator: "Personal experiment",
+  "workspace-admin-console-actions": {
+    lede: "Designing the admin experience for setup, connectors, and actions.",
+    role: "Product design, Workspace and Admin Console",
+    team: ["Debby Shephard, Product Manager", "Yiming Jen, Engineering", "Vinke Xu, Engineering", "Hans Bala, Engineering", "Neel Saswade, Designer"],
+    collaborator: "Glean · Workspace / Admin",
+    sourcePdf: "/case-studies/workspace-admin-console-actions/brief.pdf",
+    sourceLabel: "Open the Workspace Admin brief",
+    artifacts: workspaceBrief,
     sections: [
-      { id: "prompt", label: "The prompt", title: "Can a digital object hold onto a feeling?", body: "Afterimage is a small visual experiment about memory, repetition, and the details that become clearer after the fact. It starts with images that are intentionally incomplete.", visual: "gallery" },
-      { id: "material", label: "Material", title: "Soft edges make room for association.", body: "The composition pairs warm color fields with looping forms and fragments of type. Each piece is specific enough to recognize, but open enough to bring your own memory to it.", visual: "system" },
-      { id: "motion", label: "Motion", title: "Let the image arrive a beat after the thought.", body: "The motion language is slow, quiet, and slightly out of sync. Nothing is trying to impress you; it is simply giving the eye time to notice what changed.", visual: "prototype" },
+      {
+        id: "overview",
+        label: "Overview",
+        title: "Make a company ready to use Glean.",
+        body: "I was the sole designer across Workspace, the Admin Console, and the Tools and Actions team. The work covered setting up the workspace, connecting data sources, configuring permissions, managing connectors, and preparing the systems people would use every day.",
+        page: 0,
+      },
+      {
+        id: "admin-journey",
+        label: "The admin journey",
+        title: "Bring setup, governance, and action creation into one path.",
+        body: "The admin work had spread across different surfaces and teams. The goal was to make the path from initial setup to ongoing management easier to understand, from connectors and permissions through apps, actions, and workflows.",
+        page: 1,
+      },
+      {
+        id: "understanding-admin",
+        label: "Understanding the admin",
+        title: "Design for the people responsible for the system.",
+        body: "I studied the people responsible for setting up and managing Glean, then used their recurring questions and handoffs to shape a more legible experience for the work that happens before employees can use the product.",
+        page: 2,
+      },
+      {
+        id: "outcome",
+        label: "The outcome",
+        title: "A clearer foundation for everything that follows.",
+        body: "The resulting direction treats setup as an ongoing product experience rather than a one-time checklist. It gives admins clearer ownership, better context, and a more coherent path through the system.",
+        page: 3,
+      },
     ],
-    reflection: "The experiment reminded me that movement does not always need to explain. Sometimes it only needs to make the page feel alive.",
+    reflection: "The best admin experiences make complexity feel organized without hiding it. Clarity is what lets a system scale beyond the person who first configured it.",
   },
 };

@@ -45,7 +45,7 @@ export default function AboutPage() {
           <div className="simple-page__copy about-page__intro">
             <p>
               I&apos;m a product designer based in San Francisco. I think a lot about
-              what makes new technology feel easy to live with — how people
+              what makes new technology feel easy to live with: how people
               understand it, trust it, and find a reason to come back to it.
             </p>
             <p>
@@ -55,7 +55,7 @@ export default function AboutPage() {
               around.
             </p>
             <p>
-              I also spent time at the Human–Robot Interaction Lab, where I got
+              I also spent time at the Human-Robot Interaction Lab, where I got
               interested in how people make sense of unfamiliar systems. I still
               bring that lens to product work: start with the person, make the
               system easier to understand, and keep the details thoughtful.
@@ -110,7 +110,7 @@ export default function AboutPage() {
           </h2>
           <div className="about-page__experience-list">
             <article className="about-page__experience-row">
-              <p className="about-page__experience-period">2022 – Now</p>
+              <p className="about-page__experience-period">2022 to Now</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
                   <ExperienceLogoMark logo="glean" company="Glean" />
@@ -132,7 +132,7 @@ export default function AboutPage() {
                   <p>Product Design Intern</p>
                 </div>
                 <p className="about-page__experience-description">
-                  Web3 team — making new internet ideas easier for Snapchatters
+                  Web3 team: making new internet ideas easier for Snapchatters
                   to understand.
                 </p>
               </div>
@@ -168,7 +168,7 @@ export default function AboutPage() {
             </article>
 
             <article className="about-page__experience-row">
-              <p className="about-page__experience-period">2021 – 2022</p>
+              <p className="about-page__experience-period">2021 to 2022</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
                   <ExperienceLogoMark logo="clients" company="Client work" />
@@ -199,8 +199,8 @@ export default function AboutPage() {
               <p className="about-page__experience-period">Earlier</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
-                  <ExperienceLogoMark logo="hri" company="Human–Robot Interaction Lab" />
-                  <h3>Human–Robot Interaction Lab</h3>
+                  <ExperienceLogoMark logo="hri" company="Human-Robot Interaction Lab" />
+                  <h3>Human-Robot Interaction Lab</h3>
                   <p>Research / Design</p>
                 </div>
                 <p className="about-page__experience-description">

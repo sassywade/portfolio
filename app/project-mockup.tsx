@@ -1,20 +1,21 @@
-/* The work grid intentionally uses native local images as visual placeholders. */
-/* eslint-disable @next/next/no-img-element */
-
 import type { Project } from "./projects";
 
-const projectImages: Partial<Record<Project["slug"], string>> = {
-  "soft-launch": "/work/snap-treasure.png",
-  "pocket-studio": "/work/snap-nfts-as-lenses.png",
-};
+/* These are local case-study covers so the work grid reflects the supplied work. */
+/* eslint-disable @next/next/no-img-element */
 
 export function ProjectMockup({ project }: { project: Project }) {
-  const image = projectImages[project.slug];
-
   return (
-    <div className={`project-mockup${image ? " project-mockup--with-image" : ""}`} aria-hidden="true">
+    <div className={`project-mockup project-mockup--${project.theme} project-mockup--with-image`}>
+      <img
+        className={`project-work-image project-work-image--${project.cover.kind ?? "screen"}`}
+        src={project.cover.src}
+        alt=""
+        loading="lazy"
+      />
+      <div className="project-mockup__wash" />
       <span className="project-card__title">{project.title}</span>
-      {image && <img className="project-work-image" src={image} alt="" loading="lazy" />}
+      <span className="project-card__caption">{project.cover.caption}</span>
+      <span className="project-card__arrow" aria-hidden="true">↗</span>
     </div>
   );
 }
