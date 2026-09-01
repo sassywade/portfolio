@@ -4787,6 +4787,50 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   width: 1.18em;
 }
 
+.work-group--archive {
+  padding-bottom: clamp(36px, 6vw, 72px);
+}
+
+.work-archive-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 28px;
+}
+
+.work-archive-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+  padding: 18px 8px;
+  border-top: 1px solid rgba(101, 98, 95, 0.2);
+  color: var(--ink);
+  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.35;
+  text-decoration: none;
+  transition: color 200ms ease, padding-left 320ms cubic-bezier(.22,.7,.2,1);
+}
+
+.work-archive-link:hover,
+.work-archive-link:focus-visible {
+  padding-left: 13px;
+  color: var(--acid);
+}
+
+.work-archive-link:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 3px;
+}
+
+.work-archive-link__year {
+  flex: none;
+  color: var(--muted);
+  font-size: 0.78em;
+  font-variant-numeric: tabular-nums;
+}
+
 .pranathi-project-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
@@ -5088,6 +5132,10 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 
   .work-group__brand {
     margin-bottom: 14px;
+  }
+
+  .work-archive-list {
+    grid-template-columns: 1fr;
   }
 
   .simple-page {

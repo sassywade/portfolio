@@ -376,6 +376,9 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(projectMockup, /snap-nfts-as-lenses\.png/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
+  assert.match(projectCard, /id="work-group-archive"/);
+  assert.match(projectCard, /className="work-archive-list"/);
+  assert.match(projectCard, /!featuredSlugs\.has\(project\.slug\)/);
   for (const slug of [
     "signal-noise",
     "common-ground",
@@ -404,6 +407,8 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(css, /\.project-card__title \{[\s\S]*?top:\s*24px;[\s\S]*?bottom:\s*auto;/);
   assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*62px 22px 18px;/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.work-archive-list \{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.work-archive-link \{[\s\S]*?border-top:\s*1px solid/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
