@@ -63,7 +63,7 @@ export function AboutPhotoGallery() {
   return (
     <>
       <section className="about-page__gallery" aria-labelledby="about-gallery-title">
-        <h2 id="about-gallery-title">Lifemax</h2>
+        <h2 id="about-gallery-title">Life</h2>
         <div className="about-page__gallery-viewport">
           <div className="about-page__gallery-track">
             {lifePhotos.map((photo, index) => <FilmPhoto key={photo.id} photo={photo} onOpen={() => setSelectedIndex(index)} />)}

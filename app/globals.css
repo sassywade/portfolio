@@ -6402,15 +6402,14 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 .alamo-weather {
   position: absolute;
   z-index: 6;
-  right: clamp(16px, 2.6vw, 42px);
+  right: clamp(14px, 2vw, 30px);
   bottom: calc(
-    clamp(68px, 7.35vw, 110px)
+    clamp(156px, 25svh, 244px)
     + var(--meadow-height-offset)
-    - 2px
   );
   width: max-content;
-  max-width: min(34vw, 360px);
-  color: color-mix(in srgb, var(--ink) 68%, transparent);
+  max-width: min(34vw, 250px);
+  color: color-mix(in srgb, var(--ink) 82%, transparent);
   font-family: var(--sans);
   font-size: 10px;
   font-variant-numeric: tabular-nums;
@@ -6418,7 +6417,9 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   line-height: 1.35;
   pointer-events: none;
   text-align: right;
-  text-shadow: 0 1px 5px color-mix(in srgb, var(--paper) 88%, transparent);
+  text-shadow:
+    0 1px 0 color-mix(in srgb, var(--paper) 98%, transparent),
+    0 0 8px color-mix(in srgb, var(--paper) 94%, transparent);
   white-space: nowrap;
 }
 
@@ -6449,8 +6450,8 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 @media (max-width: 580px) {
   .alamo-weather {
     right: 12px;
-    bottom: calc(70px + var(--meadow-height-offset));
-    max-width: calc(100vw - 24px);
+    bottom: calc(clamp(132px, 22svh, 166px) + var(--meadow-height-offset));
+    max-width: min(48vw, 210px);
     font-size: 9px;
   }
 
@@ -10055,11 +10056,16 @@ html[data-atmosphere="grid"] .ascii-garden {
 .about-page__gallery-track {
   align-items: center;
   gap: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: 4px;
 }
 
 .film-photo,
 .film-photo--landscape {
-  margin-left: -10px;
+  flex: 0 0 calc(8.333333% + 4px);
+  min-width: 0;
+  margin-left: -4px;
   transform: rotate(var(--photo-rotation));
 }
 
@@ -10125,14 +10131,16 @@ html[data-atmosphere="grid"] .ascii-garden {
   }
 
   .about-page__gallery-track {
-    gap: 2px;
+    gap: 0;
+    width: 100%;
+    max-width: 100%;
     padding-bottom: 14px;
   }
 
   .film-photo,
   .film-photo--landscape {
-    flex-basis: 66px;
-    margin-left: -7px;
+    flex-basis: calc(8.333333% + 3px);
+    margin-left: -3px;
   }
 
   .film-photo:first-child { margin-left: 0; }
