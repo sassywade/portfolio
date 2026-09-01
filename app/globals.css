@@ -2387,6 +2387,16 @@ em {
   }
 }
 
+/* Keep unfinished work visible as calm, substantial placeholder cards. */
+.pranathi-project-grid .project-mockup.project-mockup--placeholder {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 34px);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: #f2f2f2;
+}
+
 /* Quiet work placeholders until the final project screens are ready. */
 .pranathi-project-grid .project-mockup--placeholder {
   display: flex;
