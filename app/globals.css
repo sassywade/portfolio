@@ -9068,6 +9068,91 @@ html[data-atmosphere="grid"] .ascii-garden {
   }
 }
 
+/* The personal photo wall is a simple film strip, not a carousel. */
+.about-page__gallery-heading {
+  align-items: center;
+}
+
+.about-page__gallery-filters {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 5px;
+  padding: 3px;
+  border: 1px solid rgba(36, 35, 33, 0.12);
+  border-radius: 999px;
+}
+
+.about-page__gallery-filters button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 9px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.about-page__gallery-filters button:hover,
+.about-page__gallery-filters button:focus-visible,
+.about-page__gallery-filters button.is-active {
+  background: #ebeae6;
+  color: var(--ink);
+  outline: none;
+}
+
+.about-page__gallery-track {
+  align-items: flex-start;
+  overflow-x: auto;
+  scroll-snap-type: none;
+}
+
+.film-photo {
+  transform: none;
+  transition: transform 240ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.film-photo__image {
+  aspect-ratio: 1.36 / 1;
+}
+
+.film-photo--portrait .film-photo__image {
+  aspect-ratio: 0.72 / 1;
+}
+
+.film-photo__image img {
+  transition: transform 300ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.film-photo:hover,
+.film-photo:focus-visible {
+  transform: translateY(-2px) scale(1.035);
+}
+
+.film-photo:hover .film-photo__image img,
+.film-photo:focus-visible .film-photo__image img {
+  transform: scale(1.03);
+}
+
+@media (max-width: 700px) {
+  .about-page__gallery-heading {
+    align-items: flex-start;
+  }
+
+  .about-page__gallery-filters {
+    margin-top: 18px;
+    width: fit-content;
+  }
+
+  .film-photo:hover,
+  .film-photo:focus-visible {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
 /* Keep the About page in the same quiet typographic register as the home page. */
 .about-page .simple-page h1 {
   font-size: clamp(42px, 5.4vw, 64px);
