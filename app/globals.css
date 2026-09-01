@@ -242,9 +242,9 @@ html[data-hero-highlights="true"] .hero-hobby__mark {
 .hero-company--snap .hero-company__mark {
   width: 1.28em;
   border-radius: 0.18em;
-  background-color: #fffc00;
-  background-image: url("https://images.ctfassets.net/dwtpq5hdcqjg/14K5u2ez1kiBJLpwYhMOOK/b6be28f5de463375a1ae43a8cfdca7fa/Snap_Inc_Logo_Fixed.svg");
-  background-size: 84% auto;
+  background-color: transparent;
+  background-image: url("/work/snap-logo.png");
+  background-size: contain;
 }
 
 .hero-company--intuitive {
