@@ -404,7 +404,7 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(css, /\.work-group__brand \{[\s\S]*?font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
   assert.match(css, /aspect-ratio:\s*1\.08/);
   assert.match(css, /border-radius:\s*28px/);
-  assert.match(css, /\.project-card__title \{[\s\S]*?top:\s*24px;[\s\S]*?bottom:\s*auto;/);
+  assert.match(css, /\.project-card__title \{[\s\S]*?top:\s*22px;[\s\S]*?bottom:\s*auto;[\s\S]*?font-size:\s*clamp\(13px, 0\.9vw, 16px\)/);
   assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*62px 22px 18px;/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /\.work-archive-list \{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
