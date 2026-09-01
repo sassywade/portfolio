@@ -7650,6 +7650,106 @@ html[data-atmosphere="grid"] .ascii-garden {
   align-items: baseline;
 }
 
+.about-page__experience-logo {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  place-items: center;
+  align-self: center;
+  border: 1px solid rgba(55, 53, 48, 0.18);
+  border-radius: 9px;
+  background-color: rgba(255, 255, 255, 0.74);
+  color: #373530;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 620;
+  letter-spacing: -0.08em;
+  line-height: 1;
+}
+
+.about-page__experience-logo--glean,
+.about-page__experience-logo--snap {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 22px 22px;
+}
+
+.about-page__experience-logo--glean {
+  border-color: rgba(52, 60, 237, 0.16);
+  background-image: url("/work/glean-logo.png");
+  background-color: #eef0ff;
+}
+
+.about-page__experience-logo--snap {
+  border-color: rgba(255, 214, 0, 0.34);
+  background-image: url("/work/snap-logo.png");
+  background-color: #fffbe8;
+}
+
+.about-page__experience-logo--kp {
+  border-color: rgba(30, 37, 87, 0.2);
+  border-radius: 50%;
+  background: #202657;
+  color: #f8efe0;
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: -0.13em;
+}
+
+.about-page__experience-logo--intuitive {
+  border-color: rgba(239, 126, 54, 0.32);
+  border-radius: 50%;
+  background: #fff8f1;
+  color: #ef7e36;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+}
+
+.about-page__experience-logo--clients {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-color: rgba(55, 53, 48, 0.14);
+  background: #f2f0e9;
+}
+
+.about-page__experience-logo--clients span {
+  display: grid;
+  width: 7px;
+  height: 15px;
+  place-items: center;
+  color: #fff;
+  font-size: 6px;
+  letter-spacing: -0.1em;
+}
+
+.about-page__experience-logo--clients span:nth-child(1) { background: #f15a47; }
+.about-page__experience-logo--clients span:nth-child(2) { background: #4771d0; }
+.about-page__experience-logo--clients span:nth-child(3) { background: #222; }
+
+.about-page__experience-logo--phonic {
+  border-color: rgba(105, 65, 153, 0.22);
+  border-radius: 50% 50% 50% 8px;
+  background: #f2eafb;
+  color: #694199;
+  font-family: var(--serif);
+  font-size: 19px;
+  letter-spacing: -0.04em;
+}
+
+.about-page__experience-logo--hri {
+  border-color: rgba(54, 116, 109, 0.24);
+  background: #e7f1ed;
+  color: #36746d;
+  font-size: 8px;
+  letter-spacing: -0.1em;
+}
+
 .about-page__experience-heading h3,
 .about-page__experience-heading p {
   margin: 0;
@@ -7757,6 +7857,12 @@ html[data-atmosphere="grid"] .ascii-garden {
 
   .about-page__experience-heading {
     gap: 4px 10px;
+  }
+
+  .about-page__experience-logo {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
   }
 
   .about-page__experience-heading h3,

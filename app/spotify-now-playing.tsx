@@ -83,6 +83,8 @@ export function NowPlaying() {
       <div className="about-current-card__main about-now-playing__main">
         <div className="about-now-playing__art" aria-hidden={track?.imageUrl ? undefined : true}>
           {track?.imageUrl ? (
+            // Spotify artwork is a runtime-selected external URL, so it cannot use a fixed Next image host.
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={track.imageUrl} alt={`Album artwork for ${track.album}`} />
           ) : (
             <div className="about-now-playing__fallback-disc">

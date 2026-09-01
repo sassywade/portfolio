@@ -94,6 +94,14 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 - `npm test`: build the starter and verify its rendered loading skeleton
 - `npm run db:generate`: generate Drizzle migrations after schema changes
 
+## About page Spotify card
+
+The About page includes a server-side now-playing card. To connect it locally,
+copy `.env.example` to `.dev.vars` and fill in the Spotify app credentials plus
+a refresh token authorized with the `user-read-playback-state` scope. Keep the
+client secret and refresh token server-side; for a hosted site, configure the
+same values as runtime secrets.
+
 ## Learn More
 
 - [vinext Documentation](https://github.com/cloudflare/vinext)

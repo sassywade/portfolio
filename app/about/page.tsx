@@ -4,6 +4,24 @@ import { AboutPhotoGallery } from "./about-photo-gallery";
 import { SiteFooter } from "../site-footer";
 import { NowPlaying } from "../spotify-now-playing";
 
+type ExperienceLogo = "glean" | "snap" | "kp" | "intuitive" | "clients" | "phonic" | "hri";
+
+function ExperienceLogoMark({ logo, company }: { logo: ExperienceLogo; company: string }) {
+  return (
+    <span
+      className={`about-page__experience-logo about-page__experience-logo--${logo}`}
+      role="img"
+      aria-label={`${company} logo`}
+    >
+      {logo === "kp" ? "KP" : null}
+      {logo === "intuitive" ? "i" : null}
+      {logo === "clients" ? <><span>A</span><span>M</span><span>G</span></> : null}
+      {logo === "phonic" ? "P" : null}
+      {logo === "hri" ? "HRI" : null}
+    </span>
+  );
+}
+
 export default function AboutPage() {
   return (
     <main className="site-shell page-enter about-page" id="top">
@@ -95,6 +113,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">2022 – Now</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="glean" company="Glean" />
                   <h3>Glean</h3>
                   <p>Product Designer</p>
                 </div>
@@ -108,6 +127,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">2022</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="snap" company="Snap" />
                   <h3>Snap</h3>
                   <p>Product Design Intern</p>
                 </div>
@@ -122,6 +142,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">2022</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="kp" company="Kleiner Perkins" />
                   <h3>Kleiner Perkins</h3>
                   <p>Design Fellow</p>
                 </div>
@@ -136,6 +157,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">2021</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="intuitive" company="Intuitive Surgical" />
                   <h3>Intuitive Surgical</h3>
                   <p>Interaction Designer</p>
                 </div>
@@ -149,6 +171,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">2021 – 2022</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="clients" company="Client work" />
                   <h3>Client work</h3>
                   <p>Product Design Consultant</p>
                 </div>
@@ -162,6 +185,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">2020</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="phonic" company="Phonic" />
                   <h3>Phonic</h3>
                   <p>UI/UX Design + Software Engineering Intern</p>
                 </div>
@@ -175,6 +199,7 @@ export default function AboutPage() {
               <p className="about-page__experience-period">Earlier</p>
               <div className="about-page__experience-body">
                 <div className="about-page__experience-heading">
+                  <ExperienceLogoMark logo="hri" company="Human–Robot Interaction Lab" />
                   <h3>Human–Robot Interaction Lab</h3>
                   <p>Research / Design</p>
                 </div>
