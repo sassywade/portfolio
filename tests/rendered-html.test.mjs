@@ -328,19 +328,21 @@ test("keeps colorful hero highlights optional and off by default", async () => {
   assert.match(css, /html\[data-hero-highlights="true"\] \.pranathi-bio:has/);
 });
 
-test("uses a linear editorial case-study template without navigation chrome", async () => {
+test("uses the supplied case-study pages with floating work navigation", async () => {
   const [page, css] = await Promise.all([
     readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.doesNotMatch(page, /CaseStudyNav|case-study-topbar|case-breadcrumb/);
+  assert.match(page, /CaseStudyNav/);
   assert.match(page, /className="case-intro"/);
   assert.match(page, /className="case-study-content"/);
-  assert.match(page, /className="case-section__copy"/);
-  assert.match(page, /className="case-section__visual"/);
-  assert.match(css, /Linear editorial case studies/);
-  assert.match(css, /\.case-study-shell \.case-study-frame\s*\{[^}]*width:\s*100%;[^}]*border-radius:\s*0;/);
+  assert.match(page, /case-brief-gallery/);
+  assert.match(page, /case-source-link/);
+  assert.match(page, /className="case-artifact/);
+  assert.match(css, /Supplied case-study archive/);
+  assert.match(css, /\.case-study-shell \.case-study-nav\s*\{/);
+  assert.match(css, /\.case-study-nav__items a\.is-active/);
   assert.match(css, /\.case-study-shell \.case-section,[\s\S]*?display:\s*block;/);
   assert.match(css, /\.case-study-shell \.case-section__copy\s*\{[^}]*max-width|\.case-study-shell \.case-section__copy\s*\{[^}]*width:/);
 });
@@ -355,7 +357,7 @@ test("uses the supplied projects in the Play archive", async () => {
   assert.doesNotMatch(play, /Tiny type studies|Weekend camera roll|Things in progress/);
 });
 
-test("groups the work archive into quiet Glean and Snap tiles", async () => {
+test("groups the supplied case studies into quiet Glean tiles", async () => {
   const [projects, projectCard, projectMockup, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/project-card.tsx", import.meta.url), "utf8"),
@@ -366,54 +368,27 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 16);
+  assert.equal((projects.match(/number: "\d{2}"/g) ?? []).length, 6);
   for (const title of [
-    "Homepage redesign",
-    "Artifacts",
-    "Proactive Intelligence",
-    "Growth",
     "Agent observability",
-    "Enterprise setup",
-    "Treasure",
-    "NFTs as Lenses",
+    "Artifacts",
+    "Growth",
+    "Homepage redesign",
+    "Psychic",
+    "Workspace admin",
   ]) {
     assert.match(projects, new RegExp(`title: "${title}"`));
   }
-  assert.doesNotMatch(projects, /title: "Telestrations"/);
-  assert.doesNotMatch(projects, /slug: "drift"/);
+  assert.match(projects, /sourcePdf: "\/case-studies\/agent-observability\/brief\.pdf"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
   assert.match(projectMockup, /className="project-card__title"/);
-  assert.match(projectMockup, /snap-treasure\.png/);
-  assert.match(projectMockup, /snap-nfts-as-lenses\.png/);
-  assert.match(
-    projects,
-    /techcrunch\.com\/2022\/07\/13\/snap-eyes-adding-nfts-as-ar-filters-in-snapchat/,
-  );
-  assert.match(projectCard, /project\.externalUrl/);
-  assert.match(projectCard, /target=\{isExternal \? "_blank" : undefined\}/);
-  assert.match(
-    projectCard,
-    /rel=\{isExternal \? "noopener noreferrer" : undefined\}/,
-  );
+  assert.match(projectMockup, /project\.cover\.src/);
+  assert.match(projectMockup, /project-work-image/);
   assert.match(projectCard, /id="work-group-glean"/);
-  assert.match(projectCard, /id="work-group-snap"/);
-  assert.doesNotMatch(projectCard, /work-group-archive/);
-  assert.doesNotMatch(projectCard, /work-archive-disclosure/);
-  for (const slug of [
-    "signal-noise",
-    "common-ground",
-    "field-notes",
-    "the-archive",
-    "soft-systems",
-    "afterimage",
-    "soft-launch",
-    "pocket-studio",
-  ]) {
-    assert.match(projectCard, new RegExp(`"${slug}"`));
-  }
-  assert.doesNotMatch(projectCard, /"drift"/);
-  assert.match(projects, /export const placeholderCaseStudy: CaseStudy/);
-  assert.match(caseStudy, /caseStudies\[slug\] \?\? placeholderCaseStudy/);
+  assert.doesNotMatch(projectCard, /id="work-group-snap"/);
+  assert.match(caseStudy, /CaseStudyNav/);
+  assert.match(caseStudy, /narrative\.artifacts/);
+  assert.doesNotMatch(projects, /placeholderCaseStudy|Concept placeholder/);
   assert.match(hero, /useState<WorkGridColumns>\(2\)/);
   assert.match(hero, /useState<WorkHandoff>\("dissolve"\)/);
   assert.match(hero, /document\.documentElement\.dataset\.workColumns = String\(workGridColumns\)/);
@@ -443,7 +418,8 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*0;/);
   assert.match(css, /\.project-work-image \{[\s\S]*?position:\s*absolute;[\s\S]*?top:\s*50px;[\s\S]*?bottom:\s*20px;[\s\S]*?object-fit:\s*contain;/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.doesNotMatch(css, /\.work-archive-(?:list|summary|link)/);
+  assert.match(css, /project-mockup__wash/);
+  assert.match(css, /project-card__caption/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {

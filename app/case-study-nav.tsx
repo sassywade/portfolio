@@ -1,13 +1,15 @@
-import Link from "next/link";
+/* Vinext's client-side Link shim can swallow these route clicks. */
+/* eslint-disable @next/next/no-html-link-for-pages */
+
 import type { Project } from "./projects";
 
 export function CaseStudyNav({ items, activeSlug }: { items: Project[]; activeSlug: string }) {
   return (
     <aside className="case-study-nav" aria-label="Case studies">
-      <Link className="case-study-nav__back" href="/#work">
+      <a className="case-study-nav__back" href="/#work">
         <span aria-hidden="true">←</span>
         Back to work
-      </Link>
+      </a>
 
       <div className="case-study-nav__heading">
         <span>Selected work</span>
@@ -18,7 +20,7 @@ export function CaseStudyNav({ items, activeSlug }: { items: Project[]; activeSl
         {items.map((item) => {
           const isActive = item.slug === activeSlug;
           return (
-            <Link
+            <a
               href={`/case-studies/${item.slug}`}
               className={isActive ? "is-active" : undefined}
               aria-current={isActive ? "page" : undefined}
@@ -27,7 +29,7 @@ export function CaseStudyNav({ items, activeSlug }: { items: Project[]; activeSl
               <span>{item.number}</span>
               <strong>{item.title}</strong>
               <i aria-hidden="true">↗</i>
-            </Link>
+            </a>
           );
         })}
       </div>
