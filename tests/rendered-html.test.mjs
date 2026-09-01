@@ -79,16 +79,16 @@ test("pairs Newsreader display type with Geist Sans interface and reading type",
   assert.match(css, /\.play-item p\s*\{[^}]*font-family:\s*var\(--sans\)/);
 });
 
-test("keeps the primary navigation labels static", async () => {
+test("keeps the primary navigation simple and links Work to its homepage section", async () => {
   const header = await readFile(new URL("../app/site-header.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.doesNotMatch(header, /next\/link/);
   assert.match(header, /\["resume", "Resume", "\/Neel-Saswade-Resume\.pdf"\]/);
   assert.match(header, /target=\{id === "resume" \? "_blank" : undefined\}/);
-  assert.match(header, /<a[\s\S]*?href=\{href\}/);
+  assert.match(header, /href=\{id === "work" && current === "work" \? "#work" : href\}/);
+  assert.match(header, /\["work", "Work", "\/#work"\]/);
   assert.match(header, /\["about", "About", "\/about"\]/);
-  assert.doesNotMatch(header, /\["work", "Work"/);
   assert.doesNotMatch(header, /\["play", "Play"/);
   assert.doesNotMatch(header, /site-nav__label--hover/);
   assert.doesNotMatch(css, /site-nav__label--hover/);

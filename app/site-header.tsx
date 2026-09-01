@@ -6,6 +6,7 @@ type SiteHeaderProps = {
 };
 
 const links = [
+  ["work", "Work", "/#work"],
   ["about", "About", "/about"],
   ["resume", "Resume", "/Neel-Saswade-Resume.pdf"],
 ] as const;
@@ -24,7 +25,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
       <nav className="site-nav" aria-label="Main navigation">
         {links.map(([id, label, href]) => (
           <a
-            href={href}
+            href={id === "work" && current === "work" ? "#work" : href}
             className={current === id ? "is-active" : undefined}
             aria-current={current === id ? "page" : undefined}
             target={id === "resume" ? "_blank" : undefined}
