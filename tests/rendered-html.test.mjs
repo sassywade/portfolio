@@ -367,7 +367,9 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(prototype, /onWorkGridColumnsChange\(2\)/);
   assert.match(prototype, /onWorkGridColumnsChange\(3\)/);
   assert.match(css, /html\[data-work-columns="3"\] \.pranathi-project-grid/);
-  assert.match(css, /background:\s*#eeeeed/);
+  assert.match(css, /background:\s*#ececec/);
+  assert.match(css, /\.project-card__title \{[\s\S]*?top:\s*16px;[\s\S]*?bottom:\s*auto;/);
+  assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*44px 18px 14px;/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
 });
 

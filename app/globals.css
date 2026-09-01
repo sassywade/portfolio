@@ -4761,15 +4761,16 @@ em {
   overflow: hidden;
   border: 0;
   border-radius: 10px;
-  background: #eeeeed;
+  background: #ececec;
   place-items: center;
 }
 
 .pranathi-project-grid .project-card__title {
   position: absolute;
   z-index: 2;
+  top: 16px;
   right: 16px;
-  bottom: 15px;
+  bottom: auto;
   left: 16px;
   margin: 0;
   color: #77736f;
@@ -4781,27 +4782,26 @@ em {
   text-align: center;
 }
 
-.pranathi-project-grid .project-mockup--with-image .project-card__title {
-  top: 16px;
-  bottom: auto;
+.pranathi-project-grid .project-mockup--with-image {
+  padding: 44px 18px 14px;
 }
 
 .pranathi-project-grid .project-work-image {
   width: auto;
-  max-width: 78%;
-  height: 78%;
-  margin-top: 16px;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
   object-fit: contain;
   filter: drop-shadow(0 10px 12px rgba(35, 34, 32, 0.08));
 }
 
 .pranathi-project-grid .project-card .project-mockup {
-  transition: transform 360ms cubic-bezier(.22,.7,.2,1), background-color 220ms ease;
+  transition: transform 360ms cubic-bezier(.22,.7,.2,1);
 }
 
 .pranathi-project-grid .project-card:hover .project-mockup,
 .pranathi-project-grid .project-card:focus-visible .project-mockup {
-  background: #e9e9e8;
   box-shadow: none;
   transform: translateY(-3px);
 }
