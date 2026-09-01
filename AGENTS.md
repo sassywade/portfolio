@@ -2,6 +2,8 @@
 
 This file is the operational source of truth for anyone changing the portfolio. Optimize for restraint, continuity, and easy verification.
 
+Use `design.md` as the visual and interaction north star. Use `docs/portfolio-system.md` for architecture and system behavior.
+
 ## Product intent
 
 The site should feel personal, calm, editorial, and lightly playful. The work must remain the focus. Prefer the smallest complete change. Do not add explanatory copy, decorative UI, arrows, captions, badges, sections, or animation unless Neel explicitly requests them.

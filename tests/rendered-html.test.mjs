@@ -425,14 +425,18 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
 });
 
 test("documents the portfolio's durable design and change contract", async () => {
-  const [agentContract, systemDoc] = await Promise.all([
+  const [agentContract, designDoc, systemDoc] = await Promise.all([
     readFile(new URL("../AGENTS.md", import.meta.url), "utf8"),
+    readFile(new URL("../design.md", import.meta.url), "utf8"),
     readFile(new URL("../docs/portfolio-system.md", import.meta.url), "utf8"),
   ]);
 
   assert.match(agentContract, /Prefer the smallest complete change/);
   assert.match(agentContract, /Never leave title-only empty space/);
   assert.match(agentContract, /inspect the final matching rule/);
+  assert.match(designDoc, /Quiet on arrival\. Playful on discovery\. Simple everywhere\./);
+  assert.match(designDoc, /Treat Alamo Square as a place, not a theme park/);
+  assert.match(designDoc, /Never collapse a placeholder into a title floating in empty page space/);
   assert.match(systemDoc, /Prototype settings are exploratory state/);
   assert.match(systemDoc, /Pointer speed alone is not a state transition/);
   assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);

@@ -5,6 +5,7 @@ Neel's personal product-design portfolio: a quiet editorial site with an interac
 ## Start here
 
 - Read [AGENTS.md](./AGENTS.md) before changing the site.
+- Read [design.md](./design.md) for the portfolio's visual and interaction direction.
 - Read [docs/portfolio-system.md](./docs/portfolio-system.md) for the product, design, and interaction model.
 - Edit project content in `app/projects.ts`.
 - Run `npm test` before publishing.
