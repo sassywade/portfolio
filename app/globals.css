@@ -2275,6 +2275,25 @@ em {
   }
 }
 
+/* Quiet work placeholders until the final project screens are ready. */
+.pranathi-project-grid .project-mockup--placeholder {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 34px);
+  background: #f2f2f2;
+}
+
+.project-placeholder__title {
+  color: var(--ink);
+  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 450;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: center;
+}
+
 /* Lifemax frames stay the same height and overlap like a small contact sheet. */
 .about-page__gallery-track {
   gap: 0;

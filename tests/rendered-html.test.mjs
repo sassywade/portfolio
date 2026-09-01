@@ -383,8 +383,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   }
   assert.match(projects, /sourcePdf: "\/case-studies\/agent-observability\/brief\.pdf"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
-  assert.match(projectMockup, /project\.cover\.src/);
-  assert.match(projectMockup, /project-work-image/);
+  assert.match(projectMockup, /project-mockup--placeholder/);
+  assert.match(projectMockup, /project-placeholder__title/);
+  assert.doesNotMatch(projectMockup, /project\.cover\.src|project-work-image|<img/);
   assert.doesNotMatch(projectMockup, /project-card__title|project-card__caption|project-card__arrow|project-mockup__wash/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
@@ -417,8 +418,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.work-group__brand \{[\s\S]*?margin:\s*0 0 clamp\(22px, 2vw, 28px\) 4px/);
   assert.match(css, /\.work-groups \{[\s\S]*?padding-bottom:\s*clamp\(88px, 10vw, 144px\)/);
   assert.match(css, /aspect-ratio:\s*1\.3/);
-  assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*0;/);
-  assert.match(css, /\.project-work-image \{[\s\S]*?position:\s*absolute;[\s\S]*?inset:\s*0;[\s\S]*?object-fit:\s*contain;/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup--placeholder \{[\s\S]*?background:\s*#f2f2f2;/);
+  assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
 });
