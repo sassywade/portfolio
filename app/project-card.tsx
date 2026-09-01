@@ -43,8 +43,6 @@ export function ProjectGrid({ items = projects }: { items?: Project[] }) {
     "afterimage",
   ]);
   const snapProjects = selectProjects(["soft-launch", "pocket-studio"]);
-  const featuredSlugs = new Set([...gleanProjects, ...snapProjects].map((project) => project.slug));
-  const archiveProjects = items.filter((project) => !featuredSlugs.has(project.slug));
 
   return (
     <div className="work-groups">
@@ -68,32 +66,6 @@ export function ProjectGrid({ items = projects }: { items?: Project[] }) {
         </div>
       </section>
 
-      {archiveProjects.length > 0 ? (
-        <section className="work-group work-group--archive" aria-labelledby="work-group-archive">
-          <details className="work-archive-disclosure">
-            <summary className="work-archive-summary">
-              <span id="work-group-archive">Archive</span>
-              <span className="work-archive-summary__meta">
-                {archiveProjects.length} projects
-                <span className="work-archive-summary__icon" aria-hidden="true" />
-              </span>
-            </summary>
-            <div className="work-archive-list">
-              {archiveProjects.map((project) => (
-                <a
-                  className="work-archive-link"
-                  href={`/case-studies/${project.slug}`}
-                  key={project.number}
-                  data-cuelume-toggle="pulse"
-                >
-                  <span>{project.title}</span>
-                  <span className="work-archive-link__year">{project.year}</span>
-                </a>
-              ))}
-            </div>
-          </details>
-        </section>
-      ) : null}
     </div>
   );
 }

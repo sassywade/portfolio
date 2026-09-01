@@ -394,12 +394,8 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   );
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
-  assert.match(projectCard, /id="work-group-archive"/);
-  assert.match(projectCard, /<details className="work-archive-disclosure">/);
-  assert.match(projectCard, /<summary className="work-archive-summary">/);
-  assert.doesNotMatch(projectCard, /<details className="work-archive-disclosure" open>/);
-  assert.match(projectCard, /className="work-archive-list"/);
-  assert.match(projectCard, /!featuredSlugs\.has\(project\.slug\)/);
+  assert.doesNotMatch(projectCard, /work-group-archive/);
+  assert.doesNotMatch(projectCard, /work-archive-disclosure/);
   for (const slug of [
     "signal-noise",
     "common-ground",
@@ -442,10 +438,7 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*0;/);
   assert.match(css, /\.project-work-image \{[\s\S]*?position:\s*absolute;[\s\S]*?top:\s*50px;[\s\S]*?bottom:\s*20px;[\s\S]*?object-fit:\s*contain;/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(css, /\.work-archive-list \{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(css, /\.work-archive-summary \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
-  assert.match(css, /\.work-archive-disclosure\[open\] \.work-archive-summary__icon::after/);
-  assert.match(css, /\.work-archive-link \{[\s\S]*?border-top:\s*1px solid/);
+  assert.doesNotMatch(css, /\.work-archive-(?:list|summary|link)/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
