@@ -9734,11 +9734,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 
 /* Supplied case-study archive: a quiet reading surface with a persistent work rail. */
 .case-study-shell {
-  background:
-    linear-gradient(rgba(39, 38, 36, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(39, 38, 36, 0.028) 1px, transparent 1px),
-    #faf9f6;
-  background-size: 44px 44px;
+  background: #faf9f6;
 }
 
 .case-study-shell .case-study-frame {
