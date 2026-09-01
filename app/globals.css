@@ -2275,6 +2275,62 @@ em {
   }
 }
 
+/* Lifemax contact sheet: one shared height, centered alignment, quiet rotation. */
+.about-page__gallery-track {
+  align-items: center;
+}
+
+.film-photo,
+.film-photo--landscape {
+  flex: 0 0 auto;
+  transform: rotate(var(--photo-rotation));
+}
+
+.film-photo:nth-child(1) { --photo-rotation: -1.4deg; }
+.film-photo:nth-child(2) { --photo-rotation: 1deg; }
+.film-photo:nth-child(3) { --photo-rotation: -0.7deg; }
+.film-photo:nth-child(4) { --photo-rotation: 1.5deg; }
+.film-photo:nth-child(5) { --photo-rotation: -1deg; }
+.film-photo:nth-child(6) { --photo-rotation: 0.8deg; }
+.film-photo:nth-child(7) { --photo-rotation: -1.2deg; }
+.film-photo:nth-child(8) { --photo-rotation: 0.6deg; }
+.film-photo:nth-child(9) { --photo-rotation: -0.8deg; }
+.film-photo:nth-child(10) { --photo-rotation: 1.2deg; }
+.film-photo:nth-child(11) { --photo-rotation: -0.6deg; }
+.film-photo:nth-child(12) { --photo-rotation: 0.9deg; }
+
+.film-photo__image,
+.film-photo--portrait .film-photo__image,
+.film-photo--landscape .film-photo__image {
+  width: 84px;
+  height: 128px;
+  aspect-ratio: auto;
+}
+
+.film-photo--landscape .film-photo__image {
+  width: 112px;
+}
+
+.film-photo:hover,
+.film-photo:focus-visible,
+.film-photo:nth-child(n):hover,
+.film-photo:nth-child(n):focus-visible {
+  transform: translateY(-10px) rotate(0deg) scale(1.1);
+}
+
+@media (max-width: 700px) {
+  .film-photo__image,
+  .film-photo--portrait .film-photo__image,
+  .film-photo--landscape .film-photo__image {
+    width: 70px;
+    height: 104px;
+  }
+
+  .film-photo--landscape .film-photo__image {
+    width: 94px;
+  }
+}
+
 /* Quiet work placeholders until the final project screens are ready. */
 .pranathi-project-grid .project-mockup--placeholder {
   display: flex;
