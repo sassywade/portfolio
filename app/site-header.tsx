@@ -6,9 +6,7 @@ type SiteHeaderProps = {
 };
 
 const links = [
-  ["work", "Work", "/#work"],
   ["about", "About", "/about"],
-  ["play", "Play", "/play"],
   ["resume", "Resume", "/Neel-Saswade-Resume.pdf"],
 ] as const;
 
