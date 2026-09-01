@@ -29,8 +29,108 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="about-page__details">
-          <section className="about-page__block" aria-labelledby="about-interests-title">
+        <section className="about-page__experience" aria-labelledby="about-experience-title">
+          <h2 id="about-experience-title" className="about-page__section-heading">
+            Experience
+          </h2>
+          <div className="about-page__experience-list">
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">2022 – Now</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Glean</h3>
+                  <p>Product Designer</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Building tools that help people make sense of their work.
+                </p>
+              </div>
+            </article>
+
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">2022</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Snap</h3>
+                  <p>Product Design Intern</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Web3 team — making new internet ideas easier for Snapchatters
+                  to understand.
+                </p>
+              </div>
+            </article>
+
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">2022</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Kleiner Perkins</h3>
+                  <p>Design Fellow</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Learning alongside a sharp group of early-career designers and
+                  builders.
+                </p>
+              </div>
+            </article>
+
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">2021</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Intuitive Surgical</h3>
+                  <p>Interaction Designer</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Designing for complex systems in a high-stakes environment.
+                </p>
+              </div>
+            </article>
+
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">2021 – 2022</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Client work</h3>
+                  <p>Product Design Consultant</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Selected clients: Adobe, Microsoft, Logitech G.
+                </p>
+              </div>
+            </article>
+
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">2020</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Phonic</h3>
+                  <p>UI/UX Design + Software Engineering Intern</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Working across product design and front-end development.
+                </p>
+              </div>
+            </article>
+
+            <article className="about-page__experience-row">
+              <p className="about-page__experience-period">Earlier</p>
+              <div className="about-page__experience-body">
+                <div className="about-page__experience-heading">
+                  <h3>Human–Robot Interaction Lab</h3>
+                  <p>Research / Design</p>
+                </div>
+                <p className="about-page__experience-description">
+                  Exploring how people understand and interact with robots.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section className="about-page__interests" aria-labelledby="about-interests-title">
+          <div className="about-page__block">
             <p className="about-page__label">Away from work</p>
             <h2 id="about-interests-title">
               Usually outside, with Daisy, or looking for something good to eat.
@@ -42,20 +142,8 @@ export default function AboutPage() {
               <span>food</span>
               <span>travel</span>
             </div>
-          </section>
-
-          <section className="about-page__block" aria-labelledby="about-work-title">
-            <p className="about-page__label">A few places I&apos;ve worked</p>
-            <h2 id="about-work-title" className="sr-only">Work experience</h2>
-            <ul className="about-page__work-list">
-              <li>Glean</li>
-              <li>Snap</li>
-              <li>Intuitive Surgical</li>
-              <li>Phonic</li>
-              <li>Human–Robot Interaction Lab</li>
-            </ul>
-          </section>
-        </div>
+          </div>
+        </section>
       </section>
     </main>
   );
