@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 
 type SiteHeaderProps = {
-  current?: "work" | "about" | "play";
+  current?: "work" | "about";
 };
 
 const links = [

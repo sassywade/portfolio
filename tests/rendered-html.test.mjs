@@ -351,16 +351,6 @@ test("uses an immersive case-study hero with a persistent chapter rail", async (
   assert.match(css, /\.case-story-media__frame\s*\{/);
 });
 
-test("uses the supplied projects in the Play archive", async () => {
-  const play = await readFile(new URL("../app/play/page.tsx", import.meta.url), "utf8");
-
-  for (const title of ["Passport", "Mental health app", "Logitech", "Adobe", "Microsoft"]) {
-    assert.match(play, new RegExp(`"${title}"`));
-  }
-  assert.equal((play.match(/\["\d{2}",/g) ?? []).length, 5);
-  assert.doesNotMatch(play, /Tiny type studies|Weekend camera roll|Things in progress/);
-});
-
 test("groups the supplied case studies into quiet Glean and Snap tiles", async () => {
   const [projects, projectCard, projectMockup, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
