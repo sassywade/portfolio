@@ -120,6 +120,8 @@ Case studies are quiet, image-led narratives influenced by the clarity of Natali
 
 The About page uses the same restraint as the homepage: editorial introduction, personal imagery, and only the information Neel wants to share. It should feel like another chapter of the same site, not a separate brand.
 
+The Life photographs enter once as a quiet contact sheet. Hover and keyboard focus may lift an individual print slightly, while opening a photo uses a short fade and small positional transition. Closing must be just as composed, restore focus to the originating print, and collapse to a static presentation for reduced motion. Do not animate the biography, experience rows, or photographs merely to keep the page busy.
+
 ## Interaction quality bar
 
 - Everything works without motion before enhancement is applied.

@@ -2,7 +2,7 @@
 
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 
 type PhotoSlot = {
   id: string;
@@ -28,9 +28,15 @@ const lifePhotos: PhotoSlot[] = [
   { id: "san-francisco-from-above", title: "The city from above", description: "Looking out over the city from a grassy hillside.", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
 
-function FilmPhoto({ photo, onOpen }: { photo: PhotoSlot; onOpen: () => void }) {
+function FilmPhoto({ photo, index, onOpen }: { photo: PhotoSlot; index: number; onOpen: (trigger: HTMLButtonElement) => void }) {
   return (
-    <button className={`film-photo film-photo--${photo.orientation} film-photo--${photo.id}`} type="button" onClick={onOpen} aria-label={`Open ${photo.title}`}>
+    <button
+      className={`film-photo film-photo--${photo.orientation} film-photo--${photo.id}`}
+      type="button"
+      onClick={(event) => onOpen(event.currentTarget)}
+      aria-label={`Open ${photo.title}`}
+      style={{ "--photo-index": index } as CSSProperties}
+    >
       <span className="film-photo__paper">
         <span className="film-photo__image">
           <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="(max-width: 700px) 22vw, 84px" unoptimized />
@@ -42,8 +48,57 @@ function FilmPhoto({ photo, onOpen }: { photo: PhotoSlot; onOpen: () => void }) 
 
 export function AboutPhotoGallery() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const galleryRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
   const selectedPhoto = selectedIndex === null ? null : lifePhotos[selectedIndex];
+
+  const closePhoto = useCallback(() => {
+    if (selectedIndex === null || isClosing) return;
+
+    const finishClose = () => {
+      setSelectedIndex(null);
+      setIsClosing(false);
+      window.requestAnimationFrame(() => triggerRef.current?.focus());
+    };
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finishClose();
+      return;
+    }
+
+    setIsClosing(true);
+    closeTimerRef.current = window.setTimeout(finishClose, 180);
+  }, [isClosing, selectedIndex]);
+
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+
+    gallery.dataset.motionReady = "true";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gallery.dataset.motionVisible = "true";
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        gallery.dataset.motionVisible = "true";
+        observer.unobserve(gallery);
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+    );
+
+    observer.observe(gallery);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => () => {
+    if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+  }, []);
 
   useEffect(() => {
     if (selectedIndex === null) return;
@@ -51,29 +106,37 @@ export function AboutPhotoGallery() {
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelectedIndex(null);
+      if (event.key === "Escape") closePhoto();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedIndex]);
+  }, [closePhoto, selectedIndex]);
+
+  const openPhoto = (index: number, trigger: HTMLButtonElement) => {
+    if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+    triggerRef.current = trigger;
+    setIsClosing(false);
+    setSelectedIndex(index);
+  };
 
   return (
     <>
-      <section className="about-page__gallery" aria-labelledby="about-gallery-title">
+      <section className="about-page__gallery" aria-labelledby="about-gallery-title" ref={galleryRef}>
         <h2 id="about-gallery-title">Life</h2>
         <div className="about-page__gallery-viewport">
           <div className="about-page__gallery-track">
-            {lifePhotos.map((photo, index) => <FilmPhoto key={photo.id} photo={photo} onOpen={() => setSelectedIndex(index)} />)}
+            {lifePhotos.map((photo, index) => <FilmPhoto key={photo.id} photo={photo} index={index} onOpen={(trigger) => openPhoto(index, trigger)} />)}
           </div>
         </div>
       </section>
 
       {selectedPhoto && createPortal(
-        <div className="photo-lightbox" role="dialog" aria-modal="true" aria-label={selectedPhoto.description} onClick={() => setSelectedIndex(null)}>
-          <button className="photo-lightbox__close" type="button" onClick={() => setSelectedIndex(null)} aria-label="Close photo viewer" ref={closeButtonRef}>
+        <div className="photo-lightbox" data-state={isClosing ? "closing" : "open"} role="dialog" aria-modal="true" aria-label={selectedPhoto.description}>
+          <button className="photo-lightbox__backdrop" type="button" tabIndex={-1} onClick={closePhoto} aria-label="Close photo viewer" />
+          <button className="photo-lightbox__close" type="button" onClick={closePhoto} aria-label="Close photo viewer" ref={closeButtonRef}>
             <span>Close</span><strong aria-hidden="true">×</strong>
           </button>
           <figure className="photo-lightbox__figure" onClick={(event) => event.stopPropagation()}>

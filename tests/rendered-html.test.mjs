@@ -35,7 +35,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at /);
   assert.match(html, /hero-company--glean[^>]*href="https:\/\/www\.glean\.com\/"/);
   assert.match(html, /hero-company--snap[^>]*href="https:\/\/www\.snap\.com\/"/);
-  assert.match(html, /hero-company--intuitive[^>]*href="https:\/\/www\.intuitive\.com\/"/);
+  assert.doesNotMatch(html, /as an intern/);
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
   assert.match(html, /class="meadow__image meadow__image--curated" src="\/alamo-styles\/painterly-realism\/rolling\.png"/);
   assert.match(html, /data-rolling-meadow="original"/);
@@ -92,6 +92,28 @@ test("keeps the primary navigation simple and links Work to its homepage section
   assert.doesNotMatch(header, /\["play", "Play"/);
   assert.doesNotMatch(header, /site-nav__label--hover/);
   assert.doesNotMatch(css, /site-nav__label--hover/);
+});
+
+test("keeps About motion calm, accessible, and reduced-motion safe", async () => {
+  const [gallery, css] = await Promise.all([
+    readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(gallery, /gallery\.dataset\.motionReady = "true"/);
+  assert.match(gallery, /gallery\.dataset\.motionVisible = "true"/);
+  assert.match(gallery, /data-state=\{isClosing \? "closing" : "open"\}/);
+  assert.match(gallery, /window\.requestAnimationFrame\(\(\) => triggerRef\.current\?\.focus\(\)\)/);
+  assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
+  assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
+  assert.match(css, /\.photo-lightbox\[data-state="closing"\]/);
+  assert.match(css, /\.case-media-shell > \.case-visual\s*\{\s*animation:\s*none;/);
+  assert.ok(
+    css.lastIndexOf(".case-media-shell > .case-visual {\n  animation: none;") >
+      css.lastIndexOf(".case-media-shell > .case-visual {\n  animation: case-media-drift"),
+    "the final motion layer must keep case-study media still",
+  );
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
 });
 
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {

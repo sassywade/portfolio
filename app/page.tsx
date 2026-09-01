@@ -46,8 +46,6 @@ export default function Home() {
               <CompanyLink brand="glean" href="https://www.glean.com/">Glean</CompanyLink>
               <span className="hero-copy__rest"> focused on proactive intelligence, growth, and artifacts. Previously, I designed at </span>
               <CompanyLink brand="snap" href="https://www.snap.com/">Snap</CompanyLink>
-              <span className="hero-copy__rest">, and </span>
-              <CompanyLink brand="intuitive" href="https://www.intuitive.com/">Intuitive Surgical</CompanyLink>
               <span className="hero-copy__rest">.</span>
             </p>
             <p className="hero-copy-line">

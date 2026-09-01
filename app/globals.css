@@ -2305,6 +2305,152 @@ em {
   }
 }
 
+/* Final motion layer. Keep this last so older rules cannot revive theatrical motion. */
+:root {
+  --motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --motion-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.page-enter {
+  animation-duration: 460ms;
+  animation-timing-function: var(--motion-ease-out);
+}
+
+.reveal[data-reveal-ready="true"] {
+  opacity: 0;
+  filter: none;
+  transform: translateY(10px);
+  transition: opacity 400ms var(--motion-ease-out), transform 440ms var(--motion-ease-out);
+}
+
+.project-reveal:nth-child(2) { transition-delay: 35ms; }
+.project-reveal:nth-child(3) { transition-delay: 70ms; }
+.project-reveal:nth-child(4) { transition-delay: 105ms; }
+.project-reveal:nth-child(5) { transition-delay: 140ms; }
+.project-reveal:nth-child(6) { transition-delay: 175ms; }
+
+.about-page .simple-page h1,
+.about-page .simple-page__copy {
+  animation: none;
+}
+
+.about-page__gallery[data-motion-ready="true"] .film-photo__paper {
+  opacity: 0;
+  transform: translateY(7px);
+  transition: opacity 340ms var(--motion-ease-out), transform 400ms var(--motion-ease-out);
+  transition-delay: calc(var(--photo-index, 0) * 24ms);
+}
+
+.about-page__gallery[data-motion-visible="true"] .film-photo__paper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.film-photo,
+.film-photo:nth-child(n) {
+  transition: transform 200ms var(--motion-ease-out), opacity 180ms linear, z-index 0ms linear 200ms;
+}
+
+.film-photo:focus-visible,
+.film-photo:nth-child(n):focus-visible {
+  z-index: 10;
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+  transform: translateY(-5px) rotate(0deg) scale(1.045);
+  transition-delay: 0ms;
+}
+
+.about-page__portrait-card:hover {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .film-photo:hover,
+  .film-photo:nth-child(n):hover {
+    z-index: 10;
+    transform: translateY(-5px) rotate(0deg) scale(1.045);
+    transition-delay: 0ms;
+  }
+
+  .about-page__portrait-card:hover {
+    transform: rotate(-1deg) scale(1.01);
+  }
+}
+
+.photo-lightbox {
+  animation: photo-lightbox-enter 220ms var(--motion-ease-out) both;
+}
+
+.photo-lightbox__figure {
+  position: relative;
+  z-index: 1;
+  animation: photo-lightbox-figure-enter 260ms var(--motion-ease-out) both;
+}
+
+.photo-lightbox__backdrop {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.photo-lightbox__close {
+  z-index: 2;
+}
+
+.photo-lightbox[data-state="closing"] {
+  animation: photo-lightbox-exit 180ms var(--motion-ease-in-out) both;
+  pointer-events: none;
+}
+
+.photo-lightbox[data-state="closing"] .photo-lightbox__figure {
+  animation: photo-lightbox-figure-exit 180ms var(--motion-ease-in-out) both;
+}
+
+@keyframes photo-lightbox-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes photo-lightbox-exit {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes photo-lightbox-figure-enter {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes photo-lightbox-figure-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(5px) scale(0.99); }
+}
+
+.case-media-shell > .case-visual {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .photo-lightbox,
+  .photo-lightbox__figure,
+  .photo-lightbox[data-state="closing"],
+  .photo-lightbox[data-state="closing"] .photo-lightbox__figure {
+    animation: none;
+  }
+
+  .reveal[data-reveal-ready="true"],
+  .about-page__gallery[data-motion-ready="true"] .film-photo__paper {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Keep the experience list as quiet and compact as the reference frame. */
 .about-page__experience {
   margin-top: 88px;
@@ -11429,6 +11575,88 @@ html[data-atmosphere="grid"] .ascii-garden {
 
 @media (prefers-reduced-motion: reduce) {
   .about-page__portrait-card {
+    transition: none;
+  }
+}
+
+/* Final cascade lock for the restrained portfolio motion system. */
+.page-enter {
+  animation-duration: 460ms;
+  animation-timing-function: var(--motion-ease-out);
+}
+
+.reveal[data-reveal-ready="true"] {
+  opacity: 0;
+  filter: none;
+  transform: translateY(10px);
+  transition: opacity 400ms var(--motion-ease-out), transform 440ms var(--motion-ease-out);
+}
+
+.about-page .simple-page h1,
+.about-page .simple-page__copy {
+  animation: none;
+}
+
+.about-page__gallery[data-motion-ready="true"] .film-photo__paper {
+  opacity: 0;
+  transform: translateY(7px);
+  transition: opacity 340ms var(--motion-ease-out), transform 400ms var(--motion-ease-out);
+  transition-delay: calc(var(--photo-index, 0) * 24ms);
+}
+
+.about-page__gallery[data-motion-visible="true"] .film-photo__paper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.film-photo,
+.film-photo:nth-child(n) {
+  transition: transform 200ms var(--motion-ease-out), opacity 180ms linear, z-index 0ms linear 200ms;
+}
+
+.film-photo:focus-visible,
+.film-photo:nth-child(n):focus-visible {
+  z-index: 10;
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+  transform: translateY(-5px) rotate(0deg) scale(1.045);
+  transition-delay: 0ms;
+}
+
+.about-page__portrait-card:hover {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .film-photo:hover,
+  .film-photo:nth-child(n):hover {
+    z-index: 10;
+    transform: translateY(-5px) rotate(0deg) scale(1.045);
+    transition-delay: 0ms;
+  }
+
+  .about-page__portrait-card:hover {
+    transform: rotate(-1deg) scale(1.01);
+  }
+}
+
+.case-media-shell > .case-visual {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .photo-lightbox,
+  .photo-lightbox__figure,
+  .photo-lightbox[data-state="closing"],
+  .photo-lightbox[data-state="closing"] .photo-lightbox__figure {
+    animation: none;
+  }
+
+  .reveal[data-reveal-ready="true"],
+  .about-page__gallery[data-motion-ready="true"] .film-photo__paper {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }
