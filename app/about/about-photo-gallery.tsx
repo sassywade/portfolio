@@ -15,7 +15,7 @@ type PhotoSlot = {
 
 const lifePhotos: PhotoSlot[] = [
   { id: "stars-over-camp", title: "A night under the stars", description: "Seeing the milky way for the first time in Big Sur", alt: "A glowing tent beneath a starry sky", orientation: "portrait", src: "/about/stars-over-camp.jpeg" },
-  { id: "ride-closeup", title: "A good day to ride", description: "A close-up from a long ride along the coast.", alt: "Cyclists riding on a coastal road", orientation: "portrait", src: "/about/ride-closeup.JPG" },
+  { id: "ride-closeup", title: "A good day to ride", description: "Riding back from Stinson beach", alt: "Cyclists riding on a coastal road", orientation: "portrait", src: "/about/ride-closeup.JPG" },
   { id: "pink-sky", title: "A beautiful sunset in Kyoto", description: "The sky turning pink over a quiet street in Kyoto.", alt: "A pink sunset over a city street in Kyoto", orientation: "portrait", src: "/about/pink-sky.jpg" },
   { id: "ride-day", title: "Out with the crew", description: "A morning on the road with good company and too many bikes.", alt: "Cyclists riding together", orientation: "portrait", src: "/about/ride-day.JPG" },
   { id: "bike-in-the-meadow", title: "Parked for a minute", description: "A bike resting in a meadow between rides.", alt: "A road bike resting in a flower-covered meadow", orientation: "portrait", src: "/about/bike-in-the-meadow.JPG" },
