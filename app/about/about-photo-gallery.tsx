@@ -175,12 +175,8 @@ export function AboutPhotoGallery() {
 
   return (
     <>
-      <section className="about-page__gallery" aria-labelledby="about-gallery-title">
+      <section className="about-page__gallery" aria-label="Personal photos">
         <div className="about-page__gallery-heading">
-          <div>
-            <p className="about-page__label">The fun stuff</p>
-            <h2 id="about-gallery-title">A few things I like to do when I&apos;m not designing.</h2>
-          </div>
           <div className="about-page__gallery-filters" aria-label="Filter photos by orientation">
             {(["all", "portrait", "landscape"] as const).map((option) => (
               <button
@@ -207,7 +203,6 @@ export function AboutPhotoGallery() {
           </div>
         </div>
 
-        <p className="about-page__gallery-hint">Scroll to explore · click a photo to make it full screen</p>
       </section>
 
       {selectedPhoto && createPortal(
