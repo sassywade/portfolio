@@ -8832,6 +8832,11 @@ html[data-atmosphere="grid"] .ascii-garden {
   min-height: 280px;
 }
 
+.about-page__portrait-image {
+  object-fit: cover;
+  object-position: center;
+}
+
 .about-page__portrait-initials {
   font-size: clamp(54px, 7vw, 82px);
   font-weight: 300;

@@ -3,6 +3,7 @@ import { SiteHeader } from "../site-header";
 import { AboutPhotoGallery } from "./about-photo-gallery";
 import { SiteFooter } from "../site-footer";
 import { NowPlaying } from "../spotify-now-playing";
+import Image from "next/image";
 
 type ExperienceLogo = "glean" | "snap" | "kp" | "intuitive" | "clients" | "phonic" | "hri";
 
@@ -32,13 +33,18 @@ export default function AboutPage() {
         <div className="about-page__identity">
           <div className="about-page__portrait-card" aria-label="Portrait photo slot">
             <div className="about-page__portrait-photo">
-              <span className="about-page__portrait-initials">NS</span>
-              <span className="about-page__portrait-plus" aria-hidden="true">+</span>
-              <span className="about-page__portrait-placeholder">add portrait</span>
+              <Image
+                src="/about/neel-profile.jpg"
+                alt="Neel Saswade"
+                fill
+                priority
+                sizes="(max-width: 700px) 72vw, 248px"
+                className="about-page__portrait-image"
+              />
             </div>
             <div className="about-page__portrait-caption">
-              <span>portrait / 00</span>
-              <strong>your photo here</strong>
+              <span>portrait</span>
+              <strong>Neel Saswade</strong>
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
