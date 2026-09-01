@@ -4720,12 +4720,12 @@ em {
 .work-group__brand {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   width: fit-content;
   margin: 0 0 18px 8px;
   color: var(--ink);
   font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
-  font-size: 13px;
+  font-size: clamp(16px, 1.32vw, 19px);
   font-weight: 450;
   letter-spacing: -0.01em;
   line-height: 1;
@@ -4733,13 +4733,13 @@ em {
 
 .work-group__brand .hero-company__mark {
   display: inline-grid;
-  width: 13px;
-  height: 13px;
+  width: 1em;
+  height: 1em;
   transform: none;
 }
 
 .work-group__brand.hero-company--snap .hero-company__mark {
-  width: 14px;
+  width: 1.18em;
 }
 
 .pranathi-project-grid {
