@@ -20,7 +20,7 @@ const lifePhotos: PhotoSlot[] = [
   { id: "ride-day", title: "Out with the crew", description: "My first road race. #bonked", alt: "Cyclists riding together", orientation: "portrait", src: "/about/ride-day.JPG" },
   { id: "bike-in-the-meadow", title: "Parked for a minute", description: "The new steed", alt: "A road bike resting in a flower-covered meadow", orientation: "portrait", src: "/about/bike-in-the-meadow.JPG" },
   { id: "mountain-lookout", title: "Take in the whole thing", description: "My ultralight chair makes me happy", alt: "Person looking at a mountain landscape", orientation: "portrait", src: "/about/mountain-lookout.JPG" },
-  { id: "camp-view", title: "Waking up here", description: "Backpacking at Cathedral lakes", alt: "A tent below a mountain peak", orientation: "portrait", src: "/about/camp-view.JPG" },
+  { id: "camp-view", title: "Waking up here", description: "Backpacking Cathedral with Jordan", alt: "A tent below a mountain peak", orientation: "portrait", src: "/about/camp-view.JPG" },
   { id: "san-francisco-park", title: "Alamo Square", description: "Alamo square on a beautiful day", alt: "People relaxing in Alamo Square with San Francisco in the background", orientation: "portrait", src: "/about/san-francisco-park.JPG" },
   { id: "ride-through-the-grass", title: "Chasing the light", description: "Shenanigans in fort mason with the boy", alt: "Cyclist riding through a grassy field", orientation: "landscape", src: "/about/ride-through-the-grass.JPG" },
   { id: "high-country-friends", title: "Made it up here", description: "A high-country hike with a friend.", alt: "Two friends hiking in the mountains", orientation: "landscape", src: "/about/high-country-friends.JPG" },
