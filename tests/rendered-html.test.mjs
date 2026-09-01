@@ -39,7 +39,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.doesNotMatch(html, /\[something good\]|\[company\]/);
   assert.match(html, /class="meadow__image meadow__image--curated" src="\/alamo-styles\/painterly-realism\/rolling\.png"/);
   assert.match(html, /data-rolling-meadow="original"/);
-  assert.match(html, /Checking the wind at Alamo Square/);
+  assert.match(html, /Checking Alamo Square&#x27;s wind/);
   assert.match(html, /Local time in San Francisco/);
   assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
@@ -462,7 +462,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(weather, /wind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m/);
   assert.doesNotMatch(weather, /temperature_2m|temperature:/);
   assert.match(weather, /function describeAlamoWind/);
-  assert.match(weather, /There's a slight breeze at Alamo Square right now\./);
+  assert.match(weather, /return "Slight breeze"/);
   assert.match(weather, /describeAlamoWind\(conditions\)/);
   assert.match(weather, /const WEATHER_REFRESH_MS = 10 \* 60 \* 1000/);
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
@@ -675,7 +675,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow-settings\s*\{/);
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
   assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
-  assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*11px/);
+  assert.match(css, /\.alamo-weather\s*\{[^}]*z-index:\s*6;[^}]*bottom:\s*calc\([\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?var\(--cypress-root-overlap\)[\s\S]*?clamp\(48px, 6vw, 64px\)/);
+  assert.match(weather, /return "Slight breeze"/);
+  assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*10px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
   assert.match(css, /--cypress-root-overlap:\s*clamp\(16px, 1\.4vw, 24px\)/);
   assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\([\s\S]*?clamp\(68px, 7\.35vw, 110px\)[\s\S]*?var\(--meadow-height-offset\)[\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?- var\(--cypress-root-overlap\)[\s\S]*?\);/);

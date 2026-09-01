@@ -65,12 +65,12 @@ function parseConditions(payload: OpenMeteoResponse): AlamoConditions | null {
 export function describeAlamoWind(conditions: AlamoConditions) {
   const feltWind = Math.max(conditions.windSpeed, conditions.windGusts * 0.65);
 
-  if (feltWind < 2) return "It's calm at Alamo Square right now.";
-  if (feltWind < 6) return "There's a slight breeze at Alamo Square right now.";
-  if (feltWind < 10) return "There's a gentle breeze at Alamo Square right now.";
-  if (feltWind < 15) return "There's a steady breeze at Alamo Square right now.";
-  if (feltWind < 22) return "It's pretty windy at Alamo Square right now.";
-  return "It's very windy at Alamo Square right now.";
+  if (feltWind < 2) return "Calm";
+  if (feltWind < 6) return "Slight breeze";
+  if (feltWind < 10) return "Gentle breeze";
+  if (feltWind < 15) return "Steady breeze";
+  if (feltWind < 22) return "Breezy";
+  return "Very windy";
 }
 
 function cardinalDirection(degrees: number) {
@@ -136,8 +136,8 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
   const primaryCopy = conditions
     ? describeAlamoWind(conditions)
     : hasWeatherError
-      ? "Alamo Square's wind is resting."
-      : "Checking the wind at Alamo Square…";
+      ? "Alamo Square wind unavailable"
+      : "Checking Alamo Square's wind…";
 
   const ridgeCharacters = Array.from(primaryCopy).map((character, index, characters) => {
     const progress = characters.length > 1 ? index / (characters.length - 1) : 0;

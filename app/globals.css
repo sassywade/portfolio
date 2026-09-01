@@ -6459,18 +6459,22 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 .alamo-weather {
   position: absolute;
   z-index: 6;
-  right: clamp(14px, 2vw, 30px);
+  right: clamp(6px, 1vw, 14px);
   bottom: calc(
-    clamp(156px, 25svh, 244px)
+    clamp(68px, 7.35vw, 110px)
     + var(--meadow-height-offset)
+    + var(--cypress-viewport-lift)
+    - 10px
+    - var(--cypress-root-overlap)
+    + clamp(48px, 6vw, 64px)
   );
   width: max-content;
-  max-width: min(34vw, 250px);
+  max-width: min(30vw, 180px);
   color: color-mix(in srgb, var(--ink) 82%, transparent);
   font-family: var(--sans);
   font-size: 10px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.018em;
+  letter-spacing: 0;
   line-height: 1.35;
   pointer-events: none;
   text-align: right;
@@ -6482,7 +6486,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 
 .alamo-weather__primary {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .alamo-weather__arc {
@@ -6506,8 +6510,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 
 @media (max-width: 580px) {
   .alamo-weather {
-    right: 12px;
-    bottom: calc(clamp(132px, 22svh, 166px) + var(--meadow-height-offset));
+    right: 8px;
     max-width: min(48vw, 210px);
     font-size: 9px;
   }
