@@ -28,7 +28,6 @@ export default function AboutPage() {
       <Soundscape />
       <SiteHeader current="about" />
       <section className="simple-page" aria-labelledby="about-title">
-        <p className="page-kicker">About</p>
         <h1 id="about-title">Hi, I&apos;m Neel.</h1>
         <div className="about-page__identity">
           <div className="about-page__portrait-card" aria-label="Portrait photo slot">
