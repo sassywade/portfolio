@@ -72,7 +72,7 @@ export function AboutPhotoGallery() {
       </section>
 
       {selectedPhoto && createPortal(
-        <div className="photo-lightbox" role="dialog" aria-modal="true" aria-labelledby="photo-lightbox-title" onClick={() => setSelectedIndex(null)}>
+        <div className="photo-lightbox" role="dialog" aria-modal="true" aria-label={selectedPhoto.description} onClick={() => setSelectedIndex(null)}>
           <button className="photo-lightbox__close" type="button" onClick={() => setSelectedIndex(null)} aria-label="Close photo viewer" ref={closeButtonRef}>
             <span>Close</span><strong aria-hidden="true">×</strong>
           </button>
@@ -81,7 +81,6 @@ export function AboutPhotoGallery() {
               <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" unoptimized priority />
             </div>
             <figcaption>
-              <h2 id="photo-lightbox-title">{selectedPhoto.title}</h2>
               <p>{selectedPhoto.description}</p>
             </figcaption>
           </figure>
