@@ -4849,10 +4849,96 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   padding-bottom: clamp(36px, 6vw, 72px);
 }
 
+.work-archive-disclosure {
+  border-top: 1px solid rgba(101, 98, 95, 0.2);
+  border-bottom: 1px solid rgba(101, 98, 95, 0.2);
+}
+
+.work-archive-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 72px;
+  padding: 0 8px;
+  color: var(--ink);
+  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(16px, 1.32vw, 19px);
+  line-height: 1.2;
+  list-style: none;
+  cursor: pointer;
+  transition: color 200ms ease, padding 320ms cubic-bezier(.22,.7,.2,1);
+}
+
+.work-archive-summary::-webkit-details-marker {
+  display: none;
+}
+
+.work-archive-summary:hover,
+.work-archive-summary:focus-visible {
+  padding-right: 4px;
+  padding-left: 12px;
+  color: var(--acid);
+}
+
+.work-archive-summary:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 3px;
+}
+
+.work-archive-summary__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.72em;
+  font-variant-numeric: tabular-nums;
+}
+
+.work-archive-summary__icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.work-archive-summary__icon::before,
+.work-archive-summary__icon::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  transform: translate(-50%, -50%);
+  transition: transform 300ms cubic-bezier(.22,.7,.2,1);
+}
+
+.work-archive-summary__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.work-archive-disclosure[open] .work-archive-summary__icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
 .work-archive-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 28px;
+  padding-bottom: 10px;
+  animation: archive-reveal 360ms cubic-bezier(.22,.7,.2,1) both;
+}
+
+@keyframes archive-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .work-archive-link {
