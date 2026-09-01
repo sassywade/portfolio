@@ -4631,6 +4631,7 @@ em {
 :root {
   --portfolio-reading-width: 740px;
   --portfolio-content-width: 1160px;
+  --portfolio-work-width: 1040px;
 }
 
 .site-header--pages {
@@ -4672,7 +4673,7 @@ em {
 }
 
 .pranathi-work {
-  width: min(100% - 48px, var(--portfolio-reading-width));
+  width: min(100% - 64px, var(--portfolio-work-width));
   position: relative;
   z-index: 5;
   opacity: var(--work-handoff-opacity, 1);

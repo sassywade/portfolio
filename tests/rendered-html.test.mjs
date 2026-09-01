@@ -429,6 +429,8 @@ test("groups the work archive into quiet Glean and Snap tiles", async () => {
   assert.match(css, /html\[data-work-columns="3"\] \.pranathi-project-grid/);
   assert.match(css, /html\[data-work-handoff="rising-tray"\] \.pranathi-work/);
   assert.match(css, /background:\s*#f5f5f5/);
+  assert.match(css, /--portfolio-work-width:\s*1040px/);
+  assert.match(css, /\.pranathi-work \{[\s\S]*?width:\s*min\(100% - 64px, var\(--portfolio-work-width\)\)/);
   assert.match(css, /\.hero-company--glean \.hero-company__mark \{[\s\S]*?background-image:\s*url\("\/work\/glean-logo\.png"\)/);
   assert.match(css, /\.hero-company--snap \.hero-company__mark \{[\s\S]*?background-image:\s*url\("\/work\/snap-logo\.png"\)/);
   assert.match(css, /\.work-group__brand \{[\s\S]*?font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
