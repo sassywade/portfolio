@@ -47,18 +47,6 @@ export default function AboutPage() {
               what makes new technology feel easy to live with: how people
               understand it, trust it, and find a reason to come back to it.
             </p>
-            <p>
-              That&apos;s what pulled me into design. I like working across the whole
-              experience, from the idea and the mental model behind a product to
-              the small details that make it feel good once you know your way
-              around.
-            </p>
-            <p>
-              I also spent time at the Human-Robot Interaction Lab, where I got
-              interested in how people make sense of unfamiliar systems. I still
-              bring that lens to product work: start with the person, make the
-              system easier to understand, and keep the details thoughtful.
-            </p>
           </div>
         </div>
 
