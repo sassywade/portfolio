@@ -4872,14 +4872,17 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 }
 
 .pranathi-project-grid .project-mockup--with-image {
-  padding: 62px 22px 18px;
+  padding: 0;
 }
 
 .pranathi-project-grid .project-work-image {
-  width: auto;
-  max-width: 100%;
-  height: 100%;
-  max-height: 100%;
+  position: absolute;
+  top: 58px;
+  right: 22px;
+  bottom: 18px;
+  left: 22px;
+  width: calc(100% - 44px);
+  height: calc(100% - 76px);
   margin: 0;
   object-fit: contain;
   filter: drop-shadow(0 10px 12px rgba(35, 34, 32, 0.08));
