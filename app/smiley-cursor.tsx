@@ -90,9 +90,6 @@ export function SmileyCursor() {
     let currentY = 0;
     let targetFollowDistance = 82;
     let currentFollowDistance = 82;
-    let motionLevel = 0;
-    let windStartedAt: number | null = null;
-    let previousFrameTime = performance.now();
     let hasPointerPosition = false;
     let isPastHero = false;
     let idleTimer: number | null = null;
@@ -129,7 +126,6 @@ export function SmileyCursor() {
       idleStartedAt = null;
       cursor.dataset.idle = "off";
       cursor.dataset.wind = "off";
-      windStartedAt = null;
     };
 
     const stopHappyReaction = () => {
@@ -339,16 +335,11 @@ export function SmileyCursor() {
     };
 
     const updatePetState = (timestamp: number) => {
-      const elapsed = Math.min(100, timestamp - previousFrameTime);
-      previousFrameTime = timestamp;
-      motionLevel *= Math.pow(0.94, Math.max(1, elapsed / 16.67));
-
       if (miniaturePhase === "approach") {
         cursor.dataset.idle = "off";
         cursor.dataset.reaction = "off";
         cursor.dataset.state = "idle";
         cursor.dataset.wind = "off";
-        windStartedAt = null;
         return;
       }
 
@@ -357,7 +348,6 @@ export function SmileyCursor() {
         cursor.dataset.reaction = "off";
         cursor.dataset.state = miniatureKind === "cypress" ? "strained" : "strong";
         cursor.dataset.wind = "on";
-        windStartedAt = timestamp;
         return;
       }
 
@@ -365,7 +355,6 @@ export function SmileyCursor() {
         cursor.dataset.idle = "off";
         cursor.dataset.state = "idle";
         cursor.dataset.wind = "off";
-        windStartedAt = null;
         return;
       }
 
@@ -375,7 +364,6 @@ export function SmileyCursor() {
 
       if (idleStartedAt !== null) {
         const idleElapsed = timestamp - idleStartedAt;
-        windStartedAt = null;
 
         if (idleElapsed < IDLE_APPROACH_DURATION) {
           cursor.dataset.idle = "approach";
@@ -399,32 +387,8 @@ export function SmileyCursor() {
       }
 
       cursor.dataset.idle = "off";
-
-      const sinceMove = timestamp - lastMoveTime;
-      const wantsToBlow = motionLevel > 0.32 && sinceMove < 360;
-      const isActive = motionLevel > 0.16 && sinceMove < 650;
-
-      const nextState = !isActive
-        ? "idle"
-        : motionLevel > 0.74
-          ? "strained"
-          : motionLevel > 0.53
-            ? "strong"
-            : "light";
-
-      if (cursor.dataset.state !== nextState) {
-        cursor.dataset.state = nextState;
-      }
-
-      if (wantsToBlow) {
-        windStartedAt ??= timestamp;
-        if (timestamp - windStartedAt > 150) {
-          cursor.dataset.wind = "on";
-        }
-      } else {
-        windStartedAt = null;
-        cursor.dataset.wind = "off";
-      }
+      cursor.dataset.state = "idle";
+      cursor.dataset.wind = "off";
     };
 
     const setMotionVariables = (timestamp: number) => {
@@ -481,7 +445,6 @@ export function SmileyCursor() {
         Math.abs(nextFollowDistance - currentFollowDistance) > 0.1 ||
         Math.abs(inputX - pointerX) > 0.2 ||
         Math.abs(inputY - pointerY) > 0.2 ||
-        motionLevel > 0.01 ||
         timestamp < happyUntil ||
         miniaturePhase !== "off" ||
         idleStartedAt !== null;
@@ -508,8 +471,6 @@ export function SmileyCursor() {
         idleTimer = null;
         if (!hasPointerPosition || isPastHero) return;
         idleStartedAt = performance.now();
-        motionLevel = 0;
-        windStartedAt = null;
         cursor.dataset.idle = "approach";
         cursor.dataset.state = "idle";
         cursor.dataset.wind = "off";
@@ -571,8 +532,6 @@ export function SmileyCursor() {
         inputX = pointerX = event.clientX;
         inputY = pointerY = event.clientY;
         currentFollowDistance = targetFollowDistance = 82;
-        motionLevel = 0;
-        windStartedAt = null;
         cursor.dataset.state = "idle";
         cursor.dataset.wind = "off";
         targetX = currentX = event.clientX - PET_FACE_ANCHOR_X - 82;
@@ -588,7 +547,6 @@ export function SmileyCursor() {
       const deltaY = event.clientY - lastY;
       const distance = Math.hypot(deltaX, deltaY);
 
-      motionLevel = Math.max(motionLevel, Math.min(1, Math.max(0, (distance - 6) / 27)));
       if (timestamp - lastFacingInputTime > FACING_INTENT_MEMORY) {
         facingIntent = 0;
       }

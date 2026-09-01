@@ -649,6 +649,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /cursor\.dataset\.idle = "huff"/);
   assert.match(smiley, /cursor\.dataset\.reaction = "smile"/);
   assert.match(smiley, /\/pet\/pet-smile\.png/);
+  assert.doesNotMatch(smiley, /motionLevel|wantsToBlow|const isActive/);
+  assert.match(smiley, /cursor\.dataset\.state = "idle";\s*cursor\.dataset\.wind = "off";/);
   assert.match(smiley, /stopIdleMischief\(\)/);
   assert.doesNotMatch(css, /\.meadow__grass-canvas\s*\{|\.meadow__texture\s*\{|\.meadow__visual\.is-grass-live/);
   assert.match(css, /\.meadow__visual--flat\s*\{/);
