@@ -2423,6 +2423,11 @@ em {
   line-height: 1.45;
 }
 
+/* Open the already-loaded print without a noticeable fade or second optimizer hop. */
+.photo-lightbox {
+  animation-duration: 90ms;
+}
+
 @media (max-width: 700px) {
   .film-photo,
   .film-photo--landscape {
