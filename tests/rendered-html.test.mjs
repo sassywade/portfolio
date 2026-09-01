@@ -414,9 +414,28 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.work-groups \{[\s\S]*?padding-bottom:\s*clamp\(88px, 10vw, 144px\)/);
   assert.match(css, /aspect-ratio:\s*1\.3/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup--placeholder \{[\s\S]*?background:\s*#f2f2f2;/);
+  assert.ok(
+    css.lastIndexOf(".pranathi-project-grid .project-mockup.project-mockup--placeholder") >
+      css.lastIndexOf(".pranathi-project-grid .project-mockup {\n  background: transparent;"),
+    "the final placeholder rule must win over the generic transparent-card rule",
+  );
   assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
+});
+
+test("documents the portfolio's durable design and change contract", async () => {
+  const [agentContract, systemDoc] = await Promise.all([
+    readFile(new URL("../AGENTS.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/portfolio-system.md", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(agentContract, /Prefer the smallest complete change/);
+  assert.match(agentContract, /Never leave title-only empty space/);
+  assert.match(agentContract, /inspect the final matching rule/);
+  assert.match(systemDoc, /Prototype settings are exploratory state/);
+  assert.match(systemDoc, /Pointer speed alone is not a state transition/);
+  assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
