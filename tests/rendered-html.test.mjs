@@ -383,9 +383,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   }
   assert.match(projects, /sourcePdf: "\/case-studies\/agent-observability\/brief\.pdf"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
-  assert.match(projectMockup, /className="project-card__title"/);
   assert.match(projectMockup, /project\.cover\.src/);
   assert.match(projectMockup, /project-work-image/);
+  assert.doesNotMatch(projectMockup, /project-card__title|project-card__caption|project-card__arrow|project-mockup__wash/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
   assert.match(projectCard, /project\.category\.includes\("Snap"\)/);
@@ -406,7 +406,6 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(prototype, /"compact"/);
   assert.match(css, /html\[data-work-columns="3"\] \.pranathi-project-grid/);
   assert.match(css, /html\[data-work-handoff="rising-tray"\] \.pranathi-work/);
-  assert.match(css, /background:\s*#f5f5f5/);
   assert.match(css, /--portfolio-work-width:\s*1040px/);
   assert.match(css, /\.pranathi-work \{[\s\S]*?width:\s*min\(100% - 64px, var\(--portfolio-work-width\)\)/);
   assert.match(css, /\.hero-company--glean \.hero-company__mark \{[\s\S]*?background-image:\s*url\("\/work\/glean-logo\.png"\)/);
@@ -417,13 +416,10 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.work-group__brand \{[\s\S]*?margin:\s*0 0 clamp\(22px, 2vw, 28px\) 4px/);
   assert.match(css, /\.work-groups \{[\s\S]*?padding-bottom:\s*clamp\(88px, 10vw, 144px\)/);
   assert.match(css, /aspect-ratio:\s*1\.3/);
-  assert.match(css, /border-radius:\s*20px/);
-  assert.match(css, /\.project-card__title \{[\s\S]*?top:\s*18px;[\s\S]*?bottom:\s*auto;[\s\S]*?font-size:\s*clamp\(14px, 0\.95vw, 16px\)/);
   assert.match(css, /\.project-mockup--with-image \{[\s\S]*?padding:\s*0;/);
-  assert.match(css, /\.project-work-image \{[\s\S]*?position:\s*absolute;[\s\S]*?top:\s*50px;[\s\S]*?bottom:\s*20px;[\s\S]*?object-fit:\s*contain;/);
+  assert.match(css, /\.project-work-image \{[\s\S]*?position:\s*absolute;[\s\S]*?inset:\s*0;[\s\S]*?object-fit:\s*contain;/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(css, /project-mockup__wash/);
-  assert.match(css, /project-card__caption/);
+  assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {

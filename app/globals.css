@@ -4827,31 +4827,13 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 
 .pranathi-project-grid .project-mockup {
   position: relative;
-  display: grid;
+  display: block;
   aspect-ratio: 1.3;
-  padding: 16px;
+  padding: 0;
   overflow: hidden;
   border: 0;
-  border-radius: 20px;
-  background: #f5f5f5;
-  place-items: center;
-}
-
-.pranathi-project-grid .project-card__title {
-  position: absolute;
-  z-index: 2;
-  top: 18px;
-  right: 18px;
-  bottom: auto;
-  left: 18px;
-  margin: 0;
-  color: #65625f;
-  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(14px, 0.95vw, 16px);
-  font-weight: 470;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-  text-align: center;
+  border-radius: 0;
+  background: transparent;
 }
 
 .pranathi-project-grid .project-mockup--with-image {
@@ -4860,31 +4842,22 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 
 .pranathi-project-grid .project-work-image {
   position: absolute;
-  top: 50px;
-  right: 24px;
-  bottom: 20px;
-  left: 24px;
-  width: calc(100% - 48px);
-  height: calc(100% - 70px);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   margin: 0;
   object-fit: contain;
-  filter: drop-shadow(0 10px 12px rgba(35, 34, 32, 0.08));
-  transition: transform 450ms cubic-bezier(.22,.7,.2,1);
+  filter: none;
 }
 
 .pranathi-project-grid .project-card .project-mockup {
-  transition: transform 360ms cubic-bezier(.22,.7,.2,1);
+  transition: none;
 }
 
 .pranathi-project-grid .project-card:hover .project-mockup,
 .pranathi-project-grid .project-card:focus-visible .project-mockup {
   box-shadow: none;
-  transform: translateY(-2px);
-}
-
-.pranathi-project-grid .project-card:hover .project-work-image,
-.pranathi-project-grid .project-card:focus-visible .project-work-image {
-  transform: translateY(-4px) scale(1.012);
+  transform: none;
 }
 
 .pranathi-project-grid .project-card:focus-visible {
@@ -10087,52 +10060,13 @@ html[data-atmosphere="grid"] .ascii-garden {
   max-width: 720px;
 }
 
-/* Project cards use the same supplied cover artwork as their detail pages. */
+/* Project cards show only the supplied cover artwork. */
 .pranathi-project-grid .project-mockup {
-  isolation: isolate;
-  background: #f3f2ed;
+  background: transparent;
 }
 
 .pranathi-project-grid .project-work-image {
   z-index: 0;
-}
-
-.project-mockup__wash {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(250, 249, 246, 0.98) 0 52px, rgba(250, 249, 246, 0.02) 47% 72%, rgba(250, 249, 246, 0.64) 100%);
-  pointer-events: none;
-}
-
-.pranathi-project-grid .project-card__caption,
-.pranathi-project-grid .project-card__arrow {
-  position: absolute;
-  z-index: 2;
-  color: #6f6c65;
-  font-family: var(--mono);
-  font-size: 8px;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.pranathi-project-grid .project-card__caption {
-  bottom: 18px;
-  left: 18px;
-  max-width: 76%;
-}
-
-.pranathi-project-grid .project-card__arrow {
-  right: 18px;
-  bottom: 15px;
-  font-size: 16px;
-  letter-spacing: 0;
-  transition: transform 250ms ease;
-}
-
-.pranathi-project-grid .project-card:hover .project-card__arrow,
-.pranathi-project-grid .project-card:focus-visible .project-card__arrow {
-  transform: translate(3px, -3px);
 }
 
 @media (min-width: 1080px) {

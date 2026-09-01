@@ -12,10 +12,6 @@ export function ProjectMockup({ project }: { project: Project }) {
         alt=""
         loading="lazy"
       />
-      <div className="project-mockup__wash" />
-      <span className="project-card__title">{project.title}</span>
-      <span className="project-card__caption">{project.cover.caption}</span>
-      <span className="project-card__arrow" aria-hidden="true">↗</span>
     </div>
   );
 }
