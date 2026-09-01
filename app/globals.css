@@ -2260,6 +2260,89 @@ em {
   }
 }
 
+.about-page__portrait-card {
+  transition: transform 320ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.about-page__portrait-card:hover,
+.about-page__portrait-card:focus-within {
+  transform: rotate(-1.5deg) scale(1.015);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__portrait-card {
+    transition: none;
+  }
+}
+
+/* Lifemax frames stay the same height and overlap like a small contact sheet. */
+.about-page__gallery-track {
+  gap: 0;
+}
+
+.film-photo {
+  flex-basis: 84px;
+  margin-left: -4px;
+  transform: rotate(2deg);
+  transition: transform 260ms cubic-bezier(.22, .7, .2, 1);
+}
+
+.film-photo:first-child {
+  margin-left: 0;
+}
+
+.film-photo:nth-child(2) { transform: rotate(1.5deg); }
+.film-photo:nth-child(3) { transform: rotate(1deg); }
+.film-photo:nth-child(4) { transform: rotate(0.5deg); }
+.film-photo:nth-child(5) { transform: rotate(0deg); }
+.film-photo:nth-child(6) { transform: rotate(-0.5deg); }
+.film-photo:nth-child(7) { transform: rotate(-1deg); }
+.film-photo:nth-child(8) { transform: rotate(-1.5deg); }
+.film-photo:nth-child(9) { transform: rotate(-2deg); }
+.film-photo:nth-child(10) { transform: rotate(-1.5deg); }
+.film-photo:nth-child(11) { transform: rotate(-1deg); }
+.film-photo:nth-child(12) { transform: rotate(0deg); }
+
+.film-photo__image,
+.film-photo--portrait .film-photo__image,
+.film-photo--landscape .film-photo__image {
+  aspect-ratio: auto;
+  height: 128px;
+}
+
+.film-photo--landscape .film-photo__image {
+  aspect-ratio: auto;
+}
+
+.film-photo:hover,
+.film-photo:focus-visible,
+.film-photo:nth-child(n):hover,
+.film-photo:nth-child(n):focus-visible {
+  transform: translateY(-11px) rotate(0deg) scale(1.08);
+}
+
+.photo-lightbox__figure figcaption p {
+  max-width: 360px;
+  margin: 7px auto 0;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 700px) {
+  .film-photo,
+  .film-photo--landscape {
+    flex-basis: 66px;
+  }
+
+  .film-photo__image,
+  .film-photo--portrait .film-photo__image,
+  .film-photo--landscape .film-photo__image {
+    height: 104px;
+  }
+}
+
 /* Case studies: immersive opening, persistent chapter rail, and one calm reading column. */
 .case-study-shell.case-story {
   --story-hero: #73879a;
