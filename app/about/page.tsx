@@ -38,6 +38,54 @@ export default function AboutPage() {
         </div>
 
         <AboutPhotoGallery />
+
+        <section className="about-page__experience" aria-labelledby="about-experience-title">
+          <h2 className="about-page__section-heading" id="about-experience-title">Experience</h2>
+          <div className="about-page__experience-list">
+            <article className="about-page__experience-row">
+              <div className="about-page__experience-heading">
+                <h3>Glean</h3><p>Senior Product Designer</p>
+              </div>
+              <p className="about-page__experience-period">Sep 2022 - Present</p>
+              <p className="about-page__experience-description">Leading design on proactivity, homepage, artifacts, and growth</p>
+            </article>
+            <article className="about-page__experience-row">
+              <div className="about-page__experience-heading">
+                <h3>Snap</h3><p>Product Design Intern</p>
+              </div>
+              <p className="about-page__experience-period">Jun 2022 - Aug 2022</p>
+              <p className="about-page__experience-description">Internal startup within Snap working on Web3 initiatives</p>
+            </article>
+            <article className="about-page__experience-row">
+              <div className="about-page__experience-heading">
+                <h3>Intuitive Surgical</h3><p>Interaction Design Intern</p>
+              </div>
+              <p className="about-page__experience-period">May 2021 - Aug 2021</p>
+              <p className="about-page__experience-description">Designing tools for complex systems in a high-stakes environment</p>
+            </article>
+            <article className="about-page__experience-row">
+              <div className="about-page__experience-heading">
+                <h3>Berkeley Innovation Consultancy</h3><p>Product Design Consultant</p>
+              </div>
+              <p className="about-page__experience-period">Jan 2021 - May 2022</p>
+              <p className="about-page__experience-description">Worked with Adobe, Microsoft, and Logitech G</p>
+            </article>
+            <article className="about-page__experience-row">
+              <div className="about-page__experience-heading">
+                <h3>Phonic</h3><p>Software Engineering and Product Design Intern</p>
+              </div>
+              <p className="about-page__experience-period">Jan 2020 - Dec 2020</p>
+              <p className="about-page__experience-description">Sole designer and engineer for a YC-backed audio survey company</p>
+            </article>
+            <article className="about-page__experience-row">
+              <div className="about-page__experience-heading">
+                <h3>Human-Robot Interaction Lab</h3><p>Research Assistant</p>
+              </div>
+              <p className="about-page__experience-period">May 2019 - Aug 2020</p>
+              <p className="about-page__experience-description">Conducted research between humans and computers with Dr. Takayama</p>
+            </article>
+          </div>
+        </section>
       </section>
     </main>
   );
