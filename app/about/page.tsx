@@ -41,7 +41,8 @@ export default function AboutPage() {
                 rel="noreferrer"
                 data-social="twitter"
               >
-                Twitter
+                <span>Twitter</span>
+                <span className="about-page__social-arrow" aria-hidden="true">↗</span>
               </a>
               <a
                 href="https://www.linkedin.com/in/neelsaswade/"
@@ -49,10 +50,12 @@ export default function AboutPage() {
                 rel="noreferrer"
                 data-social="linkedin"
               >
-                LinkedIn
+                <span>LinkedIn</span>
+                <span className="about-page__social-arrow" aria-hidden="true">↗</span>
               </a>
               <a href="mailto:neel.saswade@gmail.com" data-social="email">
-                Email
+                <span>Email</span>
+                <span className="about-page__social-arrow" aria-hidden="true">↗</span>
               </a>
             </nav>
           </div>
