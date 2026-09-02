@@ -2,12 +2,13 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 
 type SiteHeaderProps = {
-  current?: "work" | "about";
+  current?: "work" | "about" | "play";
 };
 
 const links = [
   ["work", "Work", "/#work"],
   ["about", "About", "/about"],
+  ["play", "Play", "/play"],
   ["resume", "Resume", "/Neel-Saswade-Resume.pdf"],
 ] as const;
 

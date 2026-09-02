@@ -10,8 +10,8 @@ The site should feel personal, calm, editorial, and lightly playful. The work mu
 
 ## Non-negotiable defaults
 
-- Navigation is `Work`, `About`, `Resume`. Work scrolls to `#work`; Resume opens the supplied PDF in a new tab.
-- There is no Play page, archive section, promotional footer, or contact/social cluster.
+- Navigation is `Work`, `About`, `Play`, `Resume`. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
+- There is no archive section, promotional footer, or contact/social cluster.
 - The homepage background is white with the subtle studio grid.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.

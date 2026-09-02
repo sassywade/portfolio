@@ -76,7 +76,7 @@ test("pairs Newsreader display type with Geist Sans interface and reading type",
   assert.match(css, /\.site-header__wordmark,[\s\S]*?\.site-header--pages \.site-nav\s*\{[^}]*font-family:\s*var\(--sans\)/);
   assert.match(css, /\.about-copy p\s*\{[^}]*font-family:\s*var\(--sans\)/);
   assert.match(css, /\.simple-page__copy p,[\s\S]*?\.simple-page__lede\s*\{[^}]*font-family:\s*var\(--sans\)/);
-  assert.match(css, /\.play-item p\s*\{[^}]*font-family:\s*var\(--sans\)/);
+  assert.match(css, /\.play-tile h2\s*\{[^}]*font-family:\s*var\(--sans\)/);
 });
 
 test("keeps the primary navigation simple and links Work to its homepage section", async () => {
@@ -89,9 +89,23 @@ test("keeps the primary navigation simple and links Work to its homepage section
   assert.match(header, /href=\{id === "work" && current === "work" \? "#work" : href\}/);
   assert.match(header, /\["work", "Work", "\/#work"\]/);
   assert.match(header, /\["about", "About", "\/about"\]/);
-  assert.doesNotMatch(header, /\["play", "Play"/);
+  assert.match(header, /\["play", "Play", "\/play"\]/);
   assert.doesNotMatch(header, /site-nav__label--hover/);
   assert.doesNotMatch(css, /site-nav__label--hover/);
+});
+
+test("renders Play as a compact three-column project grid", async () => {
+  const [play, css] = await Promise.all([
+    readFile(new URL("../app/play/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  for (const title of ["Passport", "Mental health app", "Logitech", "Adobe", "Microsoft"]) {
+    assert.match(play, new RegExp(title));
+  }
+  assert.match(play, /SiteHeader current="play"/);
+  assert.match(css, /\.play-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.play-tile\s*\{[^}]*background:\s*#f2f2f2/);
 });
 
 test("keeps About motion calm, accessible, and reduced-motion safe", async () => {
