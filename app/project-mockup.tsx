@@ -44,6 +44,22 @@ export function ProjectMockup({ project }: { project: Project }) {
     );
   }
 
+  if (project.slug === "artifacts") {
+    return (
+      <div className="project-mockup project-mockup--artifacts-work">
+        <span className="project-placeholder__title">{project.title}</span>
+        <Image
+          className="artifacts-work-image"
+          src={project.cover.src}
+          alt={project.cover.alt}
+          width={1085}
+          height={744}
+          sizes="(max-width: 700px) 86vw, (max-width: 1100px) 46vw, 480px"
+        />
+      </div>
+    );
+  }
+
   if (project.slug === "psychic") {
     return (
       <div className="project-mockup project-mockup--proactive-work">

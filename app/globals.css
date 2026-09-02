@@ -11370,6 +11370,27 @@ html[data-atmosphere="grid"] .ascii-garden {
   opacity: 0;
 }
 
+/* Artifacts uses the supplied product view as a complete, centered screen. */
+.pranathi-project-grid .project-mockup.project-mockup--artifacts-work {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: clamp(22px, 2.5vw, 30px) clamp(22px, 3vw, 32px) clamp(18px, 2vw, 24px);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: #f2f2f2;
+}
+
+.artifacts-work-image {
+  display: block;
+  flex: 0 0 auto;
+  width: min(90%, 480px);
+  height: auto;
+  margin-top: clamp(20px, 2.5vw, 30px);
+  object-fit: contain;
+  object-position: center;
+}
+
 /* Proactive intelligence uses the supplied composition without cropping or added chrome. */
 .pranathi-project-grid .project-mockup.project-mockup--proactive-work {
   display: flex;

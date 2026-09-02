@@ -405,6 +405,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectMockup, /className="homepage-work-image homepage-work-image--after"/);
   assert.match(projectMockup, /src="\/work\/glean-homepage-before\.png"/);
   assert.match(projects, /src: "\/work\/glean-homepage-redesign\.png"/);
+  assert.match(projectMockup, /project\.slug === "artifacts"/);
+  assert.match(projectMockup, /className="artifacts-work-image"/);
+  assert.match(projects, /src: "\/work\/glean-artifacts\.png"/);
   assert.match(projectMockup, /project\.slug === "agent-observability"/);
   assert.match(projectMockup, /className="observability-work-image"/);
   assert.match(projects, /src: "\/work\/glean-agent-observability\.png"/);
@@ -459,6 +462,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.project-card:hover \.homepage-work-image--before\s*\{[\s\S]*?animation:\s*homepage-before-after 2400ms var\(--motion-ease-in-out\) 450ms both/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?align-items:\s*center/);
   assert.match(css, /\.homepage-work-comparison \{[\s\S]*?width:\s*min\(88%, 480px\)[\s\S]*?aspect-ratio:\s*1280 \/ 912/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--artifacts-work \{[\s\S]*?background:\s*#f2f2f2;/);
+  assert.match(css, /\.artifacts-work-image \{[\s\S]*?width:\s*min\(90%, 480px\)[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--proactive-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.proactive-work-image \{[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--observability-work \{[\s\S]*?background:\s*#f2f2f2;/);
