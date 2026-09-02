@@ -12134,3 +12134,14 @@ html[data-atmosphere="grid"] .ascii-garden {
     transform: translateY(-5px) rotate(0deg) scale(1.075);
   }
 }
+
+/* Lift the About composition toward the homepage hero's starting point. */
+.about-page .simple-page {
+  padding-top: clamp(76px, 10.5vh, 112px);
+}
+
+@media (max-width: 700px) {
+  .about-page .simple-page {
+    padding-top: 72px;
+  }
+}
