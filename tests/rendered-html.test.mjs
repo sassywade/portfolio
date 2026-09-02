@@ -457,6 +457,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*translateY\(-4px\)/);
   assert.match(css, /\.project-card:hover \.homepage-work-image--before\s*\{[\s\S]*?animation:\s*homepage-before-after 2400ms var\(--motion-ease-in-out\) 450ms both/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?align-items:\s*center/);
+  assert.match(css, /\.homepage-work-comparison \{[\s\S]*?width:\s*min\(88%, 480px\)[\s\S]*?aspect-ratio:\s*1280 \/ 912/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--proactive-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.proactive-work-image \{[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--observability-work \{[\s\S]*?background:\s*#f2f2f2;/);
