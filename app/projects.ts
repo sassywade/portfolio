@@ -109,8 +109,8 @@ export const projects: Project[] = [
     year: "2025",
     theme: "archive",
     cover: {
-      src: "/work/work-01.png",
-      alt: "Glean homepage with personalized cards and composer",
+      src: "/work/glean-homepage-redesign.png",
+      alt: "Redesigned Glean homepage with a unified composer and suggested task",
       caption: "A focused starting point",
       kind: "screen",
     },
