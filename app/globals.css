@@ -2473,6 +2473,94 @@ em {
   }
 }
 
+/* Final compact Experience pass: keep the section close to the Figma reference. */
+.about-page__experience {
+  margin-top: clamp(72px, 8vw, 104px);
+}
+
+.about-page__experience .about-page__section-heading {
+  margin: 0 0 20px;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.about-page__experience-list {
+  border-top: 1px solid var(--line);
+}
+
+.about-page__experience-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "heading period"
+    "description description";
+  column-gap: 24px;
+  row-gap: 5px;
+  padding: 14px 0 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-page__experience-heading {
+  grid-area: heading;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 10px;
+}
+
+.about-page__experience-heading h3,
+.about-page__experience-heading p,
+.about-page__experience-period,
+.about-page__experience-description {
+  font-family: var(--sans);
+}
+
+.about-page__experience-heading h3 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.about-page__experience-heading p,
+.about-page__experience-period,
+.about-page__experience-description {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.about-page__experience-period {
+  grid-area: period;
+  align-self: baseline;
+  margin: 0;
+  font-size: 13px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.about-page__experience-description {
+  grid-area: description;
+  max-width: 610px;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .about-page__experience-row {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "heading"
+      "period"
+      "description";
+  }
+
+  .about-page__experience-period {
+    text-align: left;
+  }
+}
+
 .photo-lightbox {
   animation: photo-lightbox-enter 220ms var(--motion-ease-out) both;
 }
