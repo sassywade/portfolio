@@ -12119,6 +12119,21 @@ html[data-atmosphere="grid"] .ascii-garden {
 @media (hover: hover) and (pointer: fine) {
   .about-page__gallery-track .film-photo:hover,
   .about-page__gallery-track .film-photo:focus-visible {
+    --photo-hover-rotation: 0.9deg;
+  }
+
+  .about-page__gallery-track .film-photo:nth-child(3n + 2):hover,
+  .about-page__gallery-track .film-photo:nth-child(3n + 2):focus-visible {
+    --photo-hover-rotation: -0.9deg;
+  }
+
+  .about-page__gallery-track .film-photo:nth-child(3n):hover,
+  .about-page__gallery-track .film-photo:nth-child(3n):focus-visible {
+    --photo-hover-rotation: 0.7deg;
+  }
+
+  .about-page__gallery-track .film-photo:hover,
+  .about-page__gallery-track .film-photo:focus-visible {
     z-index: 100;
   }
 
@@ -12131,7 +12146,15 @@ html[data-atmosphere="grid"] .ascii-garden {
 
   .about-page__gallery-track .film-photo:hover,
   .about-page__gallery-track .film-photo:focus-visible {
-    transform: translateY(-5px) rotate(0deg) scale(1.075);
+    transform: translateY(-7px) rotate(calc(var(--photo-rotation) + var(--photo-hover-rotation))) scale(1.085);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__gallery-track .film-photo:hover,
+  .about-page__gallery-track .film-photo:focus-visible {
+    transform: rotate(var(--photo-rotation));
+    transition: none;
   }
 }
 
