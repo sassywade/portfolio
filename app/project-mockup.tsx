@@ -2,6 +2,22 @@ import type { Project } from "./projects";
 import Image from "next/image";
 
 export function ProjectMockup({ project }: { project: Project }) {
+  if (project.slug === "agent-observability") {
+    return (
+      <div className="project-mockup project-mockup--observability-work">
+        <span className="project-placeholder__title">{project.title}</span>
+        <Image
+          className="observability-work-image"
+          src={project.cover.src}
+          alt={project.cover.alt}
+          width={728}
+          height={624}
+          sizes="(max-width: 700px) 72vw, (max-width: 1100px) 38vw, 390px"
+        />
+      </div>
+    );
+  }
+
   if (project.slug === "homepage") {
     return (
       <div className="project-mockup project-mockup--homepage-work">

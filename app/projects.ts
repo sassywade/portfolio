@@ -64,10 +64,10 @@ export const projects: Project[] = [
     year: "2025",
     theme: "signal",
     cover: {
-      src: "/case-studies/agent-observability/page-01.png",
-      alt: "Agent observability case study brief cover",
-      caption: "Making agent behavior understandable",
-      kind: "brief",
+      src: "/work/glean-agent-observability.png",
+      alt: "Glean agent observability debug trace showing nested agent steps",
+      caption: "Agent observability",
+      kind: "screen",
     },
   },
   {
