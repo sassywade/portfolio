@@ -28,6 +28,22 @@ export function ProjectMockup({ project }: { project: Project }) {
     );
   }
 
+  if (project.slug === "artifacts") {
+    return (
+      <div className="project-mockup project-mockup--artifacts-work">
+        <span className="project-placeholder__title">{project.title}</span>
+        <Image
+          className="artifacts-work-image"
+          src={project.cover.src}
+          alt={project.cover.alt}
+          width={1086}
+          height={745}
+          sizes="(max-width: 700px) 92vw, (max-width: 1100px) 50vw, 520px"
+        />
+      </div>
+    );
+  }
+
   if (project.category.includes("Snap")) {
     return (
       <div className="project-mockup project-mockup--snap-work">

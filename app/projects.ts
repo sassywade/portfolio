@@ -79,9 +79,9 @@ export const projects: Project[] = [
     year: "2025",
     theme: "ground",
     cover: {
-      src: "/work/work-04.png",
-      alt: "Glean Edit with AI toolbar",
-      caption: "From generated response to editable work",
+      src: "/work/glean-artifacts.png",
+      alt: "Glean artifact editor showing a generated Blue Line success stories document",
+      caption: "Artifacts",
       kind: "screen",
     },
   },
