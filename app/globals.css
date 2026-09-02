@@ -11901,9 +11901,29 @@ html[data-atmosphere="grid"] .ascii-garden {
   display: block;
   box-sizing: border-box;
   overflow: hidden;
-  border: 1px solid rgba(36, 35, 33, 0.16);
+  border: 1px solid rgba(36, 35, 33, 0.11);
   background: #fff;
-  box-shadow: 0 2px 6px rgba(54, 50, 43, 0.07);
+  box-shadow: none;
+}
+
+.about-page__gallery-track .film-photo__paper::after {
+  border: 0;
+}
+
+.about-page__gallery-track .film-photo,
+.about-page__gallery-track .film-photo:nth-child(n) {
+  transform-origin: center center;
+}
+
+/* Give the prints a little more presence without changing the one-row stack. */
+.about-page__gallery-track .film-photo,
+.about-page__gallery-track .film-photo--landscape {
+  flex-basis: calc(8.333333% + 6px);
+  margin-left: -6.5px;
+}
+
+.about-page__gallery-track .film-photo:first-child {
+  margin-left: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -11915,6 +11935,12 @@ html[data-atmosphere="grid"] .ascii-garden {
   .about-page__gallery-track .film-photo:hover .film-photo__paper,
   .about-page__gallery-track .film-photo:focus-visible .film-photo__paper {
     z-index: 2;
-    box-shadow: 0 0 0 1px rgba(36, 35, 33, 0.15), 0 6px 14px rgba(54, 50, 43, 0.12);
+    box-shadow: none;
+    outline: none;
+  }
+
+  .about-page__gallery-track .film-photo:hover,
+  .about-page__gallery-track .film-photo:focus-visible {
+    transform: translateY(-5px) rotate(0deg) scale(1.075);
   }
 }
