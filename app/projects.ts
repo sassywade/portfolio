@@ -79,9 +79,9 @@ export const projects: Project[] = [
     year: "2025",
     theme: "ground",
     cover: {
-      src: "/work/glean-artifacts.png",
-      alt: "Glean artifact editor showing a generated Blue Line success stories document",
-      caption: "Artifacts",
+      src: "/work/work-04.png",
+      alt: "Glean Edit with AI toolbar",
+      caption: "From generated response to editable work",
       kind: "screen",
     },
   },
@@ -124,10 +124,10 @@ export const projects: Project[] = [
     year: "2026",
     theme: "afterimage",
     cover: {
-      src: "/case-studies/psychic/page-01.png",
-      alt: "Psychic case study brief cover",
-      caption: "Designing relief before the work begins",
-      kind: "brief",
+      src: "/work/glean-proactive-intelligence.png",
+      alt: "Glean artifact editor showing a generated Blue Line success stories document",
+      caption: "Proactive intelligence",
+      kind: "screen",
     },
   },
   {

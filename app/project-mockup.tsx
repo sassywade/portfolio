@@ -28,12 +28,12 @@ export function ProjectMockup({ project }: { project: Project }) {
     );
   }
 
-  if (project.slug === "artifacts") {
+  if (project.slug === "psychic") {
     return (
-      <div className="project-mockup project-mockup--artifacts-work">
+      <div className="project-mockup project-mockup--proactive-work">
         <span className="project-placeholder__title">{project.title}</span>
         <Image
-          className="artifacts-work-image"
+          className="proactive-work-image"
           src={project.cover.src}
           alt={project.cover.alt}
           width={1086}

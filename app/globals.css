@@ -11369,8 +11369,8 @@ html[data-atmosphere="grid"] .ascii-garden {
   opacity: 0;
 }
 
-/* Artifacts uses the supplied composition without cropping or added chrome. */
-.pranathi-project-grid .project-mockup.project-mockup--artifacts-work {
+/* Proactive intelligence uses the supplied composition without cropping or added chrome. */
+.pranathi-project-grid .project-mockup.project-mockup--proactive-work {
   display: flex;
   align-items: stretch;
   flex-direction: column;
@@ -11381,7 +11381,7 @@ html[data-atmosphere="grid"] .ascii-garden {
   background: #f2f2f2;
 }
 
-.artifacts-work-image {
+.proactive-work-image {
   display: block;
   flex: 1 1 auto;
   width: 100%;
