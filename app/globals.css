@@ -10378,6 +10378,12 @@ html[data-atmosphere="grid"] .ascii-garden {
   padding-right: 4px;
 }
 
+/* Keep the Life label quiet and proportional to the rest of the page. */
+.about-page__gallery > h2 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
 .film-photo,
 .film-photo--landscape {
   flex: 0 0 calc(8.333333% + 4px);
