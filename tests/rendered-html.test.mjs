@@ -402,7 +402,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectMockup, /project-mockup--placeholder/);
   assert.match(projectMockup, /project-placeholder__title/);
   assert.match(projectMockup, /project\.slug === "homepage"/);
-  assert.match(projectMockup, /className="homepage-work-image"/);
+  assert.match(projectMockup, /className="homepage-work-image homepage-work-image--after"/);
+  assert.match(projectMockup, /src="\/work\/glean-homepage-before\.png"/);
   assert.match(projects, /src: "\/work\/glean-homepage-redesign\.png"/);
   assert.match(projectMockup, /project\.category\.includes\("Snap"\)/);
   assert.match(projectMockup, /className="snap-work-image"/);
@@ -449,7 +450,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*translateY\(-4px\)/);
+  assert.match(css, /\.project-card:hover \.homepage-work-image--before\s*\{[\s\S]*?animation:\s*homepage-before-after 2400ms var\(--motion-ease-in-out\) 450ms both/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*none/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.project-card:hover \.homepage-work-image--before\s*\{[\s\S]*?animation:\s*none/);
   assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
 });
 
