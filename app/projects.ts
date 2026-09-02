@@ -124,9 +124,9 @@ export const projects: Project[] = [
     year: "2026",
     theme: "afterimage",
     cover: {
-      src: "/work/glean-proactive-intelligence.png",
-      alt: "Glean artifact editor showing a generated Blue Line success stories document",
-      caption: "Proactive intelligence",
+      src: "/work/work-02.png",
+      alt: "Placeholder for the proactive intelligence project",
+      caption: "Proactive intelligence placeholder",
       kind: "screen",
     },
   },

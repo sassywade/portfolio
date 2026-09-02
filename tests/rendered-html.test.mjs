@@ -411,9 +411,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectMockup, /project\.slug === "agent-observability"/);
   assert.match(projectMockup, /className="observability-work-image"/);
   assert.match(projects, /src: "\/work\/glean-agent-observability\.png"/);
-  assert.match(projectMockup, /project\.slug === "psychic"/);
-  assert.match(projectMockup, /className="proactive-work-image"/);
-  assert.match(projects, /src: "\/work\/glean-proactive-intelligence\.png"/);
+  assert.doesNotMatch(projectMockup, /project\.slug === "psychic"/);
+  assert.doesNotMatch(projectMockup, /className="proactive-work-image"/);
+  assert.match(projects, /slug: "psychic",[\s\S]*src: "\/work\/work-02\.png"/);
   assert.match(projectMockup, /project\.category\.includes\("Snap"\)/);
   assert.match(projectMockup, /className="snap-work-image"/);
   assert.match(projectMockup, /src=\{project\.cover\.src\}/);
@@ -464,8 +464,6 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.homepage-work-comparison \{[\s\S]*?width:\s*min\(88%, 480px\)[\s\S]*?aspect-ratio:\s*1280 \/ 912/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--artifacts-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.artifacts-work-image \{[\s\S]*?width:\s*min\(90%, 480px\)[\s\S]*?object-fit:\s*contain/);
-  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--proactive-work \{[\s\S]*?background:\s*#f2f2f2;/);
-  assert.match(css, /\.proactive-work-image \{[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--observability-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.observability-work-image \{[\s\S]*?width:\s*min\(76%, 420px\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*none/);
