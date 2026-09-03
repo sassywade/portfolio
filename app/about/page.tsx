@@ -1,4 +1,3 @@
-import { Soundscape } from "../soundscape";
 import { SiteHeader } from "../site-header";
 import { AboutPhotoGallery } from "./about-photo-gallery";
 import Image from "next/image";
@@ -6,7 +5,6 @@ import Image from "next/image";
 export default function AboutPage() {
   return (
     <main className="site-shell page-enter about-page" id="top">
-      <Soundscape />
       <SiteHeader current="about" />
       <section className="simple-page" aria-labelledby="about-title">
         <div className="about-page__identity">

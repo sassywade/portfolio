@@ -1,5 +1,4 @@
 import { SiteHeader } from "../site-header";
-import { Soundscape } from "../soundscape";
 
 const projects = [
   "Passport",
@@ -12,7 +11,6 @@ const projects = [
 export default function PlayPage() {
   return (
     <main className="site-shell page-enter play-page" id="top">
-      <Soundscape />
       <SiteHeader current="play" />
       <section className="play-page__content" aria-labelledby="play-title">
         <header className="play-page__intro">

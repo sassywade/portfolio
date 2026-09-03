@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import { PhilipToggle } from "./philip-toggle";
+import { Soundscape } from "./soundscape";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -77,6 +78,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${newsreader.variable} ${geist.variable} ${geistMono.variable} antialiased`}>
+        <Soundscape />
         {children}
         <PhilipToggle />
       </body>

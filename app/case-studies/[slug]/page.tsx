@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 
 import { caseStudies, projects, type CaseStudyArtifact } from "../../projects";
 import { Reveal } from "../../reveal";
-import { Soundscape } from "../../soundscape";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -49,7 +48,6 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
   return (
     <main className={`case-study-shell case-study-shell--${project.theme} case-story page-enter`}>
-      <Soundscape />
 
       <section className="case-story-hero" id="top" aria-labelledby="case-title">
         <div className="case-story-hero__copy">

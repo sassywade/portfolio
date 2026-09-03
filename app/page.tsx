@@ -2,7 +2,6 @@ import { HeroMeadow } from "./hero-meadow";
 import { BikeRide } from "./bike-ride";
 import { PhotoDrop } from "./photo-drop";
 import { BackpackWalk } from "./backpack-walk";
-import { Soundscape } from "./soundscape";
 import { ProjectGrid } from "./project-card";
 import { SiteHeader } from "./site-header";
 import { TopPetPull } from "./top-pet-pull";
@@ -35,7 +34,6 @@ export default function Home() {
     <>
       <TopPetPull />
       <main className="site-shell page-enter" id="top">
-        <Soundscape />
         <SiteHeader current="work" />
 
         <section className="pranathi-intro pranathi-intro--home" aria-labelledby="hero-title">

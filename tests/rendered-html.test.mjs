@@ -503,6 +503,21 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);
 });
 
+test("uses Cuelume's declarative profile for every actionable click", async () => {
+  const [layout, soundscape] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/soundscape.tsx", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(layout, /<Soundscape \/>/);
+  assert.match(soundscape, /bind\(\)/);
+  assert.match(soundscape, /addDeclarativeClickCue\(document\)/);
+  assert.match(soundscape, /data-cuelume-automatic='true'/);
+  assert.match(soundscape, /element\.dataset\.cuelumePress = "press"/);
+  assert.match(soundscape, /element\.dataset\.cuelumeRelease = "release"/);
+  assert.match(soundscape, /new MutationObserver/);
+});
+
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {
   const [weather, meadow, prototype, hero, tree, treeRenderer, layerHost, bike, photographer, backpacker, smiley, css] = await Promise.all([
     readFile(new URL("../app/alamo-weather.tsx", import.meta.url), "utf8"),
