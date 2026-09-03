@@ -104,8 +104,12 @@ test("renders Play as a compact three-column project grid", async () => {
     assert.match(play, new RegExp(title));
   }
   assert.match(play, /SiteHeader current="play"/);
+  assert.doesNotMatch(play, /Small experiments, side projects/);
+  assert.doesNotMatch(play, /<h1[^>]*>Play<\/h1>/);
   assert.match(css, /\.play-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/);
   assert.match(css, /\.play-tile\s*\{[^}]*background:\s*#f2f2f2/);
+  assert.match(css, /\.play-tile\s*\{[^}]*align-items:\s*center;[^}]*justify-content:\s*center/);
+  assert.match(css, /\.play-tile h2\s*\{[^}]*text-align:\s*center/);
 });
 
 test("keeps About motion calm, accessible, and reduced-motion safe", async () => {
