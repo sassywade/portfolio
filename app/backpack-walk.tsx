@@ -334,8 +334,9 @@ export function BackpackWalk() {
         type="button"
         className="backpack-word hero-inline-action hero-hobby hero-hobby--backpack"
         data-walking="false"
-        data-cuelume-toggle="arrival"
-        data-cuelume-hover="sparkle"
+        data-cuelume-hover="tick"
+        data-cuelume-press="press"
+        data-cuelume-release="release"
         aria-label="Release miniature Neel backpacking onto the meadow"
         onClick={() => launchRef.current()}
       >

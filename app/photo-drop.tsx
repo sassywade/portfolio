@@ -351,8 +351,9 @@ export function PhotoDrop() {
         type="button"
         className="photo-word hero-inline-action hero-hobby hero-hobby--photo"
         data-photographing="false"
-        data-cuelume-toggle="scan"
-        data-cuelume-hover="sparkle"
+        data-cuelume-hover="tick"
+        data-cuelume-press="press"
+        data-cuelume-release="release"
         aria-label="Release miniature Neel with a camera onto the meadow"
         onClick={() => launchRef.current()}
       >

@@ -633,7 +633,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(layerHost, /document\.querySelector<HTMLElement>\("\.hero-meadow"\)/);
   assert.match(layerHost, /window\.requestAnimationFrame/);
   assert.match(bike, /const FRAME_URLS = \[/);
-  assert.match(bike, /data-cuelume-toggle="pulse"/);
+  assert.match(bike, /data-cuelume-hover="tick"/);
+  assert.match(bike, /data-cuelume-press="press"/);
+  assert.match(bike, /data-cuelume-release="release"/);
   assert.match(bike, /createPortal/);
   assert.match(bike, /\}, \[meadowHost\]\)/);
   assert.match(bike, /surfaceByColumn/);
@@ -655,7 +657,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(bike, /data-meadow-surface="active"/);
   assert.match(bike, /meadow\.dataset\.meadowVariant === "flat"/);
   assert.match(photographer, /const FRAME_URLS = \[/);
-  assert.match(photographer, /data-cuelume-toggle="scan"/);
+  assert.match(photographer, /data-cuelume-hover="tick"/);
+  assert.match(photographer, /data-cuelume-press="press"/);
+  assert.match(photographer, /data-cuelume-release="release"/);
   assert.match(photographer, /createPortal/);
   assert.match(photographer, /\}, \[meadowHost\]\)/);
   assert.match(photographer, /const PHOTO_SEQUENCE = \[/);
@@ -679,7 +683,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(photographer, /setPhase\("shoot"\);[\s\S]*renderPhotographer\(\);[\s\S]*runPhotoStep\(\);/);
   assert.doesNotMatch(photographer, /reducedTimer = window\.setTimeout\(\(\) => setPhase\("idle"\)/);
   assert.match(backpacker, /const FRAME_URLS = \[/);
-  assert.match(backpacker, /data-cuelume-toggle="arrival"/);
+  assert.match(backpacker, /data-cuelume-hover="tick"/);
+  assert.match(backpacker, /data-cuelume-press="press"/);
+  assert.match(backpacker, /data-cuelume-release="release"/);
   assert.match(backpacker, /createPortal/);
   assert.match(backpacker, /\}, \[meadowHost\]\)/);
   assert.match(backpacker, /const WALK_FRAME_ORDER = \[/);

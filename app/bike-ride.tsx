@@ -350,8 +350,9 @@ export function BikeRide() {
         type="button"
         className="bike-word hero-inline-action hero-hobby hero-hobby--bike"
         data-riding="false"
-        data-cuelume-toggle="pulse"
-        data-cuelume-hover="sparkle"
+        data-cuelume-hover="tick"
+        data-cuelume-press="press"
+        data-cuelume-release="release"
         aria-label="Release miniature Neel on a bike onto the meadow"
         onClick={() => launchRef.current()}
       >
