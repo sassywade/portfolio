@@ -12235,3 +12235,14 @@ html[data-atmosphere="grid"] .ascii-garden {
     transform: translateY(-3px) rotate(var(--photo-rotation, 0deg)) scale(1.03);
   }
 }
+
+/* Keep the complete Life strip in one compact row without changing each print. */
+@media (min-width: 701px) {
+  .about-page__gallery-track .film-photo {
+    margin-left: -30px;
+  }
+
+  .about-page__gallery-track .film-photo:first-child {
+    margin-left: 0;
+  }
+}
