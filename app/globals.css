@@ -12105,11 +12105,38 @@ html[data-atmosphere="grid"] .ascii-garden {
   transform-origin: center center;
 }
 
-/* Give the prints a little more presence without changing the one-row stack. */
+/* Keep every print broad and complete; the bunching comes from the overlap. */
+.about-page__gallery-track {
+  gap: 0;
+}
+
 .about-page__gallery-track .film-photo,
 .about-page__gallery-track .film-photo--landscape {
-  flex-basis: calc(8.333333% + 6px);
-  margin-left: -6.5px;
+  flex: 0 0 clamp(82px, 7vw, 112px);
+  width: clamp(82px, 7vw, 112px);
+  min-width: 0;
+  height: auto;
+  margin-left: -4px;
+}
+
+.about-page__gallery-track .film-photo__paper {
+  width: 100%;
+  height: auto;
+  padding: 4px 4px 6px;
+}
+
+.about-page__gallery-track .film-photo__image,
+.about-page__gallery-track .film-photo--landscape .film-photo__image {
+  width: 100%;
+  height: auto;
+     aspect-ratio: 2 / 3;
+}
+
+.about-page__gallery-track .film-photo__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: none;
 }
 
 .about-page__gallery-track .film-photo:first-child {

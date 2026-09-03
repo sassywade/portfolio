@@ -22,8 +22,8 @@ const lifePhotos: PhotoSlot[] = [
   { id: "mountain-lookout", title: "Take in the whole thing", description: "My ultralight chair makes me happy", alt: "Person looking at a mountain landscape", orientation: "portrait", src: "/about/mountain-lookout.JPG" },
   { id: "camp-view", title: "Waking up here", description: "Backpacking Cathedral with Jordan", alt: "A tent below a mountain peak", orientation: "portrait", src: "/about/camp-view.JPG" },
   { id: "san-francisco-park", title: "Alamo Square", description: "Alamo square on a beautiful day", alt: "People relaxing in Alamo Square with San Francisco in the background", orientation: "portrait", src: "/about/san-francisco-park.JPG" },
-  { id: "ride-through-the-grass", title: "Chasing the light", description: "Shenanigans in fort mason with the boy", alt: "Cyclist riding through a grassy field", orientation: "landscape", src: "/about/ride-through-the-grass.JPG" },
-  { id: "high-country-friends", title: "Made it up here", description: "A high-country hike with a friend.", alt: "Two friends hiking in the mountains", orientation: "landscape", src: "/about/high-country-friends.JPG" },
+  { id: "ride-through-the-grass", title: "Chasing the light", description: "Shenanigans in fort mason with the boy", alt: "Cyclist riding through a grassy field", orientation: "portrait", src: "/about/ride-through-the-grass.JPG" },
+  { id: "high-country-friends", title: "Made it up here", description: "A high-country hike with a friend.", alt: "Two friends hiking in the mountains", orientation: "portrait", src: "/about/high-country-friends.JPG" },
   { id: "red-wall-bike", title: "Bike against a red wall", description: "My first bike :)", alt: "A road bike against a red wall", orientation: "portrait", src: "/about/red-wall-bike.JPG" },
   { id: "san-francisco-from-above", title: "The city from above", description: "Exploring bernal heights with Kelly", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
