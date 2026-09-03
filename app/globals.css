@@ -12195,3 +12195,43 @@ html[data-atmosphere="grid"] .ascii-garden {
     padding-top: 72px;
   }
 }
+
+/* Make the active print clearly pop without changing its image crop. */
+.about-page__gallery-track .film-photo {
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-page__gallery,
+  .about-page__gallery-viewport,
+  .about-page__gallery-track {
+    overflow: visible;
+  }
+
+  .about-page__gallery-track .film-photo:hover,
+  .about-page__gallery-track .film-photo:focus-visible {
+    z-index: 100;
+    transform: translateY(-12px)
+      rotate(calc(var(--photo-rotation) + var(--photo-hover-rotation, 0deg)))
+      scale(1.18);
+  }
+
+  .about-page__gallery-track .film-photo:hover .film-photo__paper,
+  .about-page__gallery-track .film-photo:focus-visible .film-photo__paper {
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__gallery-track .film-photo {
+    will-change: auto;
+    transition: none;
+  }
+
+  .about-page__gallery-track .film-photo:hover,
+  .about-page__gallery-track .film-photo:focus-visible {
+    transform: translateY(-3px) rotate(var(--photo-rotation, 0deg)) scale(1.03);
+  }
+}
