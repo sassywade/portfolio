@@ -17,20 +17,10 @@ const actionableSelector = [
   "[role='switch']",
 ].join(",");
 
-const explicitClickCueSelector = [
-  "[data-cuelume-press]",
-  "[data-cuelume-release]",
-  "[data-cuelume-toggle]",
-].join(",");
-
 function addDeclarativeInteractionCue(element: HTMLElement) {
-  if (!element.hasAttribute("data-cuelume-hover")) {
-    element.dataset.cuelumeHover = "tick";
-    element.dataset.cuelumeAutomaticHover = "true";
-  }
-
-  if (element.matches(explicitClickCueSelector)) return;
-
+  element.dataset.cuelumeHover = "tick";
+  element.dataset.cuelumeAutomaticHover = "true";
+  delete element.dataset.cuelumeToggle;
   element.dataset.cuelumePress = "press";
   element.dataset.cuelumeRelease = "release";
   element.dataset.cuelumeAutomaticClick = "true";

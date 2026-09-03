@@ -148,7 +148,6 @@ export function MeadowSettings({
         aria-controls={panelId}
         aria-label={isExpanded ? "Close meadow and wind settings" : "Open meadow and wind settings"}
         title="Meadow and wind settings"
-        data-cuelume-toggle="panel"
         onClick={() => setIsExpanded((current) => !current)}
       >
         <span aria-hidden="true">⚙</span>
@@ -164,7 +163,6 @@ export function MeadowSettings({
             <button
               type="button"
               className="meadow-settings__close"
-              data-cuelume-toggle="panel"
               onClick={closePanel}
             >
               Close
@@ -184,7 +182,6 @@ export function MeadowSettings({
                   type="button"
                   aria-pressed={atmosphere === id}
                   data-atmosphere-option={id}
-                  data-cuelume-toggle="bloom"
                   onClick={() => onAtmosphereChange(id)}
                   key={id}
                 >
@@ -209,7 +206,6 @@ export function MeadowSettings({
               <button
                 type="button"
                 aria-pressed={workGridColumns === 2}
-                data-cuelume-toggle="layout"
                 onClick={() => onWorkGridColumnsChange(2)}
               >
                 2 columns
@@ -217,7 +213,6 @@ export function MeadowSettings({
               <button
                 type="button"
                 aria-pressed={workGridColumns === 3}
-                data-cuelume-toggle="layout"
                 onClick={() => onWorkGridColumnsChange(3)}
               >
                 3 columns
@@ -242,7 +237,6 @@ export function MeadowSettings({
                 <button
                   type="button"
                   aria-pressed={workHandoff === id}
-                  data-cuelume-toggle="layout"
                   onClick={() => onWorkHandoffChange(id)}
                   key={id}
                 >
@@ -263,7 +257,6 @@ export function MeadowSettings({
                 type="button"
                 className="meadow-settings__motion-toggle"
                 aria-pressed={heroHighlights}
-                data-cuelume-toggle="bloom"
                 onClick={() => onHeroHighlightsChange(!heroHighlights)}
               >
                 {heroHighlights ? "On" : "Off"}
@@ -294,7 +287,6 @@ export function MeadowSettings({
                 type="button"
                 className="meadow-settings__motion-toggle"
                 aria-pressed={topPetMode !== "off"}
-                data-cuelume-toggle="motion"
                 onClick={() => onTopPetModeChange(topPetMode === "off" ? "quiet" : "off")}
               >
                 {topPetMode === "off" ? "Off" : "On"}
@@ -305,7 +297,6 @@ export function MeadowSettings({
                 type="button"
                 aria-pressed={topPetMode === "quiet"}
                 disabled={topPetMode === "off"}
-                data-cuelume-toggle="bloom"
                 onClick={() => onTopPetModeChange("quiet")}
               >
                 Quiet
@@ -314,7 +305,6 @@ export function MeadowSettings({
                 type="button"
                 aria-pressed={topPetMode === "reactive"}
                 disabled={topPetMode === "off"}
-                data-cuelume-toggle="motion"
                 onClick={() => onTopPetModeChange("reactive")}
               >
                 Reactive
@@ -366,7 +356,6 @@ export function MeadowSettings({
                   <button
                     type="button"
                     aria-pressed={asciiGardenTheme === "dark"}
-                    data-cuelume-toggle="palette"
                     onClick={() => onAsciiGardenThemeChange("dark")}
                   >
                     Dark
@@ -374,7 +363,6 @@ export function MeadowSettings({
                   <button
                     type="button"
                     aria-pressed={asciiGardenTheme === "light"}
-                    data-cuelume-toggle="palette"
                     onClick={() => onAsciiGardenThemeChange("light")}
                   >
                     Light
@@ -388,7 +376,6 @@ export function MeadowSettings({
                   <button
                     type="button"
                     aria-pressed={variant === "living"}
-                    data-cuelume-toggle="meadow"
                     onClick={() => onVariantChange("living")}
                   >
                     Living
@@ -396,7 +383,6 @@ export function MeadowSettings({
                   <button
                     type="button"
                     aria-pressed={variant === "flat"}
-                    data-cuelume-toggle="meadow"
                     onClick={() => onVariantChange("flat")}
                   >
                     Flat
@@ -434,7 +420,6 @@ export function MeadowSettings({
                     <button
                       type="button"
                       aria-label="Previous rolling meadow"
-                      data-cuelume-toggle="rolling-meadow"
                       onClick={() => cycleRollingMeadow(-1)}
                     >
                       ←
@@ -443,7 +428,6 @@ export function MeadowSettings({
                     <button
                       type="button"
                       aria-label="Next rolling meadow"
-                      data-cuelume-toggle="rolling-meadow"
                       onClick={() => cycleRollingMeadow(1)}
                     >
                       →
@@ -459,7 +443,6 @@ export function MeadowSettings({
                       <button
                         type="button"
                         aria-pressed={flatTexture === id}
-                        data-cuelume-toggle="meadow-texture"
                         onClick={() => onFlatTextureChange(id)}
                         key={id}
                       >
@@ -511,7 +494,6 @@ export function MeadowSettings({
                   type="button"
                   className="meadow-settings__motion-toggle"
                   aria-pressed={isPlaying}
-                  data-cuelume-toggle="motion"
                   onClick={() => onPlayingChange(!isPlaying)}
                 >
                   {isPlaying ? "Pause" : "Play"}

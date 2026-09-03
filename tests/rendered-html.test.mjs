@@ -503,21 +503,36 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);
 });
 
-test("uses distinct Cuelume hover and click cues on every action", async () => {
-  const [layout, soundscape] = await Promise.all([
+test("uses only the standard Cuelume Declarative profile on every action", async () => {
+  const [layout, soundscape, ...interactionSources] = await Promise.all([
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/soundscape.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/site-header.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/project-card.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/case-study-carousel.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/case-study-media.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/philip-toggle.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/bike-ride.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/backpack-walk.tsx", import.meta.url), "utf8"),
   ]);
 
   assert.match(layout, /<Soundscape \/>/);
   assert.match(soundscape, /bind\(\)/);
   assert.match(soundscape, /addDeclarativeInteractionCues\(document\)/);
   assert.match(soundscape, /element\.dataset\.cuelumeHover = "tick"/);
+  assert.match(soundscape, /delete element\.dataset\.cuelumeToggle/);
   assert.match(soundscape, /element\.dataset\.cuelumeAutomaticHover = "true"/);
   assert.match(soundscape, /element\.dataset\.cuelumeAutomaticClick = "true"/);
   assert.match(soundscape, /element\.dataset\.cuelumePress = "press"/);
   assert.match(soundscape, /element\.dataset\.cuelumeRelease = "release"/);
   assert.match(soundscape, /new MutationObserver/);
+  assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-toggle=/);
+  assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-hover="(?!tick")/);
+  assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-press="(?!press")/);
+  assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-release="(?!release")/);
 });
 
 test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", async () => {

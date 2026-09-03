@@ -12,7 +12,6 @@ export function CaseStudyMedia({ children, label }: { children: ReactNode; label
         type="button"
         aria-pressed={isPaused}
         onClick={() => setIsPaused((paused) => !paused)}
-        data-cuelume-toggle="toggle"
       >
         <span aria-hidden="true">{isPaused ? "▶" : "Ⅱ"}</span>
         {isPaused ? "Play" : "Pause"} {label}

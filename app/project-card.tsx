@@ -27,7 +27,6 @@ export function ProjectCard({ project }: { project: Project }) {
             ? `Open ${project.title} article in a new tab`
             : `Open ${project.title} case study`
         }
-        data-cuelume-toggle="pulse"
       >
         <ProjectMockup project={project} />
       </a>

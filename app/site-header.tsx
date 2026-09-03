@@ -19,7 +19,6 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         className="site-header__wordmark"
         href="/"
         aria-label="Neel Saswade, home"
-        data-cuelume-toggle="page"
       >
         Neel Saswade
       </a>
@@ -31,7 +30,6 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             aria-current={current === id ? "page" : undefined}
             target={id === "resume" ? "_blank" : undefined}
             rel={id === "resume" ? "noopener noreferrer" : undefined}
-            data-cuelume-toggle="page"
             key={id}
           >
             {label}

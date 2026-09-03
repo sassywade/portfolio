@@ -20,7 +20,7 @@ The site should feel personal, calm, editorial, and lightly playful. The work mu
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
 - The photographer is already present on the meadow when the homepage loads; clicking `photograph SF` replays the drop-and-shoot sequence.
-- Every actionable element uses Cuelume's global declarative `tick` hover cue and distinct press/release click binding. The bikes, photograph SF, and backpacking actions must use that same standard profile; special interactions elsewhere may retain a more specific declarative cue.
+- Every actionable element uses only Cuelume's global Declarative profile: `tick` on hover and the `press`/`release` click pair. Do not add custom cue overrides.
 
 ## Architecture map
 

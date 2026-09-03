@@ -111,7 +111,6 @@ export function PhilipPickerToggle() {
         aria-checked={isEnabled}
         aria-label="Toggle Philip"
         aria-describedby={tooltipId}
-        data-cuelume-toggle="bloom"
         onClick={togglePhilip}
       >
         <span className="philip-toggle__knob" aria-hidden="true">

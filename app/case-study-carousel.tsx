@@ -36,7 +36,6 @@ export function CaseStudyCarousel({ theme }: { theme: ProjectTheme }) {
             aria-label={`Go to slide ${index + 1}`}
             aria-pressed={active === index}
             onClick={() => setActive(index)}
-            data-cuelume-toggle="pulse"
             key={number}
           >
             <span>{number}</span>

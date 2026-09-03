@@ -19,8 +19,6 @@ function CompanyLink({ brand, href, children }: CompanyLinkProps) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      data-cuelume-hover="tick"
-      data-cuelume-release="page"
       aria-label={`${children} — open company website in a new tab`}
     >
       <span className="hero-company__mark" aria-hidden="true" />
