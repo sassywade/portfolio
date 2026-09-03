@@ -314,14 +314,7 @@ export function PhotoDrop() {
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
 
-    const initialBounds = layer.getBoundingClientRect();
-    const initialSize = photographerSize();
-    x = clamp(initialBounds.width * 0.52, initialSize.width * 0.5, initialBounds.width - initialSize.width * 0.5);
-    y = trackY(x) - initialSize.height * PHOTOGRAPHER_GROUND_RATIO;
-    setFrame(0);
-    setPhase("shoot");
-    renderPhotographer();
-    runPhotoStep();
+    launch();
 
     const handlePetBlow = () => {
       if (phase !== "shoot" || reducedMotion.matches) return;

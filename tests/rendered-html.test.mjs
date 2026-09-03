@@ -694,7 +694,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(photographer, /new IntersectionObserver/);
   assert.match(photographer, /prefers-reduced-motion: reduce/);
   assert.match(photographer, /data-meadow-surface="active"/);
-  assert.match(photographer, /x = clamp\(initialBounds\.width \* 0\.52/);
+  assert.match(photographer, /x = clamp\(buttonBounds\.left \+ buttonBounds\.width \* 0\.5 - layerBounds\.left/);
+  assert.match(photographer, /resizeObserver\.observe\(layer\);[\s\S]*launch\(\);/);
   assert.match(photographer, /setPhase\("shoot"\);[\s\S]*renderPhotographer\(\);[\s\S]*runPhotoStep\(\);/);
   assert.doesNotMatch(photographer, /reducedTimer = window\.setTimeout\(\(\) => setPhase\("idle"\)/);
   assert.match(backpacker, /const FRAME_URLS = \[/);
