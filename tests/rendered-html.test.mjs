@@ -503,7 +503,7 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);
 });
 
-test("uses Cuelume's declarative profile for every actionable click", async () => {
+test("uses distinct Cuelume hover and click cues on every action", async () => {
   const [layout, soundscape] = await Promise.all([
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/soundscape.tsx", import.meta.url), "utf8"),
@@ -511,8 +511,10 @@ test("uses Cuelume's declarative profile for every actionable click", async () =
 
   assert.match(layout, /<Soundscape \/>/);
   assert.match(soundscape, /bind\(\)/);
-  assert.match(soundscape, /addDeclarativeClickCue\(document\)/);
-  assert.match(soundscape, /data-cuelume-automatic='true'/);
+  assert.match(soundscape, /addDeclarativeInteractionCues\(document\)/);
+  assert.match(soundscape, /element\.dataset\.cuelumeHover = "tick"/);
+  assert.match(soundscape, /element\.dataset\.cuelumeAutomaticHover = "true"/);
+  assert.match(soundscape, /element\.dataset\.cuelumeAutomaticClick = "true"/);
   assert.match(soundscape, /element\.dataset\.cuelumePress = "press"/);
   assert.match(soundscape, /element\.dataset\.cuelumeRelease = "release"/);
   assert.match(soundscape, /new MutationObserver/);

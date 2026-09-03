@@ -19,7 +19,7 @@ The site should feel personal, calm, editorial, and lightly playful. The work mu
 - Glean order: Homepage redesign, Proactive intelligence, Artifacts, Growth, Agent observability, Enterprise setup. Snap follows with Treasure and NFTs as Lenses.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
-- Every actionable click uses Cuelume's global declarative press/release binding; special interactions may retain a more specific declarative cue.
+- Every actionable element uses Cuelume's global declarative `tick` hover cue and distinct press/release click binding; special interactions may retain a more specific declarative cue.
 
 ## Architecture map
 
