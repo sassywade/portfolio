@@ -269,7 +269,7 @@ export function PhotoDrop() {
         y = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
         setPhase("shoot");
         renderPhotographer();
-        reducedTimer = window.setTimeout(() => setPhase("idle"), 1800);
+        reducedTimer = window.setTimeout(() => setFrame(0), 1800);
         return;
       }
 
@@ -313,6 +313,15 @@ export function PhotoDrop() {
     };
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
+
+    const initialBounds = layer.getBoundingClientRect();
+    const initialSize = photographerSize();
+    x = clamp(initialBounds.width * 0.52, initialSize.width * 0.5, initialBounds.width - initialSize.width * 0.5);
+    y = trackY(x) - initialSize.height * PHOTOGRAPHER_GROUND_RATIO;
+    setFrame(0);
+    setPhase("shoot");
+    renderPhotographer();
+    runPhotoStep();
 
     const handlePetBlow = () => {
       if (phase !== "shoot" || reducedMotion.matches) return;
