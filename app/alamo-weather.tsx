@@ -138,6 +138,7 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
     : hasWeatherError
       ? "Alamo Square wind unavailable"
       : "Checking Alamo Square's wind…";
+  const ridgeCharacters = Array.from(primaryCopy);
 
   return (
     <aside
@@ -145,7 +146,28 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
       data-weather-state={conditions ? "live" : hasWeatherError ? "unavailable" : "loading"}
       aria-live="polite"
     >
-      <span className="alamo-weather__primary">{primaryCopy}</span>
+      <span className="alamo-weather__primary" aria-label={primaryCopy}>
+        <span className="alamo-weather__arc" aria-hidden="true">
+          {ridgeCharacters.map((character, index) => {
+            const progress = ridgeCharacters.length > 1 ? index / (ridgeCharacters.length - 1) : 0.5;
+            const ridgeY = Math.sin(progress * Math.PI) * 4;
+            const ridgeRotate = (0.5 - progress) * 2.2;
+
+            return (
+              <span
+                className="alamo-weather__character"
+                style={{
+                  "--ridge-y": `${ridgeY.toFixed(2)}px`,
+                  "--ridge-rotate": `${ridgeRotate.toFixed(2)}deg`,
+                } as React.CSSProperties}
+                key={`${character}-${index}`}
+              >
+                {character === " " ? "\u00a0" : character}
+              </span>
+            );
+          })}
+        </span>
+      </span>
       <span className="alamo-weather__secondary sr-only">
         {now ? `${formatSanFranciscoTime(now)} in San Francisco` : "Local time in San Francisco"}
         {conditions ? ` · ${Math.round(conditions.windSpeed)} mph ${cardinalDirection(conditions.windDirection)} wind` : ""}

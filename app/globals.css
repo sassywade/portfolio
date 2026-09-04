@@ -5246,7 +5246,7 @@ em {
   --cypress-root-registration-y: 0%;
   --cypress-display-width: clamp(240px, 22vw, 322px);
   --cypress-viewport-lift: clamp(0px, calc(20vw - 288px), 132px);
-  --cypress-root-overlap: clamp(16px, 1.4vw, 24px);
+  --cypress-root-overlap: clamp(38px, 2.5vw, 52px);
   --miniature-character-height: clamp(82px, 7vw, 100px);
   --cyclist-character-size: clamp(66px, 5.6vw, 80px);
   --backpacker-character-width: clamp(70px, 6vw, 85px);
@@ -6789,17 +6789,17 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 .alamo-weather {
   position: absolute;
   z-index: 6;
-  right: clamp(6px, 1vw, 14px);
+  right: clamp(10px, 1.6vw, 28px);
   bottom: calc(
     clamp(68px, 7.35vw, 110px)
     + var(--meadow-height-offset)
     + var(--cypress-viewport-lift)
     - 10px
     - var(--cypress-root-overlap)
-    + clamp(48px, 6vw, 64px)
+    + clamp(58px, 6.6vw, 74px)
   );
   width: max-content;
-  max-width: min(30vw, 180px);
+  max-width: min(34vw, 240px);
   color: color-mix(in srgb, var(--ink) 82%, transparent);
   font-family: var(--sans);
   font-size: 10px;
@@ -6823,11 +6823,13 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   display: inline-flex;
   align-items: baseline;
   justify-content: flex-end;
+  padding-bottom: 4px;
 }
 
 .alamo-weather__character {
   display: inline-block;
   transform-origin: 50% 100%;
+  transform: translateY(calc(-1 * var(--ridge-y))) rotate(var(--ridge-rotate));
 }
 
 .alamo-weather[data-weather-state="loading"] {

@@ -562,7 +562,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(weather, /return "Slight breeze"/);
   assert.match(weather, /describeAlamoWind\(conditions\)/);
   assert.match(weather, /\$\{describeAlamoWind\(conditions\)\} at Alamo Square right now/);
-  assert.doesNotMatch(weather, /ridgeCharacters|alamo-weather__arc|alamo-weather__character/);
+  assert.match(weather, /ridgeCharacters/);
+  assert.match(weather, /alamo-weather__arc/);
+  assert.match(weather, /--ridge-y/);
   assert.match(weather, /const WEATHER_REFRESH_MS = 10 \* 60 \* 1000/);
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
   assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);
@@ -701,7 +703,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(photographer, /prefers-reduced-motion: reduce/);
   assert.match(photographer, /data-meadow-surface="active"/);
   assert.match(photographer, /x = clamp\(buttonBounds\.left \+ buttonBounds\.width \* 0\.5 - layerBounds\.left/);
-  assert.match(photographer, /resizeObserver\.observe\(layer\);[\s\S]*launch\(\);/);
+  assert.match(photographer, /function placeOnMeadow\(\)[\s\S]*?setPhase\("shoot"\);[\s\S]*?renderPhotographer\(\);/);
+  assert.match(photographer, /resizeObserver\.observe\(layer\);[\s\S]*placeOnMeadow\(\);/);
   assert.match(photographer, /setPhase\("shoot"\);[\s\S]*renderPhotographer\(\);[\s\S]*runPhotoStep\(\);/);
   assert.doesNotMatch(photographer, /reducedTimer = window\.setTimeout\(\(\) => setPhase\("idle"\)/);
   assert.match(backpacker, /const FRAME_URLS = \[/);
@@ -784,11 +787,11 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow-settings\s*\{/);
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
   assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
-  assert.match(css, /\.alamo-weather\s*\{[^}]*z-index:\s*6;[^}]*bottom:\s*calc\([\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?var\(--cypress-root-overlap\)[\s\S]*?clamp\(48px, 6vw, 64px\)/);
+  assert.match(css, /\.alamo-weather\s*\{[^}]*z-index:\s*6;[^}]*bottom:\s*calc\([\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?var\(--cypress-root-overlap\)[\s\S]*?clamp\(58px, 6\.6vw, 74px\)/);
   assert.match(weather, /return "Slight breeze"/);
   assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*10px/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
-  assert.match(css, /--cypress-root-overlap:\s*clamp\(16px, 1\.4vw, 24px\)/);
+  assert.match(css, /--cypress-root-overlap:\s*clamp\(38px, 2\.5vw, 52px\)/);
   assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\([\s\S]*?clamp\(68px, 7\.35vw, 110px\)[\s\S]*?var\(--meadow-height-offset\)[\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?- var\(--cypress-root-overlap\)[\s\S]*?\);/);
   assert.match(css, /var\(--cypress-viewport-lift\)\s*-\s*10px/);
   assert.doesNotMatch(css, /\.cypress-tree__ground-shadow\s*\{/);

@@ -278,6 +278,30 @@ export function PhotoDrop() {
       schedule();
     }
 
+    function placeOnMeadow() {
+      window.cancelAnimationFrame(frameHandle);
+      window.clearTimeout(reducedTimer);
+      clearPhotoLoop();
+      frameHandle = 0;
+      lastTime = 0;
+      sequenceIndex = 0;
+      rapidBurstIndex = 0;
+      isRapidBurst = false;
+      layer.dataset.burst = "false";
+      setFrame(0);
+
+      const layerBounds = layer.getBoundingClientRect();
+      const buttonBounds = button.getBoundingClientRect();
+      const { width, height } = photographerSize();
+      x = clamp(buttonBounds.left + buttonBounds.width * 0.5 - layerBounds.left, width * 0.5, layerBounds.width - width * 0.5);
+      y = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
+      velocityY = 0;
+
+      setPhase("shoot");
+      renderPhotographer();
+      runPhotoStep();
+    }
+
     launchRef.current = launch;
 
     const intersectionObserver = new IntersectionObserver(([entry]) => {
@@ -314,7 +338,7 @@ export function PhotoDrop() {
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
 
-    launch();
+    placeOnMeadow();
 
     const handlePetBlow = () => {
       if (phase !== "shoot" || reducedMotion.matches) return;
