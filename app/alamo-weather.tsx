@@ -134,26 +134,10 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
   }, [onWindUpdate]);
 
   const primaryCopy = conditions
-    ? describeAlamoWind(conditions)
+    ? `${describeAlamoWind(conditions)} at Alamo Square right now`
     : hasWeatherError
       ? "Alamo Square wind unavailable"
       : "Checking Alamo Square's wind…";
-
-  const ridgeCharacters = Array.from(primaryCopy).map((character, index, characters) => {
-    const progress = characters.length > 1 ? index / (characters.length - 1) : 0;
-    const ridgeLift = 5 - progress * 9 - Math.sin(progress * Math.PI) * 1.8;
-    const ridgeAngle = -2.6 + progress * 4.8;
-
-    return (
-      <span
-        key={`${character}-${index}`}
-        className="alamo-weather__character"
-        style={{ transform: `translateY(${ridgeLift.toFixed(2)}px) rotate(${ridgeAngle.toFixed(2)}deg)` }}
-      >
-        {character === " " ? "\u00a0" : character}
-      </span>
-    );
-  });
 
   return (
     <aside
@@ -161,11 +145,7 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
       data-weather-state={conditions ? "live" : hasWeatherError ? "unavailable" : "loading"}
       aria-live="polite"
     >
-      <span className="alamo-weather__primary" aria-label={primaryCopy}>
-        <span className="alamo-weather__arc" aria-hidden="true">
-          {ridgeCharacters}
-        </span>
-      </span>
+      <span className="alamo-weather__primary">{primaryCopy}</span>
       <span className="alamo-weather__secondary sr-only">
         {now ? `${formatSanFranciscoTime(now)} in San Francisco` : "Local time in San Francisco"}
         {conditions ? ` · ${Math.round(conditions.windSpeed)} mph ${cardinalDirection(conditions.windDirection)} wind` : ""}

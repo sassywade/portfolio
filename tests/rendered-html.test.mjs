@@ -561,6 +561,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(weather, /function describeAlamoWind/);
   assert.match(weather, /return "Slight breeze"/);
   assert.match(weather, /describeAlamoWind\(conditions\)/);
+  assert.match(weather, /\$\{describeAlamoWind\(conditions\)\} at Alamo Square right now/);
+  assert.doesNotMatch(weather, /ridgeCharacters|alamo-weather__arc|alamo-weather__character/);
   assert.match(weather, /const WEATHER_REFRESH_MS = 10 \* 60 \* 1000/);
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
   assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);
