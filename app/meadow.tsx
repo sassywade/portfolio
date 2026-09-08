@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
+import type { ReactNode } from "react";
 import type { AlamoStyleDefinition } from "./alamo-styles";
 
 type MeadowProps = {
@@ -8,6 +9,7 @@ type MeadowProps = {
   flatTexture: FlatMeadowTexture;
   rollingMeadow: RollingMeadow;
   environmentStyle: AlamoStyleDefinition;
+  children?: ReactNode;
 };
 
 export type MeadowVariant = "living" | "flat";
@@ -32,6 +34,7 @@ export function Meadow({
   flatTexture,
   rollingMeadow,
   environmentStyle,
+  children,
 }: MeadowProps) {
   const texture = FLAT_MEADOW_TEXTURES.find(({ id }) => id === flatTexture) ?? FLAT_MEADOW_TEXTURES[0];
   const isControlStyle = environmentStyle.id === "control";
@@ -68,6 +71,7 @@ export function Meadow({
                 decoding="async"
               />
             )}
+        {children}
       </div>
       <div
         className="meadow__visual meadow__visual--flat"

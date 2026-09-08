@@ -372,7 +372,9 @@ export function HeroMeadow() {
             flatTexture={flatMeadowTexture}
             rollingMeadow={rollingMeadow}
             environmentStyle={environment}
-          />
+          >
+            <AlamoWeather onWindUpdate={setWind} />
+          </Meadow>
           <CypressTree
             wind={wind}
             isPlaying={sceneIsPlaying}
@@ -420,7 +422,6 @@ export function HeroMeadow() {
         onWindChange={updateWind}
         onPlayingChange={setIsPlaying}
       />
-      {!isStudioStatic && <AlamoWeather onWindUpdate={setWind} />}
     </div>
   );
 }

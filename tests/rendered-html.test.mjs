@@ -244,7 +244,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(hero, /useState<MeadowVariant>\("living"\)/);
   assert.match(hero, /const isStudioStatic = environmentStyle === "studio-static"/);
   assert.match(hero, /isStudioStatic \? null : isAsciiGarden/);
-  assert.match(hero, /!isStudioStatic && <AlamoWeather/);
+  assert.match(hero, /<Meadow[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>[\s\S]*?<\/Meadow>/);
   assert.match(hero, /shell\.dataset\.environmentStyle = environmentStyle/);
   assert.match(hero, /data-environment-style=\{environmentStyle\}/);
   assert.match(hero, /environmentStyle=\{environment\}/);
@@ -562,9 +562,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(weather, /return "Slight breeze"/);
   assert.match(weather, /describeAlamoWind\(conditions\)/);
   assert.match(weather, /\$\{describeAlamoWind\(conditions\)\} at Alamo Square right now/);
-  assert.match(weather, /ridgeCharacters/);
-  assert.match(weather, /alamo-weather__arc/);
-  assert.match(weather, /--ridge-y/);
+  assert.match(weather, /alamo-weather__ridge/);
+  assert.match(weather, /<textPath href=\{`#\$\{ridgePathId\}`\}/);
+  assert.match(weather, /M 5 43 C 76 42, 178 31, 275 12/);
   assert.match(weather, /const WEATHER_REFRESH_MS = 10 \* 60 \* 1000/);
   assert.match(weather, /timeZone: "America\/Los_Angeles"/);
   assert.match(weather, /onWindUpdate\(conditionsToWind\(next\)\)/);
@@ -786,10 +786,12 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow__flat-tint\s*\{[^}]*background:\s*var\(--flat-meadow-color\)/);
   assert.match(css, /\.meadow-settings\s*\{/);
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
-  assert.match(css, /\.alamo-weather\s*\{[^}]*font-size:\s*10px/);
-  assert.match(css, /\.alamo-weather\s*\{[^}]*z-index:\s*6;[^}]*bottom:\s*calc\([\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?var\(--cypress-root-overlap\)[\s\S]*?clamp\(58px, 6\.6vw, 74px\)/);
+  assert.match(css, /\.alamo-weather\s*\{[^}]*right:\s*calc\(\(var\(--meadow-render-width\) - 100vw\) \/ 2/);
+  assert.match(css, /\.alamo-weather\s*\{[^}]*bottom:\s*17%/);
   assert.match(weather, /return "Slight breeze"/);
-  assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*10px/);
+  assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*12px/);
+  assert.match(meadow, /children\?: ReactNode/);
+  assert.match(hero, /<AlamoWeather onWindUpdate=\{setWind\} \/>/);
   assert.match(css, /\.hero-meadow > \.cypress-tree\s*\{[^}]*z-index:\s*auto;[^}]*contain:\s*none;/);
   assert.match(css, /--cypress-root-overlap:\s*clamp\(38px, 2\.5vw, 52px\)/);
   assert.match(css, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*bottom:\s*calc\([\s\S]*?clamp\(68px, 7\.35vw, 110px\)[\s\S]*?var\(--meadow-height-offset\)[\s\S]*?var\(--cypress-viewport-lift\)[\s\S]*?- var\(--cypress-root-overlap\)[\s\S]*?\);/);

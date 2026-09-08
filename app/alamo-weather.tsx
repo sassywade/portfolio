@@ -138,7 +138,7 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
     : hasWeatherError
       ? "Alamo Square wind unavailable"
       : "Checking Alamo Square's wind…";
-  const ridgeCharacters = Array.from(primaryCopy);
+  const ridgePathId = "alamo-meadow-ridge";
 
   return (
     <aside
@@ -146,28 +146,23 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
       data-weather-state={conditions ? "live" : hasWeatherError ? "unavailable" : "loading"}
       aria-live="polite"
     >
-      <span className="alamo-weather__primary" aria-label={primaryCopy}>
-        <span className="alamo-weather__arc" aria-hidden="true">
-          {ridgeCharacters.map((character, index) => {
-            const progress = ridgeCharacters.length > 1 ? index / (ridgeCharacters.length - 1) : 0.5;
-            const ridgeY = Math.sin(progress * Math.PI) * 4;
-            const ridgeRotate = (0.5 - progress) * 2.2;
-
-            return (
-              <span
-                className="alamo-weather__character"
-                style={{
-                  "--ridge-y": `${ridgeY.toFixed(2)}px`,
-                  "--ridge-rotate": `${ridgeRotate.toFixed(2)}deg`,
-                } as React.CSSProperties}
-                key={`${character}-${index}`}
-              >
-                {character === " " ? "\u00a0" : character}
-              </span>
-            );
-          })}
-        </span>
-      </span>
+      <svg
+        className="alamo-weather__ridge"
+        viewBox="0 0 280 52"
+        role="img"
+        aria-label={primaryCopy}
+      >
+        <path
+          id={ridgePathId}
+          className="alamo-weather__ridge-guide"
+          d="M 5 43 C 76 42, 178 31, 275 12"
+        />
+        <text className="alamo-weather__primary">
+          <textPath href={`#${ridgePathId}`} startOffset="2%">
+            {primaryCopy}
+          </textPath>
+        </text>
+      </svg>
       <span className="alamo-weather__secondary sr-only">
         {now ? `${formatSanFranciscoTime(now)} in San Francisco` : "Local time in San Francisco"}
         {conditions ? ` · ${Math.round(conditions.windSpeed)} mph ${cardinalDirection(conditions.windDirection)} wind` : ""}

@@ -6785,51 +6785,41 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   }
 }
 
-/* The live Alamo Square breeze follows the hill beside the cypress. */
+/* Register the live breeze to the meadow artwork so it follows the hill at every viewport. */
 .alamo-weather {
   position: absolute;
-  z-index: 6;
-  right: clamp(10px, 1.6vw, 28px);
-  bottom: calc(
-    clamp(68px, 7.35vw, 110px)
-    + var(--meadow-height-offset)
-    + var(--cypress-viewport-lift)
-    - 10px
-    - var(--cypress-root-overlap)
-    + clamp(58px, 6.6vw, 74px)
-  );
-  width: max-content;
-  max-width: min(34vw, 240px);
+  z-index: 3;
+  right: calc((var(--meadow-render-width) - 100vw) / 2 + clamp(10px, 1.6vw, 28px));
+  bottom: 17%;
+  width: 280px;
+  height: 52px;
   color: color-mix(in srgb, var(--ink) 82%, transparent);
   font-family: var(--sans);
-  font-size: 10px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0;
-  line-height: 1.35;
   pointer-events: none;
-  text-align: right;
-  text-shadow:
-    0 1px 0 color-mix(in srgb, var(--paper) 98%, transparent),
-    0 0 8px color-mix(in srgb, var(--paper) 94%, transparent);
-  white-space: nowrap;
+}
+
+.alamo-weather__ridge {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.alamo-weather__ridge-guide {
+  fill: none;
+  stroke: none;
 }
 
 .alamo-weather__primary {
-  display: block;
-  font-size: 10px;
-}
-
-.alamo-weather__arc {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: flex-end;
-  padding-bottom: 4px;
-}
-
-.alamo-weather__character {
-  display: inline-block;
-  transform-origin: 50% 100%;
-  transform: translateY(calc(-1 * var(--ridge-y))) rotate(var(--ridge-rotate));
+  fill: currentColor;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0;
+  paint-order: stroke fill;
+  stroke: color-mix(in srgb, var(--paper) 94%, transparent);
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
 }
 
 .alamo-weather[data-weather-state="loading"] {
@@ -6837,22 +6827,18 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
 }
 
 .hero-meadow[data-meadow-variant="flat"] .alamo-weather {
-  bottom: calc(var(--flat-meadow-height) + var(--meadow-height-offset) - 1px);
+  display: none;
 }
 
 @media (max-width: 580px) {
   .alamo-weather {
-    right: 8px;
-    max-width: min(48vw, 210px);
-    font-size: 9px;
+    right: calc((var(--meadow-render-width) - 100vw) / 2 + 8px);
+    bottom: 15.8%;
+    width: 280px;
   }
 
   .alamo-weather__primary {
-    font-size: 9px;
-  }
-
-  .hero-meadow[data-meadow-variant="flat"] .alamo-weather {
-    bottom: calc(var(--flat-meadow-height) + var(--meadow-height-offset) - 1px);
+    font-size: 12px;
   }
 }
 
