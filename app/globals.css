@@ -7280,6 +7280,63 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   outline-offset: 2px;
 }
 
+.meadow-settings__scene-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.meadow-settings__scene-options button {
+  appearance: none;
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  border: 1px solid rgba(36, 35, 33, 0.14);
+  padding: 4px;
+  background: white;
+  color: #77736b;
+  cursor: pointer;
+  font-size: 7px;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-align: left;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+}
+
+.meadow-settings__scene-options button:first-child {
+  grid-column: 1 / -1;
+}
+
+.meadow-settings__scene-options button:hover,
+.meadow-settings__scene-options button:focus-visible,
+.meadow-settings__scene-options button[aria-pressed="true"] {
+  border-color: var(--acid);
+  color: var(--acid);
+}
+
+.meadow-settings__scene-options button:focus-visible {
+  outline: 1px solid var(--acid);
+  outline-offset: 2px;
+}
+
+.meadow-settings__scene-options button > small {
+  min-height: 2.5em;
+  color: #908c84;
+  line-height: 1.3;
+  text-transform: none;
+}
+
+.meadow-settings__scene-preview {
+  display: block;
+  height: 48px;
+  border: 1px solid rgba(36, 35, 33, 0.08);
+  background-color: #fafaf7;
+  background-position: 66% bottom, center bottom;
+  background-repeat: no-repeat;
+  background-size: auto 92%, cover;
+}
+
 .meadow-settings__texture {
   display: grid;
   gap: 6px;

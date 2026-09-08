@@ -2,7 +2,12 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ALAMO_STYLES, type AlamoStyle } from "./alamo-styles";
+import {
+  ALAMO_STYLES,
+  MEADOW_TREE_OPTIONS,
+  getAlamoStyle,
+  type AlamoStyle,
+} from "./alamo-styles";
 import type { AsciiGardenTheme } from "./ascii-garden";
 import {
   PORTFOLIO_ATMOSPHERES,
@@ -313,6 +318,42 @@ export function MeadowSettings({
             <p className="meadow-settings__note">
               Quiet waits for a committed pull, then reveals only the calm row with no bounce.
             </p>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-meadow-tree`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-meadow-tree`}>Meadow + tree</h2>
+                <small>Less realistic studies</small>
+              </div>
+            </div>
+            <div className="meadow-settings__scene-options" aria-label="Meadow and tree art direction">
+              {MEADOW_TREE_OPTIONS.map(({ id, label, description }) => {
+                const option = getAlamoStyle(id);
+
+                return (
+                  <button
+                    type="button"
+                    aria-pressed={environmentStyle === id}
+                    onClick={() => {
+                      onEnvironmentStyleChange(id);
+                      onVariantChange("living");
+                    }}
+                    key={id}
+                  >
+                    <span
+                      className="meadow-settings__scene-preview"
+                      style={{
+                        backgroundImage: `url(${option.treeSrc}), url(${option.rollingSrc})`,
+                      }}
+                      aria-hidden="true"
+                    />
+                    <span>{label}</span>
+                    <small>{description}</small>
+                  </button>
+                );
+              })}
+            </div>
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-meadow`}>

@@ -223,12 +223,18 @@ test("offers the original art directions, the unchanged control, and an isolated
     "whiteboard",
     "handmade-clay",
   ];
+  const styleCatalog = styles.split("] as const;")[0];
 
-  assert.equal((styles.match(/\n\s+id: "/g) ?? []).length, 18);
+  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 18);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
   assert.match(styles, /id: "studio-static"[\s\S]*label: "Studio · no meadow"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
+  assert.match(styles, /MEADOW_TREE_OPTIONS/);
+  assert.match(styles, /label: "Soft illustration"/);
+  assert.match(styles, /label: "Watercolor wash"/);
+  assert.match(styles, /label: "Marker sketch"/);
+  assert.match(styles, /label: "Clay model"/);
   assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 18);
   assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 18);
   assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 18);
@@ -256,6 +262,9 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(meadow, /environmentStyle\.rollingSrc/);
   assert.match(meadow, /environmentStyle\.flatSrc/);
   assert.match(prototype, /aria-label="Alamo Square visual style"/);
+  assert.match(prototype, /aria-label="Meadow and tree art direction"/);
+  assert.match(prototype, /MEADOW_TREE_OPTIONS\.map/);
+  assert.match(prototype, /onVariantChange\("living"\)/);
   assert.match(prototype, /ALAMO_STYLES\.map/);
   assert.match(prototype, /Style and meadow shape are independent/);
   assert.match(prototype, /No meadow · no tree · no Philip · no miniature visitors/);
@@ -266,6 +275,8 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(css, /\.meadow__visual--flat\[data-style-mode="curated"\]\s*\{[^}]*height:\s*var\(--flat-meadow-height\)/);
   assert.match(css, /\.meadow__curated-flat-image\s*\{[^}]*translate3d\(-50%, var\(--flat-meadow-registration-y\), 0\)/);
   assert.match(css, /\.hero-meadow > \.cypress-tree \.cypress-tree__stage\s*\{[^}]*translate3d\(0, var\(--cypress-root-registration-y\), 0\)/);
+  assert.match(css, /\.meadow-settings__scene-options\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.meadow-settings__scene-preview\s*\{[^}]*background-size:\s*auto 92%, cover/);
   assert.match(css, /html\[data-environment-style="studio-static"\] \.smiley-cursor/);
   assert.match(css, /html\[data-environment-style="studio-static"\] \.pranathi-intro--home\s*\{[\s\S]*?min-height:\s*auto/);
   assert.match(css, /html\[data-environment-style="studio-static"\] \.hero-inline-action\s*\{[\s\S]*?pointer-events:\s*none/);

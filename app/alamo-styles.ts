@@ -220,6 +220,38 @@ export const ALAMO_STYLES = [
 export type AlamoStyle = (typeof ALAMO_STYLES)[number]["id"];
 export type AlamoStyleDefinition = (typeof ALAMO_STYLES)[number];
 
+export const MEADOW_TREE_OPTIONS: ReadonlyArray<{
+  id: AlamoStyle;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "painterly-realism",
+    label: "Current",
+    description: "The existing restrained painterly scene.",
+  },
+  {
+    id: "soft-daylight",
+    label: "Soft illustration",
+    description: "Broad painted shapes with quieter bark detail.",
+  },
+  {
+    id: "airy-watercolor",
+    label: "Watercolor wash",
+    description: "Loose edges, pale pigment, and more paper showing.",
+  },
+  {
+    id: "whiteboard",
+    label: "Marker sketch",
+    description: "Hand-drawn outlines with simple green washes.",
+  },
+  {
+    id: "handmade-clay",
+    label: "Clay model",
+    description: "A playful miniature with simplified surfaces.",
+  },
+];
+
 export const DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism";
 
 export function getAlamoStyle(style: AlamoStyle): AlamoStyleDefinition {
