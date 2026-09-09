@@ -12,6 +12,16 @@ export function ProjectMockup({ project }: { project: Project }) {
     );
   }
 
+  if (project.slug === "psychic") {
+    return (
+      <div className="project-mockup project-mockup--proactive-work">
+        <video className="proactive-work-video" aria-label="Glean proactive intelligence walkthrough" autoPlay disablePictureInPicture loop muted playsInline poster={project.cover.src} preload="metadata">
+          <source src="/work/proactive-intelligence.mp4" type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
+
   if (project.slug === "growth") {
     return (
       <div className="project-mockup project-mockup--growth-work">
