@@ -5227,6 +5227,11 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
   opacity: 1;
 }
 
+html[data-meadow-present="false"] .smiley-cursor {
+  visibility: hidden;
+  opacity: 0 !important;
+}
+
 .smiley-cursor__direction {
   position: relative;
   width: 58px;

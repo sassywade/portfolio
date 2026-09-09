@@ -133,6 +133,13 @@ export function HeroMeadow() {
   }, [heroHighlights]);
 
   useEffect(() => {
+    document.documentElement.dataset.meadowPresent =
+      isSceneVisible && !isStudioStatic ? "true" : "false";
+
+    return () => delete document.documentElement.dataset.meadowPresent;
+  }, [isSceneVisible, isStudioStatic]);
+
+  useEffect(() => {
     if (!isStudioStatic) return;
 
     const interactiveCopy = document.querySelectorAll<HTMLElement>(

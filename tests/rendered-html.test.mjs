@@ -697,6 +697,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /window\.addEventListener\("scroll", schedule, \{ passive: true \}\)/);
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.match(hero, /data-scene-visible/);
+  assert.match(hero, /document\.documentElement\.dataset\.meadowPresent =/);
+  assert.match(hero, /isSceneVisible && !isStudioStatic \? "true" : "false"/);
+  assert.match(css, /html\[data-meadow-present="false"\] \.smiley-cursor\s*\{[^}]*visibility:\s*hidden;[^}]*opacity:\s*0 !important;/);
   assert.match(hero, /rollingMeadow=\{rollingMeadow\}/);
   assert.match(hero, /useState<RollingMeadow>\("original"\)/);
   assert.match(hero, /useState<FlatMeadowTexture>\("fine"\)/);
