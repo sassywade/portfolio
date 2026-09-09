@@ -371,7 +371,7 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden\[data-live="true"\]/);
 });
 
-test("persists the ASCII palette as a portfolio-wide theme", async () => {
+test("keeps the ASCII palette reversible without replacing the white default", async () => {
   const [layout, hero, theme, css, system] = await Promise.all([
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
@@ -381,10 +381,11 @@ test("persists the ASCII palette as a portfolio-wide theme", async () => {
   ]);
 
   assert.match(theme, /neel-portfolio-theme/);
-  assert.match(theme, /document\.documentElement\.dataset\.portfolioTheme = theme/);
+  assert.match(theme, /window\.localStorage\.removeItem/);
+  assert.match(theme, /document\.documentElement\.dataset\.portfolioTheme = "light"/);
   assert.match(layout, /suppressHydrationWarning/);
   assert.match(layout, /PORTFOLIO_THEME_BOOT_SCRIPT/);
-  assert.match(hero, /window\.localStorage\.setItem\(PORTFOLIO_THEME_STORAGE_KEY, nextTheme\)/);
+  assert.doesNotMatch(hero, /window\.localStorage\.setItem/);
   assert.match(hero, /document\.documentElement\.dataset\.portfolioTheme = nextTheme/);
   assert.match(css, /html\[data-portfolio-theme="dark"\]\s*\{[\s\S]*?--paper:\s*#101412;/);
   assert.match(css, /html\[data-portfolio-theme="dark"\] \.site-shell/);
@@ -392,7 +393,8 @@ test("persists the ASCII palette as a portfolio-wide theme", async () => {
   assert.match(css, /html\[data-portfolio-theme="dark"\][\s\S]*?\.play-tile/);
   assert.doesNotMatch(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-bio\s*\{[^}]*font-family/);
   assert.doesNotMatch(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.site-header__wordmark,/);
-  assert.match(system, /saved portfolio-wide appearance preference/);
+  assert.match(system, /always loads in its white, painterly default/);
+  assert.match(system, /must never become the saved default/);
 });
 
 test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {
