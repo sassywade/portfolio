@@ -2608,11 +2608,6 @@ html[data-portfolio-theme="dark"] .play-tile h2 {
   color: var(--ink);
 }
 
-html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--placeholder,
-html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--snap-work,
-html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--homepage-work,
-html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--artifacts-work,
-html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--observability-work,
 html[data-portfolio-theme="dark"] .play-tile {
   background: #1a201d;
 }
