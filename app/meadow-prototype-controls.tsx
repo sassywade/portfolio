@@ -330,6 +330,7 @@ export function MeadowSettings({
             <div className="meadow-settings__scene-options" aria-label="Meadow and tree art direction">
               {MEADOW_TREE_OPTIONS.map(({ id, label, description }) => {
                 const option = getAlamoStyle(id);
+                const isFieldNotes = id === "ascii-field-notes";
 
                 return (
                   <button
@@ -343,11 +344,14 @@ export function MeadowSettings({
                   >
                     <span
                       className="meadow-settings__scene-preview"
-                      style={{
+                      data-scene-preview={isFieldNotes ? "ascii-field-notes" : undefined}
+                      style={isFieldNotes ? undefined : {
                         backgroundImage: `url(${option.treeSrc}), url(${option.rollingSrc})`,
                       }}
                       aria-hidden="true"
-                    />
+                    >
+                      {isFieldNotes && <pre>{"  yvVv\n yVYVYv\n   \\|/\n.,;_||_;,."}</pre>}
+                    </span>
                     <span>{label}</span>
                     <small>{description}</small>
                   </button>
@@ -515,6 +519,11 @@ export function MeadowSettings({
               <div className="meadow-settings__curated-summary">
                 <span>ASCII Garden · checkpoint 1</span>
                 <small>Deterministic glyph meadow · fixed static sprites · paired palettes</small>
+              </div>
+            ) : environmentStyle === "ascii-field-notes" ? (
+              <div className="meadow-settings__curated-summary">
+                <span>ASCII Field Notes</span>
+                <small>Sparse authored glyphs · live wind · existing miniature actions</small>
               </div>
             ) : (
               <div className="meadow-settings__curated-summary">

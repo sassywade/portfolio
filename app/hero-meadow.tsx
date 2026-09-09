@@ -7,6 +7,7 @@ import {
   type AlamoStyle,
 } from "./alamo-styles";
 import { AlamoWeather } from "./alamo-weather";
+import { AsciiFieldNotes } from "./ascii-field-notes";
 import { AsciiGarden, type AsciiGardenTheme } from "./ascii-garden";
 import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
@@ -45,6 +46,7 @@ export function HeroMeadow() {
   const [asciiGardenTheme, setAsciiGardenTheme] = useState<AsciiGardenTheme>("dark");
   const environment = getAlamoStyle(environmentStyle);
   const isAsciiGarden = environmentStyle === "ascii-garden";
+  const isAsciiFieldNotes = environmentStyle === "ascii-field-notes";
   const isStudioStatic = environmentStyle === "studio-static";
 
   useEffect(() => {
@@ -364,6 +366,14 @@ export function HeroMeadow() {
       <div className="hero-meadow__style-atmosphere" aria-hidden="true" />
       {isStudioStatic ? null : isAsciiGarden ? (
         <AsciiGarden theme={asciiGardenTheme} variant={meadowVariant} />
+      ) : isAsciiFieldNotes ? (
+        <AsciiFieldNotes
+          isPlaying={sceneIsPlaying}
+          variant={meadowVariant}
+          wind={wind}
+        >
+          <AlamoWeather onWindUpdate={setWind} />
+        </AsciiFieldNotes>
       ) : (
         <>
           <Meadow

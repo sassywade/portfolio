@@ -42,6 +42,8 @@ The environment frames the introduction and then yields to the work. It should n
 
 Prototype settings are exploratory state. They must remain independent, reversible, and scoped to the hero.
 
+`ASCII Field Notes` is the authored typographic alternative in the Meadow + tree picker. It keeps the painterly scene as the default, reuses the existing wind and miniature-action owners, and simplifies the environment to a sparse rooted cypress, rolling glyph meadow, and generous negative space.
+
 ## 3. Data and rendering ownership
 
 `app/projects.ts` is the content source of truth. Components should render that data rather than duplicating project names, order, links, or metadata. Company grouping lives in `ProjectGrid`; card content lives in `ProjectMockup`; case-study storytelling lives in the shared slug renderer.

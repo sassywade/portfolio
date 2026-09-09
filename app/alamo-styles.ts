@@ -72,6 +72,18 @@ export const ALAMO_STYLES = [
     treeRootOffset: 0,
   },
   {
+    id: "ascii-field-notes",
+    label: "ASCII Field Notes · live prototype",
+    shortLabel: "Field Notes",
+    rollingSrc: null,
+    flatSrc: null,
+    treeSrc: "/monterey-cypress.png",
+    atmosphere: "ascii-field-notes",
+    rollingGroundOffset: 0,
+    flatHorizon: 0,
+    treeRootOffset: 0,
+  },
+  {
     id: "cut-paper",
     label: "Warm cut paper",
     shortLabel: "Cut paper",
@@ -229,6 +241,11 @@ export const MEADOW_TREE_OPTIONS: ReadonlyArray<{
     id: "painterly-realism",
     label: "Current",
     description: "The existing restrained painterly scene.",
+  },
+  {
+    id: "ascii-field-notes",
+    label: "ASCII Field Notes",
+    description: "Sparse type, a rooted tree, and plenty of paper.",
   },
   {
     id: "soft-daylight",

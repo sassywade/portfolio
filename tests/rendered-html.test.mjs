@@ -225,19 +225,21 @@ test("offers the original art directions, the unchanged control, and an isolated
   ];
   const styleCatalog = styles.split("] as const;")[0];
 
-  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 18);
+  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 19);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
   assert.match(styles, /id: "studio-static"[\s\S]*label: "Studio · no meadow"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
+  assert.match(styles, /id: "ascii-field-notes"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
   assert.match(styles, /MEADOW_TREE_OPTIONS/);
   assert.match(styles, /label: "Soft illustration"/);
+  assert.match(styles, /label: "ASCII Field Notes"/);
   assert.match(styles, /label: "Watercolor wash"/);
   assert.match(styles, /label: "Marker sketch"/);
   assert.match(styles, /label: "Clay model"/);
-  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 18);
-  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 18);
-  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 18);
+  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 19);
+  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 19);
+  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 19);
   for (const id of styleIds) {
     assert.match(styles, new RegExp(`id: "${id}"`));
     for (const asset of ["rolling", "flat", "tree"]) {
@@ -324,6 +326,34 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
   assert.match(css, /html\[data-environment-style="ascii-garden"\]\[data-ascii-garden-theme="dark"\]/);
   assert.match(css, /html\[data-environment-style="ascii-garden"\]\[data-ascii-garden-theme="light"\]/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden/);
+});
+
+test("offers an isolated ASCII Field Notes scene with live wind and the shared miniature surface", async () => {
+  const [fieldNotes, hero, picker, css] = await Promise.all([
+    readFile(new URL("../app/ascii-field-notes.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(fieldNotes, /const CANOPY_CLUSTERS = /);
+  assert.match(fieldNotes, /const TREE_WOOD = String\.raw/);
+  assert.match(fieldNotes, /const MEADOW_GLYPHS = String\.raw/);
+  assert.match(fieldNotes, /data-meadow-surface="active"/);
+  assert.match(fieldNotes, /--field-sway-start/);
+  assert.match(fieldNotes, /--field-wind-duration/);
+  assert.doesNotMatch(fieldNotes, /Math\.random|<img\b|requestAnimationFrame/);
+
+  assert.match(hero, /const isAsciiFieldNotes = environmentStyle === "ascii-field-notes"/);
+  assert.match(hero, /<AsciiFieldNotes[\s\S]*?wind=\{wind\}[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>/);
+  assert.match(picker, /data-scene-preview=\{isFieldNotes \? "ascii-field-notes" : undefined\}/);
+  assert.match(picker, /Sparse authored glyphs · live wind · existing miniature actions/);
+
+  assert.match(css, /\.ascii-field-notes__tree\s*\{[\s\S]*?bottom:\s*var\(--ascii-tree-bottom-rolling\)/);
+  assert.match(css, /@keyframes ascii-field-notes-sway/);
+  assert.match(css, /\.ascii-field-notes__meadow\s*\{[\s\S]*?opacity:\s*var\(--meadow-layer-opacity\)/);
+  assert.match(css, /\.ascii-field-notes__underprint\s*\{[\s\S]*?clip-path:\s*polygon/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-field-notes__cluster pre/);
 });
 
 test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {
