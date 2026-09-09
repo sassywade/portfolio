@@ -562,7 +562,10 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   );
   assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*translateY\(-4px\)/);
+  assert.match(css, /Final hover behavior for work tiles: move only the work itself, never the tile/);
+  assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
+  assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.homepage-work-video,[\s\S]*?transform:\s*translateY\(-4px\)/);
+  assert.doesNotMatch(css, /html\[data-portfolio-theme="dark"\] \.pranathi-project-grid \.project-card:hover \.project-mockup/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?align-items:\s*center/);
   assert.match(css, /\.homepage-work-video \{[\s\S]*?width:\s*min\(88%, 480px\)[\s\S]*?aspect-ratio:\s*2588 \/ 1676[\s\S]*?border-radius:\s*4px[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--growth-work \{[\s\S]*?background:\s*#f2f2f2;/);
@@ -572,7 +575,7 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.artifacts-work-image \{[\s\S]*?width:\s*min\(90%, 480px\)[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--observability-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.observability-work-image \{[\s\S]*?width:\s*min\(76%, 420px\)/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*none/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.homepage-work-video,[\s\S]*?transform:\s*none/);
   assert.doesNotMatch(css, /homepage-before-after|homepage-work-image--before/);
   assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
 });
