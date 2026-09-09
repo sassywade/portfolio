@@ -39,6 +39,27 @@ export function ProjectMockup({ project }: { project: Project }) {
     );
   }
 
+  if (project.slug === "growth") {
+    return (
+      <div className="project-mockup project-mockup--growth-work">
+        <span className="project-placeholder__title">{project.title}</span>
+        <video
+          className="growth-work-video"
+          aria-label="Glean onboarding walkthrough"
+          autoPlay
+          disablePictureInPicture
+          loop
+          muted
+          playsInline
+          poster={project.cover.src}
+          preload="metadata"
+        >
+          <source src="/work/onboarding-portfolio.mp4" type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
+
   if (project.slug === "artifacts") {
     return (
       <div className="project-mockup project-mockup--artifacts-work">
