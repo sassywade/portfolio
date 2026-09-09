@@ -8615,15 +8615,15 @@ html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-se
 }
 
 .ascii-garden[data-theme="light"] .ascii-garden__tree {
-  font-weight: 600;
+  font-weight: 650;
 }
 
 .ascii-garden[data-theme="light"] .ascii-garden__tree .ascii-garden__tone--olive {
-  color: #3f5938;
+  color: #304b32;
 }
 
 .ascii-garden[data-theme="light"] .ascii-garden__tree .ascii-garden__tone--rust {
-  color: #bd522f;
+  color: #b94d2c;
 }
 
 .ascii-garden[data-live="true"] .ascii-garden__tree {
