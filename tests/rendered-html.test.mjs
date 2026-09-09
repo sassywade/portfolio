@@ -565,6 +565,7 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /Final hover behavior for work tiles: move only the work itself, never the tile/);
   assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
+  assert.match(css, /\.pranathi-project-grid \.homepage-work-video,[\s\S]*?filter:\s*drop-shadow\(0 7px 12px rgba\(36, 35, 33, 0\.09\)\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.homepage-work-video,[\s\S]*?transform:\s*translateY\(-4px\)/);
   assert.doesNotMatch(css, /html\[data-portfolio-theme="dark"\] \.pranathi-project-grid \.project-card:hover \.project-mockup/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?align-items:\s*center/);

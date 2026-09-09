@@ -12418,6 +12418,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 .pranathi-project-grid .artifacts-work-image,
 .pranathi-project-grid .observability-work-image,
 .pranathi-project-grid .snap-work-image {
+  filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
   transition: transform 180ms var(--motion-ease-out);
 }
 
