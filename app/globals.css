@@ -2573,6 +2573,112 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   background-size: 40px 40px;
 }
 
+/* The ASCII palette picker doubles as the portfolio-wide appearance preference. */
+html[data-portfolio-theme="dark"] {
+  --paper: #101412;
+  --ink: #efe8d8;
+  --muted: #aaa89b;
+  --line: rgba(239, 232, 216, 0.18);
+  --acid: #78a4e8;
+  color-scheme: dark;
+  background: #101412;
+}
+
+html[data-portfolio-theme="dark"] body {
+  background: #101412;
+  color: var(--ink);
+}
+
+html[data-portfolio-theme="dark"] .site-shell {
+  background-color: #101412;
+  background-image:
+    linear-gradient(rgba(238, 232, 216, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 232, 216, 0.035) 1px, transparent 1px),
+    radial-gradient(ellipse at 52% 44%, #151a18 0%, #101412 68%);
+  background-size: 40px 40px, 40px 40px, auto;
+  color: var(--ink);
+}
+
+html[data-portfolio-theme="dark"] .site-header--pages .site-nav,
+html[data-portfolio-theme="dark"] .site-header--pages .site-nav a,
+html[data-portfolio-theme="dark"] .simple-page__copy p,
+html[data-portfolio-theme="dark"] .simple-page__lede,
+html[data-portfolio-theme="dark"] .about-page__identity .about-page__intro p,
+html[data-portfolio-theme="dark"] .play-tile h2 {
+  color: var(--ink);
+}
+
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--placeholder,
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--snap-work,
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--homepage-work,
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--artifacts-work,
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-mockup.project-mockup--observability-work,
+html[data-portfolio-theme="dark"] .play-tile {
+  background: #1a201d;
+}
+
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-card:hover .project-mockup,
+html[data-portfolio-theme="dark"] .pranathi-project-grid .project-card:focus-visible .project-mockup {
+  box-shadow: 0 17px 28px rgba(0, 0, 0, 0.2);
+}
+
+html[data-portfolio-theme="dark"] .about-page__portrait-card,
+html[data-portfolio-theme="dark"] .about-page__gallery-track .film-photo__paper {
+  border-color: rgba(239, 232, 216, 0.16);
+  background: #1a201d;
+}
+
+html[data-portfolio-theme="dark"] .case-study-shell.case-story {
+  background: #101412 !important;
+  color: var(--ink);
+}
+
+html[data-portfolio-theme="dark"] .case-story-introduction h2,
+html[data-portfolio-theme="dark"] .case-story-chapter h2,
+html[data-portfolio-theme="dark"] .case-story-reflection h2,
+html[data-portfolio-theme="dark"] .case-story-team div p:last-child,
+html[data-portfolio-theme="dark"] .case-story-rail a:hover,
+html[data-portfolio-theme="dark"] .case-story-rail a:focus-visible,
+html[data-portfolio-theme="dark"] .case-story-rail__back {
+  color: var(--ink) !important;
+}
+
+html[data-portfolio-theme="dark"] .case-story-introduction > p,
+html[data-portfolio-theme="dark"] .case-story-chapter__copy > p:last-child,
+html[data-portfolio-theme="dark"] .case-story-team p,
+html[data-portfolio-theme="dark"] .case-story-label,
+html[data-portfolio-theme="dark"] .case-story-media figcaption,
+html[data-portfolio-theme="dark"] .case-story-next span,
+html[data-portfolio-theme="dark"] .case-story-rail a {
+  color: var(--muted);
+}
+
+html[data-portfolio-theme="dark"] .case-story-team,
+html[data-portfolio-theme="dark"] .case-story-reflection,
+html[data-portfolio-theme="dark"] .case-story-next {
+  border-color: var(--line);
+}
+
+html[data-portfolio-theme="dark"] .case-story-media__frame {
+  background: #1a201d;
+}
+
+html[data-portfolio-theme="dark"] .smiley-cursor__asset,
+html[data-portfolio-theme="dark"] .top-pet-pull__frame {
+  filter: invert(1) sepia(0.12);
+}
+
+html[data-portfolio-theme="dark"] .top-pet-pull {
+  background: #101412;
+}
+
+@media (max-width: 720px) {
+  html[data-portfolio-theme="dark"] .case-story-rail {
+    border-color: var(--line);
+    background: rgba(16, 20, 18, 0.94);
+  }
+}
+
 /* The live ASCII study stays paper-white and figure-free. */
 .ascii-garden[data-live="true"] .ascii-garden__underprint,
 .ascii-garden[data-live="true"] .ascii-garden__sprite {

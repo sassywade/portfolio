@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import { PhilipToggle } from "./philip-toggle";
+import { PORTFOLIO_THEME_BOOT_SCRIPT } from "./portfolio-theme";
 import { Soundscape } from "./soundscape";
 
 const newsreader = Newsreader({
@@ -76,7 +77,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: PORTFOLIO_THEME_BOOT_SCRIPT }} />
+      </head>
       <body className={`${newsreader.variable} ${geist.variable} ${geistMono.variable} antialiased`}>
         <Soundscape />
         {children}

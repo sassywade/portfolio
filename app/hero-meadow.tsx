@@ -13,6 +13,7 @@ import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type FlatMeadowTexture, type MeadowVariant, type RollingMeadow } from "./meadow";
 import { MeadowSettings } from "./meadow-prototype-controls";
+import { PORTFOLIO_THEME_STORAGE_KEY } from "./portfolio-theme";
 import { DEFAULT_TOP_PET_MODE, type TopPetMode } from "./top-pet";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
 
@@ -49,6 +50,13 @@ export function HeroMeadow() {
   const isAsciiFieldNotes = environmentStyle === "ascii-field-notes";
   const isAsciiScene = isAsciiGarden || isAsciiFieldNotes;
   const isStudioStatic = environmentStyle === "studio-static";
+
+  useEffect(() => {
+    const savedTheme = document.documentElement.dataset.portfolioTheme;
+    if (savedTheme === "dark" || savedTheme === "light") {
+      setAsciiGardenTheme(savedTheme);
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.topPetMode = topPetMode;
@@ -336,6 +344,12 @@ export function HeroMeadow() {
 
   const handleAsciiGardenThemeChange = (nextTheme: AsciiGardenTheme) => {
     setAsciiGardenTheme(nextTheme);
+    document.documentElement.dataset.portfolioTheme = nextTheme;
+    try {
+      window.localStorage.setItem(PORTFOLIO_THEME_STORAGE_KEY, nextTheme);
+    } catch {
+      // The current page still updates when storage is unavailable.
+    }
     if (isAsciiScene && atmosphere !== "grid") {
       setAtmosphere(nextTheme === "dark" ? "night" : "day");
     }

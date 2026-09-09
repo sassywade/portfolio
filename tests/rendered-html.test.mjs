@@ -362,6 +362,28 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden\[data-live="true"\]/);
 });
 
+test("persists the ASCII palette as a portfolio-wide theme", async () => {
+  const [layout, hero, theme, css, system] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/portfolio-theme.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../docs/portfolio-system.md", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(theme, /neel-portfolio-theme/);
+  assert.match(theme, /document\.documentElement\.dataset\.portfolioTheme = theme/);
+  assert.match(layout, /suppressHydrationWarning/);
+  assert.match(layout, /PORTFOLIO_THEME_BOOT_SCRIPT/);
+  assert.match(hero, /window\.localStorage\.setItem\(PORTFOLIO_THEME_STORAGE_KEY, nextTheme\)/);
+  assert.match(hero, /document\.documentElement\.dataset\.portfolioTheme = nextTheme/);
+  assert.match(css, /html\[data-portfolio-theme="dark"\]\s*\{[\s\S]*?--paper:\s*#101412;/);
+  assert.match(css, /html\[data-portfolio-theme="dark"\] \.site-shell/);
+  assert.match(css, /html\[data-portfolio-theme="dark"\] \.case-study-shell\.case-story/);
+  assert.match(css, /html\[data-portfolio-theme="dark"\][\s\S]*?\.play-tile/);
+  assert.match(system, /saved portfolio-wide appearance preference/);
+});
+
 test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
