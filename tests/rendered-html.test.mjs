@@ -561,7 +561,7 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
     "the final placeholder rule must win over the generic transparent-card rule",
   );
   assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
-  assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-size:\s*clamp\(14px, 1vw, 16px\)/);
+  assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-size:\s*clamp\(13px, 0\.9vw, 15px\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /Final hover behavior for work tiles: move only the work itself, never the tile/);
   assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
