@@ -355,6 +355,8 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(garden, /Math\.sin\(Math\.PI \* progress\)[\s\S]*?Math\.exp\(-1\.6 \* progress\)/);
   assert.match(garden, /FOLIAGE_EDGE_GLYPHS/);
   assert.match(garden, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT/);
+  assert.match(garden, /const breeze = 4\.8 \+ \(wind\?\.breeze \?\? 0\.35\) \* 5\.2/);
+  assert.match(garden, /\{!live \? \([\s\S]*?ascii-garden__sprite--cyclist[\s\S]*?ascii-garden__details[\s\S]*?\) : null\}/);
   assert.match(smiley, /actor: "\.cypress-tree__canvas, \.ascii-garden__tree"/);
 
   assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__tree/);

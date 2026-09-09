@@ -77,7 +77,11 @@ const PIXEL_STANDING = "\n\n\n\n            iiii\n          hhhhhs\n         hhh
 const PIXEL_CYCLIST = "\n\n\n\n\n                             i\n                           iiiiii\n                           iiiiii\n                            ssrsr\n                      iiiiiiirssr\n                    iiibbbbbbbsr\n                    ibbbbbbbbb\n                  iibbbbbbbbbr\n                 iibbbbbbbbbbrr\n                 iibbbbbbbbbrrr\n                 ibbbbbbbbbrrrrsrrrii\n                 ii     iirr rrrrrrii\n                    ii   rsr  ri rri\n                   ii iirrsriiiiir\n                    ci  rrsr  iii   i\n                    cciirsr  iiii iiiiii\n             iiiiiiiiiiirsiici iiii    iii\n            iiii   iiiiissiiiiii ii    iii\n           ii     iiiiiissiii ii  iii ii ii\n           ii   iii   iiiiii  i     ii   ii\n          ii  iiiii   iiiiii  i iii iiii  i\n          ii iiiiiiiiiiiiii   iiii  i ii ii\n           ii iiii   iiiiiii  hi  i     ii\n           iiiiiii   iiiiiii   iiii   iiii       h\n            iii ii  ii          iiiiiiii    s ss\n         s    iiiiiiis r  rr r  i\n         s  r  iiiiiss r  rr r\n            r       rr          s  r     r\n\n                  s    h\n                    rr h";
 
 
-const CYPRESS_FOLIAGE_ROWS = CYPRESS_FOLIAGE.split("\n");
+const CYPRESS_FOLIAGE_SOURCE_ROWS = CYPRESS_FOLIAGE.split("\n");
+const CYPRESS_FOLIAGE_WIDTH = Math.max(...CYPRESS_FOLIAGE_SOURCE_ROWS.map((row) => row.length)) + 4;
+const CYPRESS_FOLIAGE_ROWS = CYPRESS_FOLIAGE_SOURCE_ROWS.map((row) => (
+  row.padEnd(CYPRESS_FOLIAGE_WIDTH, " ")
+));
 
 const DETAILS: Detail[] = [
   { glyph: "Y\n|", tone: "olive", x: "8%", bottom: "20%" },
@@ -173,7 +177,7 @@ function morphFoliageRow(
   }
 
   const phase = Math.sin(step * 0.71 + rowIndex * 1.83);
-  const threshold = 0.72 - Math.min(0.34, energy * 0.26);
+  const threshold = 0.78 - Math.min(0.46, energy * 0.4);
   if (first < 0 || last < 0 || Math.abs(phase) < threshold) return source;
 
   const movingRight = phase * direction > 0;
@@ -209,9 +213,9 @@ function AsciiTree({
 
     const rows = [...tree.querySelectorAll<HTMLElement>(".ascii-garden__foliage-row")];
     const direction = (wind?.direction ?? 0.6) < 0 ? -1 : 1;
-    const breeze = 0.34 + (wind?.breeze ?? 0.35) * 0.72;
-    const gustiness = 0.12 + (wind?.gust ?? 0.2) * 0.48;
-    const angularSpeed = 0.00042 + (wind?.tempo ?? 0.35) * 0.00028;
+    const breeze = 4.8 + (wind?.breeze ?? 0.35) * 5.2;
+    const gustiness = 0.8 + (wind?.gust ?? 0.2) * 0.9;
+    const angularSpeed = 0.00062 + (wind?.tempo ?? 0.35) * 0.00024;
     let frame = 0;
     let lastGlyphStep = -1;
 
@@ -231,7 +235,7 @@ function AsciiTree({
       const petImpulse = progress < 1
         ? gust.direction
           * gust.strength
-          * 18
+          * 28
           * Math.sin(Math.PI * progress)
           * Math.exp(-1.6 * progress)
           * (0.78 + 0.22 * Math.sin(4.5 * Math.PI * progress))
@@ -243,15 +247,15 @@ function AsciiTree({
           + 0.32 * Math.sin(time * angularSpeed * 1.73 + 1.2)
         );
       const totalWind = ambient + petImpulse;
-      const energy = Math.abs(totalWind) + gustiness;
+      const energy = Math.min(1, Math.abs(totalWind) / 10 + gustiness / 4);
       const glyphStep = Math.floor(time / 165);
 
       rows.forEach((row, rowIndex) => {
         const height = 1 - rowIndex / Math.max(1, rows.length - 1);
         const bend = Math.pow(height, 1.55);
-        const branchFlutter = gustiness * Math.sin(time * 0.0011 + rowIndex * 1.37);
-        const x = bend * (totalWind + branchFlutter);
-        const rotation = bend * totalWind * 0.055;
+        const branchFlutter = bend * gustiness * Math.sin(time * 0.00145 + rowIndex * 1.37);
+        const x = bend * totalWind + branchFlutter;
+        const rotation = bend * totalWind * 0.075;
         row.style.transform = "translate3d(" + x.toFixed(2) + "px, 0, 0) rotate(" + rotation.toFixed(3) + "deg)";
 
         if (glyphStep !== lastGlyphStep) {
@@ -266,7 +270,7 @@ function AsciiTree({
       });
 
       lastGlyphStep = glyphStep;
-      tree.style.transform = "translate3d(0, var(--tree-layer-y), 0) rotate(" + (totalWind * 0.035).toFixed(3) + "deg)";
+      tree.style.transform = "translate3d(0, var(--tree-layer-y), 0) rotate(" + (totalWind * 0.07).toFixed(3) + "deg)";
       frame = requestAnimationFrame(animate);
     };
 
@@ -333,7 +337,9 @@ export function AsciiGarden({
       data-meadow-variant={variant}
       style={style}
       role="img"
-      aria-label="An authored ASCII garden at Alamo Square with a Monterey cypress, a cyclist, a standing photographer, a backpacker, flowers, and small creatures."
+      aria-label={live
+        ? "An authored ASCII garden at Alamo Square with a wind-swept Monterey cypress."
+        : "An authored ASCII garden at Alamo Square with a Monterey cypress, a cyclist, a standing photographer, a backpacker, flowers, and small creatures."}
     >
       <AsciiTree isPlaying={isPlaying} live={live} wind={wind} />
 
@@ -349,6 +355,8 @@ export function AsciiGarden({
         />
       </div>
 
+      {!live ? (
+        <>
       <PixelSprite
         className="ascii-garden__sprite ascii-garden__sprite--backpacker"
         map={PIXEL_BACKPACKER}
@@ -377,6 +385,8 @@ export function AsciiGarden({
           </pre>
         ))}
       </div>
+        </>
+      ) : null}
       {children}
     </div>
   );
