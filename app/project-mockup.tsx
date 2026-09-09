@@ -21,7 +21,6 @@ export function ProjectMockup({ project }: { project: Project }) {
   if (project.slug === "homepage") {
     return (
       <div className="project-mockup project-mockup--homepage-work">
-        <span className="project-placeholder__title">{project.title}</span>
         <video
           className="homepage-work-video"
           aria-label="Glean homepage redesign walkthrough"
@@ -33,7 +32,7 @@ export function ProjectMockup({ project }: { project: Project }) {
           poster={project.cover.src}
           preload="metadata"
         >
-          <source src="/work/homepage-portfolio.mp4" type="video/mp4" />
+          <source src="/work/home-tile-experiment.mp4" type="video/mp4" />
         </video>
       </div>
     );
