@@ -355,7 +355,7 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__ground/);
   assert.match(css, /\.ascii-garden\[data-live="true"\] > \.alamo-weather/);
   assert.match(css, /\.alamo-weather__ascii-primary/);
-  assert.match(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-bio/);
+  assert.match(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-intro/);
   assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__underprint,[\s\S]*?\.ascii-garden\[data-live="true"\] \.ascii-garden__sprite[\s\S]*?display:\s*none/);
   assert.match(css, /html\[data-ascii-garden-live="true"\] \.smiley-cursor/);
   assert.match(css, /\.site-shell\[data-ascii-garden-live="true"\]\[data-ascii-garden-theme="light"\][\s\S]*?background-color:\s*#ffffff/);
@@ -381,6 +381,8 @@ test("persists the ASCII palette as a portfolio-wide theme", async () => {
   assert.match(css, /html\[data-portfolio-theme="dark"\] \.site-shell/);
   assert.match(css, /html\[data-portfolio-theme="dark"\] \.case-study-shell\.case-story/);
   assert.match(css, /html\[data-portfolio-theme="dark"\][\s\S]*?\.play-tile/);
+  assert.doesNotMatch(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-bio\s*\{[^}]*font-family/);
+  assert.doesNotMatch(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.site-header__wordmark,/);
   assert.match(system, /saved portfolio-wide appearance preference/);
 });
 

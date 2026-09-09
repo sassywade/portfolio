@@ -9047,17 +9047,6 @@ html[data-environment-style="ascii-garden"]:not([data-atmosphere="grid"]) .alamo
   width: min(100% - 48px, 812px);
 }
 
-.site-shell[data-environment-style="ascii-garden"] .pranathi-bio {
-  font-family: var(--ascii-mono);
-  font-size: clamp(16px, 1.1vw, 19px);
-  line-height: 1.72;
-}
-
-.site-shell[data-environment-style="ascii-garden"] .site-header__wordmark,
-.site-shell[data-environment-style="ascii-garden"] .site-nav {
-  font-family: var(--font-newsreader), Georgia, serif;
-}
-
 html[data-environment-style="ascii-garden"][data-ascii-garden-theme="dark"] .bike-word,
 html[data-environment-style="ascii-garden"][data-ascii-garden-theme="dark"] .photo-word,
 html[data-environment-style="ascii-garden"][data-ascii-garden-theme="dark"] .backpack-word {
