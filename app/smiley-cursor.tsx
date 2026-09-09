@@ -183,7 +183,7 @@ export function SmileyCursor() {
         backpacker: { layer: '.backpack-walk-layer[data-phase="walk"]', actor: ".mini-hiker" },
         cyclist: { layer: '.bike-ride-layer[data-phase="ride"]', actor: ".bike-rider" },
         photographer: { layer: '.photo-drop-layer[data-phase="shoot"]', actor: ".mini-photographer" },
-        cypress: { layer: '.hero-meadow[data-scene-visible="true"]', actor: ".cypress-tree__canvas" },
+        cypress: { layer: '.hero-meadow[data-scene-visible="true"]', actor: ".cypress-tree__canvas, .ascii-garden__tree" },
       };
       const selector = selectors[kind];
       const layer = document.querySelector<HTMLElement>(selector.layer);

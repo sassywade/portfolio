@@ -1,4 +1,6 @@
-import type { CSSProperties, ReactNode } from "react";
+"use client";
+
+import { type CSSProperties, type ReactNode, useEffect, useRef } from "react";
 import type { MeadowVariant } from "./meadow";
 import type { WindSettings } from "./wind";
 
@@ -54,6 +56,15 @@ type PixelSpriteStyle = CSSProperties & {
   "--pixel-rows": number;
 };
 
+type PetGustDetail = {
+  direction?: -1 | 1;
+  duration?: number;
+  strength?: number;
+};
+
+const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
+const FOLIAGE_EDGE_GLYPHS = ["v", "y", "w", "u", ";", ",", "."] as const;
+
 // These fixed matrices are sampled once from the approved composition, then
 // committed as authored glyph maps. Nothing is generated or randomized in the
 // browser, so both palettes always render the exact same scene.
@@ -65,6 +76,8 @@ const PIXEL_BACKPACKER = "\n\n\n                     rhhhi\n                    
 const PIXEL_STANDING = "\n\n\n\n            iiii\n          hhhhhs\n         hhhhhrsr\n         hhhhsssr\n           rrrrr\n           iss\n          isssi\n          hisiii\n          siisss\n          rrirsii\n          siiiiii\n          srsssrri\n          rrsssrrr\n          iirrsiii\n          rririii\n          rriisii\n          iiirrii\n          iirrsii\n          iirrii\n          cciiii\n          ccccc\n          cccccc\n          cccccc\n          cccccc\n          ccccc\n          cbccc\n          bbccc\n          ccccc\n          ccbcc\n          ccccc\n          iiicii\n          iiiirisi\n          siiisisr\n                  ss\n           r      ss\n           r\n             r\n             r\n                  rr";
 const PIXEL_CYCLIST = "\n\n\n\n\n                             i\n                           iiiiii\n                           iiiiii\n                            ssrsr\n                      iiiiiiirssr\n                    iiibbbbbbbsr\n                    ibbbbbbbbb\n                  iibbbbbbbbbr\n                 iibbbbbbbbbbrr\n                 iibbbbbbbbbrrr\n                 ibbbbbbbbbrrrrsrrrii\n                 ii     iirr rrrrrrii\n                    ii   rsr  ri rri\n                   ii iirrsriiiiir\n                    ci  rrsr  iii   i\n                    cciirsr  iiii iiiiii\n             iiiiiiiiiiirsiici iiii    iii\n            iiii   iiiiissiiiiii ii    iii\n           ii     iiiiiissiii ii  iii ii ii\n           ii   iii   iiiiii  i     ii   ii\n          ii  iiiii   iiiiii  i iii iiii  i\n          ii iiiiiiiiiiiiii   iiii  i ii ii\n           ii iiii   iiiiiii  hi  i     ii\n           iiiiiii   iiiiiii   iiii   iiii       h\n            iii ii  ii          iiiiiiii    s ss\n         s    iiiiiiis r  rr r  i\n         s  r  iiiiiss r  rr r\n            r       rr          s  r     r\n\n                  s    h\n                    rr h";
 
+
+const CYPRESS_FOLIAGE_ROWS = CYPRESS_FOLIAGE.split("\n");
 
 const DETAILS: Detail[] = [
   { glyph: "Y\n|", tone: "olive", x: "8%", bottom: "20%" },
@@ -140,6 +153,159 @@ function PixelSprite({ className, map }: { className: string; map: string }) {
   );
 }
 
+function morphFoliageRow(
+  source: string,
+  rowIndex: number,
+  step: number,
+  direction: number,
+  energy: number,
+) {
+  if (!source.trim() || energy < 0.2) return source || "\u00a0";
+
+  const characters = [...source];
+  const first = characters.findIndex((character) => character !== " ");
+  let last = -1;
+  for (let index = characters.length - 1; index >= 0; index -= 1) {
+    if (characters[index] !== " ") {
+      last = index;
+      break;
+    }
+  }
+
+  const phase = Math.sin(step * 0.71 + rowIndex * 1.83);
+  const threshold = 0.72 - Math.min(0.34, energy * 0.26);
+  if (first < 0 || last < 0 || Math.abs(phase) < threshold) return source;
+
+  const movingRight = phase * direction > 0;
+  const arrivingEdge = movingRight ? first - 1 : last + 1;
+  const leavingEdge = movingRight ? last : first;
+  const glyph = FOLIAGE_EDGE_GLYPHS[
+    Math.abs(step * 5 + rowIndex * 3) % FOLIAGE_EDGE_GLYPHS.length
+  ];
+
+  if (arrivingEdge >= 0 && arrivingEdge < characters.length) {
+    characters[arrivingEdge] = glyph;
+  }
+  if ((step + rowIndex) % 3 !== 0) {
+    characters[leavingEdge] = " ";
+  }
+
+  return characters.join("");
+}
+
+function AsciiTree({
+  isPlaying,
+  live,
+  wind,
+}: Pick<AsciiGardenProps, "isPlaying" | "live" | "wind">) {
+  const treeRef = useRef<HTMLSpanElement>(null);
+  const gustRef = useRef({ direction: 1, duration: 0, startedAt: 0, strength: 0 });
+
+  useEffect(() => {
+    const tree = treeRef.current;
+    if (!tree || !live || !isPlaying || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const rows = [...tree.querySelectorAll<HTMLElement>(".ascii-garden__foliage-row")];
+    const direction = (wind?.direction ?? 0.6) < 0 ? -1 : 1;
+    const breeze = 0.34 + (wind?.breeze ?? 0.35) * 0.72;
+    const gustiness = 0.12 + (wind?.gust ?? 0.2) * 0.48;
+    const angularSpeed = 0.00042 + (wind?.tempo ?? 0.35) * 0.00028;
+    let frame = 0;
+    let lastGlyphStep = -1;
+
+    const receivePetGust = (event: Event) => {
+      const detail = (event as CustomEvent<PetGustDetail>).detail;
+      gustRef.current = {
+        direction: detail?.direction ?? 1,
+        duration: detail?.duration ?? 1500,
+        startedAt: performance.now(),
+        strength: detail?.strength ?? 0.92,
+      };
+    };
+
+    const animate = (time: number) => {
+      const gust = gustRef.current;
+      const progress = gust.duration > 0 ? Math.min(1, (time - gust.startedAt) / gust.duration) : 1;
+      const petImpulse = progress < 1
+        ? gust.direction
+          * gust.strength
+          * 18
+          * Math.sin(Math.PI * progress)
+          * Math.exp(-1.6 * progress)
+          * (0.78 + 0.22 * Math.sin(4.5 * Math.PI * progress))
+        : 0;
+      const ambient = direction
+        * breeze
+        * (
+          0.68 * Math.sin(time * angularSpeed)
+          + 0.32 * Math.sin(time * angularSpeed * 1.73 + 1.2)
+        );
+      const totalWind = ambient + petImpulse;
+      const energy = Math.abs(totalWind) + gustiness;
+      const glyphStep = Math.floor(time / 165);
+
+      rows.forEach((row, rowIndex) => {
+        const height = 1 - rowIndex / Math.max(1, rows.length - 1);
+        const bend = Math.pow(height, 1.55);
+        const branchFlutter = gustiness * Math.sin(time * 0.0011 + rowIndex * 1.37);
+        const x = bend * (totalWind + branchFlutter);
+        const rotation = bend * totalWind * 0.055;
+        row.style.transform = "translate3d(" + x.toFixed(2) + "px, 0, 0) rotate(" + rotation.toFixed(3) + "deg)";
+
+        if (glyphStep !== lastGlyphStep) {
+          row.textContent = morphFoliageRow(
+            CYPRESS_FOLIAGE_ROWS[rowIndex] ?? "",
+            rowIndex,
+            glyphStep,
+            Math.sign(totalWind) || direction,
+            energy,
+          );
+        }
+      });
+
+      lastGlyphStep = glyphStep;
+      tree.style.transform = "translate3d(0, var(--tree-layer-y), 0) rotate(" + (totalWind * 0.035).toFixed(3) + "deg)";
+      frame = requestAnimationFrame(animate);
+    };
+
+    tree.dataset.motionReady = "true";
+    window.addEventListener(PET_BLOW_CYPRESS_EVENT, receivePetGust);
+    frame = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener(PET_BLOW_CYPRESS_EVENT, receivePetGust);
+      delete tree.dataset.motionReady;
+      tree.style.removeProperty("transform");
+      rows.forEach((row, rowIndex) => {
+        row.style.removeProperty("transform");
+        row.textContent = CYPRESS_FOLIAGE_ROWS[rowIndex] || "\u00a0";
+      });
+    };
+  }, [isPlaying, live, wind]);
+
+  return (
+    <span
+      className="ascii-garden__glyph-stack ascii-garden__tree"
+      ref={treeRef}
+      aria-hidden="true"
+    >
+      <span className="ascii-garden__foliage ascii-garden__tone--olive">
+        {CYPRESS_FOLIAGE_ROWS.map((row, index) => (
+          <span className="ascii-garden__foliage-row" key={index}>
+            {row || "\u00a0"}
+          </span>
+        ))}
+      </span>
+      <pre className="ascii-garden__glyph-layer ascii-garden__tone--rust">
+        {CYPRESS_WOOD}
+      </pre>
+    </span>
+  );
+}
+
 export function AsciiGarden({
   children,
   isPlaying = false,
@@ -169,13 +335,7 @@ export function AsciiGarden({
       role="img"
       aria-label="An authored ASCII garden at Alamo Square with a Monterey cypress, a cyclist, a standing photographer, a backpacker, flowers, and small creatures."
     >
-      <GlyphStack
-        className="ascii-garden__tree"
-        layers={[
-          { map: CYPRESS_FOLIAGE, tone: "olive" },
-          { map: CYPRESS_WOOD, tone: "rust" },
-        ]}
-      />
+      <AsciiTree isPlaying={isPlaying} live={live} wind={wind} />
 
       <div
         className="ascii-garden__ground"

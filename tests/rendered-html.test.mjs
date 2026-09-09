@@ -305,7 +305,7 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
   assert.match(garden, /b: "blue"/);
   assert.match(garden, /data-theme=\{theme\}/);
   assert.match(garden, /data-meadow-variant=\{variant\}/);
-  assert.doesNotMatch(garden, /Math\.random|<img\b|requestAnimationFrame/);
+  assert.doesNotMatch(garden, /Math\.random|<img\b/);
 
   assert.match(hero, /useState<AsciiGardenTheme>\("light"\)/);
   assert.match(hero, /const isAsciiGarden = environmentStyle === "ascii-garden"/);
@@ -330,10 +330,12 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
 });
 
 test("offers the full ASCII Garden reference as a live light and dark scene", async () => {
-  const [fieldNotes, hero, picker, css] = await Promise.all([
+  const [fieldNotes, garden, hero, picker, smiley, css] = await Promise.all([
     readFile(new URL("../app/ascii-field-notes.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/ascii-garden.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
@@ -349,6 +351,11 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(hero, /<AsciiFieldNotes[\s\S]*?theme=\{asciiGardenTheme\}[\s\S]*?wind=\{wind\}[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>/);
   assert.match(picker, /data-scene-preview=\{isFieldNotes \? "ascii-field-notes" : undefined\}/);
   assert.match(picker, /Dense authored glyphs · paired palettes · live wind and miniature actions/);
+  assert.match(garden, /Math\.pow\(height, 1\.55\)/);
+  assert.match(garden, /Math\.sin\(Math\.PI \* progress\)[\s\S]*?Math\.exp\(-1\.6 \* progress\)/);
+  assert.match(garden, /FOLIAGE_EDGE_GLYPHS/);
+  assert.match(garden, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT/);
+  assert.match(smiley, /actor: "\.cypress-tree__canvas, \.ascii-garden__tree"/);
 
   assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__tree/);
   assert.match(css, /@keyframes ascii-garden-tree-sway/);
@@ -357,7 +364,7 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(css, /\.alamo-weather__ascii-primary/);
   assert.match(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-intro/);
   assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__underprint,[\s\S]*?\.ascii-garden\[data-live="true"\] \.ascii-garden__sprite[\s\S]*?display:\s*none/);
-  assert.match(css, /html\[data-ascii-garden-live="true"\] \.smiley-cursor/);
+  assert.doesNotMatch(css, /html\[data-ascii-garden-live="true"\] \.smiley-cursor/);
   assert.match(css, /\.site-shell\[data-ascii-garden-live="true"\]\[data-ascii-garden-theme="light"\][\s\S]*?background-color:\s*#ffffff/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden\[data-live="true"\]/);
 });
@@ -825,7 +832,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /portfolio:pet-blow-cyclist/);
   assert.match(smiley, /portfolio:pet-blow-photographer/);
   assert.match(smiley, /portfolio:pet-blow-cypress/);
-  assert.match(smiley, /cypress: \{ layer: '\.hero-meadow\[data-scene-visible="true"\]', actor: "\.cypress-tree__canvas" \}/);
+  assert.match(smiley, /cypress: \{ layer: '\.hero-meadow\[data-scene-visible="true"\]', actor: "\.cypress-tree__canvas, \.ascii-garden__tree" \}/);
   assert.match(smiley, /cypress: 54/);
   assert.match(smiley, /cursor\.dataset\.miniature = "approach"/);
   assert.match(smiley, /cursor\.dataset\.miniature = "blow"/);

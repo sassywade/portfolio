@@ -2688,7 +2688,6 @@ html[data-portfolio-theme="dark"] .top-pet-pull {
 .hero-meadow[data-environment-style="ascii-field-notes"] > .bike-ride-layer,
 .hero-meadow[data-environment-style="ascii-field-notes"] > .photo-drop-layer,
 .hero-meadow[data-environment-style="ascii-field-notes"] > .backpack-walk-layer,
-html[data-ascii-garden-live="true"] .smiley-cursor,
 html[data-ascii-garden-live="true"] .top-pet-pull {
   display: none !important;
 }
@@ -8734,6 +8733,23 @@ html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-se
   white-space: pre;
 }
 
+.ascii-garden__foliage {
+  grid-area: 1 / 1;
+  display: block;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  white-space: pre;
+}
+
+.ascii-garden__foliage-row {
+  display: block;
+  height: 0.91em;
+  transform-origin: 52% 100%;
+  will-change: transform;
+}
+
 .ascii-garden__tone--ink { color: var(--ascii-ink); }
 .ascii-garden__tone--olive { color: var(--ascii-olive); }
 .ascii-garden__tone--olive-soft { color: var(--ascii-olive-soft); }
@@ -8775,6 +8791,10 @@ html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-se
   filter: blur(var(--tree-dissolve-blur));
   animation: ascii-garden-tree-sway var(--ascii-wind-duration) var(--motion-ease-in-out) infinite alternate;
   will-change: transform, opacity, filter;
+}
+
+.ascii-garden[data-live="true"] .ascii-garden__tree[data-motion-ready="true"] {
+  animation: none;
 }
 
 @keyframes ascii-garden-tree-sway {
