@@ -2561,6 +2561,44 @@ em {
   }
 }
 
+html[data-environment-style="ascii-garden"][data-ascii-garden-live="true"][data-ascii-garden-theme="light"] {
+  --paper: #ffffff;
+}
+
+html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-garden"][data-ascii-garden-theme="light"] {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(73, 72, 63, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(73, 72, 63, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* The live ASCII study stays paper-white and figure-free. */
+.ascii-garden[data-live="true"] .ascii-garden__underprint,
+.ascii-garden[data-live="true"] .ascii-garden__sprite {
+  display: none;
+}
+
+.hero-meadow[data-environment-style="ascii-field-notes"] > .bike-ride-layer,
+.hero-meadow[data-environment-style="ascii-field-notes"] > .photo-drop-layer,
+.hero-meadow[data-environment-style="ascii-field-notes"] > .backpack-walk-layer,
+html[data-ascii-garden-live="true"] .smiley-cursor,
+html[data-ascii-garden-live="true"] .top-pet-pull {
+  display: none !important;
+}
+
+html[data-ascii-garden-live="true"][data-ascii-garden-theme="light"] {
+  --paper: #ffffff;
+}
+
+.site-shell[data-ascii-garden-live="true"][data-ascii-garden-theme="light"] {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(73, 72, 63, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(73, 72, 63, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
 /* ASCII Field Notes: one sparse typographic language with a rooted, wind-responsive tree. */
 .ascii-field-notes {
   --field-paper: #f6f0e3;
@@ -12720,4 +12758,16 @@ html[data-atmosphere="grid"] .ascii-garden {
   .about-page__experience-description {
     grid-column: 1;
   }
+}
+
+html[data-environment-style="ascii-garden"][data-ascii-garden-live="true"][data-ascii-garden-theme="light"] {
+  --paper: #ffffff;
+}
+
+html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-garden"][data-ascii-garden-theme="light"] {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(73, 72, 63, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(73, 72, 63, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
 }

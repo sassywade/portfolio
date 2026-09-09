@@ -77,10 +77,16 @@ export function HeroMeadow() {
     const visualStyle = isAsciiFieldNotes ? "ascii-garden" : environmentStyle;
     shell.dataset.environmentStyle = visualStyle;
     document.documentElement.dataset.environmentStyle = visualStyle;
+    if (isAsciiFieldNotes) {
+      shell.dataset.asciiGardenLive = "true";
+      document.documentElement.dataset.asciiGardenLive = "true";
+    }
 
     return () => {
       delete shell.dataset.environmentStyle;
       delete document.documentElement.dataset.environmentStyle;
+      delete shell.dataset.asciiGardenLive;
+      delete document.documentElement.dataset.asciiGardenLive;
     };
   }, [environmentStyle, isAsciiFieldNotes]);
 

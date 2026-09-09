@@ -345,6 +345,7 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
 
   assert.match(hero, /const isAsciiFieldNotes = environmentStyle === "ascii-field-notes"/);
   assert.match(hero, /const isAsciiScene = isAsciiGarden \|\| isAsciiFieldNotes/);
+  assert.match(hero, /document\.documentElement\.dataset\.asciiGardenLive = "true"/);
   assert.match(hero, /<AsciiFieldNotes[\s\S]*?theme=\{asciiGardenTheme\}[\s\S]*?wind=\{wind\}[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>/);
   assert.match(picker, /data-scene-preview=\{isFieldNotes \? "ascii-field-notes" : undefined\}/);
   assert.match(picker, /Dense authored glyphs · paired palettes · live wind and miniature actions/);
@@ -355,6 +356,9 @@ test("offers the full ASCII Garden reference as a live light and dark scene", as
   assert.match(css, /\.ascii-garden\[data-live="true"\] > \.alamo-weather/);
   assert.match(css, /\.alamo-weather__ascii-primary/);
   assert.match(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-bio/);
+  assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__underprint,[\s\S]*?\.ascii-garden\[data-live="true"\] \.ascii-garden__sprite[\s\S]*?display:\s*none/);
+  assert.match(css, /html\[data-ascii-garden-live="true"\] \.smiley-cursor/);
+  assert.match(css, /\.site-shell\[data-ascii-garden-live="true"\]\[data-ascii-garden-theme="light"\][\s\S]*?background-color:\s*#ffffff/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden\[data-live="true"\]/);
 });
 

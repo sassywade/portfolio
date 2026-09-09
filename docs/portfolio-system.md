@@ -42,7 +42,7 @@ The environment frames the introduction and then yields to the work. It should n
 
 Prototype settings are exploratory state. They must remain independent, reversible, and scoped to the hero.
 
-`ASCII Garden · live` is the authored typographic alternative in the Meadow + tree picker. It keeps the painterly scene as the default while reusing the dense cypress, textured rolling field, miniature figures, and paired light/dark palettes from the approved visual references. Live wind, hobby actions, and the hero-to-work handoff remain owned by the existing interaction system.
+`ASCII Garden · live` is the authored typographic alternative in the Meadow + tree picker. It keeps the painterly scene as the default while reusing the dense cypress, textured rolling field, and paired light/dark palettes from the approved visual references. Its light palette stays on a white grid with no solid meadow fill, and the prototype currently hides all miniature people and pet characters. Live wind and the hero-to-work handoff remain owned by the existing interaction system.
 
 ## 3. Data and rendering ownership
 
