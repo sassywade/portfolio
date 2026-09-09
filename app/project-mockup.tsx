@@ -74,7 +74,7 @@ export function ProjectMockup({ project }: { project: Project }) {
           poster={project.cover.src}
           preload="metadata"
         >
-          <source src="/work/artifacts-portfolio.mp4" type="video/mp4" />
+          <source src="/work/artifacts-final-portfolio.mp4" type="video/mp4" />
         </video>
       </div>
     );

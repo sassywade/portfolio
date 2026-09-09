@@ -511,7 +511,7 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectMockup, /src="\/work\/onboarding-portfolio\.mp4" type="video\/mp4"/);
   assert.match(projectMockup, /project\.slug === "artifacts"/);
   assert.match(projectMockup, /<video[\s\S]*className="artifacts-work-image"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/artifacts-portfolio\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /src="\/work\/artifacts-final-portfolio\.mp4" type="video\/mp4"/);
   assert.match(projects, /src: "\/work\/glean-artifacts\.png"/);
   assert.match(projectMockup, /project\.slug === "agent-observability"/);
   assert.match(projectMockup, /className="observability-work-image"/);
