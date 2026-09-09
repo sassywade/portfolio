@@ -3143,7 +3143,7 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
 .project-placeholder__title {
   color: var(--ink);
   font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(15px, 1.25vw, 18px);
+  font-size: clamp(14px, 1vw, 16px);
   font-weight: 450;
   letter-spacing: -0.02em;
   line-height: 1.2;
