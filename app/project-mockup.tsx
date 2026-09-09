@@ -64,14 +64,19 @@ export function ProjectMockup({ project }: { project: Project }) {
     return (
       <div className="project-mockup project-mockup--artifacts-work">
         <span className="project-placeholder__title">{project.title}</span>
-        <Image
+        <video
           className="artifacts-work-image"
-          src={project.cover.src}
-          alt={project.cover.alt}
-          width={1085}
-          height={744}
-          sizes="(max-width: 700px) 86vw, (max-width: 1100px) 46vw, 480px"
-        />
+          aria-label="Glean Artifacts walkthrough"
+          autoPlay
+          disablePictureInPicture
+          loop
+          muted
+          playsInline
+          poster={project.cover.src}
+          preload="metadata"
+        >
+          <source src="/work/artifacts-portfolio.mp4" type="video/mp4" />
+        </video>
       </div>
     );
   }
