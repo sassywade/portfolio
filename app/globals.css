@@ -12026,31 +12026,17 @@ html[data-atmosphere="grid"] .ascii-garden {
   background: #f2f2f2;
 }
 
-.homepage-work-comparison {
-  position: relative;
+.homepage-work-video {
+  display: block;
   flex: 0 0 auto;
   width: min(88%, 480px);
-  aspect-ratio: 1280 / 912;
-  isolation: isolate;
-}
-
-.homepage-work-image {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 2588 / 1676;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #ffffff;
   object-fit: contain;
   object-position: center;
-}
-
-.homepage-work-image--after {
-  z-index: 1;
-}
-
-.homepage-work-image--before {
-  z-index: 2;
-  opacity: 0;
 }
 
 /* Artifacts uses the supplied product view as a complete, centered screen. */
@@ -12094,31 +12080,6 @@ html[data-atmosphere="grid"] .ascii-garden {
   margin-top: clamp(16px, 2vw, 26px);
   object-fit: contain;
   object-position: top center;
-}
-
-@keyframes homepage-before-after {
-  0%,
-  12%,
-  100% {
-    opacity: 0;
-  }
-
-  44%,
-  60% {
-    opacity: 1;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .pranathi-project-grid .project-card:hover .homepage-work-image--before {
-    animation: homepage-before-after 2400ms var(--motion-ease-in-out) 450ms both;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pranathi-project-grid .project-card:hover .homepage-work-image--before {
-    animation: none;
-  }
 }
 
 @media (min-width: 1080px) {

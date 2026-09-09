@@ -500,8 +500,9 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectMockup, /project-mockup--placeholder/);
   assert.match(projectMockup, /project-placeholder__title/);
   assert.match(projectMockup, /project\.slug === "homepage"/);
-  assert.match(projectMockup, /className="homepage-work-image homepage-work-image--after"/);
-  assert.match(projectMockup, /src="\/work\/glean-homepage-before\.png"/);
+  assert.match(projectMockup, /<video[\s\S]*className="homepage-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
+  assert.match(projectMockup, /poster=\{project\.cover\.src\}/);
+  assert.match(projectMockup, /src="\/work\/homepage-portfolio\.mov" type="video\/quicktime"/);
   assert.match(projects, /src: "\/work\/glean-homepage-redesign\.png"/);
   assert.match(projectMockup, /project\.slug === "artifacts"/);
   assert.match(projectMockup, /className="artifacts-work-image"/);
@@ -557,15 +558,14 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*translateY\(-4px\)/);
-  assert.match(css, /\.project-card:hover \.homepage-work-image--before\s*\{[\s\S]*?animation:\s*homepage-before-after 2400ms var\(--motion-ease-in-out\) 450ms both/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?align-items:\s*center/);
-  assert.match(css, /\.homepage-work-comparison \{[\s\S]*?width:\s*min\(88%, 480px\)[\s\S]*?aspect-ratio:\s*1280 \/ 912/);
+  assert.match(css, /\.homepage-work-video \{[\s\S]*?width:\s*min\(88%, 480px\)[\s\S]*?aspect-ratio:\s*2588 \/ 1676[\s\S]*?border-radius:\s*4px[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--artifacts-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.artifacts-work-image \{[\s\S]*?width:\s*min\(90%, 480px\)[\s\S]*?object-fit:\s*contain/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--observability-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.observability-work-image \{[\s\S]*?width:\s*min\(76%, 420px\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup\s*\{[\s\S]*?transform:\s*none/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.project-card:hover \.homepage-work-image--before\s*\{[\s\S]*?animation:\s*none/);
+  assert.doesNotMatch(css, /homepage-before-after|homepage-work-image--before/);
   assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
 });
 
