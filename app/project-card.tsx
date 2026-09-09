@@ -29,7 +29,6 @@ export function ProjectCard({ project }: { project: Project }) {
         }
       >
         <ProjectMockup project={project} />
-        <span className="project-card__label">{project.title}</span>
       </a>
     </Reveal>
   );

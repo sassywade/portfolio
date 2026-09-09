@@ -11976,21 +11976,33 @@ html[data-atmosphere="grid"] .ascii-garden {
 /* Keep unfinished projects visible as simple placeholder tiles. */
 .pranathi-project-grid .project-mockup.project-mockup--placeholder {
   display: flex;
-  padding: 0;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 34px);
   border-radius: clamp(18px, 2vw, 28px);
   background: #f2f2f2;
 }
 
-.pranathi-project-grid .project-card__label {
-  display: block;
-  margin-top: 12px;
-  padding: 0 2px;
-  color: var(--ink);
+.project-video-label {
+  position: absolute;
+  z-index: 1;
+  top: clamp(20px, 2.5vw, 30px);
+  left: 50%;
+  color: var(--muted);
   font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(13px, 0.9vw, 15px);
   font-weight: 450;
   letter-spacing: -0.02em;
   line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 180ms var(--motion-ease-out);
+  white-space: nowrap;
+}
+
+.project-mockup[data-label-visible] .project-video-label {
+  opacity: 1;
 }
 
 .pranathi-project-grid .project-work-image {
@@ -12455,6 +12467,10 @@ html[data-atmosphere="grid"] .ascii-garden {
   .pranathi-project-grid .growth-work-video,
   .pranathi-project-grid .observability-work-image,
   .pranathi-project-grid .snap-work-image {
+    transition: none;
+  }
+
+  .project-video-label {
     transition: none;
   }
 

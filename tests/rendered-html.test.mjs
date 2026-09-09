@@ -474,10 +474,11 @@ test("uses an immersive case-study hero with a persistent chapter rail", async (
 });
 
 test("groups the supplied case studies into quiet Glean and Snap tiles", async () => {
-  const [projects, projectCard, projectMockup, caseStudy, hero, prototype, css] = await Promise.all([
+  const [projects, projectCard, projectMockup, projectVideoTile, caseStudy, hero, prototype, css] = await Promise.all([
     readFile(new URL("../app/projects.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/project-card.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/project-mockup.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/project-video-tile.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/case-studies/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
@@ -500,19 +501,23 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projects, /sourcePdf: "\/case-studies\/agent-observability\/brief\.pdf"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
   assert.match(projectMockup, /project-mockup--placeholder/);
-  assert.doesNotMatch(projectMockup, /project-placeholder__title/);
-  assert.match(projectCard, /<ProjectMockup project=\{project\} \/>[\s\S]*?<span className="project-card__label">\{project\.title\}<\/span>/);
+  assert.match(projectMockup, /project-placeholder__title/);
+  assert.doesNotMatch(projectCard, /project-card__label/);
   assert.match(projectMockup, /project\.slug === "homepage"/);
-  assert.match(projectMockup, /<video[\s\S]*className="homepage-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /poster=\{project\.cover\.src\}/);
-  assert.match(projectMockup, /src="\/work\/homepage-ss\.mp4" type="video\/mp4"/);
+  assert.match(projectVideoTile, /<video[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
+  assert.match(projectVideoTile, /poster=\{poster\}/);
+  assert.match(projectMockup, /source="\/work\/homepage-ss\.mp4"/);
+  assert.match(projectMockup, /wideWindows=\{\[\[0, 1\.25\], \[8, 10\.5\], \[14, 17\]\]\}/);
   assert.match(projects, /src: "\/work\/glean-homepage-redesign\.png"/);
   assert.match(projectMockup, /project\.slug === "growth"/);
   assert.match(projectMockup, /<video[\s\S]*className="growth-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
   assert.match(projectMockup, /src="\/work\/onboarding-portfolio\.mp4" type="video\/mp4"/);
   assert.match(projectMockup, /project\.slug === "artifacts"/);
-  assert.match(projectMockup, /<video[\s\S]*className="artifacts-work-image"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/artifacts-ss\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /source="\/work\/artifacts-ss\.mp4"/);
+  assert.match(projectMockup, /wideWindows=\{\[\[0, 4\.5\], \[14, 17\]\]\}/);
+  assert.match(projectVideoTile, /onTimeUpdate=\{\(event\) => syncLabel\(event\.currentTarget\)\}/);
+  assert.match(projectVideoTile, /toggleAttribute\("data-label-visible", isWide\)/);
+  assert.match(projectVideoTile, /<span className="project-video-label" aria-hidden="true">\{label\}<\/span>/);
   assert.match(projects, /src: "\/work\/glean-artifacts\.png"/);
   assert.match(projectMockup, /project\.slug === "agent-observability"/);
   assert.match(projectMockup, /className="observability-work-image"/);
@@ -562,8 +567,8 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
       css.lastIndexOf(".pranathi-project-grid .project-mockup {\n  background: transparent;"),
     "the final placeholder rule must win over the generic transparent-card rule",
   );
-  assert.match(css, /\.pranathi-project-grid \.project-card__label \{[\s\S]*?margin-top:\s*12px[\s\S]*?font-family:\s*var\(--font-geist\)/);
-  assert.match(css, /\.pranathi-project-grid \.project-card__label \{[\s\S]*?font-size:\s*clamp\(13px, 0\.9vw, 15px\)/);
+  assert.match(css, /\.project-video-label \{[\s\S]*?position:\s*absolute[\s\S]*?font-family:\s*var\(--font-geist\)[\s\S]*?opacity:\s*0[\s\S]*?transition:\s*opacity 180ms var\(--motion-ease-out\)/);
+  assert.match(css, /\.project-mockup\[data-label-visible\] \.project-video-label \{[\s\S]*?opacity:\s*1/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /Final hover behavior for work tiles: lift the full-bleed video tiles/);
   assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
@@ -595,7 +600,8 @@ test("documents the portfolio's durable design and change contract", async () =>
   ]);
 
   assert.match(agentContract, /Prefer the smallest complete change/);
-  assert.match(agentContract, /Every project title sits beneath and outside its tile/);
+  assert.match(agentContract, /Titles sit inside their tiles/);
+  assert.match(agentContract, /title is visible only while the recording shows its wide composition/);
   assert.match(agentContract, /inspect the final matching rule/);
   assert.match(designDoc, /Quiet on arrival\. Playful on discovery\. Simple everywhere\./);
   assert.match(designDoc, /Treat Alamo Square as a place, not a theme park/);
