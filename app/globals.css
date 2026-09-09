@@ -12402,10 +12402,15 @@ html[data-atmosphere="grid"] .ascii-garden {
   }
 }
 
-/* Final hover behavior for work tiles: move only the work itself, never the tile. */
+/* Final hover behavior for work tiles: lift the full-bleed homepage tile; move only
+   the inset mock for the remaining projects. */
 .pranathi-project-grid .project-card .project-mockup {
   box-shadow: none;
   transform: none;
+}
+
+.pranathi-project-grid .project-mockup.project-mockup--homepage-work {
+  transition: transform 180ms var(--motion-ease-out);
 }
 
 .pranathi-project-grid .growth-work-video,
@@ -12422,20 +12427,20 @@ html[data-atmosphere="grid"] .ascii-garden {
     transform: none;
   }
 
-  .pranathi-project-grid .project-card:hover .homepage-work-video,
+  .pranathi-project-grid .project-card:hover .project-mockup--homepage-work {
+    transform: translateY(-4px);
+  }
+
   .pranathi-project-grid .project-card:hover .growth-work-video,
   .pranathi-project-grid .project-card:hover .artifacts-work-image,
   .pranathi-project-grid .project-card:hover .observability-work-image,
   .pranathi-project-grid .project-card:hover .snap-work-image {
     transform: translateY(-4px);
   }
-
-  .pranathi-project-grid .project-card:hover .homepage-work-video {
-    transform: scale(1.008);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pranathi-project-grid .project-mockup.project-mockup--homepage-work,
   .pranathi-project-grid .homepage-work-video,
   .pranathi-project-grid .growth-work-video,
   .pranathi-project-grid .artifacts-work-image,
@@ -12444,7 +12449,7 @@ html[data-atmosphere="grid"] .ascii-garden {
     transition: none;
   }
 
-  .pranathi-project-grid .project-card:hover .homepage-work-video,
+  .pranathi-project-grid .project-card:hover .project-mockup--homepage-work,
   .pranathi-project-grid .project-card:hover .growth-work-video,
   .pranathi-project-grid .project-card:hover .artifacts-work-image,
   .pranathi-project-grid .project-card:hover .observability-work-image,
