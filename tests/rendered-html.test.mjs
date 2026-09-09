@@ -571,8 +571,9 @@ test("groups six featured projects into quiet Glean and Snap tiles", async () =>
     "the final placeholder rule must win over the generic transparent-card rule",
   );
   assert.doesNotMatch(css, /\.project-video-label|data-label-visible/);
-  assert.match(css, /\.project-card__info \{[\s\S]*?padding:\s*12px 4px 0[\s\S]*?font-family:\s*var\(--font-geist\)/);
-  assert.match(css, /\.project-card__info h4 \{[\s\S]*?font-size:\s*clamp\(13px, 0\.9vw, 15px\)[\s\S]*?font-weight:\s*600/);
+  assert.match(css, /\.pranathi-project-grid \{[\s\S]*?row-gap:\s*clamp\(50px, 5vw, 68px\)/);
+  assert.match(css, /\.project-card__info \{[\s\S]*?padding:\s*18px 4px 0[\s\S]*?font-family:\s*var\(--font-geist\)/);
+  assert.match(css, /\.project-card__info h4 \{[\s\S]*?font-size:\s*clamp\(15px, 1\.05vw, 17px\)[\s\S]*?font-weight:\s*600/);
   assert.match(css, /\.project-card__info p \{[\s\S]*?color:\s*var\(--muted\)[\s\S]*?font-size:\s*clamp\(12px, 0\.82vw, 14px\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /Final hover behavior for work tiles: lift the full-bleed video tiles/);
