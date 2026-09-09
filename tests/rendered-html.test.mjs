@@ -500,18 +500,19 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projects, /sourcePdf: "\/case-studies\/agent-observability\/brief\.pdf"/);
   assert.match(projectCard, /<ProjectMockup project=\{project\} \/>/);
   assert.match(projectMockup, /project-mockup--placeholder/);
-  assert.match(projectMockup, /project-placeholder__title/);
+  assert.doesNotMatch(projectMockup, /project-placeholder__title/);
+  assert.match(projectCard, /<ProjectMockup project=\{project\} \/>[\s\S]*?<span className="project-card__label">\{project\.title\}<\/span>/);
   assert.match(projectMockup, /project\.slug === "homepage"/);
   assert.match(projectMockup, /<video[\s\S]*className="homepage-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
   assert.match(projectMockup, /poster=\{project\.cover\.src\}/);
-  assert.match(projectMockup, /src="\/work\/home-tile-experiment\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /src="\/work\/homepage-ss\.mp4" type="video\/mp4"/);
   assert.match(projects, /src: "\/work\/glean-homepage-redesign\.png"/);
   assert.match(projectMockup, /project\.slug === "growth"/);
   assert.match(projectMockup, /<video[\s\S]*className="growth-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
   assert.match(projectMockup, /src="\/work\/onboarding-portfolio\.mp4" type="video\/mp4"/);
   assert.match(projectMockup, /project\.slug === "artifacts"/);
   assert.match(projectMockup, /<video[\s\S]*className="artifacts-work-image"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/artifacts-final-portfolio\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /src="\/work\/artifacts-ss\.mp4" type="video\/mp4"/);
   assert.match(projects, /src: "\/work\/glean-artifacts\.png"/);
   assert.match(projectMockup, /project\.slug === "agent-observability"/);
   assert.match(projectMockup, /className="observability-work-image"/);
@@ -522,7 +523,7 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
   assert.match(projectMockup, /project\.category\.includes\("Snap"\)/);
   assert.match(projectMockup, /className="snap-work-image"/);
   assert.match(projectMockup, /src=\{project\.cover\.src\}/);
-  assert.doesNotMatch(projectMockup, /project-card__title|project-card__caption|project-card__arrow|project-mockup__wash/);
+  assert.doesNotMatch(projectMockup, /project-card__label|project-card__title|project-card__caption|project-card__arrow|project-mockup__wash/);
   assert.match(projectCard, /id="work-group-glean"/);
   assert.match(projectCard, /id="work-group-snap"/);
   assert.match(projectCard, /"homepage",[\s\S]*"psychic",[\s\S]*"artifacts",[\s\S]*"growth",[\s\S]*"agent-observability",[\s\S]*"workspace-admin-console-actions"/);
@@ -561,27 +562,27 @@ test("groups the supplied case studies into quiet Glean and Snap tiles", async (
       css.lastIndexOf(".pranathi-project-grid .project-mockup {\n  background: transparent;"),
     "the final placeholder rule must win over the generic transparent-card rule",
   );
-  assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-family:\s*var\(--font-geist\)/);
-  assert.match(css, /\.project-placeholder__title \{[\s\S]*?font-size:\s*clamp\(13px, 0\.9vw, 15px\)/);
+  assert.match(css, /\.pranathi-project-grid \.project-card__label \{[\s\S]*?margin-top:\s*12px[\s\S]*?font-family:\s*var\(--font-geist\)/);
+  assert.match(css, /\.pranathi-project-grid \.project-card__label \{[\s\S]*?font-size:\s*clamp\(13px, 0\.9vw, 15px\)/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(css, /Final hover behavior for work tiles: lift the full-bleed homepage tile/);
+  assert.match(css, /Final hover behavior for work tiles: lift the full-bleed video tiles/);
   assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?padding:\s*0;[\s\S]*?filter:\s*drop-shadow\(0 7px 12px rgba\(36, 35, 33, 0\.09\)\)/);
-  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work \{[\s\S]*?transition:\s*transform 180ms var\(--motion-ease-out\)/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--homepage-work,[\s\S]*?\.project-mockup--artifacts-work \{[\s\S]*?transition:\s*transform 180ms var\(--motion-ease-out\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.growth-work-video,[\s\S]*?transform:\s*translateY\(-4px\)/);
   assert.doesNotMatch(css, /html\[data-portfolio-theme="dark"\] \.pranathi-project-grid \.project-card:hover \.project-mockup/);
   assert.match(css, /\.homepage-work-video \{[\s\S]*?width:\s*100%[\s\S]*?height:\s*100%[\s\S]*?border-radius:\s*inherit[\s\S]*?object-fit:\s*cover/);
-  assert.match(css, /\.project-card:hover \.project-mockup--homepage-work \{[\s\S]*?transform:\s*translateY\(-4px\)/);
+  assert.match(css, /\.project-card:hover \.project-mockup--homepage-work,[\s\S]*?\.project-card:hover \.project-mockup--artifacts-work \{[\s\S]*?transform:\s*translateY\(-4px\)/);
   assert.doesNotMatch(css, /\.project-card:hover \.homepage-work-video/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--growth-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.growth-work-video \{[\s\S]*?width:\s*min\(94%, 500px\)[\s\S]*?aspect-ratio:\s*2588 \/ 1676[\s\S]*?border-radius:\s*4px[\s\S]*?object-fit:\s*contain/);
   assert.doesNotMatch(css, /html\[data-portfolio-theme="dark"\] \.pranathi-project-grid \.project-mockup/);
-  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--artifacts-work \{[\s\S]*?background:\s*#f2f2f2;/);
-  assert.match(css, /\.artifacts-work-image \{[\s\S]*?width:\s*min\(96%, 500px\)[\s\S]*?object-fit:\s*contain/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--artifacts-work \{[\s\S]*?padding:\s*0;[\s\S]*?background:\s*#ffffff;[\s\S]*?filter:\s*drop-shadow/);
+  assert.match(css, /\.artifacts-work-image \{[\s\S]*?width:\s*100%[\s\S]*?height:\s*100%[\s\S]*?border-radius:\s*inherit[\s\S]*?object-fit:\s*cover/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--observability-work \{[\s\S]*?background:\s*#f2f2f2;/);
   assert.match(css, /\.observability-work-image \{[\s\S]*?width:\s*min\(82%, 450px\)/);
   assert.match(css, /\.snap-work-image \{[\s\S]*?max-width:\s*min\(78%, 400px\)/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup--homepage-work,[\s\S]*?transform:\s*none/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.project-card:hover \.project-mockup--homepage-work,[\s\S]*?\.project-card:hover \.project-mockup--artifacts-work,[\s\S]*?transform:\s*none/);
   assert.doesNotMatch(css, /homepage-before-after|homepage-work-image--before/);
   assert.doesNotMatch(css, /project-mockup__wash|project-card__caption|project-card__arrow|project-card__title/);
 });
@@ -594,7 +595,7 @@ test("documents the portfolio's durable design and change contract", async () =>
   ]);
 
   assert.match(agentContract, /Prefer the smallest complete change/);
-  assert.match(agentContract, /Never leave title-only empty space/);
+  assert.match(agentContract, /Every project title sits beneath and outside its tile/);
   assert.match(agentContract, /inspect the final matching rule/);
   assert.match(designDoc, /Quiet on arrival\. Playful on discovery\. Simple everywhere\./);
   assert.match(designDoc, /Treat Alamo Square as a place, not a theme park/);

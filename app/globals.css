@@ -11976,11 +11976,21 @@ html[data-atmosphere="grid"] .ascii-garden {
 /* Keep unfinished projects visible as simple placeholder tiles. */
 .pranathi-project-grid .project-mockup.project-mockup--placeholder {
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: clamp(24px, 3vw, 34px);
+  padding: 0;
   border-radius: clamp(18px, 2vw, 28px);
   background: #f2f2f2;
+}
+
+.pranathi-project-grid .project-card__label {
+  display: block;
+  margin-top: 12px;
+  padding: 0 2px;
+  color: var(--ink);
+  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(13px, 0.9vw, 15px);
+  font-weight: 450;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .pranathi-project-grid .project-work-image {
@@ -12009,7 +12019,7 @@ html[data-atmosphere="grid"] .ascii-garden {
   object-fit: contain;
 }
 
-/* Homepage experiment: the supplied recording is the complete tile. */
+/* Homepage and Artifacts use their supplied recordings as the complete tiles. */
 .pranathi-project-grid .project-mockup.project-mockup--homepage-work {
   display: block;
   padding: 0;
@@ -12054,24 +12064,23 @@ html[data-atmosphere="grid"] .ascii-garden {
   object-position: center;
 }
 
-/* Artifacts uses the supplied product view as a complete, centered screen. */
+/* Artifacts uses the supplied recording edge to edge. */
 .pranathi-project-grid .project-mockup.project-mockup--artifacts-work {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: clamp(22px, 2.5vw, 30px) clamp(22px, 3vw, 32px) clamp(18px, 2vw, 24px);
+  display: block;
+  padding: 0;
+  overflow: hidden;
   border-radius: clamp(18px, 2vw, 28px);
-  background: #f2f2f2;
+  background: #ffffff;
+  filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
 }
 
 .artifacts-work-image {
   display: block;
-  flex: 0 0 auto;
-  width: min(96%, 500px);
-  height: auto;
-  margin-top: clamp(20px, 2.5vw, 30px);
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #ffffff;
+  object-fit: cover;
   object-position: center;
 }
 
@@ -12402,19 +12411,19 @@ html[data-atmosphere="grid"] .ascii-garden {
   }
 }
 
-/* Final hover behavior for work tiles: lift the full-bleed homepage tile; move only
+/* Final hover behavior for work tiles: lift the full-bleed video tiles; move only
    the inset mock for the remaining projects. */
 .pranathi-project-grid .project-card .project-mockup {
   box-shadow: none;
   transform: none;
 }
 
-.pranathi-project-grid .project-mockup.project-mockup--homepage-work {
+.pranathi-project-grid .project-mockup.project-mockup--homepage-work,
+.pranathi-project-grid .project-mockup.project-mockup--artifacts-work {
   transition: transform 180ms var(--motion-ease-out);
 }
 
 .pranathi-project-grid .growth-work-video,
-.pranathi-project-grid .artifacts-work-image,
 .pranathi-project-grid .observability-work-image,
 .pranathi-project-grid .snap-work-image {
   filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
@@ -12427,12 +12436,12 @@ html[data-atmosphere="grid"] .ascii-garden {
     transform: none;
   }
 
-  .pranathi-project-grid .project-card:hover .project-mockup--homepage-work {
+  .pranathi-project-grid .project-card:hover .project-mockup--homepage-work,
+  .pranathi-project-grid .project-card:hover .project-mockup--artifacts-work {
     transform: translateY(-4px);
   }
 
   .pranathi-project-grid .project-card:hover .growth-work-video,
-  .pranathi-project-grid .project-card:hover .artifacts-work-image,
   .pranathi-project-grid .project-card:hover .observability-work-image,
   .pranathi-project-grid .project-card:hover .snap-work-image {
     transform: translateY(-4px);
@@ -12441,17 +12450,17 @@ html[data-atmosphere="grid"] .ascii-garden {
 
 @media (prefers-reduced-motion: reduce) {
   .pranathi-project-grid .project-mockup.project-mockup--homepage-work,
+  .pranathi-project-grid .project-mockup.project-mockup--artifacts-work,
   .pranathi-project-grid .homepage-work-video,
   .pranathi-project-grid .growth-work-video,
-  .pranathi-project-grid .artifacts-work-image,
   .pranathi-project-grid .observability-work-image,
   .pranathi-project-grid .snap-work-image {
     transition: none;
   }
 
   .pranathi-project-grid .project-card:hover .project-mockup--homepage-work,
+  .pranathi-project-grid .project-card:hover .project-mockup--artifacts-work,
   .pranathi-project-grid .project-card:hover .growth-work-video,
-  .pranathi-project-grid .project-card:hover .artifacts-work-image,
   .pranathi-project-grid .project-card:hover .observability-work-image,
   .pranathi-project-grid .project-card:hover .snap-work-image {
     transform: none;

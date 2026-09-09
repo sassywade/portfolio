@@ -18,7 +18,7 @@ When something feels wrong, first adjust scale, spacing, hierarchy, or removal. 
 
 ### 2. Let the work speak for itself
 
-Project cards are large, quiet stages for screenshots. Their default state is a light-gray rounded tile with a modest title and no supporting caption, arrow, color wash, or invented graphic. Supplied work should be shown fully with `object-fit: contain`, never cropped for drama.
+Project cards are large, quiet stages for screenshots. Every project title sits beneath and outside its tile, with no supporting caption, arrow, color wash, or invented graphic. Their default unfinished state is a substantial light-gray rounded tile. Full-tile recordings may use `object-fit: cover`; inset product screens should use `object-fit: contain`.
 
 The work grid uses two columns on desktop and one column when space becomes tight. The rhythm should feel generous but not sparse: company label, a deliberate pause, then substantial cards with consistent gaps.
 

@@ -5,7 +5,6 @@ export function ProjectMockup({ project }: { project: Project }) {
   if (project.slug === "agent-observability") {
     return (
       <div className="project-mockup project-mockup--observability-work">
-        <span className="project-placeholder__title">{project.title}</span>
         <Image
           className="observability-work-image"
           src={project.cover.src}
@@ -32,7 +31,7 @@ export function ProjectMockup({ project }: { project: Project }) {
           poster={project.cover.src}
           preload="metadata"
         >
-          <source src="/work/home-tile-experiment.mp4" type="video/mp4" />
+          <source src="/work/homepage-ss.mp4" type="video/mp4" />
         </video>
       </div>
     );
@@ -41,7 +40,6 @@ export function ProjectMockup({ project }: { project: Project }) {
   if (project.slug === "growth") {
     return (
       <div className="project-mockup project-mockup--growth-work">
-        <span className="project-placeholder__title">{project.title}</span>
         <video
           className="growth-work-video"
           aria-label="Glean onboarding walkthrough"
@@ -62,7 +60,6 @@ export function ProjectMockup({ project }: { project: Project }) {
   if (project.slug === "artifacts") {
     return (
       <div className="project-mockup project-mockup--artifacts-work">
-        <span className="project-placeholder__title">{project.title}</span>
         <video
           className="artifacts-work-image"
           aria-label="Glean Artifacts walkthrough"
@@ -74,7 +71,7 @@ export function ProjectMockup({ project }: { project: Project }) {
           poster={project.cover.src}
           preload="metadata"
         >
-          <source src="/work/artifacts-final-portfolio.mp4" type="video/mp4" />
+          <source src="/work/artifacts-ss.mp4" type="video/mp4" />
         </video>
       </div>
     );
@@ -83,7 +80,6 @@ export function ProjectMockup({ project }: { project: Project }) {
   if (project.category.includes("Snap")) {
     return (
       <div className="project-mockup project-mockup--snap-work">
-        <span className="project-placeholder__title">{project.title}</span>
         <Image
           className="snap-work-image"
           src={project.cover.src}
@@ -97,8 +93,6 @@ export function ProjectMockup({ project }: { project: Project }) {
   }
 
   return (
-    <div className={`project-mockup project-mockup--${project.theme} project-mockup--placeholder`}>
-      <span className="project-placeholder__title">{project.title}</span>
-    </div>
+    <div className={`project-mockup project-mockup--${project.theme} project-mockup--placeholder`} />
   );
 }

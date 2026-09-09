@@ -15,7 +15,7 @@ The site should feel personal, calm, editorial, and lightly playful. The work mu
 - The homepage background is white with the subtle studio grid.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.
-- Work is a two-column grid by default. Unfinished projects render as substantial light-gray rounded tiles with only the project title. Never leave title-only empty space.
+- Work is a two-column grid by default. Every project title sits beneath and outside its tile. Unfinished projects remain substantial light-gray rounded tiles with their external title; never leave title-only empty space.
 - Glean order: Homepage redesign, Proactive intelligence, Artifacts, Growth, Agent observability, Enterprise setup. Snap follows with Treasure and NFTs as Lenses.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
