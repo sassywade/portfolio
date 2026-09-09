@@ -55,7 +55,7 @@ The default homepage should remain server-renderable. Client components are rese
 - White space is structural, not empty decoration.
 - Text color is the warm gray system ink (`#65625f` family).
 - Grid lines stay subtle and disappear on case-study pages.
-- Work tiles are quiet containers for future screenshots. Titles sit inside the tile; full-video titles are synchronized to the wide moments and hidden during close-ups. Until a real cover is supplied, keep the tile substantial and light gray.
+- Work tiles are quiet containers for future screenshots. A compact title and one-line description sit below each tile. The homepage shows four Glean projects followed by two Snap projects. Until a real cover is supplied, keep the tile substantial and light gray.
 - Project imagery should use `object-fit: contain`; never crop supplied work.
 - Use color sparingly for real brand marks and explicit interactive affordances.
 

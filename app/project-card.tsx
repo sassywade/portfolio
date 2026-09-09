@@ -7,8 +7,6 @@ const gleanProjectOrder = [
   "psychic",
   "artifacts",
   "growth",
-  "agent-observability",
-  "workspace-admin-console-actions",
 ] as const;
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -29,6 +27,10 @@ export function ProjectCard({ project }: { project: Project }) {
         }
       >
         <ProjectMockup project={project} />
+        <div className="project-card__info">
+          <h4>{project.title}</h4>
+          {project.cardDescription ? <p>{project.cardDescription}</p> : null}
+        </div>
       </a>
     </Reveal>
   );
@@ -36,7 +38,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
 export function ProjectGrid({ items = projects }: { items?: Project[] }) {
   const gleanProjects = items
-    .filter((project) => project.category.includes("Glean"))
+    .filter((project) => gleanProjectOrder.includes(project.slug as typeof gleanProjectOrder[number]))
     .sort((a, b) => gleanProjectOrder.indexOf(a.slug as typeof gleanProjectOrder[number]) - gleanProjectOrder.indexOf(b.slug as typeof gleanProjectOrder[number]));
   const snapProjects = items.filter((project) => project.category.includes("Snap"));
 

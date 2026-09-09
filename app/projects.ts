@@ -18,6 +18,7 @@ export type Project = {
   slug: string;
   title: string;
   description: string;
+  cardDescription?: string;
   category: string;
   year: string;
   theme: ProjectTheme;
@@ -56,25 +57,11 @@ const briefPages = (slug: string, title: string, count: number): CaseStudyArtifa
 
 export const projects: Project[] = [
   {
-    number: "01",
-    slug: "agent-observability",
-    title: "Agent observability",
-    description: "Making agent behavior understandable.",
-    category: "Product design · Glean",
-    year: "2025",
-    theme: "signal",
-    cover: {
-      src: "/work/glean-agent-observability.png",
-      alt: "Glean agent observability debug trace showing nested agent steps",
-      caption: "Agent observability",
-      kind: "screen",
-    },
-  },
-  {
-    number: "02",
+    number: "03",
     slug: "artifacts",
     title: "Artifacts",
     description: "From zero to nearly 200K weekly active users.",
+    cardDescription: "Creating content from chats",
     category: "Product design · Glean",
     year: "2025",
     theme: "ground",
@@ -86,10 +73,11 @@ export const projects: Project[] = [
     },
   },
   {
-    number: "03",
+    number: "04",
     slug: "growth",
     title: "Growth",
     description: "Helping users move from trying Glean to returning to it.",
+    cardDescription: "How do you make Glean a habit?",
     category: "Growth product design · Glean",
     year: "2025",
     theme: "field",
@@ -101,10 +89,11 @@ export const projects: Project[] = [
     },
   },
   {
-    number: "04",
+    number: "01",
     slug: "homepage",
     title: "Homepage redesign",
     description: "Simplifying the front door to Glean.",
+    cardDescription: "Updating the Glean homepage after 4 years",
     category: "Product design · Glean",
     year: "2025",
     theme: "archive",
@@ -116,10 +105,11 @@ export const projects: Project[] = [
     },
   },
   {
-    number: "05",
+    number: "02",
     slug: "psychic",
     title: "Proactive intelligence",
     description: "Designing relief before the work begins.",
+    cardDescription: "Doing work before someone has to ask",
     category: "Product concept · Glean",
     year: "2026",
     theme: "afterimage",
@@ -131,25 +121,11 @@ export const projects: Project[] = [
     },
   },
   {
-    number: "06",
-    slug: "workspace-admin-console-actions",
-    title: "Enterprise setup",
-    description: "Designing the admin experience for setup, connectors, and actions.",
-    category: "Product design · Glean",
-    year: "2025",
-    theme: "systems",
-    cover: {
-      src: "/case-studies/workspace-admin-console-actions/page-01.png",
-      alt: "Workspace admin case study brief cover",
-      caption: "Getting Glean ready for work",
-      kind: "brief",
-    },
-  },
-  {
-    number: "07",
+    number: "05",
     slug: "soft-launch",
     title: "Treasure",
     description: "Exploring a more playful way to discover digital collectibles through Snap AR.",
+    cardDescription: "An AR experience to visualize your NFTs",
     category: "Product design · Snap",
     year: "2022",
     theme: "systems",
@@ -161,10 +137,11 @@ export const projects: Project[] = [
     },
   },
   {
-    number: "08",
+    number: "06",
     slug: "pocket-studio",
     title: "NFTs as Lenses",
     description: "Bringing verified digital collectibles into Snapchat as augmented reality Lenses.",
+    cardDescription: "Bringing NFT ownership to Snapchat",
     category: "Product design · Snap",
     year: "2022",
     theme: "field",

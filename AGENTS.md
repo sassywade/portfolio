@@ -15,8 +15,8 @@ The site should feel personal, calm, editorial, and lightly playful. The work mu
 - The homepage background is white with the subtle studio grid.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.
-- Work is a two-column grid by default. Titles sit inside their tiles. On full-video tiles, the title is visible only while the recording shows its wide composition and fades as the recording zooms in. Unfinished projects remain substantial light-gray rounded tiles; never leave title-only empty space.
-- Glean order: Homepage redesign, Proactive intelligence, Artifacts, Growth, Agent observability, Enterprise setup. Snap follows with Treasure and NFTs as Lenses.
+- Work is a two-column grid by default. Each project title and one-line description sit below and outside the tile. Unfinished projects remain substantial light-gray rounded tiles; never leave title-only empty space.
+- The homepage shows six projects total. Glean order: Homepage redesign, Proactive intelligence, Artifacts, Growth. Snap follows with Treasure and NFTs as Lenses.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
 - The photographer is already present on the meadow when the homepage loads; clicking `photograph SF` replays the drop-and-shoot sequence.
@@ -28,7 +28,6 @@ The site should feel personal, calm, editorial, and lightly playful. The work mu
 - `app/projects.ts`: canonical project content, order inputs, covers, and case-study narratives.
 - `app/project-card.tsx`: company grouping and card links.
 - `app/project-mockup.tsx`: intentionally minimal work-tile interior.
-- `app/project-video-tile.tsx`: synchronizes full-tile video labels to wide and zoomed-in moments.
 - `app/hero-meadow.tsx`: owner of environment/prototype state and hero-to-work handoff.
 - `app/meadow.tsx`, `app/cypress-tree.tsx`, `app/alamo-weather.tsx`: visual environment primitives.
 - `app/smiley-cursor.tsx`: Philip's behavior. Keep this isolated from page content.

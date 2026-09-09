@@ -11983,28 +11983,6 @@ html[data-atmosphere="grid"] .ascii-garden {
   background: #f2f2f2;
 }
 
-.project-video-label {
-  position: absolute;
-  z-index: 1;
-  top: clamp(20px, 2.5vw, 30px);
-  left: 50%;
-  color: var(--muted);
-  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(13px, 0.9vw, 15px);
-  font-weight: 450;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%);
-  transition: opacity 180ms var(--motion-ease-out);
-  white-space: nowrap;
-}
-
-.project-mockup[data-label-visible] .project-video-label {
-  opacity: 1;
-}
-
 .pranathi-project-grid .project-work-image {
   z-index: 0;
 }
@@ -12094,28 +12072,6 @@ html[data-atmosphere="grid"] .ascii-garden {
   background: #ffffff;
   object-fit: cover;
   object-position: center;
-}
-
-/* Agent observability mirrors the supplied quiet card composition. */
-.pranathi-project-grid .project-mockup.project-mockup--observability-work {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: clamp(22px, 2.5vw, 30px) 0 0;
-  overflow: hidden;
-  border-radius: clamp(18px, 2vw, 28px);
-  background: #f2f2f2;
-}
-
-.observability-work-image {
-  display: block;
-  flex: 0 0 auto;
-  width: min(82%, 450px);
-  height: auto;
-  margin-top: clamp(16px, 2vw, 26px);
-  object-fit: contain;
-  object-position: top center;
 }
 
 @media (min-width: 1080px) {
@@ -12436,7 +12392,6 @@ html[data-atmosphere="grid"] .ascii-garden {
 }
 
 .pranathi-project-grid .growth-work-video,
-.pranathi-project-grid .observability-work-image,
 .pranathi-project-grid .snap-work-image {
   filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
   transition: transform 180ms var(--motion-ease-out);
@@ -12454,7 +12409,6 @@ html[data-atmosphere="grid"] .ascii-garden {
   }
 
   .pranathi-project-grid .project-card:hover .growth-work-video,
-  .pranathi-project-grid .project-card:hover .observability-work-image,
   .pranathi-project-grid .project-card:hover .snap-work-image {
     transform: translateY(-4px);
   }
@@ -12465,21 +12419,57 @@ html[data-atmosphere="grid"] .ascii-garden {
   .pranathi-project-grid .project-mockup.project-mockup--artifacts-work,
   .pranathi-project-grid .homepage-work-video,
   .pranathi-project-grid .growth-work-video,
-  .pranathi-project-grid .observability-work-image,
   .pranathi-project-grid .snap-work-image {
-    transition: none;
-  }
-
-  .project-video-label {
     transition: none;
   }
 
   .pranathi-project-grid .project-card:hover .project-mockup--homepage-work,
   .pranathi-project-grid .project-card:hover .project-mockup--artifacts-work,
   .pranathi-project-grid .project-card:hover .growth-work-video,
-  .pranathi-project-grid .project-card:hover .observability-work-image,
   .pranathi-project-grid .project-card:hover .snap-work-image {
     transform: none;
+  }
+}
+
+/* Project metadata sits outside the artwork so every tile follows one rhythm. */
+.pranathi-project-grid {
+  row-gap: clamp(30px, 3.2vw, 42px);
+}
+
+.project-card__info {
+  display: grid;
+  gap: 5px;
+  padding: 12px 4px 0;
+  font-family: var(--font-geist), "Geist", "Helvetica Neue", Arial, sans-serif;
+}
+
+.project-card__info h4,
+.project-card__info p {
+  margin: 0;
+}
+
+.project-card__info h4 {
+  color: var(--ink);
+  font-size: clamp(13px, 0.9vw, 15px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.project-card__info p {
+  color: var(--muted);
+  font-size: clamp(12px, 0.82vw, 14px);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+@media (max-width: 580px) {
+  .pranathi-project-grid {
+    row-gap: 28px;
+  }
+
+  .project-card__info {
+    padding-top: 10px;
   }
 }
 

@@ -18,7 +18,7 @@ When something feels wrong, first adjust scale, spacing, hierarchy, or removal. 
 
 ### 2. Let the work speak for itself
 
-Project cards are large, quiet stages for screenshots, with no supporting caption, arrow, color wash, or invented graphic. Titles sit inside their tiles. For full-tile recordings, the title appears over the wide composition and fades away when the recording zooms into product detail. Their default unfinished state is a substantial light-gray rounded tile. Full-tile recordings may use `object-fit: cover`; inset product screens should use `object-fit: contain`.
+Project cards are large, quiet stages for screenshots, with no arrow, color wash, or invented graphic. A compact project title and one-line description sit below the tile, outside the artwork. Their default unfinished state is a substantial light-gray rounded tile. Full-tile recordings may use `object-fit: cover`; inset product screens should use `object-fit: contain`.
 
 The work grid uses two columns on desktop and one column when space becomes tight. The rhythm should feel generous but not sparse: company label, a deliberate pause, then substantial cards with consistent gaps.
 
@@ -98,10 +98,7 @@ The meadow and cypress sit in front of the page as one responsive hero environme
 
 ### Work grid
 
-The grid is grouped by company. Glean appears first, followed by Snap. Cards contain only:
-
-1. A concise title at the top.
-2. The supplied project graphic, shown fully.
+The grid is grouped by company. Glean appears first, followed by Snap. The homepage shows six projects: four Glean projects followed by two Snap projects. Each card contains the supplied project graphic, followed by a concise title and one-line description beneath the tile.
 
 Until a graphic exists, the card remains a substantial gray placeholder. Never collapse a placeholder into a title floating in empty page space.
 
