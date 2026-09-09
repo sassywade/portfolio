@@ -12003,7 +12003,7 @@ html[data-atmosphere="grid"] .ascii-garden {
   display: block;
   flex: 1 1 auto;
   width: auto;
-  max-width: min(72%, 368px);
+  max-width: min(78%, 400px);
   height: auto;
   min-height: 0;
   object-fit: contain;
@@ -12024,7 +12024,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 .homepage-work-video {
   display: block;
   flex: 0 0 auto;
-  width: min(88%, 480px);
+  width: min(94%, 500px);
   height: auto;
   aspect-ratio: 2588 / 1676;
   overflow: hidden;
@@ -12048,7 +12048,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 .growth-work-video {
   display: block;
   flex: 0 0 auto;
-  width: min(88%, 480px);
+  width: min(94%, 500px);
   height: auto;
   aspect-ratio: 2588 / 1676;
   margin-top: clamp(20px, 2.5vw, 30px);
@@ -12073,7 +12073,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 .artifacts-work-image {
   display: block;
   flex: 0 0 auto;
-  width: min(90%, 480px);
+  width: min(96%, 500px);
   height: auto;
   margin-top: clamp(20px, 2.5vw, 30px);
   object-fit: contain;
@@ -12095,7 +12095,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 .observability-work-image {
   display: block;
   flex: 0 0 auto;
-  width: min(76%, 420px);
+  width: min(82%, 450px);
   height: auto;
   margin-top: clamp(16px, 2vw, 26px);
   object-fit: contain;
