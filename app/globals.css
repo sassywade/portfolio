@@ -8626,6 +8626,26 @@ html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-se
   color: #bd522f;
 }
 
+.ascii-garden[data-live="true"] .ascii-garden__tree {
+  opacity: var(--tree-layer-opacity);
+  filter: blur(var(--tree-dissolve-blur));
+  animation: ascii-garden-tree-sway var(--ascii-wind-duration) var(--motion-ease-in-out) infinite alternate;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes ascii-garden-tree-sway {
+  from {
+    transform: translate3d(0, var(--tree-layer-y), 0) rotate(var(--ascii-sway-from));
+  }
+  to {
+    transform: translate3d(0, var(--tree-layer-y), 0) rotate(var(--ascii-sway-to));
+  }
+}
+
+.ascii-garden[data-live="true"][data-playing="false"] .ascii-garden__tree {
+  animation-play-state: paused;
+}
+
 .ascii-garden__ground {
   position: absolute;
   z-index: 2;
@@ -8649,6 +8669,15 @@ html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-se
     100% 100%,
     0 100%
   );
+}
+
+.ascii-garden[data-live="true"] .ascii-garden__ground,
+.ascii-garden[data-live="true"] .ascii-garden__details,
+.ascii-garden[data-live="true"] .ascii-garden__sprite {
+  opacity: var(--meadow-layer-opacity);
+  filter: blur(var(--meadow-dissolve-blur));
+  transform: translate3d(0, var(--meadow-layer-y), 0);
+  will-change: transform, opacity, filter;
 }
 
 .ascii-garden[data-meadow-variant="flat"] .ascii-garden__ground {
@@ -8753,6 +8782,57 @@ html[data-atmosphere="grid"][data-environment-style="ascii-terminal"] .meadow-se
   white-space: pre;
 }
 
+.ascii-garden[data-live="true"] > .alamo-weather {
+  z-index: 6;
+  right: clamp(22px, 4vw, 72px);
+  bottom: clamp(22px, 4svh, 46px);
+  width: min(390px, 38vw);
+  color: var(--ascii-ink);
+  text-align: right;
+}
+
+.alamo-weather__ascii-primary {
+  display: none;
+}
+
+.ascii-garden[data-live="true"] > .alamo-weather .alamo-weather__ridge {
+  display: none;
+}
+
+.ascii-garden[data-live="true"] > .alamo-weather .alamo-weather__ascii-primary,
+.ascii-garden[data-live="true"] > .alamo-weather .alamo-weather__secondary.sr-only {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  color: inherit;
+  font-family: var(--ascii-mono);
+  font-size: clamp(11px, 0.8vw, 14px);
+  letter-spacing: 0;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.ascii-garden[data-live="true"] > .alamo-weather .alamo-weather__secondary.sr-only {
+  opacity: 0.82;
+}
+
+.ascii-garden[data-live="true"] .ascii-garden__sprite--backpacker {
+  width: clamp(64px, 5.8vw, 96px);
+}
+
+.ascii-garden[data-live="true"] .ascii-garden__sprite--standing {
+  width: clamp(38px, 3.5vw, 58px);
+}
+
+.ascii-garden[data-live="true"] .ascii-garden__sprite--cyclist {
+  width: clamp(78px, 7vw, 116px);
+}
+
 .hero-meadow[data-environment-style="ascii-garden"] > .bike-ride-layer,
 .hero-meadow[data-environment-style="ascii-garden"] > .photo-drop-layer,
 .hero-meadow[data-environment-style="ascii-garden"] > .backpack-walk-layer {
@@ -8821,6 +8901,24 @@ html[data-environment-style="ascii-garden"]:not([data-atmosphere="grid"]) .alamo
 
 .site-shell[data-environment-style="ascii-garden"] .pranathi-intro {
   width: min(100% - 48px, 812px);
+}
+
+.site-shell[data-environment-style="ascii-garden"] .pranathi-bio {
+  font-family: var(--ascii-mono);
+  font-size: clamp(16px, 1.1vw, 19px);
+  line-height: 1.72;
+}
+
+.site-shell[data-environment-style="ascii-garden"] .site-header__wordmark,
+.site-shell[data-environment-style="ascii-garden"] .site-nav {
+  font-family: var(--font-newsreader), Georgia, serif;
+}
+
+html[data-environment-style="ascii-garden"][data-ascii-garden-theme="dark"] .bike-word,
+html[data-environment-style="ascii-garden"][data-ascii-garden-theme="dark"] .photo-word,
+html[data-environment-style="ascii-garden"][data-ascii-garden-theme="dark"] .backpack-word {
+  color: #78a4e8;
+  text-decoration-color: rgba(120, 164, 232, 0.72);
 }
 
 html[data-environment-style="ascii-garden"]:not([data-atmosphere="grid"]) .site-header--pages .site-nav {
@@ -8939,6 +9037,12 @@ html[data-atmosphere="grid"] .ascii-garden {
   .ascii-garden__detail:nth-child(n + 7) {
     display: none;
   }
+
+  .ascii-garden[data-live="true"] > .alamo-weather {
+    right: 16px;
+    bottom: 18px;
+    width: min(280px, 78vw);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8947,6 +9051,10 @@ html[data-atmosphere="grid"] .ascii-garden {
   .site-shell[data-environment-style="ascii-garden"] {
     animation: none !important;
     transition: none !important;
+  }
+
+  .ascii-garden[data-live="true"] .ascii-garden__tree {
+    transform: translate3d(0, var(--tree-layer-y), 0);
   }
 }
 

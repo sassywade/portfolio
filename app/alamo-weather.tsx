@@ -163,6 +163,9 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
           </textPath>
         </text>
       </svg>
+      <span className="alamo-weather__ascii-primary" aria-hidden="true">
+        {primaryCopy}
+      </span>
       <span className="alamo-weather__secondary sr-only">
         {now ? `${formatSanFranciscoTime(now)} in San Francisco` : "Local time in San Francisco"}
         {conditions ? ` · ${Math.round(conditions.windSpeed)} mph ${cardinalDirection(conditions.windDirection)} wind` : ""}

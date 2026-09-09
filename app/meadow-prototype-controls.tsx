@@ -350,7 +350,7 @@ export function MeadowSettings({
                       }}
                       aria-hidden="true"
                     >
-                      {isFieldNotes && <pre>{"  yvVv\n yVYVYv\n   \\|/\n.,;_||_;,."}</pre>}
+                      {isFieldNotes && <pre>{" .;yvYVYVv;.\n,yVYv;..;vYVYv,\n  \\{{||}}/\n.,;vY||||Yv;,.."}</pre>}
                     </span>
                     <span>{label}</span>
                     <small>{description}</small>
@@ -394,7 +394,7 @@ export function MeadowSettings({
                 ? "A quiet portfolio-only view with the playful scene and interactions removed."
                 : "Style and meadow shape are independent. Control keeps the original prototype variants."}
             </p>
-            {environmentStyle === "ascii-garden" && (
+            {(environmentStyle === "ascii-garden" || environmentStyle === "ascii-field-notes") && (
               <div className="meadow-settings__ascii-palette">
                 <span>ASCII palette</span>
                 <div className="meadow-settings__modes" aria-label="ASCII Garden palette">
@@ -522,8 +522,8 @@ export function MeadowSettings({
               </div>
             ) : environmentStyle === "ascii-field-notes" ? (
               <div className="meadow-settings__curated-summary">
-                <span>ASCII Field Notes</span>
-                <small>Sparse authored glyphs · live wind · existing miniature actions</small>
+                <span>ASCII Garden · live</span>
+                <small>Dense authored glyphs · paired palettes · live wind and miniature actions</small>
               </div>
             ) : (
               <div className="meadow-settings__curated-summary">

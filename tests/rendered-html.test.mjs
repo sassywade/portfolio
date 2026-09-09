@@ -233,7 +233,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
   assert.match(styles, /MEADOW_TREE_OPTIONS/);
   assert.match(styles, /label: "Soft illustration"/);
-  assert.match(styles, /label: "ASCII Field Notes"/);
+  assert.match(styles, /label: "ASCII Garden · live"/);
   assert.match(styles, /label: "Watercolor wash"/);
   assert.match(styles, /label: "Marker sketch"/);
   assert.match(styles, /label: "Clay model"/);
@@ -253,7 +253,8 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(hero, /const isStudioStatic = environmentStyle === "studio-static"/);
   assert.match(hero, /isStudioStatic \? null : isAsciiGarden/);
   assert.match(hero, /<Meadow[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>[\s\S]*?<\/Meadow>/);
-  assert.match(hero, /shell\.dataset\.environmentStyle = environmentStyle/);
+  assert.match(hero, /const visualStyle = isAsciiFieldNotes \? "ascii-garden" : environmentStyle/);
+  assert.match(hero, /shell\.dataset\.environmentStyle = visualStyle/);
   assert.match(hero, /data-environment-style=\{environmentStyle\}/);
   assert.match(hero, /environmentStyle=\{environment\}/);
   assert.match(hero, /assetUrl=\{environment\.treeSrc\}/);
@@ -306,11 +307,11 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
   assert.match(garden, /data-meadow-variant=\{variant\}/);
   assert.doesNotMatch(garden, /Math\.random|<img\b|requestAnimationFrame/);
 
-  assert.match(hero, /useState<AsciiGardenTheme>\("dark"\)/);
+  assert.match(hero, /useState<AsciiGardenTheme>\("light"\)/);
   assert.match(hero, /const isAsciiGarden = environmentStyle === "ascii-garden"/);
   assert.match(hero, /<AsciiGarden theme=\{asciiGardenTheme\} variant=\{meadowVariant\} \/>/);
   assert.match(hero, /previousAtmosphereRef\.current = atmosphere/);
-  assert.match(hero, /data-ascii-garden-theme=\{isAsciiGarden \? asciiGardenTheme : undefined\}/);
+  assert.match(hero, /data-ascii-garden-theme=\{isAsciiScene \? asciiGardenTheme : undefined\}/);
   assert.match(picker, /aria-label="ASCII Garden palette"/);
   assert.match(picker, /onAsciiGardenThemeChange\("dark"\)/);
   assert.match(picker, /onAsciiGardenThemeChange\("light"\)/);
@@ -328,7 +329,7 @@ test("renders ASCII Garden from fixed glyph maps with paired palettes and static
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden/);
 });
 
-test("offers an isolated ASCII Field Notes scene with live wind and the shared miniature surface", async () => {
+test("offers the full ASCII Garden reference as a live light and dark scene", async () => {
   const [fieldNotes, hero, picker, css] = await Promise.all([
     readFile(new URL("../app/ascii-field-notes.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
@@ -336,24 +337,25 @@ test("offers an isolated ASCII Field Notes scene with live wind and the shared m
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(fieldNotes, /const CANOPY_CLUSTERS = /);
-  assert.match(fieldNotes, /const TREE_WOOD = String\.raw/);
-  assert.match(fieldNotes, /const MEADOW_GLYPHS = String\.raw/);
-  assert.match(fieldNotes, /data-meadow-surface="active"/);
-  assert.match(fieldNotes, /--field-sway-start/);
-  assert.match(fieldNotes, /--field-wind-duration/);
+  assert.match(fieldNotes, /<AsciiGarden/);
+  assert.match(fieldNotes, /live/);
+  assert.match(fieldNotes, /theme=\{theme\}/);
+  assert.match(fieldNotes, /wind=\{wind\}/);
   assert.doesNotMatch(fieldNotes, /Math\.random|<img\b|requestAnimationFrame/);
 
   assert.match(hero, /const isAsciiFieldNotes = environmentStyle === "ascii-field-notes"/);
-  assert.match(hero, /<AsciiFieldNotes[\s\S]*?wind=\{wind\}[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>/);
+  assert.match(hero, /const isAsciiScene = isAsciiGarden \|\| isAsciiFieldNotes/);
+  assert.match(hero, /<AsciiFieldNotes[\s\S]*?theme=\{asciiGardenTheme\}[\s\S]*?wind=\{wind\}[\s\S]*?<AlamoWeather onWindUpdate=\{setWind\} \/>/);
   assert.match(picker, /data-scene-preview=\{isFieldNotes \? "ascii-field-notes" : undefined\}/);
-  assert.match(picker, /Sparse authored glyphs · live wind · existing miniature actions/);
+  assert.match(picker, /Dense authored glyphs · paired palettes · live wind and miniature actions/);
 
-  assert.match(css, /\.ascii-field-notes__tree\s*\{[\s\S]*?bottom:\s*var\(--ascii-tree-bottom-rolling\)/);
-  assert.match(css, /@keyframes ascii-field-notes-sway/);
-  assert.match(css, /\.ascii-field-notes__meadow\s*\{[\s\S]*?opacity:\s*var\(--meadow-layer-opacity\)/);
-  assert.match(css, /\.ascii-field-notes__underprint\s*\{[\s\S]*?clip-path:\s*polygon/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-field-notes__cluster pre/);
+  assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__tree/);
+  assert.match(css, /@keyframes ascii-garden-tree-sway/);
+  assert.match(css, /\.ascii-garden\[data-live="true"\] \.ascii-garden__ground/);
+  assert.match(css, /\.ascii-garden\[data-live="true"\] > \.alamo-weather/);
+  assert.match(css, /\.alamo-weather__ascii-primary/);
+  assert.match(css, /\.site-shell\[data-environment-style="ascii-garden"\] \.pranathi-bio/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.ascii-garden\[data-live="true"\]/);
 });
 
 test("scopes the dark ASCII terminal theme and restores the normal tokens outside it", async () => {

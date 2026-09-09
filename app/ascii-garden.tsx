@@ -1,5 +1,6 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { MeadowVariant } from "./meadow";
+import type { WindSettings } from "./wind";
 
 export type AsciiGardenTheme = "dark" | "light";
 
@@ -20,8 +21,18 @@ type GlyphLayer = {
 };
 
 type AsciiGardenProps = {
+  children?: ReactNode;
+  isPlaying?: boolean;
+  live?: boolean;
   theme: AsciiGardenTheme;
   variant: MeadowVariant;
+  wind?: WindSettings;
+};
+
+type AsciiGardenStyle = CSSProperties & {
+  "--ascii-sway-from"?: string;
+  "--ascii-sway-to"?: string;
+  "--ascii-wind-duration"?: string;
 };
 
 type Detail = {
@@ -129,13 +140,32 @@ function PixelSprite({ className, map }: { className: string; map: string }) {
   );
 }
 
-export function AsciiGarden({ theme, variant }: AsciiGardenProps) {
+export function AsciiGarden({
+  children,
+  isPlaying = false,
+  live = false,
+  theme,
+  variant,
+  wind,
+}: AsciiGardenProps) {
+  const direction = (wind?.direction ?? 0.6) < 0 ? -1 : 1;
+  const breeze = 0.18 + (wind?.breeze ?? 0.35) * 0.42;
+  const gust = 0.08 + (wind?.gust ?? 0.2) * 0.28;
+  const style = {
+    "--ascii-sway-from": `${(-breeze * direction).toFixed(2)}deg`,
+    "--ascii-sway-to": `${((breeze + gust) * direction).toFixed(2)}deg`,
+    "--ascii-wind-duration": `${(8.8 - (wind?.tempo ?? 0.35) * 3).toFixed(2)}s`,
+  } as AsciiGardenStyle;
+
   return (
     <div
       className="ascii-garden"
       data-ascii-garden
+      data-live={live ? "true" : "false"}
+      data-playing={isPlaying ? "true" : "false"}
       data-theme={theme}
       data-meadow-variant={variant}
+      style={style}
       role="img"
       aria-label="An authored ASCII garden at Alamo Square with a Monterey cypress, a cyclist, a standing photographer, a backpacker, flowers, and small creatures."
     >
@@ -147,7 +177,11 @@ export function AsciiGarden({ theme, variant }: AsciiGardenProps) {
         ]}
       />
 
-      <div className="ascii-garden__ground" aria-hidden="true">
+      <div
+        className="ascii-garden__ground"
+        data-meadow-surface={live ? "active" : undefined}
+        aria-hidden="true"
+      >
         <span className="ascii-garden__underprint" />
         <GlyphStack
           className="ascii-garden__terrain"
@@ -183,6 +217,7 @@ export function AsciiGarden({ theme, variant }: AsciiGardenProps) {
           </pre>
         ))}
       </div>
+      {children}
     </div>
   );
 }

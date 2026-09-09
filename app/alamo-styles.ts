@@ -73,8 +73,8 @@ export const ALAMO_STYLES = [
   },
   {
     id: "ascii-field-notes",
-    label: "ASCII Field Notes · live prototype",
-    shortLabel: "Field Notes",
+    label: "ASCII Garden · live reference",
+    shortLabel: "ASCII Garden Live",
     rollingSrc: null,
     flatSrc: null,
     treeSrc: "/monterey-cypress.png",
@@ -244,8 +244,8 @@ export const MEADOW_TREE_OPTIONS: ReadonlyArray<{
   },
   {
     id: "ascii-field-notes",
-    label: "ASCII Field Notes",
-    description: "Sparse type, a rooted tree, and plenty of paper.",
+    label: "ASCII Garden · live",
+    description: "The full authored light and dark garden, now responsive to wind.",
   },
   {
     id: "soft-daylight",

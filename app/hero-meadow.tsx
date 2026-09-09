@@ -43,10 +43,11 @@ export function HeroMeadow() {
   const [heroHighlights, setHeroHighlights] = useState(false);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
-  const [asciiGardenTheme, setAsciiGardenTheme] = useState<AsciiGardenTheme>("dark");
+  const [asciiGardenTheme, setAsciiGardenTheme] = useState<AsciiGardenTheme>("light");
   const environment = getAlamoStyle(environmentStyle);
   const isAsciiGarden = environmentStyle === "ascii-garden";
   const isAsciiFieldNotes = environmentStyle === "ascii-field-notes";
+  const isAsciiScene = isAsciiGarden || isAsciiFieldNotes;
   const isStudioStatic = environmentStyle === "studio-static";
 
   useEffect(() => {
@@ -73,20 +74,21 @@ export function HeroMeadow() {
     const shell = scene?.closest<HTMLElement>(".site-shell");
     if (!shell) return;
 
-    shell.dataset.environmentStyle = environmentStyle;
-    document.documentElement.dataset.environmentStyle = environmentStyle;
+    const visualStyle = isAsciiFieldNotes ? "ascii-garden" : environmentStyle;
+    shell.dataset.environmentStyle = visualStyle;
+    document.documentElement.dataset.environmentStyle = visualStyle;
 
     return () => {
       delete shell.dataset.environmentStyle;
       delete document.documentElement.dataset.environmentStyle;
     };
-  }, [environmentStyle]);
+  }, [environmentStyle, isAsciiFieldNotes]);
 
   useEffect(() => {
     const scene = sceneRef.current;
     const shell = scene?.closest<HTMLElement>(".site-shell");
 
-    if (!isAsciiGarden) {
+    if (!isAsciiScene) {
       delete document.documentElement.dataset.asciiGardenTheme;
       if (shell) delete shell.dataset.asciiGardenTheme;
       return;
@@ -99,7 +101,7 @@ export function HeroMeadow() {
       delete document.documentElement.dataset.asciiGardenTheme;
       if (shell) delete shell.dataset.asciiGardenTheme;
     };
-  }, [asciiGardenTheme, isAsciiGarden]);
+  }, [asciiGardenTheme, isAsciiScene]);
 
   useEffect(() => {
     document.documentElement.dataset.workColumns = String(workGridColumns);
@@ -310,16 +312,16 @@ export function HeroMeadow() {
     } else if (environmentStyle === "studio-static") {
       const previousAtmosphere = previousAtmosphereRef.current;
       setAtmosphere(
-        nextStyle === "ascii-garden" && previousAtmosphere === "grid"
+        (nextStyle === "ascii-garden" || nextStyle === "ascii-field-notes") && previousAtmosphere === "grid"
           ? (asciiGardenTheme === "dark" ? "night" : "day")
           : previousAtmosphere,
       );
-    } else if (nextStyle === "ascii-garden") {
+    } else if (nextStyle === "ascii-garden" || nextStyle === "ascii-field-notes") {
       previousAtmosphereRef.current = atmosphere;
       if (atmosphere === "grid") {
         setAtmosphere(asciiGardenTheme === "dark" ? "night" : "day");
       }
-    } else if (environmentStyle === "ascii-garden") {
+    } else if (isAsciiScene) {
       setAtmosphere(previousAtmosphereRef.current);
     }
 
@@ -328,7 +330,7 @@ export function HeroMeadow() {
 
   const handleAsciiGardenThemeChange = (nextTheme: AsciiGardenTheme) => {
     setAsciiGardenTheme(nextTheme);
-    if (isAsciiGarden && atmosphere !== "grid") {
+    if (isAsciiScene && atmosphere !== "grid") {
       setAtmosphere(nextTheme === "dark" ? "night" : "day");
     }
   };
@@ -359,7 +361,7 @@ export function HeroMeadow() {
       data-scroll-state="hero"
       data-meadow-variant={meadowVariant}
       data-environment-style={environmentStyle}
-      data-ascii-garden-theme={isAsciiGarden ? asciiGardenTheme : undefined}
+      data-ascii-garden-theme={isAsciiScene ? asciiGardenTheme : undefined}
       data-style-atmosphere={environment.atmosphere}
       style={sceneStyle}
     >
@@ -369,6 +371,7 @@ export function HeroMeadow() {
       ) : isAsciiFieldNotes ? (
         <AsciiFieldNotes
           isPlaying={sceneIsPlaying}
+          theme={asciiGardenTheme}
           variant={meadowVariant}
           wind={wind}
         >
