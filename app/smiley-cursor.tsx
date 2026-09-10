@@ -68,7 +68,6 @@ export function SmileyCursor() {
     const root = document.documentElement;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const hasFinePointer = window.matchMedia("(pointer: fine)");
-    const heroSection = document.querySelector<HTMLElement>(".pranathi-intro--home");
 
     if (!cursor || pathname !== "/" || !hasFinePointer.matches || prefersReducedMotion.matches) {
       return;
@@ -91,7 +90,7 @@ export function SmileyCursor() {
     let targetFollowDistance = 82;
     let currentFollowDistance = 82;
     let hasPointerPosition = false;
-    let isPastHero = false;
+    let isPastHero = root.dataset.meadowPresent !== "true";
     let idleTimer: number | null = null;
     let idleStartedAt: number | null = null;
     let happyUntil = 0;
@@ -478,8 +477,8 @@ export function SmileyCursor() {
       }, remainingDelay);
     };
 
-    const handleScroll = () => {
-      const nextIsPastHero = Boolean(heroSection && heroSection.getBoundingClientRect().bottom <= 0);
+    const handleMeadowPresenceChange = () => {
+      const nextIsPastHero = root.dataset.meadowPresent !== "true";
 
       if (nextIsPastHero === isPastHero) {
         return;
@@ -503,6 +502,12 @@ export function SmileyCursor() {
         armIdleMischief();
       }
     };
+
+    const meadowPresenceObserver = new MutationObserver(handleMeadowPresenceChange);
+    meadowPresenceObserver.observe(root, {
+      attributes: true,
+      attributeFilter: ["data-meadow-present"],
+    });
 
     const handlePointerMove = (event: PointerEvent) => {
       if (event.pointerType && event.pointerType !== "mouse") {
@@ -588,13 +593,12 @@ export function SmileyCursor() {
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerout", handlePointerOut);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    handleMeadowPresenceChange();
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerout", handlePointerOut);
-      window.removeEventListener("scroll", handleScroll);
+      meadowPresenceObserver.disconnect();
       root.classList.remove("has-cursor-pet");
       clearFacingTimer();
       clearIdleTimer();

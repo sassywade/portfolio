@@ -5222,7 +5222,8 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
   opacity: 1;
 }
 
-html[data-meadow-present="false"] .smiley-cursor {
+html:not([data-meadow-present="true"]) .smiley-cursor {
+  display: none !important;
   visibility: hidden;
   opacity: 0 !important;
 }

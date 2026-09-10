@@ -750,8 +750,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(hero, /prefers-reduced-motion: reduce/);
   assert.match(hero, /data-scene-visible/);
   assert.match(hero, /document\.documentElement\.dataset\.meadowPresent =/);
-  assert.match(hero, /isSceneVisible && !isStudioStatic \? "true" : "false"/);
-  assert.match(css, /html\[data-meadow-present="false"\] \.smiley-cursor\s*\{[^}]*visibility:\s*hidden;[^}]*opacity:\s*0 !important;/);
+  assert.match(hero, /!isStudioStatic && dissolveProgress < 0\.95 \? "true" : "false"/);
+  assert.match(css, /html:not\(\[data-meadow-present="true"\]\) \.smiley-cursor\s*\{[^}]*display:\s*none !important;[^}]*visibility:\s*hidden;[^}]*opacity:\s*0 !important;/);
   assert.match(hero, /rollingMeadow=\{rollingMeadow\}/);
   assert.match(hero, /useState<RollingMeadow>\("original"\)/);
   assert.match(hero, /useState<FlatMeadowTexture>\("fine"\)/);
@@ -866,8 +866,11 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
   assert.match(smiley, /IDLE_HUFF_SEQUENCE\[cycleIndex\] \?\? "strained"/);
   assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
-  assert.match(smiley, /const heroSection = document\.querySelector<HTMLElement>\("\.pranathi-intro--home"\)/);
-  assert.match(smiley, /heroSection\.getBoundingClientRect\(\)\.bottom <= 0/);
+  assert.doesNotMatch(smiley, /heroSection|getBoundingClientRect\(\)\.bottom <= 0/);
+  assert.match(smiley, /root\.dataset\.meadowPresent !== "true"/);
+  assert.match(smiley, /new MutationObserver\(handleMeadowPresenceChange\)/);
+  assert.match(smiley, /attributeFilter: \["data-meadow-present"\]/);
+  assert.match(smiley, /meadowPresenceObserver\.disconnect\(\)/);
   assert.doesNotMatch(smiley, /HERO_COPY_CLEARANCE|heroCopyTargets|isNearHeroCopy|data-hero-copy/);
   assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| miniaturePhase !== "off"\) return/);
   assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
@@ -971,4 +974,5 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /--smiley-facing:\s*1/);
   assert.match(css, /transform:\s*scaleX\(var\(--smiley-facing\)\)/);
   assert.match(css, /pointer-events:\s*none/);
+  assert.match(css, /html:not\(\[data-meadow-present="true"\]\) \.smiley-cursor \{[\s\S]*?display:\s*none !important;[\s\S]*?opacity:\s*0 !important/);
 });

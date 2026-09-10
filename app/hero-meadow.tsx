@@ -147,13 +147,6 @@ export function HeroMeadow() {
   }, [heroHighlights]);
 
   useEffect(() => {
-    document.documentElement.dataset.meadowPresent =
-      isSceneVisible && !isStudioStatic ? "true" : "false";
-
-    return () => delete document.documentElement.dataset.meadowPresent;
-  }, [isSceneVisible, isStudioStatic]);
-
-  useEffect(() => {
     if (!isStudioStatic) return;
 
     const interactiveCopy = document.querySelectorAll<HTMLElement>(
@@ -202,6 +195,8 @@ export function HeroMeadow() {
       const ceremonialProgress = Math.pow(smootherProgress, 1.08);
       const dissolveProgress = clamp((smootherProgress - 0.12) / 0.88, 0, 1);
       const treeDissolveProgress = clamp((dissolveProgress - 0.16) / 0.84, 0, 1);
+      document.documentElement.dataset.meadowPresent =
+        !isStudioStatic && dissolveProgress < 0.95 ? "true" : "false";
       const exitDistance = viewportHeight + Math.max(120, viewportHeight * 0.18);
       const fadeProgress = clamp((currentProgress - 0.72) / 0.28, 0, 1);
       const softenedFade = fadeProgress * fadeProgress * (3 - 2 * fadeProgress);
@@ -328,11 +323,12 @@ export function HeroMeadow() {
       window.removeEventListener("resize", schedule);
       window.visualViewport?.removeEventListener("resize", schedule);
       reducedMotion.removeEventListener("change", schedule);
+      delete document.documentElement.dataset.meadowPresent;
       work.style.removeProperty("--work-handoff-y");
       work.style.removeProperty("--work-handoff-opacity");
       work.style.removeProperty("--work-handoff-scale");
     };
-  }, [workHandoff]);
+  }, [isStudioStatic, workHandoff]);
 
   const updateWind = (key: WindKey, value: number) => {
     setWind((current) => ({ ...current, [key]: value }));
