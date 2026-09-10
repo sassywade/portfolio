@@ -68,6 +68,15 @@ Case studies use a plain white background with no studio grid.
 - Shadows are used only when needed to separate a real object, such as a phone mockup, from its card.
 - Natural texture belongs in the meadow and tree. Interface surfaces remain clean.
 
+### Interface details
+
+- Balance short display titles and use pretty wrapping for paragraphs so line endings feel intentional.
+- Keep nested radii concentric: an outer radius equals the inner radius plus its surrounding padding.
+- Prefer translucent outlines and layered shadows to opaque borders when media needs edge definition.
+- Use tabular numerals for live values such as time and weather so updates do not shift the layout.
+- Use interruptible CSS transitions for reversible interaction states; reserve keyframes and staggered entrances for authored one-way sequences.
+- Keep exits quieter than entrances and optically align asymmetrical icons when geometric centering looks wrong.
+
 ### Spacing and scale
 
 Whitespace is structural. It should create calm, not make related content feel disconnected.

@@ -611,7 +611,10 @@ test("groups six featured projects into quiet Glean and Snap tiles", async () =>
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /Final hover behavior for work tiles: lift the full-bleed video tiles/);
   assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
-  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--full-video \{[\s\S]*?padding:\s*0;[\s\S]*?overflow:\s*hidden;[\s\S]*?filter:\s*drop-shadow\(0 7px 12px rgba\(36, 35, 33, 0\.09\)\)/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--full-video \{[\s\S]*?padding:\s*0;[\s\S]*?overflow:\s*hidden;/);
+  assert.match(css, /Small interface details:[\s\S]*?text-wrap:\s*balance;[\s\S]*?text-wrap:\s*pretty;/);
+  assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--full-video \{[\s\S]*?outline:\s*1px solid rgba\(36, 35, 33, 0\.08\);[\s\S]*?outline-offset:\s*-1px;[\s\S]*?filter:\s*none;[\s\S]*?box-shadow:/);
+  assert.match(css, /Small interface details:[\s\S]*?@media \(hover: hover\) and \(pointer: fine\) \{[\s\S]*?\.project-card:hover \.project-mockup--full-video \{[\s\S]*?box-shadow:/);
   assert.match(css, /\.pranathi-project-grid \.project-mockup\.project-mockup--full-video \{[\s\S]*?transition:\s*transform 180ms var\(--motion-ease-out\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.pranathi-project-grid \.project-card:hover \.project-mockup--full-video \{[\s\S]*?transform:\s*translateY\(-4px\)/);
   assert.doesNotMatch(css, /html\[data-portfolio-theme="dark"\] \.pranathi-project-grid \.project-card:hover \.project-mockup/);
@@ -638,6 +641,9 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(agentContract, /homepage shows six projects total/);
   assert.match(agentContract, /Every supplied Glean recording fills its tile edge to edge/);
   assert.match(agentContract, /inspect the final matching rule/);
+  assert.match(designDoc, /Balance short display titles and use pretty wrapping/);
+  assert.match(designDoc, /Keep nested radii concentric/);
+  assert.match(designDoc, /Use interruptible CSS transitions/);
   assert.match(designDoc, /Quiet on arrival\. Playful on discovery\. Simple everywhere\./);
   assert.match(designDoc, /Treat Alamo Square as a place, not a theme park/);
   assert.match(designDoc, /Never collapse a placeholder into a title floating in empty page space/);
