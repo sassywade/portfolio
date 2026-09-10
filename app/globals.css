@@ -12381,6 +12381,7 @@ html[data-atmosphere="grid"] .ascii-garden {
 
 /* Project metadata sits outside the artwork so every tile follows one rhythm. */
 .pranathi-project-grid {
+  column-gap: clamp(22px, 1.8vw, 28px);
   row-gap: clamp(50px, 5vw, 68px);
 }
 
