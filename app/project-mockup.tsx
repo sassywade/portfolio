@@ -2,7 +2,59 @@
 
 import type { Project } from "./projects";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type ProjectVideoProps = {
+  ariaLabel: string;
+  className: string;
+  poster: string;
+  src: string;
+};
+
+function ProjectVideo({ ariaLabel, className, poster, src }: ProjectVideoProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          void video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.2 },
+    );
+
+    observer.observe(video);
+    return () => {
+      observer.disconnect();
+      video.pause();
+    };
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      className={className}
+      aria-label={ariaLabel}
+      disablePictureInPicture
+      loop
+      muted
+      playsInline
+      poster={poster}
+      preload="metadata"
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  );
+}
 
 function useWorkGradients() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -28,9 +80,7 @@ export function ProjectMockup({ project }: { project: Project }) {
     const src = workGradients ? "/work/homepage-gradient.mp4" : "/work/homepage-ss.mp4";
     return (
       <div className="project-mockup project-mockup--full-video project-mockup--homepage-work">
-        <video key={src} className="project-work-video homepage-work-video" aria-label="Glean homepage redesign walkthrough" autoPlay disablePictureInPicture loop muted playsInline poster={project.cover.src} preload="metadata">
-          <source src={src} type="video/mp4" />
-        </video>
+        <ProjectVideo key={src} src={src} className="project-work-video homepage-work-video" ariaLabel="Glean homepage redesign walkthrough" poster={project.cover.src} />
       </div>
     );
   }
@@ -39,9 +89,7 @@ export function ProjectMockup({ project }: { project: Project }) {
     const src = workGradients ? "/work/proactive-intelligence-gradient.mp4" : "/work/proactive-intelligence.mp4";
     return (
       <div className="project-mockup project-mockup--full-video project-mockup--proactive-work">
-        <video key={src} className="project-work-video proactive-work-video" aria-label="Glean proactive intelligence walkthrough" autoPlay disablePictureInPicture loop muted playsInline poster={project.cover.src} preload="metadata">
-          <source src={src} type="video/mp4" />
-        </video>
+        <ProjectVideo key={src} src={src} className="project-work-video proactive-work-video" ariaLabel="Glean proactive intelligence walkthrough" poster={project.cover.src} />
       </div>
     );
   }
@@ -50,20 +98,13 @@ export function ProjectMockup({ project }: { project: Project }) {
     const src = workGradients ? "/work/growth-gradient.mp4" : "/work/onboarding-portfolio.mp4";
     return (
       <div className="project-mockup project-mockup--full-video project-mockup--growth-work">
-        <video
+        <ProjectVideo
           key={src}
+          src={src}
           className="project-work-video growth-work-video"
-          aria-label="Glean onboarding walkthrough"
-          autoPlay
-          disablePictureInPicture
-          loop
-          muted
-          playsInline
+          ariaLabel="Glean onboarding walkthrough"
           poster={project.cover.src}
-          preload="metadata"
-        >
-          <source src={src} type="video/mp4" />
-        </video>
+        />
       </div>
     );
   }
@@ -72,9 +113,7 @@ export function ProjectMockup({ project }: { project: Project }) {
     const src = workGradients ? "/work/artifacts-gradient.mp4" : "/work/artifacts-ss.mp4";
     return (
       <div className="project-mockup project-mockup--full-video project-mockup--artifacts-work">
-        <video key={src} className="project-work-video artifacts-work-image" aria-label="Glean Artifacts walkthrough" autoPlay disablePictureInPicture loop muted playsInline poster={project.cover.src} preload="metadata">
-          <source src={src} type="video/mp4" />
-        </video>
+        <ProjectVideo key={src} src={src} className="project-work-video artifacts-work-image" ariaLabel="Glean Artifacts walkthrough" poster={project.cover.src} />
       </div>
     );
   }
