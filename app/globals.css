@@ -12009,8 +12009,8 @@ html[data-atmosphere="grid"] .ascii-garden {
   object-fit: contain;
 }
 
-/* Homepage and Artifacts use their supplied recordings as the complete tiles. */
-.pranathi-project-grid .project-mockup.project-mockup--homepage-work {
+/* Every Glean recording fills its tile; Snap keeps the inset phone treatment. */
+.pranathi-project-grid .project-mockup.project-mockup--full-video {
   display: block;
   padding: 0;
   overflow: hidden;
@@ -12019,67 +12019,7 @@ html[data-atmosphere="grid"] .ascii-garden {
   filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
 }
 
-.homepage-work-video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: #ffffff;
-  object-fit: cover;
-  object-position: center;
-}
-
-/* Growth uses the supplied onboarding walkthrough as its complete tile visual. */
-.pranathi-project-grid .project-mockup.project-mockup--growth-work {
-  display: block;
-  padding: 0;
-  overflow: hidden;
-  border-radius: clamp(18px, 2vw, 28px);
-  background: #ffffff;
-  filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
-}
-
-.growth-work-video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: #ffffff;
-  object-fit: cover;
-  object-position: center;
-}
-
-/* Artifacts uses the supplied recording edge to edge. */
-.pranathi-project-grid .project-mockup.project-mockup--artifacts-work {
-  display: block;
-  padding: 0;
-  overflow: hidden;
-  border-radius: clamp(18px, 2vw, 28px);
-  background: #ffffff;
-  filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
-}
-
-.artifacts-work-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: #ffffff;
-  object-fit: cover;
-  object-position: center;
-}
-
-/* Proactive intelligence uses its supplied recording edge to edge. */
-.pranathi-project-grid .project-mockup.project-mockup--proactive-work {
-  display: block;
-  padding: 0;
-  overflow: hidden;
-  border-radius: clamp(18px, 2vw, 28px);
-  background: #ffffff;
-  filter: drop-shadow(0 7px 12px rgba(36, 35, 33, 0.09));
-}
-
-.proactive-work-video {
+.project-work-video {
   display: block;
   width: 100%;
   height: 100%;
@@ -12401,10 +12341,7 @@ html[data-atmosphere="grid"] .ascii-garden {
   transform: none;
 }
 
-.pranathi-project-grid .project-mockup.project-mockup--homepage-work,
-.pranathi-project-grid .project-mockup.project-mockup--artifacts-work,
-.pranathi-project-grid .project-mockup.project-mockup--proactive-work,
-.pranathi-project-grid .project-mockup.project-mockup--growth-work {
+.pranathi-project-grid .project-mockup.project-mockup--full-video {
   transition: transform 180ms var(--motion-ease-out);
 }
 
@@ -12419,10 +12356,7 @@ html[data-atmosphere="grid"] .ascii-garden {
     transform: none;
   }
 
-  .pranathi-project-grid .project-card:hover .project-mockup--homepage-work,
-  .pranathi-project-grid .project-card:hover .project-mockup--artifacts-work,
-  .pranathi-project-grid .project-card:hover .project-mockup--proactive-work,
-  .pranathi-project-grid .project-card:hover .project-mockup--growth-work {
+  .pranathi-project-grid .project-card:hover .project-mockup--full-video {
     transform: translateY(-4px);
   }
 
@@ -12432,21 +12366,13 @@ html[data-atmosphere="grid"] .ascii-garden {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pranathi-project-grid .project-mockup.project-mockup--homepage-work,
-  .pranathi-project-grid .project-mockup.project-mockup--artifacts-work,
-  .pranathi-project-grid .project-mockup.project-mockup--proactive-work,
-  .pranathi-project-grid .project-mockup.project-mockup--growth-work,
-  .pranathi-project-grid .homepage-work-video,
-  .pranathi-project-grid .proactive-work-video,
-  .pranathi-project-grid .growth-work-video,
+  .pranathi-project-grid .project-mockup.project-mockup--full-video,
+  .pranathi-project-grid .project-work-video,
   .pranathi-project-grid .snap-work-image {
     transition: none;
   }
 
-  .pranathi-project-grid .project-card:hover .project-mockup--homepage-work,
-  .pranathi-project-grid .project-card:hover .project-mockup--artifacts-work,
-  .pranathi-project-grid .project-card:hover .project-mockup--proactive-work,
-  .pranathi-project-grid .project-card:hover .project-mockup--growth-work,
+  .pranathi-project-grid .project-card:hover .project-mockup--full-video,
   .pranathi-project-grid .project-card:hover .snap-work-image {
     transform: none;
   }
