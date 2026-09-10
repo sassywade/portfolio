@@ -503,21 +503,37 @@ test("groups six featured projects into quiet Glean and Snap tiles", async () =>
   assert.match(projectMockup, /project-mockup--placeholder/);
   assert.equal((projectMockup.match(/project-mockup--full-video/g) ?? []).length, 4);
   assert.equal((projectMockup.match(/project-work-video/g) ?? []).length, 4);
+  assert.match(hero, /useState\(false\)[\s\S]*?dataset\.workGradients = workGradients \? "true" : "false"/);
+  assert.match(hero, /portfolio:work-gradient-change/);
+  assert.match(prototype, />Gradient videos</);
+  assert.match(prototype, /aria-pressed=\{workGradients\}/);
+  assert.match(prototype, /onWorkGradientsChange\(!workGradients\)/);
+  assert.match(prototype, /Off is the default/);
+  assert.match(projectMockup, /document\.documentElement\.dataset\.workGradients === "true"/);
+  assert.match(projectMockup, /"portfolio:work-gradient-change"/);
+  for (const gradientVideo of [
+    "homepage-gradient.mp4",
+    "proactive-intelligence-gradient.mp4",
+    "artifacts-gradient.mp4",
+    "growth-gradient.mp4",
+  ]) {
+    assert.match(projectMockup, new RegExp(gradientVideo.replace(".", "\\.")));
+  }
   assert.doesNotMatch(projectMockup, /project-placeholder__title|project-video-label/);
   assert.match(projectMockup, /project\.slug === "homepage"/);
   assert.match(projectMockup, /<video[\s\S]*className="project-work-video homepage-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/homepage-ss\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /"\/work\/homepage-ss\.mp4"/);
   assert.match(projects, /src: "\/work\/glean-homepage-redesign\.png"/);
   assert.match(projectMockup, /project\.slug === "growth"/);
   assert.match(projectMockup, /<video[\s\S]*className="project-work-video growth-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/onboarding-portfolio\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /"\/work\/onboarding-portfolio\.mp4"/);
   assert.match(projectMockup, /project\.slug === "artifacts"/);
   assert.match(projectMockup, /<video[\s\S]*className="project-work-video artifacts-work-image"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/artifacts-ss\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /"\/work\/artifacts-ss\.mp4"/);
   assert.match(projects, /src: "\/work\/glean-artifacts\.png"/);
   assert.match(projectMockup, /project\.slug === "psychic"/);
   assert.match(projectMockup, /<video[\s\S]*className="project-work-video proactive-work-video"[\s\S]*autoPlay[\s\S]*loop[\s\S]*muted[\s\S]*playsInline/);
-  assert.match(projectMockup, /src="\/work\/proactive-intelligence\.mp4" type="video\/mp4"/);
+  assert.match(projectMockup, /"\/work\/proactive-intelligence\.mp4"/);
   assert.match(projects, /slug: "psychic",[\s\S]*src: "\/work\/work-02\.png"/);
   assert.match(projectMockup, /project\.category\.includes\("Snap"\)/);
   assert.match(projectMockup, /className="snap-work-image"/);
@@ -611,6 +627,7 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(designDoc, /Treat Alamo Square as a place, not a theme park/);
   assert.match(designDoc, /Never collapse a placeholder into a title floating in empty page space/);
   assert.match(systemDoc, /Prototype settings are exploratory state/);
+  assert.match(systemDoc, /Gradient videos experiment[\s\S]*always off on load/);
   assert.match(systemDoc, /Pointer speed alone is not a state transition/);
   assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);
 });

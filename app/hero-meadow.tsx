@@ -40,6 +40,7 @@ export function HeroMeadow() {
   const [atmosphere, setAtmosphere] = useState<PortfolioAtmosphere>("grid");
   const [workGridColumns, setWorkGridColumns] = useState<WorkGridColumns>(2);
   const [workHandoff, setWorkHandoff] = useState<WorkHandoff>("dissolve");
+  const [workGradients, setWorkGradients] = useState(false);
   const [heroHighlights, setHeroHighlights] = useState(false);
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
@@ -125,6 +126,14 @@ export function HeroMeadow() {
     document.documentElement.dataset.workHandoff = workHandoff;
     return () => delete document.documentElement.dataset.workHandoff;
   }, [workHandoff]);
+
+  useEffect(() => {
+    document.documentElement.dataset.workGradients = workGradients ? "true" : "false";
+    window.dispatchEvent(new CustomEvent("portfolio:work-gradient-change", {
+      detail: { enabled: workGradients },
+    }));
+    return () => delete document.documentElement.dataset.workGradients;
+  }, [workGradients]);
 
   useEffect(() => {
     document.documentElement.dataset.heroHighlights = heroHighlights ? "true" : "false";
@@ -422,6 +431,7 @@ export function HeroMeadow() {
         atmosphere={atmosphere}
         workGridColumns={workGridColumns}
         workHandoff={workHandoff}
+        workGradients={workGradients}
         heroHighlights={heroHighlights}
         variant={meadowVariant}
         rollingMeadow={rollingMeadow}
@@ -437,6 +447,7 @@ export function HeroMeadow() {
         onAsciiGardenThemeChange={handleAsciiGardenThemeChange}
         onWorkGridColumnsChange={setWorkGridColumns}
         onWorkHandoffChange={setWorkHandoff}
+        onWorkGradientsChange={setWorkGradients}
         onHeroHighlightsChange={setHeroHighlights}
         onVariantChange={setMeadowVariant}
         onRollingMeadowChange={(nextMeadow) => {

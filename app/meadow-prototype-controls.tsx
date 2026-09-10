@@ -38,6 +38,7 @@ type MeadowSettingsProps = {
   atmosphere: PortfolioAtmosphere;
   workGridColumns: WorkGridColumns;
   workHandoff: WorkHandoff;
+  workGradients: boolean;
   heroHighlights: boolean;
   variant: MeadowVariant;
   rollingMeadow: RollingMeadow;
@@ -53,6 +54,7 @@ type MeadowSettingsProps = {
   onAtmosphereChange: (atmosphere: PortfolioAtmosphere) => void;
   onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
   onWorkHandoffChange: (handoff: WorkHandoff) => void;
+  onWorkGradientsChange: (isEnabled: boolean) => void;
   onHeroHighlightsChange: (isEnabled: boolean) => void;
   onVariantChange: (variant: MeadowVariant) => void;
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
@@ -70,6 +72,7 @@ export function MeadowSettings({
   atmosphere,
   workGridColumns,
   workHandoff,
+  workGradients,
   heroHighlights,
   variant,
   rollingMeadow,
@@ -85,6 +88,7 @@ export function MeadowSettings({
   onAtmosphereChange,
   onWorkGridColumnsChange,
   onWorkHandoffChange,
+  onWorkGradientsChange,
   onHeroHighlightsChange,
   onVariantChange,
   onRollingMeadowChange,
@@ -223,6 +227,26 @@ export function MeadowSettings({
                 3 columns
               </button>
             </div>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-work-gradients`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-work-gradients`}>Gradient videos</h2>
+                <small>Glean tile experiment</small>
+              </div>
+              <button
+                type="button"
+                className="meadow-settings__motion-toggle"
+                aria-pressed={workGradients}
+                onClick={() => onWorkGradientsChange(!workGradients)}
+              >
+                {workGradients ? "On" : "Off"}
+              </button>
+            </div>
+            <p className="meadow-settings__note">
+              Swaps all four Glean recordings together. Off is the default.
+            </p>
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-work-handoff`}>
