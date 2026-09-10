@@ -12404,10 +12404,15 @@ html[data-atmosphere="grid"] .ascii-garden {
 }
 
 .project-card__info p {
+  display: none;
   color: var(--muted);
   font-size: clamp(12px, 0.82vw, 14px);
   font-weight: 400;
   line-height: 1.4;
+}
+
+html[data-project-subtext="true"] .project-card__info p {
+  display: block;
 }
 
 @media (max-width: 580px) {

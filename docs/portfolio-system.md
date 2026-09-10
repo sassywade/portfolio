@@ -40,7 +40,7 @@ The environment frames the introduction and then yields to the work. It should n
 | Hidden top faces | Off |
 | Typography | Newsreader display, Geist interface/body |
 
-Prototype settings are exploratory state. They must remain independent and reversible. The portfolio always loads in its white, painterly default; the explicit ASCII Light/Dark choice may update the full portfolio only for the current visit and must never become the saved default. The Gradient videos experiment swaps all four Glean tile recordings together and is always off on load; Snap tiles are unaffected.
+Prototype settings are exploratory state. They must remain independent and reversible. The portfolio always loads in its white, painterly default; the explicit ASCII Light/Dark choice may update the full portfolio only for the current visit and must never become the saved default. The Gradient videos experiment swaps all four Glean tile recordings together and is always off on load; Snap tiles are unaffected. Project descriptions remain in the page but are hidden by default and can be revealed with the Project subtext toggle.
 
 `ASCII Garden · live` is the authored ASCII-rendered alternative in the Meadow + tree picker. It keeps the painterly scene as the default while reusing the dense cypress, textured rolling field, and paired light/dark palettes from the approved visual references. The garden changes only the environment artwork and palette; navigation, introduction, project, and page typography retain the portfolio's standard Newsreader and Geist system. Its light palette stays on a white grid with no solid meadow fill, and the live prototype hides every scene miniature and decorative character while retaining Philip as the interactive cursor pet. Choosing Dark applies the same dark paper, warm ink, quiet grid, and surface palette across Work, About, Play, and case studies during the current visit; reloading restores the white painterly default. Live wind bends the canopy row by row, deterministically turns edge glyphs over, and accepts Philip's directional gust through the shared cypress event. The hero-to-work handoff remains owned by the existing interaction system.
 
@@ -55,7 +55,7 @@ The default homepage should remain server-renderable. Client components are rese
 - White space is structural, not empty decoration.
 - Text color is the warm gray system ink (`#65625f` family).
 - Grid lines stay subtle and disappear on case-study pages.
-- Work tiles are quiet containers for future screenshots. A compact title and one-line description sit below each tile. The homepage shows four Glean projects followed by two Snap projects. Until a real cover is supplied, keep the tile substantial and light gray.
+- Work tiles are quiet containers for future screenshots. A compact title sits below each tile; one-line descriptions are hidden by default. The homepage shows four Glean projects followed by two Snap projects. Until a real cover is supplied, keep the tile substantial and light gray.
 - Project imagery should use `object-fit: contain`; never crop supplied work.
 - Use color sparingly for real brand marks and explicit interactive affordances.
 

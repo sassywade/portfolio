@@ -509,6 +509,11 @@ test("groups six featured projects into quiet Glean and Snap tiles", async () =>
   assert.match(prototype, /aria-pressed=\{workGradients\}/);
   assert.match(prototype, /onWorkGradientsChange\(!workGradients\)/);
   assert.match(prototype, /Off is the default/);
+  assert.match(hero, /useState\(false\)[\s\S]*?dataset\.projectSubtext = projectSubtext \? "true" : "false"/);
+  assert.match(prototype, />Project subtext</);
+  assert.match(prototype, /aria-pressed=\{projectSubtext\}/);
+  assert.match(prototype, /onProjectSubtextChange\(!projectSubtext\)/);
+  assert.match(prototype, /title-only by default/);
   assert.match(projectMockup, /document\.documentElement\.dataset\.workGradients === "true"/);
   assert.match(projectMockup, /"portfolio:work-gradient-change"/);
   for (const gradientVideo of [
@@ -593,7 +598,8 @@ test("groups six featured projects into quiet Glean and Snap tiles", async () =>
   assert.match(css, /\.pranathi-project-grid \{[\s\S]*?row-gap:\s*clamp\(50px, 5vw, 68px\)/);
   assert.match(css, /\.project-card__info \{[\s\S]*?padding:\s*18px 4px 0[\s\S]*?font-family:\s*var\(--font-geist\)/);
   assert.match(css, /\.project-card__info h4 \{[\s\S]*?font-size:\s*clamp\(15px, 1\.05vw, 17px\)[\s\S]*?font-weight:\s*600/);
-  assert.match(css, /\.project-card__info p \{[\s\S]*?color:\s*var\(--muted\)[\s\S]*?font-size:\s*clamp\(12px, 0\.82vw, 14px\)/);
+  assert.match(css, /\.project-card__info p \{[\s\S]*?display:\s*none;[\s\S]*?color:\s*var\(--muted\)[\s\S]*?font-size:\s*clamp\(12px, 0\.82vw, 14px\)/);
+  assert.match(css, /html\[data-project-subtext="true"\] \.project-card__info p \{[\s\S]*?display:\s*block/);
   assert.match(css, /grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /Final hover behavior for work tiles: lift the full-bleed video tiles/);
   assert.match(css, /\.pranathi-project-grid \.project-card \.project-mockup \{[^}]*box-shadow:\s*none;[^}]*transform:\s*none;/);
@@ -619,7 +625,8 @@ test("documents the portfolio's durable design and change contract", async () =>
   ]);
 
   assert.match(agentContract, /Prefer the smallest complete change/);
-  assert.match(agentContract, /title and one-line description sit below and outside the tile/);
+  assert.match(agentContract, /Each project title sits below and outside the tile/);
+  assert.match(agentContract, /descriptions remain available through the prototype picker but are hidden by default/);
   assert.match(agentContract, /homepage shows six projects total/);
   assert.match(agentContract, /Every supplied Glean recording fills its tile edge to edge/);
   assert.match(agentContract, /inspect the final matching rule/);
@@ -628,6 +635,7 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(designDoc, /Never collapse a placeholder into a title floating in empty page space/);
   assert.match(systemDoc, /Prototype settings are exploratory state/);
   assert.match(systemDoc, /Gradient videos experiment[\s\S]*always off on load/);
+  assert.match(systemDoc, /Project descriptions remain in the page but are hidden by default/);
   assert.match(systemDoc, /Pointer speed alone is not a state transition/);
   assert.match(systemDoc, /placeholder tile visibility and cascade precedence/);
 });

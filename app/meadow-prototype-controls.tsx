@@ -39,6 +39,7 @@ type MeadowSettingsProps = {
   workGridColumns: WorkGridColumns;
   workHandoff: WorkHandoff;
   workGradients: boolean;
+  projectSubtext: boolean;
   heroHighlights: boolean;
   variant: MeadowVariant;
   rollingMeadow: RollingMeadow;
@@ -55,6 +56,7 @@ type MeadowSettingsProps = {
   onWorkGridColumnsChange: (columns: WorkGridColumns) => void;
   onWorkHandoffChange: (handoff: WorkHandoff) => void;
   onWorkGradientsChange: (isEnabled: boolean) => void;
+  onProjectSubtextChange: (isEnabled: boolean) => void;
   onHeroHighlightsChange: (isEnabled: boolean) => void;
   onVariantChange: (variant: MeadowVariant) => void;
   onRollingMeadowChange: (rollingMeadow: RollingMeadow) => void;
@@ -73,6 +75,7 @@ export function MeadowSettings({
   workGridColumns,
   workHandoff,
   workGradients,
+  projectSubtext,
   heroHighlights,
   variant,
   rollingMeadow,
@@ -89,6 +92,7 @@ export function MeadowSettings({
   onWorkGridColumnsChange,
   onWorkHandoffChange,
   onWorkGradientsChange,
+  onProjectSubtextChange,
   onHeroHighlightsChange,
   onVariantChange,
   onRollingMeadowChange,
@@ -246,6 +250,26 @@ export function MeadowSettings({
             </div>
             <p className="meadow-settings__note">
               Swaps all four Glean recordings together. Off is the default.
+            </p>
+          </section>
+
+          <section className="meadow-settings__section" aria-labelledby={`${panelId}-project-subtext`}>
+            <div className="meadow-settings__section-head">
+              <div>
+                <h2 id={`${panelId}-project-subtext`}>Project subtext</h2>
+                <small>One-line descriptions</small>
+              </div>
+              <button
+                type="button"
+                className="meadow-settings__motion-toggle"
+                aria-pressed={projectSubtext}
+                onClick={() => onProjectSubtextChange(!projectSubtext)}
+              >
+                {projectSubtext ? "On" : "Off"}
+              </button>
+            </div>
+            <p className="meadow-settings__note">
+              Keeps the work grid title-only by default.
             </p>
           </section>
 
