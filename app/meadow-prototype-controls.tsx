@@ -33,6 +33,8 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 ];
 
 type MeadowSettingsProps = {
+  grassEnabled: boolean;
+  onGrassEnabledChange: (enabled: boolean) => void;
   environmentStyle: AlamoStyle;
   asciiGardenTheme: AsciiGardenTheme;
   atmosphere: PortfolioAtmosphere;
@@ -69,6 +71,8 @@ type MeadowSettingsProps = {
 };
 
 export function MeadowSettings({
+  grassEnabled,
+  onGrassEnabledChange,
   environmentStyle,
   asciiGardenTheme,
   atmosphere,
@@ -407,6 +411,26 @@ export function MeadowSettings({
               })}
             </div>
           </section>
+
+          {environmentStyle === "painterly-realism" && variant === "living" && (
+            <section className="meadow-settings__section" aria-labelledby={`${panelId}-grass`}>
+              <div className="meadow-settings__section-head">
+                <div>
+                  <h2 id={`${panelId}-grass`}>Grass meadow</h2>
+                  <small>{grassEnabled ? "Individual blades" : "Original image"}</small>
+                </div>
+                <button
+                  type="button"
+                  className="meadow-settings__motion-toggle"
+                  aria-label="Grass meadow"
+                  aria-pressed={grassEnabled}
+                  onClick={() => onGrassEnabledChange(!grassEnabled)}
+                >
+                  {grassEnabled ? "On" : "Off"}
+                </button>
+              </div>
+            </section>
+          )}
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-meadow`}>
             <h2 id={`${panelId}-meadow`}>Meadow lab</h2>

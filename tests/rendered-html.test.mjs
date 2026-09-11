@@ -1004,3 +1004,17 @@ test("shared terrain wind is calm at zero, directional, and stronger in gusts", 
     assert.ok(sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, gust: 1 }) >= sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, gust: 0 }));
   }
 });
+
+
+test("grass meadow replaces its reference and keeps the image-only picker alternative", async () => {
+  const [hero, meadow, grass, controls, css] = await Promise.all([
+    "hero-meadow.tsx", "meadow.tsx", "meadow-grass.tsx", "meadow-prototype-controls.tsx", "globals.css",
+  ].map((file) => readFile(new URL(`../app/${file}`, import.meta.url), "utf8")));
+  assert.match(hero, /const \[grassEnabled, setGrassEnabled\] = useState\(true\)/);
+  assert.match(meadow, /grassEnabled && environmentStyle.id === "painterly-realism"/);
+  assert.match(controls, /aria-label="Grass meadow"[\s\S]*?aria-pressed=\{grassEnabled\}[\s\S]*?onGrassEnabledChange\(!grassEnabled\)/);
+  assert.match(grass, /surface.dataset.grassReady = "true"/);
+  assert.match(grass, /delete surface.dataset.grassReady/);
+  assert.doesNotMatch(grass, /ctx\.drawImage\(source/);
+  assert.match(css, /\.meadow__visual\[data-grass-ready="true"\] > \.meadow__image\s*\{[^}]*visibility: hidden/);
+});

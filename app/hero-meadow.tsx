@@ -33,6 +33,7 @@ export function HeroMeadow() {
   ));
   const [isSceneVisible, setIsSceneVisible] = useState(true);
   const [meadowVariant, setMeadowVariant] = useState<MeadowVariant>("living");
+  const [grassEnabled, setGrassEnabled] = useState(true);
   const [rollingMeadow, setRollingMeadow] = useState<RollingMeadow>("original");
   const [flatMeadowTexture, setFlatMeadowTexture] = useState<FlatMeadowTexture>("fine");
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
@@ -412,6 +413,7 @@ export function HeroMeadow() {
       ) : (
         <>
           <Meadow
+            grassEnabled={grassEnabled}
             wind={wind}
             isPlaying={sceneIsPlaying}
             variant={meadowVariant}
@@ -429,6 +431,8 @@ export function HeroMeadow() {
         </>
       )}
       <MeadowSettings
+        grassEnabled={grassEnabled}
+        onGrassEnabledChange={setGrassEnabled}
         environmentStyle={environmentStyle}
         asciiGardenTheme={asciiGardenTheme}
         atmosphere={atmosphere}

@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import type { AlamoStyleDefinition } from "./alamo-styles";
 
 type MeadowProps = {
+  grassEnabled: boolean;
   isPlaying: boolean;
   wind: WindSettings;
   variant: MeadowVariant;
@@ -32,6 +33,7 @@ export const FLAT_MEADOW_TEXTURES = [
 export type FlatMeadowTexture = (typeof FLAT_MEADOW_TEXTURES)[number]["id"];
 
 export function Meadow({
+  grassEnabled,
   isPlaying,
   wind,
   variant,
@@ -75,7 +77,7 @@ export function Meadow({
                 decoding="async"
               />
             )}
-        {environmentStyle.id === "painterly-realism" && environmentStyle.rollingSrc && (
+        {grassEnabled && environmentStyle.id === "painterly-realism" && environmentStyle.rollingSrc && (
           <MeadowGrass wind={wind} isPlaying={isPlaying && variant === "living"} src={environmentStyle.rollingSrc} />
         )}
         {children}

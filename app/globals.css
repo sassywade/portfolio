@@ -12913,3 +12913,10 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   pointer-events: none;
   transform: translate3d(0, var(--rolling-meadow-registration-y), 0);
 }
+
+/* Once the blade field is complete, the reference image leaves the scene. */
+.meadow__visual[data-grass-ready="true"] > .meadow__image {
+  visibility: hidden;
+  opacity: 0;
+  transition: none;
+}

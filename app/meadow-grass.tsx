@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import { sampleMeadowWind, type WindSettings } from "./wind";
 
 // Sample the painted terrain itself: every root and color belongs to the hill,
-// including its irregular silhouette. The source remains the no-JS fallback.
+// including its irregular silhouette. Only generated blades reach the visible canvas.
+// The source image is a loading / no-canvas fallback and picker alternative.
 export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPlaying: boolean; src: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const settings = useRef({ wind, isPlaying });
@@ -16,6 +17,10 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     if (!canvas || !ctx) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const source = new Image();
+    const undergrowth = document.createElement("canvas");
+    const ground = undergrowth.getContext("2d");
+    if (!ground) return;
+    const surface = canvas.parentElement;
     let disposed = false;
     let visible = true;
     let frame = 0;
@@ -33,6 +38,9 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      undergrowth.width = canvas.width;
+      undergrowth.height = canvas.height;
+      ground!.setTransform(dpr, 0, 0, dpr, 0, 0);
       const sample = document.createElement("canvas");
       sample.width = 720;
       sample.height = Math.max(1, Math.round(720 * height / width));
@@ -41,8 +49,49 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       const scale = Math.min(sample.width / source.naturalWidth, sample.height / source.naturalHeight);
       sampler.drawImage(source, (sample.width - source.naturalWidth * scale) / 2, (sample.height - source.naturalHeight * scale) / 2, source.naturalWidth * scale, source.naturalHeight * scale);
       const pixels = sampler.getImageData(0, 0, sample.width, sample.height).data;
+      // Carry terrain color down from each column's ridge through transparent
+      // flecks in the cutout, so the blade-only hill has no holes to the grid.
+      for (let x = 0; x < sample.width; x++) {
+        let previous = -1;
+        for (let y = 0; y < sample.height; y++) {
+          const p = (y * sample.width + x) * 4;
+          if (pixels[p + 3] >= 235 && pixels[p + 1] >= pixels[p] * 0.9 && pixels[p + 2] <= pixels[p + 1] * 0.96) {
+            previous = p;
+          } else if (previous >= 0) {
+            pixels[p] = pixels[previous];
+            pixels[p + 1] = pixels[previous + 1];
+            pixels[p + 2] = pixels[previous + 2];
+            pixels[p + 3] = 255;
+          } else {
+            pixels[p + 3] = 0;
+          }
+        }
+      }
       let seed = 7419;
       const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+      // Dense, overlapping short blades form the entire field. Bake these once;
+      // the longer, wind-responsive blades above them remain individually animated.
+      // Never draw the reference bitmap into the visible canvas or this backing layer.
+      const spacing = Math.max(2.1, width / 650);
+      let groundCount = 0;
+      for (let y = 0; y < height + spacing; y += spacing) {
+        for (let x = 0; x < width; x += spacing) {
+          const rootX = x + random() * spacing;
+          const rootY = Math.min(height - 1, y + random() * spacing);
+          const p = (Math.min(sample.height - 1, Math.floor(rootY / height * sample.height)) * sample.width + Math.min(sample.width - 1, Math.floor(rootX / width * sample.width))) * 4;
+          if (pixels[p + 3] < 235 || pixels[p + 1] < pixels[p] * 0.9 || pixels[p + 2] > pixels[p + 1] * 0.96) continue;
+          const light = 0.76 + random() * 0.4;
+          const length = spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6);
+          const lean = (random() - 0.3) * length * 0.45;
+          ground!.fillStyle = `rgb(${pixels[p] * light},${pixels[p + 1] * light},${pixels[p + 2] * light})`;
+          ground!.beginPath();
+          ground!.moveTo(rootX - spacing * 0.85, rootY + spacing);
+          ground!.quadraticCurveTo(rootX - spacing * 0.4, rootY - length * 0.55, rootX + lean, rootY - length);
+          ground!.quadraticCurveTo(rootX + spacing * 0.6, rootY - length * 0.25, rootX + spacing * 0.85, rootY + spacing);
+          ground!.fill();
+          groundCount++;
+        }
+      }
       blades = [];
       for (let i = 0; i < Math.min(26000, width * 18); i++) {
         const x = random();
@@ -55,12 +104,15 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       }
       blades.sort((a, b) => a.y - b.y);
       canvas.dataset.bladeCount = String(blades.length);
+      canvas.dataset.groundBladeCount = String(groundCount);
       draw(performance.now());
+      if (surface && groundCount > 0) surface.dataset.grassReady = "true";
     }
 
     function draw(now: number) {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(undergrowth, 0, 0, width, height);
       const moving = settings.current.isPlaying && !reduced.matches;
       for (const blade of blades) {
         const flow = moving ? sampleMeadowWind(now / 1000, blade.x / width, settings.current.wind) : 0;
@@ -101,6 +153,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     reduced.addEventListener("change", sync);
     return () => {
       disposed = true;
+      if (surface) delete surface.dataset.grassReady;
       cancelAnimationFrame(frame);
       observer.disconnect();
       sceneObserver.disconnect();
