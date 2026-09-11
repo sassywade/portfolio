@@ -6,8 +6,8 @@ import { sampleMeadowWind } from "./wind";
 const global = typeof window !== "undefined" ? window : undefined;
 
   const DEFAULTS = { breeze: 0.34, gust: 0.52, elasticity: 0.38, tempo: 0.31, direction: 1 };
-  const LEAF_GRID_X = 16;
-  const LEAF_GRID_Y = 12;
+  const LEAF_GRID_X = 32;
+  const LEAF_GRID_Y = 24;
   const LEAF_OFFSET_LIMIT = 0.0042;
   const bones = [
     { parent: -1, start: [0.50, 0.03], end: [0.51, 0.60], pivot: [0.50, 0.08], radius: 0.19, stiffness: 4.2, damping: 4.8, mass: 2.8, response: 0.30, gust: 0.26, frequency: 0.52, phase: 0.18, delay: 0.00, maxAngle: 0.040, inherit: 0.00 },
@@ -20,13 +20,30 @@ const global = typeof window !== "undefined" ? window : undefined;
     { parent: 0, start: [0.51, 0.57], end: [0.52, 0.97], pivot: [0.51, 0.57], radius: 0.18, stiffness: 7.5, damping: 1.9, mass: 0.55, response: 1.16, gust: 1.02, frequency: 1.72, phase: 2.76, delay: 0.30, maxAngle: 0.185, inherit: 0.48 }
   ];
 
+  // Smaller boughs inherit their supporting limb, then flex locally at its fork.
+  const boughs = [
+    [1, 0.30, 0.36, 0.08, 0.49], [2, 0.72, 0.36, 0.95, 0.49],
+    [3, 0.31, 0.53, 0.08, 0.66], [4, 0.72, 0.53, 0.95, 0.67],
+    [5, 0.34, 0.72, 0.12, 0.86], [6, 0.72, 0.72, 0.92, 0.87],
+    [7, 0.50, 0.84, 0.30, 0.96], [7, 0.54, 0.85, 0.76, 0.96],
+  ];
+  boughs.forEach(([parent, x, y, tipX, tipY], index) => {
+    bones.push({ parent, start: [x, y], end: [tipX, tipY], pivot: [x, y],
+      radius: 0.075, stiffness: 9.2, damping: 3.8, mass: 0.48,
+      response: 0.62, gust: 0.58, frequency: 1.85 + index * 0.07,
+      phase: index * 1.37, delay: bones[parent].delay + 0.12,
+      maxAngle: 0.065, inherit: 0.92 });
+  });
+
   const treeVertex = `
     attribute vec2 a_position;
     attribute vec2 a_uv;
     attribute vec4 a_weights0;
     attribute vec4 a_weights1;
-    uniform vec2 u_bone_pivots[8];
-    uniform float u_bone_angles[8];
+    attribute vec4 a_weights2;
+    attribute vec4 a_weights3;
+    uniform vec2 u_bone_pivots[16];
+    uniform float u_bone_angles[16];
     varying vec2 v_uv;
     varying float v_leaf_zone;
     varying float v_outer;
@@ -49,6 +66,14 @@ const global = typeof window !== "undefined" ? window : undefined;
       position += (rotate_around(a_position, u_bone_pivots[5], u_bone_angles[5]) - a_position) * a_weights1.y;
       position += (rotate_around(a_position, u_bone_pivots[6], u_bone_angles[6]) - a_position) * a_weights1.z;
       position += (rotate_around(a_position, u_bone_pivots[7], u_bone_angles[7]) - a_position) * a_weights1.w;
+      position += (rotate_around(a_position, u_bone_pivots[8], u_bone_angles[8]) - a_position) * a_weights2.x;
+      position += (rotate_around(a_position, u_bone_pivots[9], u_bone_angles[9]) - a_position) * a_weights2.y;
+      position += (rotate_around(a_position, u_bone_pivots[10], u_bone_angles[10]) - a_position) * a_weights2.z;
+      position += (rotate_around(a_position, u_bone_pivots[11], u_bone_angles[11]) - a_position) * a_weights2.w;
+      position += (rotate_around(a_position, u_bone_pivots[12], u_bone_angles[12]) - a_position) * a_weights3.x;
+      position += (rotate_around(a_position, u_bone_pivots[13], u_bone_angles[13]) - a_position) * a_weights3.y;
+      position += (rotate_around(a_position, u_bone_pivots[14], u_bone_angles[14]) - a_position) * a_weights3.z;
+      position += (rotate_around(a_position, u_bone_pivots[15], u_bone_angles[15]) - a_position) * a_weights3.w;
       gl_Position = vec4(position, 0.0, 1.0);
       v_uv = a_uv;
       v_leaf_zone = leaf_zone;
@@ -76,7 +101,8 @@ const global = typeof window !== "undefined" ? window : undefined;
       float leafness = max(smoothstep(-0.015, 0.12, green_bias), v_leaf_zone * 0.55) * source.a;
       float motion_time = u_time * (0.00031 + u_tempo * 0.0012);
       float leaf_flutter = sin(v_uv.x * 146.0 + v_uv.y * 71.0 - motion_time * 8.0 + hash(floor(v_uv * 18.0)) * 6.2831);
-      vec2 leaf_cell = (floor(v_uv * vec2(16.0, 12.0)) + 0.5) / vec2(16.0, 12.0);
+      // Continuous sampling keeps neighboring foliage attached without square seams.
+      vec2 leaf_cell = v_uv;
       vec2 leaf_offset = (texture2D(u_leaf_motion, leaf_cell).rg * 2.0 - 1.0) * 0.0042;
       float wake = exp(-distance(v_uv, u_pointer) * 34.0) * u_pointer_active * v_leaf_zone;
       leaf_offset += vec2(wake * 0.0009, wake * 0.00022) * clamp(u_breeze + u_gust, 0.15, 1.2);
@@ -102,7 +128,7 @@ export function createCypressTree(options) {
       const gridY = Math.floor(index / LEAF_GRID_X);
       return {
         x: (gridX + 0.5) / LEAF_GRID_X,
-        y: 0.57 + (gridY + 0.5) / LEAF_GRID_Y * 0.40,
+        y: (gridY + 0.5) / LEAF_GRID_Y,
         phase: index * 1.731,
         stiffness: 8.0 + (index % 3) * 0.9,
         damping: 3.5 + (index % 4) * 0.35,
@@ -128,8 +154,8 @@ export function createCypressTree(options) {
     let treeBuffer = null;
     let indexBuffer = null;
     let indexCount = 0;
-    let bonePivots = new Float32Array(16);
-    let boneAngles = new Float32Array(8);
+    let bonePivots = new Float32Array(bones.length * 2);
+    let boneAngles = new Float32Array(bones.length);
     let frameHandle = 0;
     let destroyed = false;
     const petGust = { direction: 1, strength: 0, elapsed: 0, duration: 0, settleDuration: 0 };
@@ -195,11 +221,11 @@ export function createCypressTree(options) {
         const distance = distanceToSegment(x, y, bone.start[0], bone.start[1], bone.end[0], bone.end[1]);
         return Math.exp(-Math.pow(distance / bone.radius, 2) * 1.65);
       });
-      const outer = clamp(Math.abs(x - 0.50) * 2.2, 0, 1);
-      const leafHardness = clamp((y - 0.48) / 0.36, 0, 1) * (0.42 + outer * 0.58);
-      const dominant = weights.reduce((best, weight, index) => weight > weights[best] ? index : best, 0);
-      if (leafHardness > 0.04) weights.forEach((weight, index) => { weights[index] = weight * (1 - leafHardness); });
-      weights[dominant] += leafHardness;
+      // Smooth overlap preserves continuity at branch junctions.
+      const rootFreedom = clamp((y - 0.08) / 0.30, 0, 1);
+      weights.forEach((weight, index) => {
+        if (index > 0) weights[index] = weight * rootFreedom;
+      });
       const total = weights.reduce((sum, weight) => sum + weight, 0) || 1;
       return weights.map((weight) => weight / total);
     }
@@ -244,7 +270,7 @@ export function createCypressTree(options) {
         const gustWave = Math.max(0, Math.sin(delayedTime * (0.64 + wind.tempo * 0.35) - bone.phase * 0.31));
         const gustPulse = Math.pow(gustWave, 6.0);
         const turbulence = 0.72 + 0.28 * Math.sin(delayedTime * bone.frequency * 2.35 + bone.phase * 1.7);
-        const sharedFlow = sampleMeadowWind(performance.now() / 1000 - bone.delay, 0.82, wind);
+        const sharedFlow = sampleMeadowWind(performance.now() / 1000 - bone.delay, 0.78 + bone.end[0] * 0.1, wind);
         const naturalDrive = sharedFlow * (0.035 * bone.response + 0.024 * bone.gust) * turbulence;
         const petTurbulence = 0.88 + Math.sin(time * 15.0 + bone.phase * 1.9) * 0.12;
         const petDrive = petGust.direction * petGust.strength * gustEnvelope * petTurbulence * (0.082 + bone.response * 0.068);
@@ -354,7 +380,7 @@ export function createCypressTree(options) {
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
       gl.useProgram(programHandle);
       gl.bindBuffer(gl.ARRAY_BUFFER, treeBuffer);
-      const stride = 48;
+      const stride = (4 + bones.length) * 4;
       gl.enableVertexAttribArray(programHandle._position);
       gl.vertexAttribPointer(programHandle._position, 2, gl.FLOAT, false, stride, 0);
       gl.enableVertexAttribArray(programHandle._uv);
@@ -363,6 +389,10 @@ export function createCypressTree(options) {
       gl.vertexAttribPointer(programHandle._weights0, 4, gl.FLOAT, false, stride, 16);
       gl.enableVertexAttribArray(programHandle._weights1);
       gl.vertexAttribPointer(programHandle._weights1, 4, gl.FLOAT, false, stride, 32);
+      gl.enableVertexAttribArray(programHandle._weights2);
+      gl.vertexAttribPointer(programHandle._weights2, 4, gl.FLOAT, false, stride, 48);
+      gl.enableVertexAttribArray(programHandle._weights3);
+      gl.vertexAttribPointer(programHandle._weights3, 4, gl.FLOAT, false, stride, 64);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -414,7 +444,7 @@ export function createCypressTree(options) {
       petGust.duration = clamp(Number(next.duration) || 1450, 420, 2600);
       petGust.settleDuration = 1800;
       states.forEach((state, index) => {
-        state.velocity += petGust.direction * petGust.strength * (index === 0 ? 0.012 : 0.028 + index * 0.003);
+        state.velocity += petGust.direction * petGust.strength * (index === 0 ? 0.012 : 0.028 + Math.min(index, 7) * 0.003);
       });
       return { ...petGust };
     }
@@ -427,13 +457,15 @@ export function createCypressTree(options) {
       programHandle._uv = gl.getAttribLocation(programHandle, 'a_uv');
       programHandle._weights0 = gl.getAttribLocation(programHandle, 'a_weights0');
       programHandle._weights1 = gl.getAttribLocation(programHandle, 'a_weights1');
+      programHandle._weights2 = gl.getAttribLocation(programHandle, 'a_weights2');
+      programHandle._weights3 = gl.getAttribLocation(programHandle, 'a_weights3');
       programHandle._uniforms = {
         time: gl.getUniformLocation(programHandle, 'u_time'), breeze: gl.getUniformLocation(programHandle, 'u_breeze'), gust: gl.getUniformLocation(programHandle, 'u_gust'), tempo: gl.getUniformLocation(programHandle, 'u_tempo'), pointer: gl.getUniformLocation(programHandle, 'u_pointer'), pointerActive: gl.getUniformLocation(programHandle, 'u_pointer_active'), tree: gl.getUniformLocation(programHandle, 'u_tree'), leafMotion: gl.getUniformLocation(programHandle, 'u_leaf_motion'), bonePivots: gl.getUniformLocation(programHandle, 'u_bone_pivots[0]'), boneAngles: gl.getUniformLocation(programHandle, 'u_bone_angles[0]')
       };
       leafMotionTexture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, leafMotionTexture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, LEAF_GRID_X, LEAF_GRID_Y, 0, gl.RGBA, gl.UNSIGNED_BYTE, leafMotionData);

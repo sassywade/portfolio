@@ -1087,3 +1087,14 @@ test("grass contact redraws preserve cache scale, whole-pixel edges, and paint o
   assert.match(grass, /Math.ceil\(\(patch.x \+ patch.w\) \* pixelScale\) \/ pixelScale/);
   assert.match(grass, /\[\.\.\.rows\].sort\(\(a, b\) => a - b\)/);
 });
+
+test("fine cypress articulation keeps foliage continuous and child flex bounded", async () => {
+  const renderer = await readFile(new URL("../app/cypress-tree-renderer.ts", import.meta.url), "utf8");
+  assert.match(renderer, /LEAF_GRID_X = 32/);
+  assert.match(renderer, /LEAF_GRID_Y = 24/);
+  assert.match(renderer, /u_bone_angles\[16\]/);
+  assert.match(renderer, /maxAngle: 0\.065, inherit: 0\.92/);
+  assert.match(renderer, /vec2 leaf_cell = v_uv;/);
+  assert.doesNotMatch(renderer, /gl\.NEAREST|weights\[dominant\]/);
+  assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
+});
