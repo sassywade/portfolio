@@ -130,3 +130,5 @@ Grass wind response uses a shared 65-point damped spring field, interpolated acr
 Grass elasticity tuning: retain the spring recovery and moving crest, but keep the ambient bend around half the initial elastic version (wind gain 1.10, blade bend gain 0.95). The welcome gust is softened to 0.8 in the spring field. Avoid the strongly swept-over look.
 
 The painterly weather readout uses Geist at 13–15px for the summary and 12–14px for details. Counteract the meadow's vertical artwork scale on the readout so the typography retains its normal proportions.
+
+Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.

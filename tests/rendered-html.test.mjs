@@ -1114,7 +1114,7 @@ test("Polaroid captions fill the lower border and the sheen stays decorative", a
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   assert.match(css, /\.photo-lightbox__tilt \.photo-lightbox__figure\s*\{\s*gap: 0/);
   assert.match(css, /figcaption\s*\{\s*display: grid;\s*place-items: center;/);
-  assert.match(css, /font-family: "Permanent Marker", "Marker Felt", cursive/);
+  assert.match(css, /\.photo-lightbox__tilt \.photo-lightbox__figure figcaption p\s*\{[^}]*font-family: var\(--serif\)/);
   assert.match(gallery, /className="photo-lightbox__sheen" aria-hidden="true"/);
   assert.match(css, /\.photo-lightbox__sheen\s*\{[^}]*pointer-events: none/);
 });

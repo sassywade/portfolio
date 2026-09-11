@@ -13028,7 +13028,7 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   margin: 0;
   max-width: 100%;
   color: #343631;
-  font-family: "Permanent Marker", "Marker Felt", cursive;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.7vw, 20px);
   font-weight: 400;
   line-height: 1.45;
@@ -13061,4 +13061,37 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather {
     bottom: 12px;
   }
+}
+
+/* Fit the paper to the complete photo, without an inner letterbox. */
+.photo-lightbox__tilt .photo-lightbox__figure {
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+  max-height: none;
+}
+
+.photo-lightbox__tilt .photo-lightbox__visual {
+  display: block;
+  flex: none;
+  width: max-content;
+  min-height: 0;
+  max-height: none;
+  margin: 14px 14px 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.photo-lightbox__tilt .photo-lightbox__visual img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(452px, calc(100vw - 68px));
+  max-height: calc(100svh - 230px);
+  object-fit: contain;
+}
+
+.photo-lightbox__tilt .photo-lightbox__figure figcaption {
+  grid-template-columns: 1fr;
+  flex: none;
 }
