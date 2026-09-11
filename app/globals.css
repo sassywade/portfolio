@@ -3874,7 +3874,7 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
   color: var(--ink);
   font-family: var(--serif);
   font-size: clamp(40px, 4vw, 50px);
-  font-style: italic;
+  font-style: normal;
   font-weight: 400;
   letter-spacing: -0.06em;
   line-height: 1;

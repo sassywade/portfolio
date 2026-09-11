@@ -132,3 +132,5 @@ Grass elasticity tuning: retain the spring recovery and moving crest, but keep t
 The painterly weather readout uses Geist at 13–15px for the summary and 12–14px for details. Counteract the meadow's vertical artwork scale on the readout so the typography retains its normal proportions.
 
 Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.
+
+The homepage “Neel Saswade” name uses upright Newsreader, not italics.
