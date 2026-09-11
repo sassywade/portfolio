@@ -1103,7 +1103,7 @@ test("opened Life prints isolate pointer tilt from entrance and honor input pref
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   assert.match(gallery, /\(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)/);
   assert.match(gallery, /event.pointerType !== "mouse"/);
-  assert.match(gallery, /perspective\(1400px\) rotateX/);
+  assert.match(gallery, /perspective\(2000px\) rotateX/);
   assert.match(gallery, /print.removeEventListener\("pointerleave", reset\)/);
   assert.match(gallery, /className="photo-lightbox__tilt" ref=\{tiltRef\}/);
   assert.match(gallery, /draggable=\{false\}/);

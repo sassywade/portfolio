@@ -117,7 +117,7 @@ Grass contact patches must never reveal rectangular seams: copy the baked turf a
 
 The cypress uses 16 articulated trunk, limb, and smaller bough groups. Boughs inherit their supporting branch's movement with lighter local flex; 768 fine foliage groups respond to the same spatial wind. Smooth mesh weights and interpolated foliage motion keep branch junctions and leaf patches continuous. Keep the existing single renderer loop, visibility suspension, and reduced-motion behavior.
 
-Opened Life photos gently tilt as a complete film print toward a fine mouse pointer (up to 6 degrees, 1400px perspective), returning to neutral on leave, close, resize, or focus loss. The tilt wrapper keeps the existing entrance/exit independent. Touch and reduced-motion views stay still; thumbnails and photo navigation remain unchanged.
+Opened Life photos gently tilt as a complete film print toward a fine mouse pointer (up to 3 degrees, 2000px perspective), returning to neutral on leave, close, resize, or focus loss. The tilt wrapper keeps the existing entrance/exit independent. Touch and reduced-motion views stay still; thumbnails and photo navigation remain unchanged.
 
 Opened Life prints have a restrained laminated sheen that follows the existing pointer tilt, an off-white paper edge, and Permanent Marker captions. Center the caption vertically and horizontally within the entire lower border, with no gap above that border. Keep sheen subtle enough to preserve photo detail and static under reduced motion.
 

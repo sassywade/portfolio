@@ -67,7 +67,7 @@ export function AboutPhotoGallery() {
       window.cancelAnimationFrame(frame);
       frame = 0;
       bounds = null;
-      print.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg)";
+      print.style.transform = "perspective(2000px) rotateX(0deg) rotateY(0deg)";
       if (sheen) sheen.style.transform = "translate3d(0, 0, 0) rotate(-18deg)";
     };
     const move = (event: PointerEvent) => {
@@ -77,7 +77,7 @@ export function AboutPhotoGallery() {
       const y = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1));
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
-        print.style.transform = `perspective(1400px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`;
+        print.style.transform = `perspective(2000px) rotateX(${-y * 3}deg) rotateY(${x * 3}deg)`;
         if (sheen) sheen.style.transform = `translate3d(${-x * 16}%, ${-y * 10}%, 0) rotate(-18deg)`;
         frame = 0;
       });

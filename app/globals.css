@@ -12971,7 +12971,7 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   width: fit-content;
   max-width: 100%;
   margin: 0 auto;
-  transform: perspective(1400px) rotateX(0deg) rotateY(0deg);
+  transform: perspective(2000px) rotateX(0deg) rotateY(0deg);
   transition: transform 180ms var(--motion-ease-out);
 }
 
