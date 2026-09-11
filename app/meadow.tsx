@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { MeadowGrass } from "./meadow-grass";
+import type { WindSettings } from "./wind";
 import type { ReactNode } from "react";
 import type { AlamoStyleDefinition } from "./alamo-styles";
 
 type MeadowProps = {
   isPlaying: boolean;
+  wind: WindSettings;
   variant: MeadowVariant;
   flatTexture: FlatMeadowTexture;
   rollingMeadow: RollingMeadow;
@@ -30,6 +33,7 @@ export type FlatMeadowTexture = (typeof FLAT_MEADOW_TEXTURES)[number]["id"];
 
 export function Meadow({
   isPlaying,
+  wind,
   variant,
   flatTexture,
   rollingMeadow,
@@ -71,6 +75,9 @@ export function Meadow({
                 decoding="async"
               />
             )}
+        {environmentStyle.id === "painterly-realism" && environmentStyle.rollingSrc && (
+          <MeadowGrass wind={wind} isPlaying={isPlaying && variant === "living"} src={environmentStyle.rollingSrc} />
+        )}
         {children}
       </div>
       <div

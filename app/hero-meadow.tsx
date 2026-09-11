@@ -412,6 +412,7 @@ export function HeroMeadow() {
       ) : (
         <>
           <Meadow
+            wind={wind}
             isPlaying={sceneIsPlaying}
             variant={meadowVariant}
             flatTexture={flatMeadowTexture}

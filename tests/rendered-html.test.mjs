@@ -41,7 +41,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /data-rolling-meadow="original"/);
   assert.match(html, /Checking Alamo Square&#x27;s wind/);
   assert.match(html, /Local time in San Francisco/);
-  assert.doesNotMatch(html, /meadow__grass-canvas|data-grass-layer/);
+  assert.match(html, /meadow__grass-canvas[^>]*data-grass-layer/);
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
   assert.match(html, /data-flat-texture="fine"/);
   assert.match(html, /class="[^"]*\bbike-word\b[^"]*\bhero-hobby--bike\b/);
@@ -723,7 +723,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(meadow, /\/meadow-rolling-foggy\.png/);
   assert.match(meadow, /type FlatMeadowTexture/);
   assert.match(meadow, /\{ id: "original", label: "Original", src: "\/meadow-ground\.png" \}/);
-  assert.doesNotMatch(meadow, /createMeadowGrass|meadow__texture|meadow__grass-canvas/);
+  assert.match(meadow, /<MeadowGrass wind=\{wind\}/);
   assert.match(meadow, /data-meadow-surface=\{variant === "flat" \? "active" : "inactive"\}/);
   assert.match(meadow, /className="meadow__flat-field"/);
   assert.match(meadow, /\/flat-meadow-fine\.jpg/);
@@ -799,10 +799,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(treeRenderer, /const petDrive = petGust\.direction/);
   assert.match(treeRenderer, /const dynamicMaxAngle = bone\.maxAngle/);
   assert.match(treeRenderer, /const naturalDirection = Number\.isFinite\(wind\.direction\)/);
-  assert.match(treeRenderer, /naturalDirection \* \(\(0\.006/);
+  assert.match(treeRenderer, /const sharedFlow = sampleMeadowWind/);
   assert.match(treeRenderer, /const petLeafPush = petGust\.direction/);
   assert.match(treeRenderer, /function applyGust\(values\)/);
-  assert.match(treeRenderer, /running \|\| petGust\.duration > 0/);
+  assert.match(treeRenderer, /running && !reducedMotion\.matches/);
   assert.match(layerHost, /document\.querySelector<HTMLElement>\("\.hero-meadow"\)/);
   assert.match(layerHost, /window\.requestAnimationFrame/);
   assert.match(bike, /const FRAME_URLS = \[/);
@@ -922,7 +922,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.doesNotMatch(smiley, /motionLevel|wantsToBlow|const isActive/);
   assert.match(smiley, /cursor\.dataset\.state = "idle";\s*cursor\.dataset\.wind = "off";/);
   assert.match(smiley, /stopIdleMischief\(\)/);
-  assert.doesNotMatch(css, /\.meadow__grass-canvas\s*\{|\.meadow__texture\s*\{|\.meadow__visual\.is-grass-live/);
+  assert.match(css, /\.meadow__grass-canvas\s*\{[^}]*pointer-events: none/);
   assert.match(css, /\.meadow__visual--flat\s*\{/);
   assert.match(css, /--flat-meadow-color:\s*#6f8d45/);
   assert.match(css, /--flat-meadow-height:\s*clamp\(86px, 11svh, 122px\)/);
@@ -989,4 +989,18 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /transform:\s*scaleX\(var\(--smiley-facing\)\)/);
   assert.match(css, /pointer-events:\s*none/);
   assert.match(css, /html:not\(\[data-meadow-present="true"\]\) \.smiley-cursor \{[\s\S]*?display:\s*none !important;[\s\S]*?opacity:\s*0 !important/);
+});
+
+
+test("shared terrain wind is calm at zero, directional, and stronger in gusts", async () => {
+  const ts = await import("typescript");
+  const source = await readFile(new URL("../app/wind.ts", import.meta.url), "utf8");
+  const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
+  const { sampleMeadowWind, INITIAL_WIND } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
+  for (let t = 0; t < 30; t += 0.25) {
+    assert.equal(sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, breeze: 0, gust: 0 }), 0);
+    assert.ok(sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, direction: 1 }) >= 0);
+    assert.ok(sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, direction: -1 }) <= 0);
+    assert.ok(sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, gust: 1 }) >= sampleMeadowWind(t, 0.5, { ...INITIAL_WIND, gust: 0 }));
+  }
 });

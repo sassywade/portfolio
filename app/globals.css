@@ -12902,3 +12902,14 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
     linear-gradient(90deg, rgba(73, 72, 63, 0.045) 1px, transparent 1px);
   background-size: 40px 40px;
 }
+
+/* Living texture shares the exact registration and bounds of its terrain. */
+.meadow__grass-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  transform: translate3d(0, var(--rolling-meadow-registration-y), 0);
+}

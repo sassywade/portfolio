@@ -96,3 +96,7 @@ Visual changes still require rendered verification because source-level assertio
 ## 8. Decision discipline
 
 When a new request conflicts with an older experiment, the newest explicit preference wins. Remove superseded behavior rather than stacking another override. Update the system contract when the preference should survive future work.
+
+## Living terrain
+
+The painterly default now includes thousands of fine grass blades sampled from the rolling terrain's opaque green pixels. Roots and colors follow the supplied hill exactly, with perspective-scaled blades and the same image registration. Grass and cypress share a spatial wind field driven by the existing Alamo Square weather observations; the canopy responds with slower branch inertia and finer foliage groups. Keep the white studio grid and existing composition. Grass remains isolated from the flat and alternate art styles. Both renderers suspend animation when paused, offscreen, in a hidden tab, or under reduced motion; the original terrain remains a complete fallback.

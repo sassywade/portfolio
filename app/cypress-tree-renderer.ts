@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-unused-vars, prefer-const */
 // @ts-nocheck
 
+import { sampleMeadowWind } from "./wind";
+
 const global = typeof window !== "undefined" ? window : undefined;
 
   const DEFAULTS = { breeze: 0.34, gust: 0.52, elasticity: 0.38, tempo: 0.31, direction: 1 };
-  const LEAF_GRID_X = 8;
-  const LEAF_GRID_Y = 6;
+  const LEAF_GRID_X = 16;
+  const LEAF_GRID_Y = 12;
   const LEAF_OFFSET_LIMIT = 0.0042;
   const bones = [
     { parent: -1, start: [0.50, 0.03], end: [0.51, 0.60], pivot: [0.50, 0.08], radius: 0.19, stiffness: 4.2, damping: 4.8, mass: 2.8, response: 0.30, gust: 0.26, frequency: 0.52, phase: 0.18, delay: 0.00, maxAngle: 0.040, inherit: 0.00 },
@@ -74,7 +76,7 @@ const global = typeof window !== "undefined" ? window : undefined;
       float leafness = max(smoothstep(-0.015, 0.12, green_bias), v_leaf_zone * 0.55) * source.a;
       float motion_time = u_time * (0.00031 + u_tempo * 0.0012);
       float leaf_flutter = sin(v_uv.x * 146.0 + v_uv.y * 71.0 - motion_time * 8.0 + hash(floor(v_uv * 18.0)) * 6.2831);
-      vec2 leaf_cell = (floor(v_uv * vec2(8.0, 6.0)) + 0.5) / vec2(8.0, 6.0);
+      vec2 leaf_cell = (floor(v_uv * vec2(16.0, 12.0)) + 0.5) / vec2(16.0, 12.0);
       vec2 leaf_offset = (texture2D(u_leaf_motion, leaf_cell).rg * 2.0 - 1.0) * 0.0042;
       float wake = exp(-distance(v_uv, u_pointer) * 34.0) * u_pointer_active * v_leaf_zone;
       leaf_offset += vec2(wake * 0.0009, wake * 0.00022) * clamp(u_breeze + u_gust, 0.15, 1.2);
@@ -242,7 +244,8 @@ export function createCypressTree(options) {
         const gustWave = Math.max(0, Math.sin(delayedTime * (0.64 + wind.tempo * 0.35) - bone.phase * 0.31));
         const gustPulse = Math.pow(gustWave, 6.0);
         const turbulence = 0.72 + 0.28 * Math.sin(delayedTime * bone.frequency * 2.35 + bone.phase * 1.7);
-        const naturalDrive = naturalDirection * ((0.006 + wind.breeze * 0.032 * bone.response) * swell * turbulence + wind.gust * gustPulse * 0.082 * bone.gust);
+        const sharedFlow = sampleMeadowWind(performance.now() / 1000 - bone.delay, 0.82, wind);
+        const naturalDrive = sharedFlow * (0.035 * bone.response + 0.024 * bone.gust) * turbulence;
         const petTurbulence = 0.88 + Math.sin(time * 15.0 + bone.phase * 1.9) * 0.12;
         const petDrive = petGust.direction * petGust.strength * gustEnvelope * petTurbulence * (0.082 + bone.response * 0.068);
         const drive = naturalDrive + petDrive;
@@ -265,7 +268,8 @@ export function createCypressTree(options) {
         const flutter = Math.sin(localTime * (2.8 + wind.tempo * 1.5) + group.phase) * 0.5 + 0.5;
         const petLeafFlutter = 0.82 + Math.sin(time * 17.0 + group.phase * 1.4) * 0.18;
         const petLeafPush = petGust.direction * petGust.strength * gustEnvelope * petLeafFlutter * 0.00255 * group.response;
-        const targetX = naturalDirection * ((Math.sin(localTime * 1.35 + group.phase) * 0.00034 + wind.breeze * 0.00050 * flutter) * group.response + wind.gust * gustPulse * 0.00155 * group.response) + petLeafPush;
+        const sharedFlow = sampleMeadowWind(performance.now() / 1000 - group.y * 0.18, 0.78 + group.x * 0.1, wind);
+        const targetX = sharedFlow * 0.0031 * group.response + Math.sin(localTime * 1.35 + group.phase) * wind.breeze * 0.00024 + petLeafPush;
         const targetY = Math.cos(localTime * 1.72 + group.phase * 1.2) * (0.00010 + wind.breeze * 0.00018) * group.response + gustPulse * 0.00024 * group.response + Math.abs(petLeafPush) * 0.16;
         const spring = group.stiffness * (1.08 - wind.elasticity * 0.16);
         const damping = group.damping * (1.04 - wind.elasticity * 0.10);
@@ -328,6 +332,7 @@ export function createCypressTree(options) {
       treeRect = { x: width * 0.5 - treeHeight * aspect * 0.5, y: height * 0.01, width: treeHeight * aspect, height: treeHeight };
       if (gl) { gl.viewport(0, 0, canvas.width, canvas.height); createTreeMesh(); }
       if (fallback) fallback.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (gl && texture) drawWebGL(); else drawFallback();
     }
 
     function drawFallback() {
@@ -383,7 +388,16 @@ export function createCypressTree(options) {
       pointerActive = true;
     }
 
-    function setPlaying(next) { running = Boolean(next); return running; }
+    const reducedMotion = global.matchMedia('(prefers-reduced-motion: reduce)');
+    function schedule() {
+      global.cancelAnimationFrame(frameHandle);
+      frameHandle = 0;
+      if (!destroyed && !document.hidden && running && !reducedMotion.matches) {
+        lastFrame = performance.now();
+        frameHandle = global.requestAnimationFrame(frame);
+      }
+    }
+    function setPlaying(next) { running = Boolean(next); schedule(); return running; }
     function setWind(values) {
       ["breeze", "gust", "elasticity", "tempo"].forEach((key) => {
         if (values && Number.isFinite(Number(values[key]))) wind[key] = clamp(Number(values[key]), 0, 1);
@@ -392,6 +406,7 @@ export function createCypressTree(options) {
       return { ...wind };
     }
     function applyGust(values) {
+      if (reducedMotion.matches || !running || document.hidden) return;
       const next = values || {};
       petGust.direction = Number(next.direction) < 0 ? -1 : 1;
       petGust.strength = clamp(Number(next.strength) || 1, 0.2, 1.35);
@@ -432,19 +447,21 @@ export function createCypressTree(options) {
     canvas.addEventListener('pointermove', pointerMove);
     canvas.addEventListener('pointerleave', pointerLeave);
     global.addEventListener('resize', resize);
-    image.addEventListener('load', () => { resize(); if (gl) texture = textureFrom(image); canvas.parentElement?.classList.add('is-live'); });
-    if (image.complete && image.naturalWidth) { resize(); if (gl) texture = textureFrom(image); canvas.parentElement?.classList.add('is-live'); }
+    image.addEventListener('load', () => { resize(); if (gl) texture = textureFrom(image); canvas.parentElement?.classList.add('is-live'); updateLeafMotionTexture(); if (gl) drawWebGL(); else drawFallback(); });
+    if (image.complete && image.naturalWidth) { resize(); if (gl) texture = textureFrom(image); canvas.parentElement?.classList.add('is-live'); updateLeafMotionTexture(); if (gl) drawWebGL(); else drawFallback(); }
     resize();
 
     function frame(now) {
       if (destroyed) return;
       const delta = Math.min(60, now - lastFrame);
       lastFrame = now;
-      if (running || petGust.duration > 0) { elapsed += delta; updatePhysics(delta); }
+      if (running && !reducedMotion.matches) { elapsed += delta; updatePhysics(delta); }
       if (gl && texture) drawWebGL(); else drawFallback();
-      frameHandle = global.requestAnimationFrame(frame);
+      if (running && !reducedMotion.matches && !document.hidden) frameHandle = global.requestAnimationFrame(frame);
     }
-    frameHandle = global.requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", schedule);
+    reducedMotion.addEventListener("change", schedule);
+    schedule();
 
     return {
       setWind,
@@ -462,6 +479,8 @@ export function createCypressTree(options) {
         canvas.removeEventListener('pointermove', pointerMove);
         canvas.removeEventListener('pointerleave', pointerLeave);
         global.removeEventListener('resize', resize);
+        document.removeEventListener('visibilitychange', schedule);
+        reducedMotion.removeEventListener('change', schedule);
         if (gl) { if (texture) gl.deleteTexture(texture); if (leafMotionTexture) gl.deleteTexture(leafMotionTexture); if (treeBuffer) gl.deleteBuffer(treeBuffer); if (indexBuffer) gl.deleteBuffer(indexBuffer); }
       }
     };
