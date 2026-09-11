@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { MEADOW_GUST_EVENT, GRASS_PRESENCE_EVENT, petGrassWind, arrivalGrassWind, grassPressure, type MeadowGust, type GrassFootprint } from "./grass-interaction";
+import { MEADOW_GUST_EVENT, WELCOME_TRAVEL_MS, cursorGrassBend, arrivalGrassWind, grassPressure, type MeadowGust, type GrassFootprint } from "./grass-interaction";
 import { sampleMeadowWind, type WindSettings } from "./wind";
 
 // Sample the painted terrain itself: every root and color belongs to the hill,
@@ -33,6 +33,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     let ridge: number[] = [];
     let pointer: { x: number; y: number } | null = null;
     let pointerDirection = 1;
+    let lastPointerMove = 0;
     let grassActive = false;
     let brush: { x: number; y: number; direction: number; strength: number } | null = null;
     const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
@@ -40,25 +41,18 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       if (grassActive === active) return;
       grassActive = active;
       if (canvas) canvas.dataset.pointerGrass = active ? "true" : "false";
-      window.dispatchEvent(new CustomEvent(GRASS_PRESENCE_EVENT, { detail: { active } }));
+      window.dispatchEvent(new CustomEvent(WELCOME_TRAVEL_MS, { detail: { active } }));
     };
-    function updateBrush() {
+    function updateBrush(now: number) {
       if (!canvas || !finePointer.matches || !pointer) { announcePresence(false); brush = null; return; }
       const bounds = canvas.getBoundingClientRect();
       const toLocal = (x: number, y: number) => ({ x: (x - bounds.left) * width / bounds.width, y: (y - bounds.top) * height / bounds.height });
       const inGrass = (point: {x: number; y: number}) => point.x >= 0 && point.x < width && point.y >= (ridge[Math.floor(point.x / width * ridge.length)] ?? height) && point.y <= height;
       const local = toLocal(pointer.x, pointer.y);
-      const pet = document.querySelector<HTMLElement>('.smiley-cursor.is-visible');
-      const petVisible = pet && getComputedStyle(pet).visibility !== "hidden" && getComputedStyle(pet).display !== "none";
-      const petBounds = petVisible ? pet.getBoundingClientRect() : null;
-      const petPoint = petBounds ? toLocal(petBounds.left + petBounds.width / 2, petBounds.top + petBounds.height / 2) : null;
-      const active = inGrass(local) || Boolean(petPoint && inGrass(petPoint));
+      const active = inGrass(local) && now - lastPointerMove < 160;
       announcePresence(active);
       if (active) {
-        // The cursor steers a broad puff in front of Philip; easing carries momentum on exit.
-        const nextX = petPoint && inGrass(petPoint) ? petPoint.x * 0.35 + local.x * 0.65 : local.x;
-        const nextY = Math.max(local.y, ridge[Math.max(0, Math.min(ridge.length - 1, Math.floor(local.x / width * ridge.length)))] ?? local.y);
-        brush = { x: nextX, y: nextY, direction: pointerDirection, strength: Math.min(1, (brush?.strength ?? 0) + 0.12) };
+        brush = { x: local.x, y: local.y, direction: pointerDirection, strength: Math.min(1, (brush?.strength ?? 0) + 0.12) };
       } else if (brush) {
         brush.strength *= 0.86;
         if (brush.strength < 0.02) brush = null;
@@ -188,20 +182,18 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(undergrowth, 0, 0, width, height);
       const moving = settings.current.isPlaying && !reduced.matches && visible && !document.hidden;
-      if (moving) { collectFootprints(now); updateBrush(); }
+      if (moving) { collectFootprints(now); updateBrush(now); }
       // Animate the dense turf too, within bounded wind/contact patches.
       const patches = footprints.map((foot) => ({ x: foot.x - foot.radius - 22, y: foot.y - foot.radius - 22, w: (foot.radius + 22) * 2, h: (foot.radius + 22) * 2 }));
-      if (brush && moving) patches.push({ x: brush.x - 120, y: brush.y - 80, w: 240, h: 160 });
+      if (brush && moving) patches.push({ x: brush.x - 62, y: brush.y - 48, w: 124, h: 96 });
       if (gust && moving) {
-        const travel = (now - gust.startedAt) / 1700;
-        const tail = gust.duration * 0.6 / 1700;
-        for (const sign of [-1, 1]) {
-          const edge = gust.origin + sign * travel;
-          const back = edge - sign * tail;
-          const left = Math.max(0, Math.min(edge, back) * width - 24);
-          const right = Math.min(width, Math.max(edge, back) * width + 24);
-          if (right > left) patches.push({ x: left, y: 0, w: right - left, h: height });
-        }
+        const span = gust.span ?? 1;
+        const travel = (now - gust.startedAt) / WELCOME_TRAVEL_MS * span;
+        const tail = gust.duration / WELCOME_TRAVEL_MS * span;
+        const edge = gust.origin + travel;
+        const left = Math.max(0, (edge - tail) * width - 24);
+        const right = Math.min(width, edge * width + 24);
+        if (right > left) patches.push({ x: left, y: 0, w: right - left, h: height });
       }
       if (patches.length) {
         ctx.save();
@@ -216,13 +208,13 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         for (const row of rows) for (const blade of groundRows.get(row) ?? []) {
           if (!patches.some((patch) => blade.x >= patch.x - 32 && blade.x <= patch.x + patch.w + 32)) continue;
           const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
-          const flow = moving ? arrivalGrassWind(now, blade.x / width, gust) + petGrassWind(blade.x, blade.y, brush) : 0;
+          const flow = moving ? arrivalGrassWind(now, blade.x / width, gust) + cursorGrassBend(blade.x, blade.y, brush) : 0;
           paintGround(ctx, blade, pressure, direction, flow);
         }
         ctx.restore();
       }
       for (const blade of blades) {
-        const flow = moving ? (sampleMeadowWind(now / 1000, blade.x / width, settings.current.wind) + arrivalGrassWind(now, blade.x / width, gust) + petGrassWind(blade.x, blade.y, brush)) : 0;
+        const flow = moving ? (sampleMeadowWind(now / 1000, blade.x / width, settings.current.wind) + arrivalGrassWind(now, blade.x / width, gust) + cursorGrassBend(blade.x, blade.y, brush)) : 0;
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
         const length = blade.length * (1 - pressure * 0.83);
         const bend = blade.lean + flow * length * 0.85 + pressure * blade.length * direction;
@@ -252,6 +244,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     const handlePointer = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" || !finePointer.matches) return;
       if (pointer && Math.abs(event.clientX - pointer.x) > 2) pointerDirection = event.clientX < pointer.x ? -1 : 1;
+      lastPointerMove = performance.now();
       pointer = { x: event.clientX, y: event.clientY };
     };
     const handlePointerOut = (event: PointerEvent) => {
@@ -261,7 +254,13 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     window.addEventListener("pointerout", handlePointerOut);
     const handleGust = (event: Event) => {
       if (reduced.matches || !settings.current.isPlaying || document.hidden) return;
-      gust = (event as CustomEvent<MeadowGust>).detail;
+      const bounds = canvas.getBoundingClientRect();
+      const left = Math.max(0, bounds.left);
+      const right = Math.min(window.innerWidth, bounds.right);
+      gust = { ...(event as CustomEvent<MeadowGust>).detail,
+        origin: (left - bounds.left) / bounds.width,
+        span: (right - left) / bounds.width,
+      };
     };
     window.addEventListener(MEADOW_GUST_EVENT, handleGust);
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });

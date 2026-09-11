@@ -32,7 +32,7 @@ const global = typeof window !== "undefined" ? window : undefined;
     varying float v_outer;
     vec2 rotate_around(vec2 point, vec2 pivot, float angle) {
       float c = cos(angle);
-      float s = sin(angle);
+      float s = sin(-angle);
       vec2 offset = point - pivot;
       return pivot + vec2(offset.x * c - offset.y * s, offset.x * s + offset.y * c);
     }
@@ -220,7 +220,7 @@ export function createCypressTree(options) {
         const ancestors = [];
         let parent = bone.parent;
         while (parent >= 0) { ancestors.unshift(parent); parent = bones[parent].parent; }
-        ancestors.forEach((ancestor) => { pivot = rotatePoint(pivot, bones[ancestor].pivot, states[ancestor].angle); });
+        ancestors.forEach((ancestor) => { pivot = rotatePoint(pivot, bones[ancestor].pivot, -states[ancestor].angle); });
         values.push(...pointToClip(pivot[0], pivot[1]));
       });
       bonePivots = new Float32Array(values);

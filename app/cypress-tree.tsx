@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createCypressTree } from "./cypress-tree-renderer";
-import { MEADOW_GUST_EVENT } from "./grass-interaction";
+import { MEADOW_GUST_EVENT, WELCOME_TRAVEL_MS } from "./grass-interaction";
 import { type WindSettings } from "./wind";
 
 const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
@@ -61,25 +61,34 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
+    let treeArrivalTimer: number | undefined;
     const welcomeTimer = window.setTimeout(() => {
       const tree = treeRef.current;
       const currentWind = latestWind.current;
       const ambientWind = Math.max(currentWind.breeze, currentWind.gust * 0.72);
       if (!tree || !latestPlaying.current || document.hidden) return;
       window.dispatchEvent(new CustomEvent(MEADOW_GUST_EVENT, { detail: {
-        startedAt: performance.now(), origin: 0.82,
-        direction: currentWind.direction < 0 ? -1 : 1,
+        startedAt: performance.now(), origin: 0,
+        direction: 1,
         strength: WELCOME_BREEZE_STRENGTH, duration: WELCOME_BREEZE_DURATION,
       } }));
 
-      tree.applyGust({
-        direction: currentWind.direction < 0 ? -1 : 1,
-        strength: ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD ? WELCOME_BREEZE_STRENGTH * 0.65 : WELCOME_BREEZE_STRENGTH,
-        duration: WELCOME_BREEZE_DURATION,
-      });
+      const bounds = canvasRef.current?.getBoundingClientRect();
+      const treePosition = bounds ? Math.max(0, Math.min(1, (bounds.left + bounds.width * 0.5) / window.innerWidth)) : 0.82;
+      treeArrivalTimer = window.setTimeout(() => {
+        if (!latestPlaying.current || document.hidden || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        tree.applyGust({
+          direction: 1,
+          strength: ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD ? WELCOME_BREEZE_STRENGTH * 0.65 : WELCOME_BREEZE_STRENGTH,
+          duration: WELCOME_BREEZE_DURATION,
+        });
+      }, treePosition * WELCOME_TRAVEL_MS);
     }, WELCOME_BREEZE_DELAY);
 
-    return () => window.clearTimeout(welcomeTimer);
+    return () => {
+      window.clearTimeout(welcomeTimer);
+      window.clearTimeout(treeArrivalTimer);
+    };
   }, []);
 
   useEffect(() => {

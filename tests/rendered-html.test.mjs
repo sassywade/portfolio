@@ -789,7 +789,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /Math\.max\(currentWind\.breeze, currentWind\.gust \* 0\.72\)/);
   assert.match(tree, /ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD/);
   assert.match(tree, /window\.dispatchEvent\(new CustomEvent\(MEADOW_GUST_EVENT/);
-  assert.match(tree, /direction: currentWind\.direction < 0 \? -1 : 1/);
+  assert.match(tree, /treePosition \* WELCOME_TRAVEL_MS/);
   assert.doesNotMatch(tree, /cypress-tree__ground-shadow/);
   assert.doesNotMatch(tree, /cypress-tree__controls|useState/);
   assert.doesNotMatch(tree, /cypress-tree__root-transition/);
@@ -886,7 +886,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /attributeFilter: \["data-meadow-present"\]/);
   assert.match(smiley, /meadowPresenceObserver\.disconnect\(\)/);
   assert.doesNotMatch(smiley, /HERO_COPY_CLEARANCE|heroCopyTargets|isNearHeroCopy|data-hero-copy/);
-  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| grassActive \|\| miniaturePhase !== "off"\) return/);
+  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| miniaturePhase !== "off"\) return/);
   assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
   assert.match(smiley, /const FACING_CHANGE_DELAY = 240/);
   assert.match(smiley, /const FACING_INTENT_MEMORY = 180/);
@@ -1025,11 +1025,11 @@ test("arrival breeze travels and character pressure recovers without disturbing 
   const source = await readFile(new URL("../app/grass-interaction.ts", import.meta.url), "utf8");
   const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
   const { arrivalGrassWind, grassPressure } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
-  const gust = { startedAt: 1000, origin: 0.8, direction: -1, strength: 0.46, duration: 1450 };
-  assert.ok(arrivalGrassWind(1500, 0.8, gust) < 0);
-  assert.equal(arrivalGrassWind(1500, 0, gust), 0);
-  assert.ok(arrivalGrassWind(2800, 0, gust) < 0);
-  assert.equal(arrivalGrassWind(5000, 0, gust), 0);
+  const gust = { startedAt: 1000, origin: 0, direction: 1, strength: 0.46, duration: 1450 };
+  assert.ok(arrivalGrassWind(1500, 0, gust) > 0);
+  assert.equal(arrivalGrassWind(1500, 0.8, gust), 0);
+  assert.ok(arrivalGrassWind(4100, 0.8, gust) > 0);
+  assert.equal(arrivalGrassWind(7000, 1, gust), 0);
   const footprints = [{ x: 100, y: 100, radius: 16, at: 1000, direction: -1 }];
   assert.equal(grassPressure(100, 100, 1000, footprints).pressure, 1);
   assert.equal(grassPressure(100, 100, 1950, footprints).pressure, 0.5);
@@ -1039,20 +1039,20 @@ test("arrival breeze travels and character pressure recovers without disturbing 
 });
 
 
-test("Philip's grass gust is directional, local, and disabled outside its patch", async () => {
+test("cursor gently brushes nearby grass without making Philip blow", async () => {
   const ts = await import("typescript");
   const source = await readFile(new URL("../app/grass-interaction.ts", import.meta.url), "utf8");
   const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
-  const { petGrassWind } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
+  const { cursorGrassBend } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
   const brush = { x: 100, y: 100, direction: 1, strength: 1 };
-  assert.ok(petGrassWind(100, 100, brush) > 2);
-  assert.equal(petGrassWind(100, 100, { ...brush, direction: -1 }), -petGrassWind(100, 100, brush));
-  assert.equal(petGrassWind(210, 100, brush), 0);
-  assert.equal(petGrassWind(100, 170, brush), 0);
-  assert.equal(petGrassWind(100, 100, null), 0);
+  assert.ok(cursorGrassBend(100, 100, brush) <= 0.32);
+  assert.equal(cursorGrassBend(100, 100, { ...brush, direction: -1 }), -cursorGrassBend(100, 100, brush));
+  assert.equal(cursorGrassBend(210, 100, brush), 0);
+  assert.equal(cursorGrassBend(100, 170, brush), 0);
+  assert.equal(cursorGrassBend(100, 100, null), 0);
   const pet = await readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8");
-  assert.match(pet, /window.addEventListener\(GRASS_PRESENCE_EVENT, handleGrassPresence\)/);
-  assert.match(pet, /if \(grassActive\) \{[\s\S]*?nextFollowDistance = 38/);
+  assert.doesNotMatch(pet, /GRASS_PRESENCE_EVENT|grassActive/);
+  assert.match(pet, /updateMiniatureInteraction\(timestamp\)/);
   const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
   assert.match(grass, /point.y >= \(ridge/);
   assert.match(grass, /paintGround\(ctx, blade, pressure, direction, flow\)/);
@@ -1065,4 +1065,15 @@ test("miniature feet and bike tires sit slightly inside the grass roots", async 
     assert.match(source, /const grassInset = meadow.dataset.grassReady === "true" \? 4 : 0/);
     assert.match(source, /surface \* meadowBounds.height - layerBounds.top \+ grassInset/);
   }
+});
+
+
+test("the welcome tree receives the passing breeze and leans with its screen direction", async () => {
+  const tree = await readFile(new URL("../app/cypress-tree.tsx", import.meta.url), "utf8");
+  const renderer = await readFile(new URL("../app/cypress-tree-renderer.ts", import.meta.url), "utf8");
+  assert.match(tree, /startedAt: performance.now\(\), origin: 0,[\s\S]*?direction: 1/);
+  assert.match(tree, /treeArrivalTimer = window.setTimeout/);
+  assert.match(tree, /treePosition \* WELCOME_TRAVEL_MS/);
+  assert.match(tree, /window.clearTimeout\(treeArrivalTimer\)/);
+  assert.match(renderer, /float s = sin\(-angle\)/);
 });
