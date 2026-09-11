@@ -1129,3 +1129,12 @@ test("the cypress grounds into both grass layers without a cutout halo", async (
   assert.match(grass, /color: grassColor\(p, light, x \* width, y \* height, 0.78\)/);
   assert.match(css, /\[data-environment-style="painterly-realism"\] \.cypress-tree__canvas\s*\{\s*filter: none;/);
 });
+
+test("elastic grass shares spring motion and feathers the moving crest into cached turf", async () => {
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  assert.match(grass, /windSprings = Array.from\(\{ length: 65 \}/);
+  assert.match(grass, /spring.velocity \+=/);
+  assert.match(grass, /elasticWind\(blade.x\) \* crestFlex/);
+  assert.match(grass, /\(22 - \(blade.y - ridgeY\)\) \/ 14/);
+  assert.match(grass, /lastWindFrame = 0/);
+});

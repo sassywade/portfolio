@@ -29,6 +29,13 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     let width = 1;
     let height = 1;
     let pixelScale = 1;
+    let lastWindFrame = 0;
+    const windSprings = Array.from({ length: 65 }, () => ({ bend: 0, velocity: 0 }));
+    const elasticWind = (x: number) => {
+      const position = Math.max(0, Math.min(64, x / width * 64));
+      const index = Math.min(63, Math.floor(position));
+      return windSprings[index].bend + (windSprings[index + 1].bend - windSprings[index].bend) * (position - index);
+    };
     let gust: MeadowGust | null = null;
     let footprints: GrassFootprint[] = [];
     let ridge: number[] = [];
@@ -64,11 +71,11 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     function paintGround(target: CanvasRenderingContext2D, blade: GroundBlade, pressure = 0, direction = 1, flow = 0) {
       const { x, y, spacing, color } = blade;
       const length = blade.length * (1 - pressure * 0.83) / (1 + Math.abs(flow) * 0.2);
-      const lean = blade.lean + pressure * blade.length * direction * 0.85 + flow * blade.length * 0.8;
+      const lean = blade.lean + pressure * blade.length * direction * 0.85 + flow * blade.length * 1.25;
       target.fillStyle = color;
       target.beginPath();
       target.moveTo(x - spacing * 0.85, y + spacing);
-      target.quadraticCurveTo(x - spacing * 0.4, y - length * 0.55, x + lean, y - length);
+      target.quadraticCurveTo(x - spacing * 0.4 + lean * 0.22, y - length * 0.62, x + lean, y - length);
       target.quadraticCurveTo(x + spacing * 0.6, y - length * 0.25, x + spacing * 0.85, y + spacing);
       target.fill();
     }
@@ -211,9 +218,29 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       ctx.drawImage(undergrowth, 0, 0);
       ctx.restore();
       const moving = settings.current.isPlaying && !reduced.matches && visible && !document.hidden;
+      if (moving) {
+        const dt = lastWindFrame ? Math.min(0.04, (now - lastWindFrame) / 1000) : 0.016;
+        windSprings.forEach((spring, index) => {
+          const x = index / 64;
+          const target = sampleMeadowWind(now / 1000, x, settings.current.wind) * 1.55 + arrivalGrassWind(now, x, gust);
+          spring.velocity += ((target - spring.bend) * 100 - spring.velocity * (14 - settings.current.wind.elasticity * 4)) * dt;
+          spring.bend += spring.velocity * dt;
+        });
+        lastWindFrame = now;
+      } else {
+        lastWindFrame = 0;
+      }
       if (moving) { collectFootprints(now); updateBrush(now); }
       // Animate the dense turf too, within bounded wind/contact patches.
       const patches = footprints.map((foot) => ({ x: foot.x - foot.radius - 22, y: foot.y - foot.radius - 22, w: (foot.radius + 22) * 2, h: (foot.radius + 22) * 2 }));
+      // The dense skyline must breathe too, not just the sparse foreground tips.
+      if (moving && ridge.length) for (let x = 0; x < width; x += 64) {
+        const start = Math.max(0, Math.floor(x / width * ridge.length));
+        const end = Math.min(ridge.length, Math.ceil((x + 64) / width * ridge.length) + 1);
+        const edge = ridge.slice(start, end);
+        const top = Math.min(...edge) - 24;
+        patches.push({ x, y: top, w: 64, h: Math.max(...edge) + 22 - top });
+      }
       if (brush && moving) patches.push({ x: brush.x - 62, y: brush.y - 48, w: 124, h: 96 });
       if (gust && moving) {
         const span = gust.span ?? 1;
@@ -242,22 +269,25 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         for (const row of [...rows].sort((a, b) => a - b)) for (const blade of groundRows.get(row) ?? []) {
           if (!patches.some((patch) => blade.x >= patch.x - 32 && blade.x <= patch.x + patch.w + 32)) continue;
           const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
-          const flow = moving ? arrivalGrassWind(now, blade.x / width, gust) + cursorGrassBend(blade.x, blade.y, brush) : 0;
+          const ridgeY = ridge[Math.min(ridge.length - 1, Math.max(0, Math.floor(blade.x / width * ridge.length)))] ?? height;
+          const crestFlex = Math.max(0, Math.min(1, (22 - (blade.y - ridgeY)) / 14));
+          const flow = moving ? elasticWind(blade.x) * crestFlex + arrivalGrassWind(now, blade.x / width, gust) * (1 - crestFlex) + cursorGrassBend(blade.x, blade.y, brush) : 0;
           paintGround(ctx, blade, pressure, direction, flow);
         }
         ctx.restore();
       }
       for (const blade of blades) {
-        const flow = moving ? (sampleMeadowWind(now / 1000, blade.x / width, settings.current.wind) + arrivalGrassWind(now, blade.x / width, gust) + cursorGrassBend(blade.x, blade.y, brush)) : 0;
+        const flow = moving ? elasticWind(blade.x) + cursorGrassBend(blade.x, blade.y, brush) : 0;
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
         const length = blade.length * (1 - pressure * 0.83);
-        const bend = blade.lean + flow * length * 0.85 + pressure * blade.length * direction;
+        const flexibility = 0.9 + (Math.sin(blade.x * 0.37 + blade.y * 0.21) + 1) * 0.15;
+        const bend = blade.lean + flow * length * 1.25 * flexibility + pressure * blade.length * direction;
         const tipY = blade.y - length + Math.abs(flow) * length * 0.15;
         ctx.strokeStyle = blade.color;
         ctx.lineWidth = blade.width;
         ctx.beginPath();
         ctx.moveTo(blade.x, blade.y);
-        ctx.quadraticCurveTo(blade.x + bend * 0.16, blade.y - length * 0.7, blade.x + bend, tipY);
+        ctx.quadraticCurveTo(blade.x + bend * 0.3, blade.y - length * 0.75, blade.x + bend, tipY);
         ctx.stroke();
       }
     }
