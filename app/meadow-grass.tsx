@@ -71,7 +71,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     function paintGround(target: CanvasRenderingContext2D, blade: GroundBlade, pressure = 0, direction = 1, flow = 0) {
       const { x, y, spacing, color } = blade;
       const length = blade.length * (1 - pressure * 0.83) / (1 + Math.abs(flow) * 0.2);
-      const lean = blade.lean + pressure * blade.length * direction * 0.85 + flow * blade.length * 1.25;
+      const lean = blade.lean + pressure * blade.length * direction * 0.85 + flow * blade.length * 0.95;
       target.fillStyle = color;
       target.beginPath();
       target.moveTo(x - spacing * 0.85, y + spacing);
@@ -222,7 +222,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         const dt = lastWindFrame ? Math.min(0.04, (now - lastWindFrame) / 1000) : 0.016;
         windSprings.forEach((spring, index) => {
           const x = index / 64;
-          const target = sampleMeadowWind(now / 1000, x, settings.current.wind) * 1.55 + arrivalGrassWind(now, x, gust);
+          const target = sampleMeadowWind(now / 1000, x, settings.current.wind) * 1.10 + arrivalGrassWind(now, x, gust) * 0.8;
           spring.velocity += ((target - spring.bend) * 100 - spring.velocity * (14 - settings.current.wind.elasticity * 4)) * dt;
           spring.bend += spring.velocity * dt;
         });
@@ -281,7 +281,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
         const length = blade.length * (1 - pressure * 0.83);
         const flexibility = 0.9 + (Math.sin(blade.x * 0.37 + blade.y * 0.21) + 1) * 0.15;
-        const bend = blade.lean + flow * length * 1.25 * flexibility + pressure * blade.length * direction;
+        const bend = blade.lean + flow * length * 0.95 * flexibility + pressure * blade.length * direction;
         const tipY = blade.y - length + Math.abs(flow) * length * 0.15;
         ctx.strokeStyle = blade.color;
         ctx.lineWidth = blade.width;
