@@ -53,7 +53,48 @@ export function AboutPhotoGallery() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const closeTimerRef = useRef<number | null>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
   const selectedPhoto = selectedIndex === null ? null : lifePhotos[selectedIndex];
+
+  useEffect(() => {
+    const print = tiltRef.current;
+    if (!print || isClosing) return;
+    const enabled = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+    let frame = 0;
+    let bounds: DOMRect | null = null;
+    const reset = () => {
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+      bounds = null;
+      print.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg)";
+    };
+    const move = (event: PointerEvent) => {
+      if (!enabled.matches || event.pointerType !== "mouse") return;
+      bounds ??= print.getBoundingClientRect();
+      const x = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1));
+      const y = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1));
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        print.style.transform = `perspective(1400px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`;
+        frame = 0;
+      });
+    };
+    print.addEventListener("pointermove", move);
+    print.addEventListener("pointerleave", reset);
+    print.addEventListener("pointercancel", reset);
+    enabled.addEventListener("change", reset);
+    window.addEventListener("resize", reset);
+    window.addEventListener("blur", reset);
+    return () => {
+      reset();
+      print.removeEventListener("pointermove", move);
+      print.removeEventListener("pointerleave", reset);
+      print.removeEventListener("pointercancel", reset);
+      enabled.removeEventListener("change", reset);
+      window.removeEventListener("resize", reset);
+      window.removeEventListener("blur", reset);
+    };
+  }, [selectedIndex, isClosing]);
 
   const closePhoto = useCallback(() => {
     if (selectedIndex === null || isClosing) return;
@@ -139,14 +180,16 @@ export function AboutPhotoGallery() {
           <button className="photo-lightbox__close" type="button" onClick={closePhoto} aria-label="Close photo viewer" ref={closeButtonRef}>
             <span>Close</span><strong aria-hidden="true">×</strong>
           </button>
+          <div className="photo-lightbox__tilt" ref={tiltRef}>
           <figure className="photo-lightbox__figure">
             <div className="photo-lightbox__visual">
-              <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" unoptimized priority />
+              <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" draggable={false} unoptimized priority />
             </div>
             <figcaption>
               <p>{selectedPhoto.description}</p>
             </figcaption>
           </figure>
+          </div>
         </div>,
         document.body,
       )}

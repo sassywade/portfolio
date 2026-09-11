@@ -1098,3 +1098,13 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.doesNotMatch(renderer, /gl\.NEAREST|weights\[dominant\]/);
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
+
+test("opened Life prints isolate pointer tilt from entrance and honor input preferences", async () => {
+  const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
+  assert.match(gallery, /\(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)/);
+  assert.match(gallery, /event.pointerType !== "mouse"/);
+  assert.match(gallery, /perspective\(1400px\) rotateX/);
+  assert.match(gallery, /print.removeEventListener\("pointerleave", reset\)/);
+  assert.match(gallery, /className="photo-lightbox__tilt" ref=\{tiltRef\}/);
+  assert.match(gallery, /draggable=\{false\}/);
+});

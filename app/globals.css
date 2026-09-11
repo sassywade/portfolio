@@ -12962,3 +12962,32 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   font-size: 11px;
   opacity: 0.76;
 }
+
+/* The opened film print follows the pointer independently of its entrance. */
+.photo-lightbox__tilt {
+  grid-column: 2;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  transform: perspective(1400px) rotateX(0deg) rotateY(0deg);
+  transition: transform 180ms var(--motion-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .photo-lightbox__tilt {
+    transform: none !important;
+    transition: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .photo-lightbox__tilt,
+  .photo-lightbox__tilt .photo-lightbox__figure {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .photo-lightbox__tilt .photo-lightbox__visual {
+    width: auto;
+  }
+}
