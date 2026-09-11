@@ -1118,3 +1118,13 @@ test("Polaroid captions fill the lower border and the sheen stays decorative", a
   assert.match(gallery, /className="photo-lightbox__sheen" aria-hidden="true"/);
   assert.match(css, /\.photo-lightbox__sheen\s*\{[^}]*pointer-events: none/);
 });
+
+test("the cypress grounds into both grass layers without a cutout halo", async () => {
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(grass, /tree.left \+ tree.width \* 0.5 - bounds.left/);
+  assert.match(grass, /const depth = y - groundAt\(x\)/);
+  assert.match(grass, /color: grassColor\(p, light, rootX, rootY\)/);
+  assert.match(grass, /color: grassColor\(p, light, x \* width, y \* height, 0.78\)/);
+  assert.match(css, /\[data-environment-style="painterly-realism"\] \.cypress-tree__canvas\s*\{\s*filter: none;/);
+});

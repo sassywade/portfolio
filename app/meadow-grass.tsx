@@ -137,6 +137,25 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         for (let y = 0; y < sample.height; y++) if (pixels[(y * sample.width + x) * 4 + 3] >= 235) return y / sample.height * height;
         return height;
       });
+      // Ground the tree by shading the actual blades, never an overlay ellipse.
+      // Use the rendered trunk position so the contact follows responsive layouts.
+      const bounds = canvas.getBoundingClientRect();
+      const tree = canvas.closest(".hero-meadow")?.querySelector(".cypress-tree__canvas")?.getBoundingClientRect();
+      const treeX = tree ? (tree.left + tree.width * 0.5 - bounds.left) * width / bounds.width : -width;
+      const treeWidth = tree ? tree.width * width / bounds.width : 1;
+      const groundAt = (x: number) => ridge[Math.max(0, Math.min(ridge.length - 1, Math.floor(x / width * ridge.length)))] ?? height;
+      const treeShade = (x: number, y: number) => {
+        const depth = y - groundAt(x);
+        const dx = (x - treeX) / treeWidth;
+        const contact = Math.exp(-Math.pow(dx / 0.14, 2) - Math.pow((depth - 5) / 14, 2));
+        const shelter = Math.exp(-Math.pow((dx + 0.10) / 0.44, 2) - Math.pow((depth - 18) / 42, 2));
+        const brokenLight = 0.86 + 0.14 * Math.sin(x * 0.13 + Math.sin(y * 0.19) * 2);
+        return (contact * 0.28 + shelter * 0.13) * brokenLight;
+      };
+      const grassColor = (p: number, light: number, x: number, y: number, alpha = 1) => {
+        const shade = treeShade(x, y);
+        return `rgba(${Math.min(220, pixels[p] * light) * (1 - shade)},${Math.min(225, pixels[p + 1] * light) * (1 - shade * 0.9)},${Math.min(170, pixels[p + 2] * light) * (1 - shade * 0.68)},${alpha})`;
+      };
       let seed = 7419;
       const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
       // Dense, overlapping short blades form the entire field. Bake these once;
@@ -151,10 +170,13 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
           const rootY = Math.min(height - 1, y + random() * spacing);
           const p = (Math.min(sample.height - 1, Math.floor(rootY / height * sample.height)) * sample.width + Math.min(sample.width - 1, Math.floor(rootX / width * sample.width))) * 4;
           if (pixels[p + 3] < 235 || pixels[p + 1] < pixels[p] * 0.9 || pixels[p + 2] > pixels[p + 1] * 0.96) continue;
-          const light = 0.76 + random() * 0.4;
-          const length = 0.7 * spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6);
+          const light = 0.80 + random() * 0.30;
+          const crest = Math.min(1, Math.max(0, (rootY - groundAt(rootX)) / 65));
+          const rootTuft = Math.exp(-Math.pow((rootX - treeX) / (treeWidth * 0.12), 2) - Math.pow((rootY - groundAt(rootX)) / 12, 2));
+          const tuft = rootTuft * Math.max(0, Math.sin(rootX * 0.42)) * 0.4;
+          const length = 0.7 * spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6) * (0.8 + crest * 0.2 + tuft);
           const lean = (random() - 0.3) * length * 0.45;
-          const blade = { x: rootX, y: rootY, length, lean, spacing, color: `rgb(${pixels[p] * light},${pixels[p + 1] * light},${pixels[p + 2] * light})` };
+          const blade = { x: rootX, y: rootY, length, lean, spacing, color: grassColor(p, light, rootX, rootY) };
           paintGround(ground!, blade);
           const row = Math.floor(rootY / 32);
           if (!groundRows.has(row)) groundRows.set(row, []);
@@ -168,9 +190,9 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         const y = random();
         const p = (Math.floor(y * sample.height) * sample.width + Math.floor(x * sample.width)) * 4;
         if (pixels[p + 3] < 235 || pixels[p + 1] < pixels[p] * 0.96 || pixels[p + 2] > pixels[p + 1] * 0.94) continue;
-        const light = 0.75 + random() * 0.65;
+        const light = 0.80 + random() * 0.44;
         const length = 0.7 * (2.2 + random() * 6.8) * (0.45 + y * 0.9) * Math.min(1.2, width / 1100);
-        blades.push({ x: x * width, y: y * height, length, lean: (random() - 0.5) * length * 0.6, width: 0.4 + random() * 0.65, color: `rgba(${Math.min(210, pixels[p] * light)},${Math.min(220, pixels[p + 1] * light)},${Math.min(165, pixels[p + 2] * light)},0.78)` });
+        blades.push({ x: x * width, y: y * height, length, lean: (random() - 0.5) * length * 0.6, width: 0.4 + random() * 0.65, color: grassColor(p, light, x * width, y * height, 0.78) });
       }
       blades.sort((a, b) => a.y - b.y);
       canvas.dataset.bladeCount = String(blades.length);
@@ -282,6 +304,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     if (hero) sceneObserver.observe(hero, { attributes: true, attributeFilter: ["data-scene-visible", "data-meadow-variant"] });
     const sizeObserver = new ResizeObserver(resize);
     sizeObserver.observe(canvas);
+    window.addEventListener("resize", resize);
     source.onload = () => { resize(); sync(); };
     source.src = src;
     document.addEventListener("visibilitychange", sync);
@@ -296,6 +319,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       observer.disconnect();
       sceneObserver.disconnect();
       sizeObserver.disconnect();
+      window.removeEventListener("resize", resize);
       source.onload = null;
       window.removeEventListener(MEADOW_GUST_EVENT, handleGust);
       document.removeEventListener("visibilitychange", sync);

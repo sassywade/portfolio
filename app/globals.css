@@ -13049,3 +13049,8 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
     transform: none !important;
   }
 }
+
+/* The grass receives the tree's shade; the cutout itself casts no halo. */
+.hero-meadow[data-environment-style="painterly-realism"] .cypress-tree__canvas {
+  filter: none;
+}
