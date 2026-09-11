@@ -136,3 +136,5 @@ Life captions now use the site's Newsreader serif instead of the marker font. Si
 The homepage “Neel Saswade” name uses upright Newsreader, not italics.
 
 The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
+
+Opened Polaroids have no glimmer or moving sheen overlay. Keep the paper finish, Newsreader caption, and gentle tilt.

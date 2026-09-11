@@ -13035,22 +13035,7 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   text-wrap: balance;
 }
 
-.photo-lightbox__sheen {
-  position: absolute;
-  z-index: 2;
-  inset: -30%;
-  pointer-events: none;
-  background: linear-gradient(110deg, transparent 27%, rgb(255 255 255 / 3%) 39%, rgb(255 255 255 / 16%) 47%, rgb(255 255 255 / 5%) 54%, transparent 66%);
-  transform: translate3d(0, 0, 0) rotate(-18deg);
-  transition: transform 180ms var(--motion-ease-out);
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .photo-lightbox__sheen {
-    transition: none;
-    transform: none !important;
-  }
-}
 
 /* The grass receives the tree's shade; the cutout itself casts no halo. */
 .hero-meadow[data-environment-style="painterly-realism"] .cypress-tree__canvas {
