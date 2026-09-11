@@ -28,6 +28,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     let last = 0;
     let width = 1;
     let height = 1;
+    let pixelScale = 1;
     let gust: MeadowGust | null = null;
     let footprints: GrassFootprint[] = [];
     let ridge: number[] = [];
@@ -99,6 +100,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       height = canvas.clientHeight;
       if (width < 1 || height < 1) return;
       const dpr = Math.min(devicePixelRatio || 1, 1.5);
+      pixelScale = dpr;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -180,7 +182,11 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     function draw(now: number) {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
-      ctx.drawImage(undergrowth, 0, 0, width, height);
+      // Copy cached turf pixel-for-pixel: resampling makes rebuilt patches differ.
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(undergrowth, 0, 0);
+      ctx.restore();
       const moving = settings.current.isPlaying && !reduced.matches && visible && !document.hidden;
       if (moving) { collectFootprints(now); updateBrush(now); }
       // Animate the dense turf too, within bounded wind/contact patches.
@@ -200,12 +206,17 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         ctx.beginPath();
         const rows = new Set<number>();
         for (const patch of patches) {
-          ctx.rect(patch.x, patch.y, patch.w, patch.h);
+          // Fractional clip edges partially erase pixels and leave a pale box.
+          const left = Math.floor(patch.x * pixelScale) / pixelScale;
+          const top = Math.floor(patch.y * pixelScale) / pixelScale;
+          const right = Math.ceil((patch.x + patch.w) * pixelScale) / pixelScale;
+          const bottom = Math.ceil((patch.y + patch.h) * pixelScale) / pixelScale;
+          ctx.rect(left, top, right - left, bottom - top);
           for (let row = Math.max(0, Math.floor((patch.y - 28) / 32)); row <= Math.min(Math.ceil(height / 32), Math.ceil((patch.y + patch.h + 28) / 32)); row++) rows.add(row);
         }
         ctx.clip();
         ctx.clearRect(0, 0, width, height);
-        for (const row of rows) for (const blade of groundRows.get(row) ?? []) {
+        for (const row of [...rows].sort((a, b) => a - b)) for (const blade of groundRows.get(row) ?? []) {
           if (!patches.some((patch) => blade.x >= patch.x - 32 && blade.x <= patch.x + patch.w + 32)) continue;
           const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
           const flow = moving ? arrivalGrassWind(now, blade.x / width, gust) + cursorGrassBend(blade.x, blade.y, brush) : 0;

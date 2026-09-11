@@ -110,3 +110,5 @@ The welcome ripple now bends the dense turf as well as the fine blades, with a s
 Miniature ground contact sits 4px lower in the ready grass-only meadow, for the photographer and hiker feet and cyclist tires. Apply the inset to terrain tracking so landing, movement, and contact flattening remain aligned; image-only and flat meadow placement stay unchanged.
 
 The current welcome motion supersedes the dramatic ripple: a soft gust crosses the visible viewport from left to right over 3.2 seconds, with a broad 1.45-second rise and release at each location. The tree receives its welcome gust only when that traveling wind reaches its horizontal position. Cursor contact is a small, low-strength brush (38px by 24px falloff) that relaxes when movement stops. Grass no longer activates Philip's blowing expression or closer follow mode; his existing independent behavior remains.
+
+Grass contact patches must never reveal rectangular seams: copy the baked turf at native backing-pixel scale, align replacement clip edges to those same pixels, and redraw rows in their original back-to-front order.

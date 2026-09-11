@@ -1077,3 +1077,12 @@ test("the welcome tree receives the passing breeze and leans with its screen dir
   assert.match(tree, /window.clearTimeout\(treeArrivalTimer\)/);
   assert.match(renderer, /float s = sin\(-angle\)/);
 });
+
+
+test("grass contact redraws preserve cache scale, whole-pixel edges, and paint order", async () => {
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  assert.match(grass, /ctx.setTransform\(1, 0, 0, 1, 0, 0\);[\s\S]*?ctx.drawImage\(undergrowth, 0, 0\)/);
+  assert.match(grass, /Math.floor\(patch.x \* pixelScale\) \/ pixelScale/);
+  assert.match(grass, /Math.ceil\(\(patch.x \+ patch.w\) \* pixelScale\) \/ pixelScale/);
+  assert.match(grass, /\[\.\.\.rows\].sort\(\(a, b\) => a - b\)/);
+});
