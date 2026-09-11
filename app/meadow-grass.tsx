@@ -143,14 +143,15 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       const tree = canvas.closest(".hero-meadow")?.querySelector(".cypress-tree__canvas")?.getBoundingClientRect();
       const treeX = tree ? (tree.left + tree.width * 0.5 - bounds.left) * width / bounds.width : -width;
       const treeWidth = tree ? tree.width * width / bounds.width : 1;
+      const shadeDepth = tree ? tree.width * height / bounds.height : 1;
       const groundAt = (x: number) => ridge[Math.max(0, Math.min(ridge.length - 1, Math.floor(x / width * ridge.length)))] ?? height;
       const treeShade = (x: number, y: number) => {
-        const depth = y - groundAt(x);
+        const depth = (y - groundAt(x)) / shadeDepth;
         const dx = (x - treeX) / treeWidth;
-        const contact = Math.exp(-Math.pow(dx / 0.14, 2) - Math.pow((depth - 5) / 14, 2));
-        const shelter = Math.exp(-Math.pow((dx + 0.10) / 0.44, 2) - Math.pow((depth - 18) / 42, 2));
-        const brokenLight = 0.86 + 0.14 * Math.sin(x * 0.13 + Math.sin(y * 0.19) * 2);
-        return (contact * 0.28 + shelter * 0.13) * brokenLight;
+        const contact = Math.exp(-Math.pow(dx / 0.16, 2) - Math.pow((depth - 0.02) / 0.065, 2));
+        const shelter = Math.exp(-Math.pow((dx + 0.16) / 0.58, 2) - Math.pow((depth - 0.09) / 0.19, 2));
+        const brokenLight = 0.82 + 0.18 * Math.sin(dx * 23 + Math.sin(depth * 29) * 2);
+        return (contact * 0.40 + shelter * 0.28) * brokenLight;
       };
       const grassColor = (p: number, light: number, x: number, y: number, alpha = 1) => {
         const shade = treeShade(x, y);
