@@ -59,6 +59,7 @@ export function AboutPhotoGallery() {
   useEffect(() => {
     const print = tiltRef.current;
     if (!print || isClosing) return;
+    const sheen = print.querySelector<HTMLElement>(".photo-lightbox__sheen");
     const enabled = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
     let frame = 0;
     let bounds: DOMRect | null = null;
@@ -67,6 +68,7 @@ export function AboutPhotoGallery() {
       frame = 0;
       bounds = null;
       print.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg)";
+      if (sheen) sheen.style.transform = "translate3d(0, 0, 0) rotate(-18deg)";
     };
     const move = (event: PointerEvent) => {
       if (!enabled.matches || event.pointerType !== "mouse") return;
@@ -76,6 +78,7 @@ export function AboutPhotoGallery() {
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
         print.style.transform = `perspective(1400px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`;
+        if (sheen) sheen.style.transform = `translate3d(${-x * 16}%, ${-y * 10}%, 0) rotate(-18deg)`;
         frame = 0;
       });
     };
@@ -182,6 +185,7 @@ export function AboutPhotoGallery() {
           </button>
           <div className="photo-lightbox__tilt" ref={tiltRef}>
           <figure className="photo-lightbox__figure">
+            <span className="photo-lightbox__sheen" aria-hidden="true" />
             <div className="photo-lightbox__visual">
               <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" draggable={false} unoptimized priority />
             </div>
