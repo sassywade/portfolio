@@ -134,3 +134,5 @@ The painterly weather readout uses Geist at 13–15px for the summary and 12–1
 Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.
 
 The homepage “Neel Saswade” name uses upright Newsreader, not italics.
+
+The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
