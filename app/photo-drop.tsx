@@ -142,7 +142,9 @@ export function PhotoDrop() {
       const fallbackSurface = 0.79 + Math.sin(normalizedX * Math.PI) * 0.08;
       const sourceX = clamp(Math.round(normalizedX * Math.max(0, sourceWidth - 1)), 0, Math.max(0, sourceWidth - 1));
       const surface = surfaceByColumn.length ? surfaceByColumn[sourceX] : fallbackSurface;
-      return meadowBounds.top + surface * meadowBounds.height - layerBounds.top;
+      // Sink feet and tires just into the blade roots, not onto their tips.
+      const grassInset = meadow.dataset.grassReady === "true" ? 4 : 0;
+      return meadowBounds.top + surface * meadowBounds.height - layerBounds.top + grassInset;
     }
 
     function setFrame(index: number) {
@@ -327,6 +329,16 @@ export function PhotoDrop() {
       }
     });
     resizeObserver.observe(layer);
+    const groundObserver = new MutationObserver(() => {
+      if (phase === "land" || phase === "shoot") {
+        y = trackY(x) - photographerSize().height * PHOTOGRAPHER_GROUND_RATIO;
+        renderPhotographer();
+      }
+    });
+    const meadowSurface = document.querySelector(".meadow");
+    if (meadowSurface) groundObserver.observe(meadowSurface, {
+      subtree: true, attributes: true, attributeFilter: ["data-grass-ready", "data-meadow-active"],
+    });
 
     const handleMeadowLoad = () => {
       prepareMeadowProfile();
@@ -356,6 +368,7 @@ export function PhotoDrop() {
       clearPhotoLoop();
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
+      groundObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
       window.removeEventListener(PET_BLOW_PHOTOGRAPHER_EVENT, handlePetBlow);
     };

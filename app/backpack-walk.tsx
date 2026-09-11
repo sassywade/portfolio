@@ -121,7 +121,9 @@ export function BackpackWalk() {
       const fallbackSurface = 0.79 + Math.sin(normalizedX * Math.PI) * 0.08;
       const sourceX = clamp(Math.round(normalizedX * Math.max(0, sourceWidth - 1)), 0, Math.max(0, sourceWidth - 1));
       const surface = surfaceByColumn.length ? surfaceByColumn[sourceX] : fallbackSurface;
-      return meadowBounds.top + surface * meadowBounds.height - layerBounds.top;
+      // Sink feet and tires just into the blade roots, not onto their tips.
+      const grassInset = meadow.dataset.grassReady === "true" ? 4 : 0;
+      return meadowBounds.top + surface * meadowBounds.height - layerBounds.top + grassInset;
     }
 
     function trackAngle(localX: number) {

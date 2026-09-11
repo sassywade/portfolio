@@ -1057,3 +1057,12 @@ test("Philip's grass gust is directional, local, and disabled outside its patch"
   assert.match(grass, /point.y >= \(ridge/);
   assert.match(grass, /paintGround\(ctx, blade, pressure, direction, flow\)/);
 });
+
+
+test("miniature feet and bike tires sit slightly inside the grass roots", async () => {
+  for (const file of ["bike-ride.tsx", "photo-drop.tsx", "backpack-walk.tsx"]) {
+    const source = await readFile(new URL(`../app/${file}`, import.meta.url), "utf8");
+    assert.match(source, /const grassInset = meadow.dataset.grassReady === "true" \? 4 : 0/);
+    assert.match(source, /surface \* meadowBounds.height - layerBounds.top \+ grassInset/);
+  }
+});
