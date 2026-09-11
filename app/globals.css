@@ -12920,3 +12920,8 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   opacity: 0;
   transition: none;
 }
+
+/* Give the trunk a little daylight above the shorter blade field. */
+.hero-meadow[data-environment-style="painterly-realism"][data-meadow-variant="living"][data-grass-enabled="true"] > .cypress-tree .cypress-tree__stage {
+  transform: translate3d(0, calc(var(--cypress-root-registration-y) - 8px), 0);
+}

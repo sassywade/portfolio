@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { MEADOW_GUST_EVENT, arrivalGrassWind, grassPressure, type MeadowGust, type GrassFootprint } from "./grass-interaction";
 import { sampleMeadowWind, type WindSettings } from "./wind";
 
 // Sample the painted terrain itself: every root and color belongs to the hill,
@@ -27,6 +28,41 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
     let last = 0;
     let width = 1;
     let height = 1;
+    let gust: MeadowGust | null = null;
+    let footprints: GrassFootprint[] = [];
+    type GroundBlade = { x: number; y: number; length: number; lean: number; color: string; spacing: number };
+    const groundRows = new Map<number, GroundBlade[]>();
+    function paintGround(target: CanvasRenderingContext2D, blade: GroundBlade, pressure = 0, direction = 1) {
+      const { x, y, spacing, color } = blade;
+      const length = blade.length * (1 - pressure * 0.83);
+      const lean = blade.lean + pressure * blade.length * direction * 0.85;
+      target.fillStyle = color;
+      target.beginPath();
+      target.moveTo(x - spacing * 0.85, y + spacing);
+      target.quadraticCurveTo(x - spacing * 0.4, y - length * 0.55, x + lean, y - length);
+      target.quadraticCurveTo(x + spacing * 0.6, y - length * 0.25, x + spacing * 0.85, y + spacing);
+      target.fill();
+    }
+    function collectFootprints(now: number) {
+      if (!canvas) return;
+      footprints = footprints.filter((foot) => now - foot.at < 1900);
+      const bounds = canvas.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
+      const actors = document.querySelectorAll<HTMLElement>('.backpack-walk-layer:is([data-phase="walk"], [data-phase="land"]) .mini-hiker, .bike-ride-layer:is([data-phase="ride"], [data-phase="land"]) .bike-rider, .photo-drop-layer:is([data-phase="shoot"], [data-phase="land"]) .mini-photographer');
+      actors.forEach((actor) => {
+        const rect = actor.getBoundingClientRect();
+        const x = (rect.left + rect.width * 0.5 - bounds.left) * width / bounds.width;
+        const y = (rect.bottom - 3 - bounds.top) * height / bounds.height;
+        if (x < 0 || x > width || y < 0 || y > height) return;
+        const radius = Math.max(10, rect.width * (actor.classList.contains("bike-rider") ? 0.34 : 0.2)) * width / bounds.width;
+        const direction = actor.closest('[data-direction]')?.getAttribute('data-direction') === "left" ? -1 : 1;
+        const existing = footprints.find((foot) => Math.abs(foot.x - x) < 5 && Math.abs(foot.y - y) < 5);
+        if (existing) { existing.at = now; }
+        else footprints.push({ x, y, radius, at: now, direction });
+      });
+      footprints = footprints.slice(-36);
+      canvas.dataset.contactCount = String(footprints.length);
+    }
     let blades: { x: number; y: number; length: number; lean: number; color: string; width: number }[] = [];
 
     function resize() {
@@ -74,6 +110,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       // Never draw the reference bitmap into the visible canvas or this backing layer.
       const spacing = Math.max(2.1, width / 650);
       let groundCount = 0;
+      groundRows.clear();
       for (let y = 0; y < height + spacing; y += spacing) {
         for (let x = 0; x < width; x += spacing) {
           const rootX = x + random() * spacing;
@@ -81,14 +118,13 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
           const p = (Math.min(sample.height - 1, Math.floor(rootY / height * sample.height)) * sample.width + Math.min(sample.width - 1, Math.floor(rootX / width * sample.width))) * 4;
           if (pixels[p + 3] < 235 || pixels[p + 1] < pixels[p] * 0.9 || pixels[p + 2] > pixels[p + 1] * 0.96) continue;
           const light = 0.76 + random() * 0.4;
-          const length = spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6);
+          const length = 0.7 * spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6);
           const lean = (random() - 0.3) * length * 0.45;
-          ground!.fillStyle = `rgb(${pixels[p] * light},${pixels[p + 1] * light},${pixels[p + 2] * light})`;
-          ground!.beginPath();
-          ground!.moveTo(rootX - spacing * 0.85, rootY + spacing);
-          ground!.quadraticCurveTo(rootX - spacing * 0.4, rootY - length * 0.55, rootX + lean, rootY - length);
-          ground!.quadraticCurveTo(rootX + spacing * 0.6, rootY - length * 0.25, rootX + spacing * 0.85, rootY + spacing);
-          ground!.fill();
+          const blade = { x: rootX, y: rootY, length, lean, spacing, color: `rgb(${pixels[p] * light},${pixels[p + 1] * light},${pixels[p + 2] * light})` };
+          paintGround(ground!, blade);
+          const row = Math.floor(rootY / 32);
+          if (!groundRows.has(row)) groundRows.set(row, []);
+          groundRows.get(row)!.push(blade);
           groundCount++;
         }
       }
@@ -99,7 +135,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         const p = (Math.floor(y * sample.height) * sample.width + Math.floor(x * sample.width)) * 4;
         if (pixels[p + 3] < 235 || pixels[p + 1] < pixels[p] * 0.96 || pixels[p + 2] > pixels[p + 1] * 0.94) continue;
         const light = 0.75 + random() * 0.65;
-        const length = (2.2 + random() * 6.8) * (0.45 + y * 0.9) * Math.min(1.2, width / 1100);
+        const length = 0.7 * (2.2 + random() * 6.8) * (0.45 + y * 0.9) * Math.min(1.2, width / 1100);
         blades.push({ x: x * width, y: y * height, length, lean: (random() - 0.5) * length * 0.6, width: 0.4 + random() * 0.65, color: `rgba(${Math.min(210, pixels[p] * light)},${Math.min(220, pixels[p + 1] * light)},${Math.min(165, pixels[p + 2] * light)},0.78)` });
       }
       blades.sort((a, b) => a.y - b.y);
@@ -114,15 +150,37 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(undergrowth, 0, 0, width, height);
       const moving = settings.current.isPlaying && !reduced.matches;
+      if (moving) collectFootprints(now);
+      // Redraw only contact patches from their original blades, never a painted shadow.
+      if (footprints.length) {
+        ctx.save();
+        ctx.beginPath();
+        const rows = new Set<number>();
+        for (const foot of footprints) {
+          const r = foot.radius + 22;
+          ctx.rect(foot.x - r, foot.y - r, r * 2, r * 2);
+          for (let row = Math.floor((foot.y - r - 22) / 32); row <= Math.ceil((foot.y + r + 22) / 32); row++) rows.add(row);
+        }
+        ctx.clip();
+        ctx.clearRect(0, 0, width, height);
+        for (const row of rows) for (const blade of groundRows.get(row) ?? []) {
+          if (!footprints.some((foot) => Math.abs(blade.x - foot.x) < foot.radius + 45)) continue;
+          const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
+          paintGround(ctx, blade, pressure, direction);
+        }
+        ctx.restore();
+      }
       for (const blade of blades) {
-        const flow = moving ? sampleMeadowWind(now / 1000, blade.x / width, settings.current.wind) : 0;
-        const bend = blade.lean + flow * blade.length * 0.85;
-        const tipY = blade.y - blade.length + Math.abs(flow) * blade.length * 0.15;
+        const flow = moving ? (sampleMeadowWind(now / 1000, blade.x / width, settings.current.wind) + arrivalGrassWind(now, blade.x / width, gust)) : 0;
+        const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
+        const length = blade.length * (1 - pressure * 0.83);
+        const bend = blade.lean + flow * length * 0.85 + pressure * blade.length * direction;
+        const tipY = blade.y - length + Math.abs(flow) * length * 0.15;
         ctx.strokeStyle = blade.color;
         ctx.lineWidth = blade.width;
         ctx.beginPath();
         ctx.moveTo(blade.x, blade.y);
-        ctx.quadraticCurveTo(blade.x + bend * 0.16, blade.y - blade.length * 0.7, blade.x + bend, tipY);
+        ctx.quadraticCurveTo(blade.x + bend * 0.16, blade.y - length * 0.7, blade.x + bend, tipY);
         ctx.stroke();
       }
     }
@@ -139,6 +197,11 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       if (source.naturalWidth) draw(performance.now());
       if (!disposed && visible && !document.hidden && !reduced.matches && settings.current.isPlaying) frame = requestAnimationFrame(tick);
     }
+    const handleGust = (event: Event) => {
+      if (reduced.matches || !settings.current.isPlaying || document.hidden) return;
+      gust = (event as CustomEvent<MeadowGust>).detail;
+    };
+    window.addEventListener(MEADOW_GUST_EVENT, handleGust);
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
     observer.observe(canvas);
     // The hero's dissolve changes playback without unmounting the terrain.
@@ -159,6 +222,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       sceneObserver.disconnect();
       sizeObserver.disconnect();
       source.onload = null;
+      window.removeEventListener(MEADOW_GUST_EVENT, handleGust);
       document.removeEventListener("visibilitychange", sync);
       reduced.removeEventListener("change", sync);
     };

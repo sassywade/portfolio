@@ -788,7 +788,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /WELCOME_BREEZE_STRENGTH = 0\.46/);
   assert.match(tree, /Math\.max\(currentWind\.breeze, currentWind\.gust \* 0\.72\)/);
   assert.match(tree, /ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD/);
-  assert.match(tree, /sessionStorage\.getItem\(WELCOME_BREEZE_SESSION_KEY\)/);
+  assert.match(tree, /window\.dispatchEvent\(new CustomEvent\(MEADOW_GUST_EVENT/);
   assert.match(tree, /direction: currentWind\.direction < 0 \? -1 : 1/);
   assert.doesNotMatch(tree, /cypress-tree__ground-shadow/);
   assert.doesNotMatch(tree, /cypress-tree__controls|useState/);
@@ -1017,4 +1017,23 @@ test("grass meadow replaces its reference and keeps the image-only picker altern
   assert.match(grass, /delete surface.dataset.grassReady/);
   assert.doesNotMatch(grass, /ctx\.drawImage\(source/);
   assert.match(css, /\.meadow__visual\[data-grass-ready="true"\] > \.meadow__image\s*\{[^}]*visibility: hidden/);
+});
+
+
+test("arrival breeze travels and character pressure recovers without disturbing distant grass", async () => {
+  const ts = await import("typescript");
+  const source = await readFile(new URL("../app/grass-interaction.ts", import.meta.url), "utf8");
+  const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
+  const { arrivalGrassWind, grassPressure } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
+  const gust = { startedAt: 1000, origin: 0.8, direction: -1, strength: 0.46, duration: 1450 };
+  assert.ok(arrivalGrassWind(1500, 0.8, gust) < 0);
+  assert.equal(arrivalGrassWind(1500, 0, gust), 0);
+  assert.ok(arrivalGrassWind(2800, 0, gust) < 0);
+  assert.equal(arrivalGrassWind(5000, 0, gust), 0);
+  const footprints = [{ x: 100, y: 100, radius: 16, at: 1000, direction: -1 }];
+  assert.equal(grassPressure(100, 100, 1000, footprints).pressure, 1);
+  assert.equal(grassPressure(100, 100, 1950, footprints).pressure, 0.5);
+  assert.equal(grassPressure(100, 100, 2900, footprints).pressure, 0);
+  assert.equal(grassPressure(130, 100, 1000, footprints).pressure, 0);
+  assert.equal(grassPressure(100, 100, 1000, footprints).direction, -1);
 });

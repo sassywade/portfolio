@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { createCypressTree } from "./cypress-tree-renderer";
+import { MEADOW_GUST_EVENT } from "./grass-interaction";
 import { type WindSettings } from "./wind";
 
 const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
-const WELCOME_BREEZE_SESSION_KEY = "neel-cypress-welcome-breeze";
 const WELCOME_BREEZE_DELAY = 1250;
 const STRONG_AMBIENT_WIND_THRESHOLD = 0.58;
 const WELCOME_BREEZE_STRENGTH = 0.46;
@@ -61,27 +61,20 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
-    try {
-      if (window.sessionStorage.getItem(WELCOME_BREEZE_SESSION_KEY) === "shown") return;
-    } catch {
-      // Storage can be unavailable in privacy-restricted contexts; the breeze can still run once.
-    }
-
     const welcomeTimer = window.setTimeout(() => {
-      try {
-        window.sessionStorage.setItem(WELCOME_BREEZE_SESSION_KEY, "shown");
-      } catch {
-        // The animation is nonessential, so storage failure should never block it.
-      }
-
       const tree = treeRef.current;
       const currentWind = latestWind.current;
       const ambientWind = Math.max(currentWind.breeze, currentWind.gust * 0.72);
-      if (!tree || !latestPlaying.current || ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD) return;
+      if (!tree || !latestPlaying.current || document.hidden) return;
+      window.dispatchEvent(new CustomEvent(MEADOW_GUST_EVENT, { detail: {
+        startedAt: performance.now(), origin: 0.82,
+        direction: currentWind.direction < 0 ? -1 : 1,
+        strength: WELCOME_BREEZE_STRENGTH, duration: WELCOME_BREEZE_DURATION,
+      } }));
 
       tree.applyGust({
         direction: currentWind.direction < 0 ? -1 : 1,
-        strength: WELCOME_BREEZE_STRENGTH,
+        strength: ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD ? WELCOME_BREEZE_STRENGTH * 0.65 : WELCOME_BREEZE_STRENGTH,
         duration: WELCOME_BREEZE_DURATION,
       });
     }, WELCOME_BREEZE_DELAY);

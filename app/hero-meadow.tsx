@@ -393,6 +393,7 @@ export function HeroMeadow() {
       data-scene-visible={isSceneVisible ? "true" : "false"}
       data-scroll-state="hero"
       data-meadow-variant={meadowVariant}
+      data-grass-enabled={grassEnabled ? "true" : "false"}
       data-environment-style={environmentStyle}
       data-ascii-garden-theme={isAsciiScene ? asciiGardenTheme : undefined}
       data-style-atmosphere={environment.atmosphere}
