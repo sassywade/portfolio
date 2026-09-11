@@ -941,6 +941,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /\.meadow-settings__modes button\[aria-pressed="true"\]/);
   assert.match(css, /\.alamo-weather\s*\{[^}]*right:\s*calc\(\(var\(--meadow-render-width\) - 100vw\) \/ 2/);
   assert.match(css, /\.alamo-weather\s*\{[^}]*bottom:\s*17%/);
+  assert.match(css, /\[data-environment-style="painterly-realism"\] \.alamo-weather\s*\{[^}]*bottom: 22px;[^}]*height: auto;[^}]*color: rgb\(255 255 255 \/ 92%\);[^}]*text-align: right;/);
   assert.match(weather, /return "Slight breeze"/);
   assert.match(css, /\.alamo-weather__primary\s*\{[^}]*font-size:\s*12px/);
   assert.match(meadow, /children\?: ReactNode/);

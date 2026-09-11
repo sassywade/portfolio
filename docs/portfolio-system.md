@@ -52,6 +52,8 @@ Philip's visibility follows the meadow's rendered presence, not the hero section
 
 The default homepage should remain server-renderable. Client components are reserved for interactions that genuinely need pointer, scroll, time, or weather state.
 
+The painterly meadow's live weather is a compact, right-aligned white Geist readout at the bottom right: breeze summary above local San Francisco time and wind details. Keep the alternate environment treatments intact.
+
 ## 4. Visual language
 
 - White space is structural, not empty decoration.

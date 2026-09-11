@@ -12925,3 +12925,40 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
 .hero-meadow[data-environment-style="painterly-realism"][data-meadow-variant="living"][data-grass-enabled="true"] > .cypress-tree .cypress-tree__stage {
   transform: translate3d(0, calc(var(--cypress-root-registration-y) - 8px), 0);
 }
+
+/* A quiet weather readout tucked into the grass. */
+.hero-meadow[data-environment-style="painterly-realism"] .alamo-weather {
+  right: calc((var(--meadow-render-width) - 100vw) / 2 + clamp(16px, 2.5vw, 36px));
+  bottom: 22px;
+  width: min(360px, calc(100vw - 32px));
+  height: auto;
+  color: rgb(255 255 255 / 92%);
+  text-align: right;
+  text-shadow: 0 1px 3px rgb(25 37 12 / 24%);
+}
+
+.hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__ridge {
+  display: none;
+}
+
+.hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__ascii-primary,
+.hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__secondary.sr-only {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: normal;
+}
+
+.hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__secondary.sr-only {
+  font-size: 11px;
+  opacity: 0.76;
+}

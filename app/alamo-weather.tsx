@@ -145,6 +145,7 @@ export function AlamoWeather({ onWindUpdate }: AlamoWeatherProps) {
       className="alamo-weather"
       data-weather-state={conditions ? "live" : hasWeatherError ? "unavailable" : "loading"}
       aria-live="polite"
+      aria-label={primaryCopy}
     >
       <svg
         className="alamo-weather__ridge"
