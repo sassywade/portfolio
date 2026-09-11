@@ -128,3 +128,5 @@ The tree shade must remain visible at large desktop sizes: scale both its width 
 Grass wind response uses a shared 65-point damped spring field, interpolated across the meadow, with stronger wind susceptibility and varied blade flexibility. The dense crest animates alongside the fine foreground blades, using bounded redraw strips in the existing loop. Roots stay fixed; tips curve and settle elastically. Cursor brushing remains gentle and motion still pauses offscreen or under reduced motion.
 
 Grass elasticity tuning: retain the spring recovery and moving crest, but keep the ambient bend around half the initial elastic version (wind gain 1.10, blade bend gain 0.95). The welcome gust is softened to 0.8 in the spring field. Avoid the strongly swept-over look.
+
+The painterly weather readout uses Geist at 13–15px for the summary and 12–14px for details. Counteract the meadow's vertical artwork scale on the readout so the typography retains its normal proportions.

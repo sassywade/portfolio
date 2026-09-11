@@ -12930,11 +12930,13 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
 .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather {
   right: calc((var(--meadow-render-width) - 100vw) / 2 + clamp(16px, 2.5vw, 36px));
   bottom: 22px;
-  width: min(360px, calc(100vw - 32px));
+  width: min(420px, calc(100vw - 32px));
   height: auto;
   color: rgb(255 255 255 / 92%);
   text-align: right;
   text-shadow: 0 1px 3px rgb(25 37 12 / 24%);
+  transform: scaleY(calc(1 / var(--living-meadow-scale-y)));
+  transform-origin: bottom right;
 }
 
 .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__ridge {
@@ -12952,14 +12954,14 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   clip: auto;
   clip-path: none;
   font-family: var(--sans);
-  font-size: 12px;
+  font-size: clamp(13px, 1vw, 15px);
   line-height: 1.5;
   letter-spacing: 0;
   white-space: normal;
 }
 
 .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__secondary.sr-only {
-  font-size: 11px;
+  font-size: clamp(12px, 0.9vw, 14px);
   opacity: 0.76;
 }
 
@@ -13053,4 +13055,10 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
 /* The grass receives the tree's shade; the cutout itself casts no halo. */
 .hero-meadow[data-environment-style="painterly-realism"] .cypress-tree__canvas {
   filter: none;
+}
+
+@media (max-width: 580px) {
+  .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather {
+    bottom: 12px;
+  }
 }
