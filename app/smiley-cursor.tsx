@@ -3,6 +3,7 @@
 /* Native local images keep cursor-frame swaps immediate and avoid optimizer overhead. */
 /* eslint-disable @next/next/no-img-element */
 
+import { GRASS_PRESENCE_EVENT } from "./grass-interaction";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -106,6 +107,7 @@ export function SmileyCursor() {
     let miniatureBlowSent = false;
     let miniatureNeedsExit: MiniatureKind | null = null;
     let miniatureCooldownUntil = 0;
+    let grassActive = false;
 
     cursor.dataset.facing = "right";
     cursor.dataset.backpacker = "off";
@@ -415,8 +417,18 @@ export function SmileyCursor() {
         }
       }
 
-      updateMiniatureInteraction(timestamp);
-      updatePetState(timestamp);
+      if (grassActive) {
+        resetMiniatureInteraction();
+        stopIdleMischief();
+        nextFollowDistance = 38;
+        positionEase = 0.075;
+        cursor.dataset.state = "strong";
+        cursor.dataset.wind = "on";
+        cursor.dataset.reaction = "off";
+      } else {
+        updateMiniatureInteraction(timestamp);
+        updatePetState(timestamp);
+      }
 
       pointerX += (inputX - pointerX) * 0.14;
       pointerY += (inputY - pointerY) * 0.14;
@@ -446,7 +458,7 @@ export function SmileyCursor() {
         Math.abs(inputY - pointerY) > 0.2 ||
         timestamp < happyUntil ||
         miniaturePhase !== "off" ||
-        idleStartedAt !== null;
+        idleStartedAt !== null || grassActive;
 
       if (stillSettling) {
         frame = window.requestAnimationFrame(setMotionVariables);
@@ -463,7 +475,7 @@ export function SmileyCursor() {
 
     const armIdleMischief = () => {
       clearIdleTimer();
-      if (!hasPointerPosition || isPastHero || miniaturePhase !== "off") return;
+      if (!hasPointerPosition || isPastHero || grassActive || miniaturePhase !== "off") return;
 
       const remainingDelay = Math.max(0, IDLE_MISCHIEF_DELAY - (performance.now() - lastMoveTime));
       idleTimer = window.setTimeout(() => {
@@ -578,6 +590,8 @@ export function SmileyCursor() {
     };
 
     const handlePointerLeave = () => {
+      grassActive = false;
+      cursor.dataset.grass = "off";
       resetMiniatureInteraction();
       clearFacingTimer();
       stopIdleMischief();
@@ -591,11 +605,19 @@ export function SmileyCursor() {
       }
     };
 
+    const handleGrassPresence = (event: Event) => {
+      grassActive = Boolean((event as CustomEvent<{ active: boolean }>).detail?.active) && !isPastHero;
+      cursor.dataset.grass = grassActive ? "on" : "off";
+      if (grassActive) { stopIdleMischief(); stopHappyReaction(); }
+      scheduleFrame();
+    };
+    window.addEventListener(GRASS_PRESENCE_EVENT, handleGrassPresence);
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerout", handlePointerOut);
     handleMeadowPresenceChange();
 
     return () => {
+      window.removeEventListener(GRASS_PRESENCE_EVENT, handleGrassPresence);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerout", handlePointerOut);
       meadowPresenceObserver.disconnect();

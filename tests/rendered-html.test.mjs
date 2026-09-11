@@ -886,7 +886,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /attributeFilter: \["data-meadow-present"\]/);
   assert.match(smiley, /meadowPresenceObserver\.disconnect\(\)/);
   assert.doesNotMatch(smiley, /HERO_COPY_CLEARANCE|heroCopyTargets|isNearHeroCopy|data-hero-copy/);
-  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| miniaturePhase !== "off"\) return/);
+  assert.match(smiley, /if \(!hasPointerPosition \|\| isPastHero \|\| grassActive \|\| miniaturePhase !== "off"\) return/);
   assert.match(smiley, /const FACING_INTENT_THRESHOLD = 32/);
   assert.match(smiley, /const FACING_CHANGE_DELAY = 240/);
   assert.match(smiley, /const FACING_INTENT_MEMORY = 180/);
@@ -1036,4 +1036,24 @@ test("arrival breeze travels and character pressure recovers without disturbing 
   assert.equal(grassPressure(100, 100, 2900, footprints).pressure, 0);
   assert.equal(grassPressure(130, 100, 1000, footprints).pressure, 0);
   assert.equal(grassPressure(100, 100, 1000, footprints).direction, -1);
+});
+
+
+test("Philip's grass gust is directional, local, and disabled outside its patch", async () => {
+  const ts = await import("typescript");
+  const source = await readFile(new URL("../app/grass-interaction.ts", import.meta.url), "utf8");
+  const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
+  const { petGrassWind } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
+  const brush = { x: 100, y: 100, direction: 1, strength: 1 };
+  assert.ok(petGrassWind(100, 100, brush) > 2);
+  assert.equal(petGrassWind(100, 100, { ...brush, direction: -1 }), -petGrassWind(100, 100, brush));
+  assert.equal(petGrassWind(210, 100, brush), 0);
+  assert.equal(petGrassWind(100, 170, brush), 0);
+  assert.equal(petGrassWind(100, 100, null), 0);
+  const pet = await readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8");
+  assert.match(pet, /window.addEventListener\(GRASS_PRESENCE_EVENT, handleGrassPresence\)/);
+  assert.match(pet, /if \(grassActive\) \{[\s\S]*?nextFollowDistance = 38/);
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  assert.match(grass, /point.y >= \(ridge/);
+  assert.match(grass, /paintGround\(ctx, blade, pressure, direction, flow\)/);
 });
