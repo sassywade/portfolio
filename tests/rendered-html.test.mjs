@@ -425,7 +425,7 @@ test("lets visitors toggle Philip from inside the prototype picker", async () =>
   assert.match(philip, /role="tooltip"/);
   assert.match(philip, /portfolio:philip-enabled/);
   assert.match(philip, /window\.localStorage\.setItem/);
-  assert.match(philip, /isReady && isEnabled \? <SmileyCursor \/>/);
+  assert.match(philip, /isReady && isEnabled && !quietLayout \? <SmileyCursor \/>/);
   assert.match(philip, /\/pet\/pet-idle\.png/);
   assert.match(picker, /<PhilipPickerToggle \/>/);
   assert.match(picker, />Philip<\/h2>/);
@@ -1136,4 +1136,15 @@ test("elastic grass shares spring motion and feathers the moving crest into cach
   assert.match(grass, /elasticWind\(blade.x\) \* crestFlex/);
   assert.match(grass, /\(22 - \(blade.y - ridgeY\)\) \/ 14/);
   assert.match(grass, /lastWindFrame = 0/);
+});
+
+test("quiet sidebar is opt-in and keeps character selection exclusive", async () => {
+  const hero = await readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8");
+  assert.match(hero, /useState<"classic" \| "quiet">\("classic"\)/);
+  assert.match(hero, /portfolio:solo-actor/);
+  for (const file of ["bike-ride", "photo-drop", "backpack-walk"]) {
+    const actor = await readFile(new URL(`../app/${file}.tsx`, import.meta.url), "utf8");
+    assert.match(actor, /removeEventListener\("portfolio:solo-actor", handleSoloActor\)/);
+    assert.match(actor, /window.cancelAnimationFrame\(frameHandle\)/);
+  }
 });

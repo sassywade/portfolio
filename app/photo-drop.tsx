@@ -350,7 +350,7 @@ export function PhotoDrop() {
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
 
-    placeOnMeadow();
+    if (document.documentElement.dataset.portfolioLayout !== "quiet") placeOnMeadow();
 
     const handlePetBlow = () => {
       if (phase !== "shoot" || reducedMotion.matches) return;
@@ -361,7 +361,20 @@ export function PhotoDrop() {
     };
     window.addEventListener(PET_BLOW_PHOTOGRAPHER_EVENT, handlePetBlow);
 
+    const handleSoloActor = (event: Event) => {
+      const selected = (event as CustomEvent<string>).detail;
+      if (selected === "photo") return;
+      window.cancelAnimationFrame(frameHandle);
+      frameHandle = 0;
+      window.clearTimeout(reducedTimer);
+      clearPhotoLoop();
+      setPhase("idle");
+      if (selected === "classic") placeOnMeadow();
+    };
+    window.addEventListener("portfolio:solo-actor", handleSoloActor);
+
     return () => {
+      window.removeEventListener("portfolio:solo-actor", handleSoloActor);
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
       window.clearTimeout(reducedTimer);

@@ -33,6 +33,8 @@ const windFields: Array<{ key: WindKey; label: string }> = [
 ];
 
 type MeadowSettingsProps = {
+  layout: "classic" | "quiet";
+  onLayoutChange: (layout: "classic" | "quiet") => void;
   grassEnabled: boolean;
   onGrassEnabledChange: (enabled: boolean) => void;
   environmentStyle: AlamoStyle;
@@ -71,6 +73,7 @@ type MeadowSettingsProps = {
 };
 
 export function MeadowSettings({
+  layout, onLayoutChange,
   grassEnabled,
   onGrassEnabledChange,
   environmentStyle,
@@ -185,6 +188,14 @@ export function MeadowSettings({
               Close
             </button>
           </div>
+
+          <section className="meadow-settings__section" aria-label="Page layout">
+            <h2>Page layout</h2>
+            <div className="layout-prototype-options">
+              <button type="button" aria-pressed={layout === "classic"} onClick={() => onLayoutChange("classic")}>Current portfolio</button>
+              <button type="button" aria-pressed={layout === "quiet"} onClick={() => onLayoutChange("quiet")}>Quiet sidebar</button>
+            </div>
+          </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-atmosphere`}>
             <div className="meadow-settings__section-head">
@@ -330,7 +341,7 @@ export function MeadowSettings({
                 <h2 id={`${panelId}-philip`}>Philip</h2>
                 <small>Cursor pet</small>
               </div>
-              <PhilipPickerToggle />
+              {layout === "quiet" ? <p>Off in this variation</p> : <PhilipPickerToggle />}
             </div>
           </section>
 

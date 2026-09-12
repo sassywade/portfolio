@@ -13080,3 +13080,42 @@ html[data-ascii-garden-live="true"] .site-shell[data-environment-style="ascii-ga
   grid-template-columns: 1fr;
   flex: none;
 }
+
+/* An opt-in composition study; the original portfolio remains the default. */
+.quiet-sidebar { display: none; }
+.layout-prototype-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.layout-prototype-options button { padding: 20px 14px; border: 1px solid var(--line); border-radius: 12px; text-align: left; font-family: var(--sans); }
+.layout-prototype-options button[aria-pressed="true"] { background: #eeeee9; border-color: #79796d; }
+.meadow-settings__panel { width: min(620px, calc(100vw - 32px)); }
+html[data-portfolio-layout="quiet"] .site-header,
+html[data-portfolio-layout="quiet"] .pranathi-name,
+html[data-portfolio-layout="quiet"] .hero-copy__rest,
+html[data-portfolio-layout="quiet"] .hero-company,
+html[data-portfolio-layout="quiet"] .top-pet-pull { display: none; }
+html[data-portfolio-layout="quiet"] .pranathi-bio,
+html[data-portfolio-layout="quiet"] .hero-copy-line { font-size: 0; animation: none; transform: none; }
+html[data-portfolio-layout="quiet"] .quiet-sidebar { display: flex; position: fixed; z-index: 30; left: clamp(24px, 3.4vw, 60px); top: 30vh; flex-direction: column; gap: 15px; font-family: var(--serif); font-size: 21px; color: #292925; }
+.quiet-sidebar a { text-decoration: none; }
+.quiet-sidebar a[aria-current]::before { content: "·"; position: absolute; margin-left: -15px; }
+html[data-portfolio-layout="quiet"] .hero-hobby { position: fixed; top: 34px; z-index: 40; width: 34px; height: 34px; padding: 0; display: grid; place-items: center; border: 1px solid #deded8; border-radius: 5px; background: #fafaf7; color: #36362f; font-size: 20px; line-height: 1; text-decoration: none; transform: none; }
+html[data-portfolio-layout="quiet"] .hero-hobby span { display: none; }
+html[data-portfolio-layout="quiet"] .bike-word { left: calc(50% - 62px); }
+html[data-portfolio-layout="quiet"] .photo-word { left: calc(50% - 17px); }
+html[data-portfolio-layout="quiet"] .backpack-word { left: calc(50% + 28px); }
+html[data-portfolio-layout="quiet"] .bike-word::after { content: "🚲"; }
+html[data-portfolio-layout="quiet"] .photo-word::after { content: "📷"; }
+html[data-portfolio-layout="quiet"] .backpack-word::after { content: "🥾"; }
+html[data-portfolio-layout="quiet"] .hero-hobby[aria-pressed="true"] { background: #deded4; border-color: #737568; }
+html[data-portfolio-layout="quiet"] .pranathi-work { position: relative; z-index: 35; background: var(--paper); }
+.quiet-weather { position: fixed; z-index: 30; right: 32px; top: 28px; width: min(360px, 30vw); pointer-events: none; }
+.quiet-weather .alamo-weather { position: static; width: auto; height: auto; color: #303029; font-family: var(--serif); }
+.quiet-weather .alamo-weather__ridge { display: none; }
+.quiet-weather .alamo-weather__ascii-primary,
+.quiet-weather .alamo-weather__secondary { display: block; position: static; width: auto; height: auto; clip: auto; clip-path: none; overflow: visible; white-space: normal; margin: 0; font-family: var(--serif); font-size: 18px; line-height: 1.5; }
+.quiet-weather .alamo-weather__secondary { color: #92938b; font-size: 16px; }
+@media (max-width: 700px) {
+  html[data-portfolio-layout="quiet"] .quiet-sidebar { top: 24vh; left: 24px; gap: 13px; font-size: 19px; }
+  .quiet-weather { top: 90px; left: 24px; right: 24px; width: auto; }
+  .quiet-weather .alamo-weather__ascii-primary { font-size: 16px; }
+  .quiet-weather .alamo-weather__secondary { font-size: 14px; }
+}

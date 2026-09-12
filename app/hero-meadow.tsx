@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import {
   DEFAULT_ALAMO_STYLE,
@@ -34,6 +35,28 @@ export function HeroMeadow() {
   const [isSceneVisible, setIsSceneVisible] = useState(true);
   const [meadowVariant, setMeadowVariant] = useState<MeadowVariant>("living");
   const [grassEnabled, setGrassEnabled] = useState(true);
+  const [layout, setLayout] = useState<"classic" | "quiet">("classic");
+
+  useEffect(() => {
+    document.documentElement.dataset.portfolioLayout = layout;
+    window.dispatchEvent(new CustomEvent("portfolio:layout", { detail: layout }));
+    window.dispatchEvent(new CustomEvent("portfolio:solo-actor", { detail: layout === "quiet" ? "none" : "classic" }));
+    const select = (event: MouseEvent) => {
+      if (layout !== "quiet") return;
+      const button = (event.target as Element).closest(".bike-word, .photo-word, .backpack-word");
+      if (!button) return;
+      const actor = button.classList.contains("bike-word") ? "bike" : button.classList.contains("photo-word") ? "photo" : "backpack";
+      document.querySelectorAll(".bike-word, .photo-word, .backpack-word").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      window.dispatchEvent(new CustomEvent("portfolio:solo-actor", { detail: actor }));
+    };
+    document.addEventListener("click", select, true);
+    return () => {
+      document.removeEventListener("click", select, true);
+      delete document.documentElement.dataset.portfolioLayout;
+      document.querySelectorAll(".bike-word, .photo-word, .backpack-word").forEach(item => item.removeAttribute("aria-pressed"));
+      window.dispatchEvent(new CustomEvent("portfolio:layout", { detail: "classic" }));
+    };
+  }, [layout]);
   const [rollingMeadow, setRollingMeadow] = useState<RollingMeadow>("original");
   const [flatMeadowTexture, setFlatMeadowTexture] = useState<FlatMeadowTexture>("fine");
   const [flatMeadowColor, setFlatMeadowColor] = useState(DEFAULT_FLAT_MEADOW_COLOR);
@@ -422,7 +445,7 @@ export function HeroMeadow() {
             rollingMeadow={rollingMeadow}
             environmentStyle={environment}
           >
-            <AlamoWeather onWindUpdate={setWind} />
+            {layout === "quiet" ? createPortal(<div className="quiet-weather"><AlamoWeather onWindUpdate={setWind} /></div>, document.body) : <AlamoWeather onWindUpdate={setWind} />}
           </Meadow>
           <CypressTree
             wind={wind}
@@ -432,6 +455,8 @@ export function HeroMeadow() {
         </>
       )}
       <MeadowSettings
+        layout={layout}
+        onLayoutChange={setLayout}
         grassEnabled={grassEnabled}
         onGrassEnabledChange={setGrassEnabled}
         environmentStyle={environmentStyle}

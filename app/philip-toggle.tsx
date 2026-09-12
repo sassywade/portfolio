@@ -32,6 +32,13 @@ function savePhilipPreference(isEnabled: boolean) {
 
 export function PhilipToggle() {
   const pathname = usePathname();
+  const [quietLayout, setQuietLayout] = useState(false);
+  useEffect(() => {
+    const update = () => setQuietLayout(document.documentElement.dataset.portfolioLayout === "quiet");
+    update();
+    window.addEventListener("portfolio:layout", update);
+    return () => window.removeEventListener("portfolio:layout", update);
+  }, []);
   const [isEnabled, setIsEnabled] = useState(true);
   const [isReady, setIsReady] = useState(false);
 
@@ -63,7 +70,7 @@ export function PhilipToggle() {
 
   if (pathname !== "/") return null;
 
-  return isReady && isEnabled ? <SmileyCursor /> : null;
+  return isReady && isEnabled && !quietLayout ? <SmileyCursor /> : null;
 }
 
 export function PhilipPickerToggle() {

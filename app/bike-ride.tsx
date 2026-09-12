@@ -334,7 +334,18 @@ export function BikeRide() {
     };
     window.addEventListener(PET_BLOW_CYCLIST_EVENT, handlePetBlow);
 
+    const handleSoloActor = (event: Event) => {
+      const selected = (event as CustomEvent<string>).detail;
+      if (selected === "bike") return;
+      window.cancelAnimationFrame(frameHandle);
+      frameHandle = 0;
+      window.clearTimeout(reducedTimer);
+      setPhase("idle");
+    };
+    window.addEventListener("portfolio:solo-actor", handleSoloActor);
+
     return () => {
+      window.removeEventListener("portfolio:solo-actor", handleSoloActor);
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
       window.clearTimeout(reducedTimer);

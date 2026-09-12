@@ -318,7 +318,18 @@ export function BackpackWalk() {
     meadowImage.addEventListener("load", handleMeadowLoad);
     if (meadowImage.complete && meadowImage.naturalWidth) handleMeadowLoad();
 
+    const handleSoloActor = (event: Event) => {
+      const selected = (event as CustomEvent<string>).detail;
+      if (selected === "backpack") return;
+      window.cancelAnimationFrame(frameHandle);
+      frameHandle = 0;
+      window.clearTimeout(reducedTimer);
+      setPhase("idle");
+    };
+    window.addEventListener("portfolio:solo-actor", handleSoloActor);
+
     return () => {
+      window.removeEventListener("portfolio:solo-actor", handleSoloActor);
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
       window.clearTimeout(reducedTimer);

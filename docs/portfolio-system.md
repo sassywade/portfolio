@@ -138,3 +138,5 @@ The homepage “Neel Saswade” name uses upright Newsreader, not italics.
 The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
 
 Opened Polaroids have no glimmer or moving sheen overlay. Keep the paper finish, Newsreader caption, and gentle tilt.
+
+The prototype picker includes an opt-in “Quiet sidebar” page layout and the unchanged “Current portfolio” default. Quiet sidebar hides the homepage introduction and header, uses left-side Newsreader navigation to existing destinations, places bike/camera/hiking controls at the top, and shows one selected miniature at a time. Selecting another cancels the previous actor's animation; switching back restores the default photographer. Philip is temporarily suppressed without changing the stored preference. Weather moves to the upper right. The prototype panel is wider for comparing options.

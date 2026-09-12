@@ -33,6 +33,14 @@ export default function Home() {
       <TopPetPull />
       <main className="site-shell page-enter" id="top">
         <SiteHeader current="work" />
+        <nav className="quiet-sidebar" aria-label="Sidebar navigation">
+          <a href="#top" aria-current="page">Home</a>
+          <a href="#work">Work</a>
+          <a href="/play">Play</a>
+          <a href="/about#about-gallery-title">Photography</a>
+          <a href="/about">Me</a>
+          <a href="/Neel-Saswade-Resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+        </nav>
 
         <section className="pranathi-intro pranathi-intro--home" aria-labelledby="hero-title">
           <p className="pranathi-name" id="hero-title">Neel Saswade</p>
