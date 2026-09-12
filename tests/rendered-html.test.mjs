@@ -1148,3 +1148,9 @@ test("quiet sidebar is opt-in and keeps character selection exclusive", async ()
     assert.match(actor, /window.cancelAnimationFrame\(frameHandle\)/);
   }
 });
+
+ test("quiet variation keeps a consistent 20px reading size", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const quiet = css.slice(css.indexOf("/* An opt-in composition study;"));
+  assert.doesNotMatch(quiet, /font-size: (?!20px|0[; ])\d/);
+});
