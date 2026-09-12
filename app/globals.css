@@ -13094,10 +13094,10 @@ html[data-portfolio-layout="quiet"] .hero-company,
 html[data-portfolio-layout="quiet"] .top-pet-pull { display: none; }
 html[data-portfolio-layout="quiet"] .pranathi-bio,
 html[data-portfolio-layout="quiet"] .hero-copy-line { font-size: 0; animation: none; transform: none; }
-html[data-portfolio-layout="quiet"] .quiet-sidebar { display: flex; position: fixed; z-index: 30; left: clamp(24px, 3.4vw, 60px); top: 30vh; flex-direction: column; gap: 15px; font-family: var(--serif); font-size: 20px; color: #292925; }
+html[data-portfolio-layout="quiet"] .quiet-sidebar { display: flex; position: fixed; z-index: 30; left: clamp(24px, 3.4vw, 60px); top: 30vh; flex-direction: column; gap: 15px; font-family: var(--serif); font-size: clamp(16px, 1.32vw, 19px); color: #292925; }
 .quiet-sidebar a { text-decoration: none; }
 .quiet-sidebar a[aria-current]::before { content: "·"; position: absolute; margin-left: -15px; }
-html[data-portfolio-layout="quiet"] .hero-hobby { position: fixed; top: 34px; z-index: 40; width: 34px; height: 34px; padding: 0; display: grid; place-items: center; border: 1px solid #deded8; border-radius: 5px; background: #fafaf7; color: #36362f; font-size: 20px; line-height: 1; text-decoration: none; transform: none; }
+html[data-portfolio-layout="quiet"] .hero-hobby { position: fixed; top: 34px; z-index: 40; width: 34px; height: 34px; padding: 0; display: grid; place-items: center; border: 1px solid #deded8; border-radius: 5px; background: #fafaf7; color: #36362f; font-size: clamp(16px, 1.32vw, 19px); line-height: 1; text-decoration: none; transform: none; }
 html[data-portfolio-layout="quiet"] .hero-hobby span { display: none; }
 html[data-portfolio-layout="quiet"] .bike-word { left: calc(50% - 62px); }
 html[data-portfolio-layout="quiet"] .photo-word { left: calc(50% - 17px); }
@@ -13111,15 +13111,15 @@ html[data-portfolio-layout="quiet"] .pranathi-work { position: relative; z-index
 .quiet-weather .alamo-weather { position: static; width: auto; height: auto; color: #303029; font-family: var(--serif); }
 .quiet-weather .alamo-weather__ridge { display: none; }
 .quiet-weather .alamo-weather__ascii-primary,
-.quiet-weather .alamo-weather__secondary { display: block; position: static; width: auto; height: auto; clip: auto; clip-path: none; overflow: visible; white-space: normal; margin: 0; font-family: var(--serif); font-size: 20px; line-height: 1.5; }
-.quiet-weather .alamo-weather__secondary { color: #92938b; font-size: 20px; }
+.quiet-weather .alamo-weather__secondary { display: block; position: static; width: auto; height: auto; clip: auto; clip-path: none; overflow: visible; white-space: normal; margin: 0; font-family: var(--serif); font-size: clamp(16px, 1.32vw, 19px); line-height: 1.5; }
+.quiet-weather .alamo-weather__secondary { color: #92938b; font-size: clamp(16px, 1.32vw, 19px); }
 @media (max-width: 700px) {
-  html[data-portfolio-layout="quiet"] .quiet-sidebar { top: 24vh; left: 24px; gap: 13px; font-size: 20px; }
+  html[data-portfolio-layout="quiet"] .quiet-sidebar { top: 24vh; left: 24px; gap: 13px; font-size: clamp(16px, 1.32vw, 19px); }
   .quiet-weather { top: 90px; left: 24px; right: 24px; width: auto; }
-  .quiet-weather .alamo-weather__ascii-primary { font-size: 20px; }
-  .quiet-weather .alamo-weather__secondary { font-size: 20px; }
+  .quiet-weather .alamo-weather__ascii-primary { font-size: clamp(16px, 1.32vw, 19px); }
+  .quiet-weather .alamo-weather__secondary { font-size: clamp(16px, 1.32vw, 19px); }
 }
 
 /* One consistent reading size throughout the quiet variation. */
 html[data-portfolio-layout="quiet"] .pranathi-work :is(h2, h3, h4, p, a, span),
-html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, button, label, span, output, summary) { font-size: 20px; }
+html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, button, label, span, output, summary) { font-size: clamp(16px, 1.32vw, 19px); }
