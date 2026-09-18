@@ -1183,3 +1183,8 @@ test("default homepage uses quiet navigation and top-right weather while keeping
   assert.match(hero, /weatherHost \? createPortal/);
   assert.match(css, /\.home-portfolio \.quiet-sidebar \{ display: flex/);
 });
+
+test("sidebar preserves the original desktop header space above the introduction", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.home-portfolio::before\s*\{[^}]*height: calc\(30px \+ clamp\(15px, 1\.1vw, 18px\) \* 1\.05\)/);
+});

@@ -13174,3 +13174,12 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
     margin-inline: auto;
   }
 }
+
+/* Preserve the original header's space when the sidebar replaces it. */
+@media (min-width: 701px) {
+  html:not([data-portfolio-layout="quiet"]) .home-portfolio::before {
+    content: "";
+    display: block;
+    height: calc(30px + clamp(15px, 1.1vw, 18px) * 1.05);
+  }
+}
