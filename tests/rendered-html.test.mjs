@@ -1188,3 +1188,10 @@ test("sidebar preserves the original desktop header space above the introduction
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.home-portfolio::before\s*\{[^}]*height: calc\(30px \+ clamp\(15px, 1\.1vw, 18px\) \* 1\.05\)/);
 });
+
+
+test("weather summary and details stay smaller than navigation", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.quiet-weather \.alamo-weather__ascii-primary \{ font-size: clamp\(12px, 0\.9vw, 14px\)/);
+  assert.match(css, /\.quiet-weather \.alamo-weather__secondary \{ font-size: clamp\(11px, 0\.8vw, 12px\)/);
+});

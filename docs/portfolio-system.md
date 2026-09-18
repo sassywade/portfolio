@@ -152,3 +152,5 @@ Grass readability and performance: skyline blades are 30% longer and slightly na
 The default homepage now uses the quiet study's left Newsreader navigation (Home, Work, Play, Photography, Me, Resume) and top-right breeze/time readout. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. Reserve a left rail beside desktop work; on mobile place navigation and weather above the introduction, with no overlap. The full quiet study remains opt-in.
 
 Replacing the homepage header with the sidebar must preserve the introduction's original desktop vertical position. Above 700px, retain the old header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
+
+Top-right weather typography is deliberately smaller than navigation: breeze summary 12–14px, time and wind details 11–12px, responsive on desktop and mobile.

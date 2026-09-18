@@ -13183,3 +13183,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
     height: calc(30px + clamp(15px, 1.1vw, 18px) * 1.05);
   }
 }
+
+/* Keep the top-right weather subordinate to the introduction. */
+.quiet-weather .alamo-weather__ascii-primary { font-size: clamp(12px, 0.9vw, 14px); }
+.quiet-weather .alamo-weather__secondary { font-size: clamp(11px, 0.8vw, 12px); }
