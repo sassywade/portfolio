@@ -13104,7 +13104,7 @@ html[data-portfolio-layout="quiet"] .pranathi-bio,
 html[data-portfolio-layout="quiet"] .hero-copy-line { font-size: 0; animation: none; transform: none; }
 .home-portfolio .quiet-sidebar { display: flex; position: fixed; z-index: 30; left: clamp(24px, 3.4vw, 60px); top: 30vh; flex-direction: column; gap: 15px; font-family: var(--serif); font-size: clamp(16px, 1.32vw, 19px); color: #292925; }
 .quiet-sidebar a { text-decoration: none; }
-.quiet-sidebar a[aria-current]::before { content: "·"; position: absolute; margin-left: -15px; }
+.quiet-sidebar a[aria-current]::before { content: "·"; position: absolute; margin-left: -15px; transform: scale(1.4); }
 html[data-portfolio-layout="quiet"] .hero-hobby { position: fixed; top: 34px; z-index: 40; width: 34px; height: 34px; padding: 0; display: grid; place-items: center; border: 1px solid #deded8; border-radius: 5px; background: #fafaf7; color: #36362f; font-size: clamp(16px, 1.32vw, 19px); line-height: 1; text-decoration: none; transform: none; }
 html[data-portfolio-layout="quiet"] .hero-hobby span { display: none; }
 html[data-portfolio-layout="quiet"] .bike-word { left: calc(50% - 62px); }
