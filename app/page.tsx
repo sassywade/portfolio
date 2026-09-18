@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <>
       <TopPetPull />
-      <main className="site-shell page-enter home-portfolio" id="top">
+      <main className="site-shell home-portfolio" id="top">
         <nav className="quiet-sidebar" aria-label="Sidebar navigation">
           <a href="#top" aria-current="page">Home</a>
           <a href="#work">Work</a>
