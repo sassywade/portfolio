@@ -23,14 +23,13 @@ export default function AboutPage() {
           <div className="simple-page__copy about-page__intro">
             <h1 id="about-title">Hello!</h1>
             <p>
-              I&apos;m a product designer who likes figuring out how new technology can
-              feel a little more natural to use.
+              I&apos;m a product designer interested in making new technology feel
+              natural to use.
             </p>
             <p>
-              I tend to bounce between thinking about the larger product and
-              sweating the small details. I&apos;m happiest working on things that are
-              still taking shape, where there&apos;s room to explore, try ideas, and
-              make something people actually want to use.
+              I work across the big product question and the small detail. I like
+              projects that are still taking shape: room to explore, try ideas, and
+              make something useful.
             </p>
             <nav className="about-page__socials" aria-label="Social links">
               <a

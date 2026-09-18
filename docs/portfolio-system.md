@@ -56,6 +56,10 @@ The painterly meadow's live weather is a compact, right-aligned white Geist read
 
 ## 4. Visual language
 
+### Editorial voice
+
+Portfolio copy follows a Typehug- and Torph-inspired rule: short, concrete sentences; active verbs; one idea at a time; intentional line endings; and continuity when text changes state. Lead with the human action, cut throat-clearing phrases, and use specific outcomes instead of broad claims. Keep headings scannable and paragraphs conversational. When a label or status changes, preserve its grammatical shape and anchor words so the interface feels coherent. This applies to new homepage, About, project, case-study, caption, metadata, and interface-state copy.
+
 - White space is structural, not empty decoration.
 - Text color is the warm gray system ink (`#65625f` family).
 - Grid lines stay subtle and disappear on case-study pages.
@@ -142,3 +146,7 @@ Opened Polaroids have no glimmer or moving sheen overlay. Keep the paper finish,
 The prototype picker includes an opt-in “Quiet sidebar” page layout and the unchanged “Current portfolio” default. Quiet sidebar hides the homepage introduction and header, uses left-side Newsreader navigation to existing destinations, places bike/camera/hiking controls at the top, and shows one selected miniature at a time. Selecting another cancels the previous actor's animation; switching back restores the default photographer. Philip is temporarily suppressed without changing the stored preference. Weather moves to the upper right. The prototype panel is wider for comparing options.
 
 Quiet sidebar matches the original introduction’s responsive text size (clamp(16px, 1.32vw, 19px)) on desktop and mobile, including navigation, both weather lines, work text, and prototype controls. The classic layout retains its existing typography.
+
+Grass readability and performance: skyline blades are 30% longer and slightly narrower; fine moving blades are about 34% longer with fewer samples. Dense interior turf remains cached on its own canvas. A separate canvas draws preselected skyline blades and fine tips on each display frame. Only cursor and character contact patches rebuild the interior, using spatial buckets and the original paint order; the passing welcome breeze reads through the skyline and moving tips. Playback changes must not regenerate the terrain. Keep native-pixel restoration, responsive registration, tree shading, and hidden/offscreen/reduced-motion suspension.
+
+The default homepage now uses the quiet study's left Newsreader navigation (Home, Work, Play, Photography, Me, Resume) and top-right breeze/time readout. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. Reserve a left rail beside desktop work; on mobile place navigation and weather above the introduction, with no overlap. The full quiet study remains opt-in.

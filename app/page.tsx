@@ -3,7 +3,6 @@ import { BikeRide } from "./bike-ride";
 import { PhotoDrop } from "./photo-drop";
 import { BackpackWalk } from "./backpack-walk";
 import { ProjectGrid } from "./project-card";
-import { SiteHeader } from "./site-header";
 import { TopPetPull } from "./top-pet-pull";
 
 type CompanyLinkProps = {
@@ -31,8 +30,7 @@ export default function Home() {
   return (
     <>
       <TopPetPull />
-      <main className="site-shell page-enter" id="top">
-        <SiteHeader current="work" />
+      <main className="site-shell page-enter home-portfolio" id="top">
         <nav className="quiet-sidebar" aria-label="Sidebar navigation">
           <a href="#top" aria-current="page">Home</a>
           <a href="#work">Work</a>
@@ -46,14 +44,14 @@ export default function Home() {
           <p className="pranathi-name" id="hero-title">Neel Saswade</p>
           <div className="pranathi-bio">
             <p className="hero-copy-line">
-              <span className="hero-copy__rest">I&apos;m a product designer based in San Francisco. Currently, I work at </span>
+              <span className="hero-copy__rest">I&apos;m a product designer in San Francisco. I work at </span>
               <CompanyLink brand="glean" href="https://www.glean.com/">Glean</CompanyLink>
-              <span className="hero-copy__rest"> focused on proactive intelligence, growth, and artifacts. Previously, I designed at </span>
+              <span className="hero-copy__rest"> on proactive intelligence, growth, and artifacts. Before that, I designed at </span>
               <CompanyLink brand="snap" href="https://www.snap.com/">Snap</CompanyLink>
               <span className="hero-copy__rest">.</span>
             </p>
             <p className="hero-copy-line">
-              <span className="hero-copy__rest">In my free time I ride </span>
+              <span className="hero-copy__rest">In my free time, I ride </span>
               <BikeRide />
               <span className="hero-copy__rest">, </span>
               <PhotoDrop />

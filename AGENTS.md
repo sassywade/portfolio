@@ -8,9 +8,13 @@ Use `design.md` as the visual and interaction north star. Use `docs/portfolio-sy
 
 The site should feel personal, calm, editorial, and lightly playful. The work must remain the focus. Prefer the smallest complete change. Do not add explanatory copy, decorative UI, arrows, captions, badges, sections, or animation unless Neel explicitly requests them.
 
+## Editorial voice
+
+Write with the restraint of Typehug and the continuity of Torph: make a small space do useful work, and let language change without breaking the reader’s sense of place. Prefer short, concrete sentences and active verbs. Put the human action before the product language. Keep one idea per sentence, remove throat-clearing phrases and stacked qualifiers, and let specific outcomes carry the weight. Headings should be easy to scan and end cleanly; paragraphs should wrap naturally without stranded one-word endings. When a label or status changes, keep its grammatical shape and anchor words stable. Use conversational language that sounds like Neel speaking, with quiet confidence instead of marketing claims. Apply this voice to homepage copy, About copy, project summaries, case studies, captions, metadata, interface states, and any future text added to the portfolio.
+
 ## Non-negotiable defaults
 
-- Navigation is `Work`, `About`, `Play`, `Resume`. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
+- Homepage navigation uses the quiet left sidebar: `Home`, `Work`, `Play`, `Photography`, `Me`, `Resume`, with breeze and time at the top right. Keep the current introduction and meadow. Other pages retain `Work`, `About`, `Play`, `Resume`. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
 - There is no archive section, promotional footer, or contact/social cluster.
 - The homepage background is white with the subtle studio grid.
 - The default environment is the restrained painterly rolling Alamo Square meadow.

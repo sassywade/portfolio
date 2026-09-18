@@ -229,6 +229,14 @@ html[data-top-pet-active="true"] .hero-meadow {
   transition: opacity 220ms ease, color 220ms ease, background-color 220ms ease, transform 220ms cubic-bezier(.22, .7, .2, 1);
 }
 
+.pranathi-bio,
+.simple-page__copy p,
+.case-story-hero__copy p,
+.case-story-introduction > p,
+.case-story-chapter__copy > p:last-child {
+  text-wrap: pretty;
+}
+
 html[data-hero-highlights="true"] .hero-inline-action {
   --hero-actor-color: var(--acid);
   --hero-actor-wash: rgba(0, 47, 167, 0.1);
@@ -13094,7 +13102,7 @@ html[data-portfolio-layout="quiet"] .hero-company,
 html[data-portfolio-layout="quiet"] .top-pet-pull { display: none; }
 html[data-portfolio-layout="quiet"] .pranathi-bio,
 html[data-portfolio-layout="quiet"] .hero-copy-line { font-size: 0; animation: none; transform: none; }
-html[data-portfolio-layout="quiet"] .quiet-sidebar { display: flex; position: fixed; z-index: 30; left: clamp(24px, 3.4vw, 60px); top: 30vh; flex-direction: column; gap: 15px; font-family: var(--serif); font-size: clamp(16px, 1.32vw, 19px); color: #292925; }
+.home-portfolio .quiet-sidebar { display: flex; position: fixed; z-index: 30; left: clamp(24px, 3.4vw, 60px); top: 30vh; flex-direction: column; gap: 15px; font-family: var(--serif); font-size: clamp(16px, 1.32vw, 19px); color: #292925; }
 .quiet-sidebar a { text-decoration: none; }
 .quiet-sidebar a[aria-current]::before { content: "·"; position: absolute; margin-left: -15px; }
 html[data-portfolio-layout="quiet"] .hero-hobby { position: fixed; top: 34px; z-index: 40; width: 34px; height: 34px; padding: 0; display: grid; place-items: center; border: 1px solid #deded8; border-radius: 5px; background: #fafaf7; color: #36362f; font-size: clamp(16px, 1.32vw, 19px); line-height: 1; text-decoration: none; transform: none; }
@@ -13123,3 +13131,46 @@ html[data-portfolio-layout="quiet"] .pranathi-work { position: relative; z-index
 /* One consistent reading size throughout the quiet variation. */
 html[data-portfolio-layout="quiet"] .pranathi-work :is(h2, h3, h4, p, a, span),
 html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, button, label, span, output, summary) { font-size: clamp(16px, 1.32vw, 19px); }
+
+
+/* The default homepage borrows the sidebar and weather from the quiet study. */
+.home-portfolio > .pranathi-work {
+  width: min(calc(100% - 220px), var(--portfolio-work-width));
+  margin-left: max(190px, calc((100% - var(--portfolio-work-width)) / 2));
+  margin-right: 30px;
+}
+.quiet-weather[data-portfolio-layout="classic"] {
+  position: absolute;
+  width: min(440px, calc(100vw - 224px));
+  right: 104px;
+  text-align: right;
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .home-portfolio .pranathi-intro--home {
+    width: calc(100% - 240px);
+    margin-left: 200px;
+    margin-right: 40px;
+  }
+}
+@media (max-width: 700px) {
+  html:not([data-portfolio-layout="quiet"]) .home-portfolio .quiet-sidebar {
+    position: absolute;
+    top: 28px;
+    left: 24px;
+    gap: 12px;
+  }
+  html:not([data-portfolio-layout="quiet"]) .home-portfolio .pranathi-intro--home {
+    padding-top: 300px;
+  }
+  .quiet-weather[data-portfolio-layout="classic"] {
+    position: absolute;
+    top: 84px;
+    left: 156px;
+    right: 24px;
+    width: auto;
+  }
+  .home-portfolio > .pranathi-work {
+    width: calc(100% - 32px);
+    margin-inline: auto;
+  }
+}

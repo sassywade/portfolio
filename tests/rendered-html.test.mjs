@@ -30,9 +30,11 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Neel Saswade — Product designer<\/title>/i);
-  assert.match(html, /class="site-header__wordmark"[^>]*>\s*Neel Saswade\s*<\/a>/);
+  assert.match(html, /class="quiet-sidebar" aria-label="Sidebar navigation"/);
   assert.match(html, />Neel Saswade</);
-  assert.match(html, /I&#x27;m a product designer based in San Francisco\. Currently, I work at /);
+  assert.match(html, /I&#x27;m a product designer in San Francisco\. I work at /);
+  assert.match(html, /Before that, I designed at /);
+  assert.match(html, /In my free time, I ride /);
   assert.match(html, /hero-company--glean[^>]*href="https:\/\/www\.glean\.com\/"/);
   assert.match(html, /hero-company--snap[^>]*href="https:\/\/www\.snap\.com\/"/);
   assert.doesNotMatch(html, /as an intern/);
@@ -72,6 +74,7 @@ test("pairs Newsreader display type with Geist Sans interface and reading type",
   assert.match(css, /body\s*\{[^}]*font-family:\s*var\(--sans\)/);
   assert.match(css, /\.pranathi-name\s*\{[^}]*font-family:\s*var\(--serif\)/);
   assert.match(css, /\.pranathi-bio\s*\{[^}]*font-family:\s*var\(--serif\)/);
+  assert.match(css, /\.pranathi-bio,[\s\S]*?\.case-story-chapter__copy > p:last-child\s*\{[^}]*text-wrap:\s*pretty/);
   assert.match(css, /\.case-intro h1\s*\{[^}]*font-family:\s*var\(--serif\)/);
   assert.match(css, /\.site-header__wordmark,[\s\S]*?\.site-header--pages \.site-nav\s*\{[^}]*font-family:\s*var\(--sans\)/);
   assert.match(css, /\.about-copy p\s*\{[^}]*font-family:\s*var\(--sans\)/);
@@ -641,6 +644,8 @@ test("documents the portfolio's durable design and change contract", async () =>
   assert.match(agentContract, /homepage shows six projects total/);
   assert.match(agentContract, /Every supplied Glean recording fills its tile edge to edge/);
   assert.match(agentContract, /inspect the final matching rule/);
+  assert.match(agentContract, /continuity of Torph/);
+  assert.match(systemDoc, /continuity when text changes state/);
   assert.match(designDoc, /Balance short display titles and use pretty wrapping/);
   assert.match(designDoc, /Keep nested radii concentric/);
   assert.match(designDoc, /Use interruptible CSS transitions/);
@@ -1134,7 +1139,7 @@ test("elastic grass shares spring motion and feathers the moving crest into cach
   assert.match(grass, /windSprings = Array.from\(\{ length: 65 \}/);
   assert.match(grass, /spring.velocity \+=/);
   assert.match(grass, /elasticWind\(blade.x\) \* crestFlex/);
-  assert.match(grass, /\(22 - \(blade.y - ridgeY\)\) \/ 14/);
+  assert.match(grass, /\(22 - \(rootY - groundAt\(rootX\)\)\) \/ 14/);
   assert.match(grass, /lastWindFrame = 0/);
 });
 
@@ -1154,4 +1159,27 @@ test("quiet sidebar is opt-in and keeps character selection exclusive", async ()
   const quiet = css.slice(css.indexOf("/* An opt-in composition study;"));
   assert.doesNotMatch(quiet, /font-size: \d+px/);
   assert.match(quiet, /font-size: clamp\(16px, 1.32vw, 19px\)/);
+});
+
+
+test("grass separates cached turf from display-synced tips without rebuilding on playback", async () => {
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  assert.match(grass, /data-grass-tips/);
+  assert.match(grass, /for \(const blade of crestBlades\)/);
+  assert.match(grass, /previousPatches = patches/);
+  assert.match(grass, /groundCells/);
+  assert.match(grass, /a.order - b.order/);
+  assert.doesNotMatch(grass, /now - last >= 32/);
+  assert.doesNotMatch(grass, /\}, \[src, isPlaying\]\)/);
+});
+
+
+test("default homepage uses quiet navigation and top-right weather while keeping its introduction", async () => {
+  const [page, hero, css] = await Promise.all(["page.tsx", "hero-meadow.tsx", "globals.css"].map(file => readFile(new URL(`../app/${file}`, import.meta.url), "utf8")));
+  assert.match(page, /home-portfolio/);
+  assert.doesNotMatch(page, /<SiteHeader/);
+  for (const label of ["Home", "Work", "Play", "Photography", "Me", "Resume"]) assert.ok(page.includes(`>${label}</a>`));
+  assert.match(page, /pranathi-name/);
+  assert.match(hero, /weatherHost \? createPortal/);
+  assert.match(css, /\.home-portfolio \.quiet-sidebar \{ display: flex/);
 });

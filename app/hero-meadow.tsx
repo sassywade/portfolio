@@ -35,6 +35,8 @@ export function HeroMeadow() {
   const [isSceneVisible, setIsSceneVisible] = useState(true);
   const [meadowVariant, setMeadowVariant] = useState<MeadowVariant>("living");
   const [grassEnabled, setGrassEnabled] = useState(true);
+  const [weatherHost, setWeatherHost] = useState<HTMLElement | null>(null);
+  useEffect(() => { setWeatherHost(document.body); }, []);
   const [layout, setLayout] = useState<"classic" | "quiet">("classic");
 
   useEffect(() => {
@@ -445,7 +447,7 @@ export function HeroMeadow() {
             rollingMeadow={rollingMeadow}
             environmentStyle={environment}
           >
-            {layout === "quiet" ? createPortal(<div className="quiet-weather"><AlamoWeather onWindUpdate={setWind} /></div>, document.body) : <AlamoWeather onWindUpdate={setWind} />}
+            {weatherHost ? createPortal(<div className="quiet-weather" data-portfolio-layout={layout}><AlamoWeather onWindUpdate={setWind} /></div>, weatherHost) : <AlamoWeather onWindUpdate={setWind} />}
           </Meadow>
           <CypressTree
             wind={wind}
