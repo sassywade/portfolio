@@ -154,3 +154,5 @@ The default homepage now uses the quiet study's left Newsreader navigation (Home
 Replacing the homepage header with the sidebar must preserve the introduction's original desktop vertical position. Above 700px, retain the old header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
 
 Top-right weather typography is deliberately smaller than navigation: breeze summary 12–14px, time and wind details 11–12px, responsive on desktop and mobile.
+
+Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader, 20px line height, and 20px gaps (40px row rhythm). Keep the restored introduction position.

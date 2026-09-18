@@ -1157,7 +1157,7 @@ test("quiet sidebar is opt-in and keeps character selection exclusive", async ()
  test("quiet variation matches the original introduction reading size", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const quiet = css.slice(css.indexOf("/* An opt-in composition study;"));
-  assert.doesNotMatch(quiet, /font-size: \d+px/);
+  assert.match(quiet, /\.home-portfolio \.quiet-sidebar \{[^}]*font-size: 20px; line-height: 1/);
   assert.match(quiet, /font-size: clamp\(16px, 1.32vw, 19px\)/);
 });
 
