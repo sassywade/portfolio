@@ -26,7 +26,7 @@ export default function AboutPage() {
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
               confusion and curiosity made me interested in how we introduce new
-              technology in ways that feel intuitive.
+              technologies to people.
             </h1>
             <nav className="about-page__socials" aria-label="Links">
               <a
