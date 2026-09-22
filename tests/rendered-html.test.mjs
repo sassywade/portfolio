@@ -208,8 +208,8 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
-  assert.match(about, /className="about-page__greeting">Nice to meet you<\/h2>/);
-  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: #373530;[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
+  assert.match(about, /className="about-page__greeting">Hello,<\/h2>/);
+  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--ink\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
   assert.match(about, /aria-label="CV"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
@@ -1235,7 +1235,7 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
 
 test("Life photos share the centered viewer and keep playful hover movement", async () => {
   const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(galleryMarkup, /<h2 id="about-gallery-title">afk<\/h2>/);
+  assert.match(galleryMarkup, /<h2 id="about-gallery-title">Life<\/h2>/);
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
@@ -1257,8 +1257,6 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
   assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
   assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(42px, 8vw, 100px\)/);
-  assert.match(css, /\.about-page__gallery-track\s*\{[\s\S]*width: min\(100%, 820px\);[\s\S]*max-width: 100%;/);
-  assert.match(css, /flex-basis: clamp\(84px, 5\.8vw, 104px\);/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {

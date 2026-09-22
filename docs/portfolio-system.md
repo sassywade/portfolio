@@ -1,5 +1,7 @@
 # Portfolio system
 
+The About page uses “Hello,” and “Life” with the homepage ink color. Its resume link reads “CV”. On desktop the Life strip extends slightly beyond the introduction, using responsive card widths and modest overlap; mobile keeps readable cards in a horizontally scrollable strip. Preserve the white film matting and hover lift.
+
 ## 1. Experience model
 
 The portfolio has three user-facing destinations:

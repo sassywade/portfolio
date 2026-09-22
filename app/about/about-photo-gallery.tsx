@@ -57,7 +57,7 @@ export function AboutPhotoGallery() {
   return (
     <>
       <section className="about-page__gallery" aria-labelledby="about-gallery-title" ref={galleryRef}>
-        <h2 id="about-gallery-title">afk</h2>
+        <h2 id="about-gallery-title">Life</h2>
         <div className="about-page__gallery-viewport">
           <div className="about-page__gallery-track">
             {lifePhotos.map((photo, index) => (

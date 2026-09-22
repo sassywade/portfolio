@@ -21,7 +21,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
-            <h2 className="about-page__greeting">Nice to meet you</h2>
+            <h2 className="about-page__greeting">Hello,</h2>
             <h1 id="about-title" className="about-page__about-copy">
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
@@ -57,12 +57,7 @@ export default function AboutPage() {
                 data-social="resume"
                 aria-label="CV"
               >
-                <span className="about-page__social-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" focusable="false">
-                    <path d="M6 2.5h8.5L19 7v14.5H6z" />
-                    <path d="M14 2.5V7h5M8.5 11h8M8.5 14.5h8M8.5 18h5" />
-                  </svg>
-                </span>
+                CV
               </a>
             </nav>
           </div>
