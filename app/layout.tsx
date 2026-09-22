@@ -65,8 +65,8 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [socialImage],
     },
     icons: {
-      icon: "/lmo-square-tree.png",
-      shortcut: "/lmo-square-tree.png",
+      icon: "/lmo-square-tree.png?v=2",
+      shortcut: "/lmo-square-tree.png?v=2",
     },
   };
 }
