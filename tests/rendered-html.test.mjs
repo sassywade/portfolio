@@ -1258,10 +1258,10 @@ test("desktop work rail aligns with the mockups instead of viewport height", asy
   assert.match(css, /\.work-section-nav \{\s*position: sticky;\s*top: calc\(90px \+ clamp\(29\.9px, 2\.645vw, 41\.4px\) \+ 26px\)/);
 });
 
-test("work rail gives inactive items a lighter color and active item stronger weight", async () => {
+test("work rail gives inactive items a lighter color and active item stronger color", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-section-nav a \{[^}]*color: #999691;[^}]*font: 500 14px\/1\.4 var\(--sans\)/);
-  assert.match(css, /\.work-section-nav a\[aria-current\] \{[^}]*color: #43413e;[^}]*font-weight: 600;/);
+  assert.match(css, /\.work-section-nav a \{[^}]*color: #999691;[^}]*font: 14px\/1\.4 var\(--sans\)/);
+  assert.match(css, /\.work-section-nav a\[aria-current\], \.work-section-nav a:hover \{ color: #43413e; \}/);
 });
 
 
@@ -1273,7 +1273,7 @@ test("work rail reveals once after entering the first project and respects reduc
   assert.match(nav, /firstMedia.getBoundingClientRect\(\).top <= window.innerHeight \* 0.55/);
   assert.match(nav, /rootMargin: "0px 0px -45% 0px"/);
   assert.match(nav, /nav.dataset.revealed = "true";\s*entrance.disconnect\(\)/);
-  assert.match(css, /\.work-section-nav a \{[^}]*font: 500 14px/);
+  assert.match(css, /\.work-section-nav a \{[^}]*font: 14px/);
   assert.match(css, /prefers-reduced-motion: reduce[^}]*work-section-nav[^}]*transition: opacity 150ms linear/s);
 });
 
