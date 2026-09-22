@@ -13171,16 +13171,30 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   text-decoration: none;
 }
 .work-section-nav a[aria-current], .work-section-nav a:hover { color: var(--ink); }
-.work-section-nav a[aria-current]::before {
-  content: "";
+.work-section-nav__dot {
   position: absolute;
   left: 0;
-  top: .55em;
+  top: 0;
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--ink);
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 250ms var(--motion-ease-in-out), opacity 150ms linear;
 }
+.work-section-nav__dot[data-positioned="true"] { opacity: 1; }
+@media (min-width: 1080px) {
+  .work-section-nav[data-reveal-ready="true"] .work-section-nav__dot {
+    transition: transform 250ms var(--motion-ease-in-out), opacity 600ms var(--motion-ease-out) 150ms;
+  }
+  .work-section-nav[data-reveal-ready="true"]:not([data-revealed="true"]) .work-section-nav__dot { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-section-nav .work-section-nav__dot { transition: opacity 150ms linear; }
+}
+
+.work-section-nav:has(a:focus-visible) .work-section-nav__dot { transition: opacity 150ms linear; }
 .work-section-nav a:focus-visible { outline: 1px solid currentColor; outline-offset: 5px; }
 .work-feature { scroll-margin-top: 90px; }
 .work-feature + .work-feature { margin-top: clamp(100px, 12vw, 200px); }

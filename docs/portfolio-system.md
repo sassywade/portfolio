@@ -175,3 +175,5 @@ Do not display a Selected work heading above the projects. Retain the existing o
 Work uses guided project scrolling: each deliberate desktop wheel gesture moves to the next or previous centered project, with trackpad momentum grouped into that gesture. Reversing direction interrupts the movement. The meadow, the end of Work, nested scrollers, zoom gestures, tall sections, and reduced motion retain ordinary scrolling. Touch uses native proximity snapping; project rail links center the full section. Approaching projects settle with a small 16px shift and fade using the shared ease-out curve; no new animation library or permanent frame loop is used.
 
 Work metadata keeps a 6px gap between the Glean logo and its text label.
+
+The Work rail uses one shared active dot that glides between labels over 250ms with the shared ease-in-out curve. It follows measured link positions on desktop and mobile, retargets smoothly, and moves immediately for reduced motion and focused keyboard navigation.

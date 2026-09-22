@@ -1,10 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export function WorkNav({ items }: { items: { slug: string; title: string }[] }) {
   const navRef = useRef<HTMLElement>(null);
+  const indicatorRef = useRef<HTMLSpanElement>(null);
   const [active, setActive] = useState(items[0]?.slug);
+
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    const indicator = indicatorRef.current;
+    if (!nav || !indicator) return;
+    const position = () => {
+      const link = nav.querySelector<HTMLAnchorElement>("a[aria-current]");
+      if (!link) return;
+      const y = link.offsetTop + parseFloat(getComputedStyle(link).fontSize) * 0.55;
+      indicator.style.transform = `translate3d(${link.offsetLeft}px, ${y}px, 0)`;
+      indicator.dataset.positioned = "true";
+    };
+    position();
+    const resize = new ResizeObserver(position);
+    resize.observe(nav);
+    nav.querySelectorAll("a").forEach((link) => resize.observe(link));
+    return () => resize.disconnect();
+  }, [active]);
 
   useEffect(() => {
     const sections = items.map(({ slug }) => document.getElementById(`work-${slug}`));
@@ -42,6 +61,7 @@ export function WorkNav({ items }: { items: { slug: string; title: string }[] })
             {title}
           </a>
         ))}
+        <span ref={indicatorRef} className="work-section-nav__dot" aria-hidden="true" />
       </nav>
     </aside>
   );

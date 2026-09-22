@@ -1272,3 +1272,17 @@ test("Glean work metadata separates the logo and label", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__meta \.hero-company--glean \{[^}]*display: inline-flex;[^}]*gap: 6px/);
 });
+
+
+test("Work rail uses one moving indicator with reduced-motion support", async () => {
+  const [nav, css] = await Promise.all([
+    readFile(new URL("../app/work-nav.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.match(nav, /className="work-section-nav__dot" aria-hidden="true"/);
+  assert.match(nav, /link.offsetLeft/);
+  assert.match(nav, /resize.disconnect\(\)/);
+  assert.doesNotMatch(css, /\.work-section-nav a\[aria-current\]::before/);
+  assert.match(css, /transform 250ms var\(--motion-ease-in-out\)/);
+  assert.match(css, /prefers-reduced-motion: reduce[^}]*work-section-nav__dot[^}]*transition: opacity 150ms linear/s);
+});
