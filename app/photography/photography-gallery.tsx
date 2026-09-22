@@ -118,7 +118,7 @@ export function PhotographyGallery() {
         {query && <button type="button" aria-label="Clear search" onClick={() => { setQuery(''); capture(); setAppliedQuery(''); input.current?.focus(); }}>Clear</button>}
       </div>
       <p className="sr-only" role="status" aria-live="polite">{matching.length} {matching.length === 1 ? 'photo' : 'photos'}{appliedQuery ? ` matching ${appliedQuery}` : ''}</p>
-      {!matching.length && <p className={styles.empty}>No photos found.</p>}
+      {!matching.length && <p className={styles.empty}>nothin bout that</p>}
       <div ref={gallery} className={styles.gallery} data-ready={measure.width > 0} data-grouping={grouping} style={measure.width ? { height: Math.max(layout.height, matching.length ? 0 : 120) } : undefined}>
         {ordered.map((photo, index) => {
           const position = layout.positions.get(photo.id) ?? fullLayout.positions.get(photo.id);
