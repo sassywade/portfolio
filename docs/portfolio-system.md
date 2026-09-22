@@ -127,6 +127,8 @@ Opened Life prints have a restrained laminated sheen that follows the existing p
 
 The painterly cypress has no silhouette drop shadow. Its contact and diffuse canopy shade are baked into both grass layers at the rendered trunk position, following the hill contour and responsive layout. Broken shading and a few slightly taller root tufts ground the trunk without covering it; finer crest blades and restrained brightness variation connect the grass texture to the canopy. Interaction redraws reuse these blade colors, preserving the shade without extra overlay shapes or animation loops.
 
+Keep the original painterly cypress artwork and silhouette. Its bark has only a slight contrast reduction to sit with the meadow. Smaller boughs and foliage respond visibly to the shared wind, with locally phased leaf motion and a steady trunk; retain the existing visibility and reduced-motion suspension.
+
 The tree shade must remain visible at large desktop sizes: scale both its width and depth from the rendered canopy width, accounting for the meadow's vertical transform. Use a stronger narrow root contact inside a broad, broken olive shadow, rather than fixed-pixel shading that disappears at larger scales.
 
 Grass wind response uses a shared 65-point damped spring field, interpolated across the meadow, with stronger wind susceptibility and varied blade flexibility. The dense crest animates alongside the fine foreground blades, using bounded redraw strips in the existing loop. Roots stay fixed; tips curve and settle elastically. Cursor brushing remains gentle and motion still pauses offscreen or under reduced motion.
