@@ -26,25 +26,20 @@ export default function AboutPage() {
               (Did you get a welcome bike?)
             </p>
             <p>
-              You found my site. I&apos;m Neel, a product designer trying to make new
-              technology feel less new.
+              Welcome to my website. I&apos;m hoping to use this space to share more of
+              my work, photography, and, eventually, writing.
             </p>
             <p>
-              I started out studying software engineering. Then I took a design class
-              with Dr. Takeyama and ended up in her human–robot interaction lab,
-              watching people meet unfamiliar machines with a mix of confusion and
-              delight. That moment stuck with me: the instant something strange
-              starts to make sense.
+              I found my way to design through a human-robot interaction lab in
+              college. Watching people meet unfamiliar machines with a mix of
+              confusion and curiosity made me interested in how we introduce new
+              technology in ways that feel intuitive.
             </p>
             <p>
-              Now I work on products that change habits. It&apos;s a puzzle I keep coming
-              back to: how do you explain the unfamiliar? How do you make someone
-              want to try it? How do you make them smile? And how do you respect
-              their time while you&apos;re asking them to change?
-            </p>
-            <p>
-              This space is for the work and, eventually, the photography and writing
-              around it.
+              Today, my medium is product design, and the technology is AI. I&apos;m drawn
+              to the puzzle of changing habits: How do you explain the unfamiliar?
+              How do you get someone to try it? And how do you make the experience
+              feel a little delightful?
             </p>
             <nav className="about-page__socials" aria-label="Links">
               <a
