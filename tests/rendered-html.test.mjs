@@ -1298,11 +1298,11 @@ test("Proactive Intelligence pairs popup artwork with the default card wheel", a
   assert.match(wheelTransform.split('\n          :')[1], /-offset \* 12/);
   const cardCss = await readFile(new URL("../app/psychic-cards.module.css", import.meta.url), "utf8");
   assert.match(cardCss, /\[data-mode="rolodex"\] \.card \{\s*width: 72%;\s*height: auto;/);
-  assert.match(motion, /180 \* Math.sin/);
-  assert.match(motion, /const angle = offset \* 7/);
+  assert.match(motion, /420 \* Math.sin/);
+  assert.match(motion, /const angle = offset \* 2\.8/);
   assert.match(motion, /Flip wheel/);
   assert.match(motion, /let flipped = false/);
-  assert.match(motion, /side \* 180 \* \(Math.cos/);
+  assert.match(motion, /side \* 420 \* \(Math.cos/);
   assert.match(motion, /side \* angle/);
   assert.match(motion, /clearInterval\(timer\)/);
   assert.match(motion, /document\.hidden/);
