@@ -733,9 +733,9 @@ test("uses only the standard Cuelume Declarative profile on every action", async
   assert.match(soundscape, /element\.dataset\.cuelumePress = "press"/);
   assert.match(soundscape, /element\.dataset\.cuelumeRelease = "release"/);
   assert.match(soundscape, /new MutationObserver/);
-  assert.match(soundscape, /ENTRANCE_SOUND_KEY/);
-  assert.match(soundscape, /createEntranceSound/);
-  assert.match(soundscape, /bandpass/);
+  assert.match(soundscape, /playWindSound/);
+  assert.match(soundscape, /lowpass/);
+  assert.doesNotMatch(soundscape, /createOscillator|174|261/);
   assert.match(soundscape, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(soundscape, /addEventListener\("pointerdown", startEntranceSound, \{ once: true/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-toggle=/);

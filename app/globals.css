@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+.entrance-wind-control {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 40;
+  border: 1px solid rgba(36, 35, 33, 0.18);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(245, 245, 244, 0.88);
+  color: #65625f;
+  font: 12px/1 var(--sans);
+  backdrop-filter: blur(8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrance-wind-control {
+    display: none;
+  }
+}
+
 :root {
   --paper: #ffffff;
   --ink: #65625f;

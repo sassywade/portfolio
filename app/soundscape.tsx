@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { bind, setVolume } from "cuelume";
-
-const ENTRANCE_SOUND_KEY = "portfolio:entrance-sound-played-v2";
 
 const actionableSelector = [
   "a[href]",
@@ -38,99 +36,84 @@ function addDeclarativeInteractionCues(root: ParentNode) {
     .forEach(addDeclarativeInteractionCue);
 }
 
-function createEntranceSound() {
+async function playWindSound(userInitiated: boolean) {
   const AudioContextConstructor =
     window.AudioContext
     ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextConstructor) return false;
 
   const context = new AudioContextConstructor();
+  if (!userInitiated && context.state !== "running") {
+    void context.close();
+    return false;
+  }
+  if (context.state !== "running") {
+    try {
+      await context.resume();
+    } catch {
+      void context.close();
+      return false;
+    }
+  }
+  if (context.state !== "running") {
+    void context.close();
+    return false;
+  }
+
   const master = context.createGain();
   master.gain.setValueAtTime(0.0001, context.currentTime);
-  master.gain.exponentialRampToValueAtTime(0.14, context.currentTime + 0.7);
-  master.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.6);
+  master.gain.exponentialRampToValueAtTime(0.32, context.currentTime + 0.35);
+  master.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 2.8);
   master.connect(context.destination);
 
-  const hum = context.createOscillator();
-  const humGain = context.createGain();
-  hum.type = "sine";
-  hum.frequency.setValueAtTime(174, context.currentTime);
-  humGain.gain.setValueAtTime(0.0001, context.currentTime);
-  humGain.gain.exponentialRampToValueAtTime(0.34, context.currentTime + 0.55);
-  humGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.35);
-  hum.connect(humGain).connect(master);
-
-  const overtone = context.createOscillator();
-  const overtoneGain = context.createGain();
-  overtone.type = "sine";
-  overtone.frequency.setValueAtTime(261, context.currentTime);
-  overtoneGain.gain.setValueAtTime(0.0001, context.currentTime);
-  overtoneGain.gain.exponentialRampToValueAtTime(0.1, context.currentTime + 0.8);
-  overtoneGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.1);
-  overtone.connect(overtoneGain).connect(master);
-
-  const noiseBuffer = context.createBuffer(1, context.sampleRate * 3.2, context.sampleRate);
+  const noiseBuffer = context.createBuffer(1, context.sampleRate * 2.6, context.sampleRate);
   const noiseData = noiseBuffer.getChannelData(0);
   for (let index = 0; index < noiseData.length; index += 1) {
-    noiseData[index] = (Math.random() * 2 - 1) * 0.7;
+    noiseData[index] = (Math.random() * 2 - 1) * 0.9;
   }
 
   const wind = context.createBufferSource();
   const windFilter = context.createBiquadFilter();
   const windGain = context.createGain();
   wind.buffer = noiseBuffer;
-  windFilter.type = "bandpass";
-  windFilter.frequency.setValueAtTime(380, context.currentTime);
-  windFilter.frequency.exponentialRampToValueAtTime(1_600, context.currentTime + 1.8);
-  windFilter.frequency.exponentialRampToValueAtTime(520, context.currentTime + 3.1);
-  windFilter.Q.setValueAtTime(0.45, context.currentTime);
+  windFilter.type = "lowpass";
+  windFilter.frequency.setValueAtTime(220, context.currentTime);
+  windFilter.frequency.exponentialRampToValueAtTime(2_400, context.currentTime + 1.25);
+  windFilter.frequency.exponentialRampToValueAtTime(420, context.currentTime + 2.45);
+  windFilter.Q.setValueAtTime(0.7, context.currentTime);
   windGain.gain.setValueAtTime(0.0001, context.currentTime);
-  windGain.gain.exponentialRampToValueAtTime(0.34, context.currentTime + 1.1);
-  windGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.15);
+  windGain.gain.exponentialRampToValueAtTime(0.72, context.currentTime + 0.7);
+  windGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 2.55);
   wind.connect(windFilter).connect(windGain).connect(master);
 
   const startTime = context.currentTime;
-  hum.start(startTime);
-  overtone.start(startTime);
-  wind.start(startTime + 0.35);
-  hum.stop(startTime + 3.65);
-  overtone.stop(startTime + 3.65);
-  wind.stop(startTime + 3.55);
-
-  if (context.state === "suspended") {
-    void context.resume().catch(() => {});
-    void context.close();
-    return false;
-  }
+  wind.start(startTime);
+  wind.stop(startTime + 2.65);
 
   window.setTimeout(() => {
     void context.close();
-  }, 4_000);
+  }, 3_000);
   return true;
 }
 
-function playEntranceSound() {
-  try {
-    if (window.sessionStorage.getItem(ENTRANCE_SOUND_KEY)) return true;
-    const didStart = createEntranceSound();
-    if (didStart) window.sessionStorage.setItem(ENTRANCE_SOUND_KEY, "true");
-    return didStart;
-  } catch {
-    return false;
-  }
-}
-
 export function Soundscape() {
+  const [showWindControl, setShowWindControl] = useState(false);
+
   useEffect(() => {
     setVolume(0.55);
     bind();
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let entranceSoundStarted = reducedMotion || playEntranceSound();
-    const startEntranceSound = () => {
+    let entranceSoundStarted = reducedMotion;
+    const startEntranceSound = async (userInitiated = true) => {
       if (entranceSoundStarted) return;
-      entranceSoundStarted = playEntranceSound();
-      if (entranceSoundStarted) removeGestureListeners();
+      entranceSoundStarted = await playWindSound(userInitiated);
+      if (entranceSoundStarted) {
+        setShowWindControl(false);
+        removeGestureListeners();
+      } else if (userInitiated) {
+        setShowWindControl(true);
+      }
     };
     const removeGestureListeners = () => {
       window.removeEventListener("pointerdown", startEntranceSound);
@@ -141,6 +124,7 @@ export function Soundscape() {
       window.addEventListener("pointerdown", startEntranceSound, { passive: true });
       window.addEventListener("keydown", startEntranceSound);
       window.addEventListener("touchstart", startEntranceSound, { passive: true });
+      void startEntranceSound(false);
     }
 
     addDeclarativeInteractionCues(document);
@@ -176,5 +160,17 @@ export function Soundscape() {
     };
   }, []);
 
-  return null;
+  if (!showWindControl) return null;
+  return (
+    <button
+      className="entrance-wind-control"
+      type="button"
+      aria-label="Play the entrance wind sound"
+      onClick={() => {
+        window.dispatchEvent(new Event("pointerdown"));
+      }}
+    >
+      Play wind
+    </button>
+  );
 }
