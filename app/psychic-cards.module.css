@@ -18,9 +18,9 @@
   display: block;
   transition: transform 750ms var(--ease-in-out, cubic-bezier(.77, 0, .175, 1)), opacity 250ms ease;
 }
-/* Keep the original Rolodex proportions independent of wheel tuning. */
+/* Match the popup artwork above while keeping Rolodex independent of the wheel. */
 .stage[data-mode="rolodex"] .card {
-  width: 72%;
+  width: 80%;
   height: auto;
 }
 .cell { position: absolute; width: 49%; aspect-ratio: 1229 / 271; transform: translate(-50%, -50%); }

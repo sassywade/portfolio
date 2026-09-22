@@ -1278,7 +1278,7 @@ test("homepage presents five inline projects with black placeholders and anchor 
   assert.doesNotMatch(html, /class="project-work-video/);
 });
 
-test("Proactive Intelligence pairs popup artwork with the default card wheel", async () => {
+test("Proactive Intelligence pairs popup artwork with the larger default Rolodex", async () => {
   const html = await (await render()).text();
   const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];
   assert.match(psychic, /class="work-feature__popups"/);
@@ -1286,18 +1286,20 @@ test("Proactive Intelligence pairs popup artwork with the default card wheel", a
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__popups img \{[^}]*width: 86%/);
   assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 0);
-  assert.match(psychic, /data-mode="wheel"/);
+  assert.match(psychic, /data-mode="rolodex"/);
   assert.doesNotMatch(psychic, /Pause proactive card animation/);
   const motion = await readFile(new URL("../app/psychic-cards.tsx", import.meta.url), "utf8");
   assert.match(motion, /\["wheel", "rolodex", "grid"\]/);
   assert.match(motion, /visible && !reduced/);
   const wheelTransform = motion.split('const transform = mode === "wheel"')[1].split('\n        return')[0];
   assert.doesNotMatch(wheelTransform.split('\n          :')[0], /rotateX|perspective|scale\(/);
-  assert.match(wheelTransform.split('\n          :')[1], /offset \* 14\.7/);
+  assert.match(wheelTransform.split('\n          :')[1], /offset \* 16\.35/);
   assert.match(wheelTransform.split('\n          :')[1], /perspective\(600px\) rotateX/);
   assert.match(wheelTransform.split('\n          :')[1], /-offset \* 12/);
   const cardCss = await readFile(new URL("../app/psychic-cards.module.css", import.meta.url), "utf8");
-  assert.match(cardCss, /\[data-mode="rolodex"\] \.card \{\s*width: 72%;\s*height: auto;/);
+  assert.match(cardCss, /\[data-mode="rolodex"\] \.card \{\s*width: 80%;\s*height: auto;/);
+  assert.match(motion, /let mode: Mode = "rolodex"/);
+  assert.match(motion, /const serverSnapshot = \(\): Mode => "rolodex"/);
   assert.match(motion, /420 \* Math.sin/);
   assert.match(motion, /const angle = offset \* 2\.8/);
   assert.match(motion, /Flip wheel/);

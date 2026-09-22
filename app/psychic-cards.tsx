@@ -4,12 +4,12 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import styles from "./psychic-cards.module.css";
 
 type Mode = "wheel" | "rolodex" | "grid";
-let mode: Mode = "wheel";
+let mode: Mode = "rolodex";
 let flipped = false;
 const listeners = new Set<() => void>();
 const subscribe = (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
 const snapshot = () => mode;
-const serverSnapshot = (): Mode => "wheel";
+const serverSnapshot = (): Mode => "rolodex";
 const useMode = () => useSyncExternalStore(subscribe, snapshot, serverSnapshot);
 const useFlipped = () => useSyncExternalStore(subscribe, () => flipped, () => false);
 // Coprime ordering mixes the supplied categories without random hydration or repeats.
@@ -81,7 +81,7 @@ function CardStage({ mode, flipped }: { mode: Mode; flipped: boolean }) {
         const side = flipped ? -1 : 1;
         const transform = mode === "wheel"
           ? "translate(-50%, -50%) translate(" + (side * 420 * (Math.cos(radians) - 1)).toFixed(3) + "cqw, " + (420 * Math.sin(radians)).toFixed(3) + "cqw) rotate(" + (side * angle) + "deg)"
-          : "translate(-50%, -50%) translateY(" + (offset * 14.7) + "cqw) perspective(600px) rotateX(" + (-offset * 12) + "deg) scale(" + Math.max(.8, 1 - Math.abs(offset) * .035) + ")";
+          : "translate(-50%, -50%) translateY(" + (offset * 16.35) + "cqw) perspective(600px) rotateX(" + (-offset * 12) + "deg) scale(" + Math.max(.8, 1 - Math.abs(offset) * .035) + ")";
         return <img key={src} className={styles.card} src={src} alt="" aria-hidden="true" loading="lazy"
           style={{ transform, opacity: Math.abs(offset) > 4 ? 0 : 1, transition: Math.abs(offset) > 4 ? "none" : undefined }} />;
       })}
