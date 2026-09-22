@@ -161,6 +161,7 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 ## Inline work sections (current)
 
 The two Snapchat image panels use #ECECEC; the surrounding homepage paper remains #F5F5F4.
+Snapchat phone mockups are approximately 10% larger within their existing panels: Treasure uses 83% height capped at 484px; the lens phone uses 91% capped at 495px. Preserve full images with contain sizing, the panel layout, and captions.
 The Snapchat Work metadata logo and label are vertically centered with an 8px gap and no baseline transform on the logo.
 
 The homepage now presents five major project sections in this order: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap. This supersedes the card-grid defaults above. `featuredWork` in `app/projects.ts` owns their copy, order, and media layouts. `WorkSections` renders titles and metadata above black placeholders, with summaries below. `WorkNav` uses same-page anchors and marks the section at the reading position; its desktop rail stays within Work and is hidden below 1080px when the left navigation no longer fits. Existing Reveal entrances and hero handoff remain unchanged. Split layouts scale from 1145×500, with a 708×500 main panel, two 417×240 panels, and 20px gaps. A single-panel layout uses 1145×550. Growth has three equal panels and Snap two unequal panels. Await new assets; do not reinsert previous covers or recordings. Legacy case-study URLs redirect to matching homepage anchors.

@@ -13260,12 +13260,12 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 .work-feature__asset-phones img {
   display: block;
   width: auto;
-  height: min(75%, 440px);
+  height: min(83%, 484px);
   max-width: 31%;
   object-fit: contain;
 }
 .work-feature__asset-group:last-child .work-feature__asset-phones img {
-  height: min(83%, 450px);
+  height: min(91%, 495px);
   max-width: 100%;
 }
 .work-feature__asset-group > span {
