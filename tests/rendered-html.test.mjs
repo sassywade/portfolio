@@ -1489,8 +1489,8 @@ test("project navigation is hidden when the left rail does not fit", async () =>
 test("Proactive Intelligence uses the cropped main video", async () => {
   const html = await (await render()).text();
   assert.match(html, /class="work-feature__video"/);
-  assert.match(html, /src="\/work\/psychic-main.mp4"/);
-  assert.match(html, /poster="\/work\/psychic-main-poster.jpg"/);
+  assert.match(html, /src="\/work\/psychic-updated.mp4"/);
+  assert.match(html, /poster="\/work\/psychic-updated-poster.jpg"/);
 });
 
 
