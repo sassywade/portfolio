@@ -171,7 +171,7 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
-Card motion correction: Wheel and Rolodex cards share an 82%-width, 1229:271 box with contain sizing; never apply perspective or per-card scaling. The wheel radius is 165cqw at 10-degree steps so the inner edges and shadows stay separated. Rolodex steps are 23cqw with a slight 2D tilt. No Pause button is shown; visibility and reduced-motion suspension remain active.
+Card motion correction: Wheel and Rolodex cards share an 82%-width, 1229:271 box with contain sizing; never apply perspective or per-card scaling. The wheel radius is 150cqw at 10-degree steps, bringing cards slightly closer while keeping the inner edges separated. Rolodex steps are 23cqw with a slight 2D tilt. No Pause button is shown; visibility and reduced-motion suspension remain active.
 
 Proactive Intelligence’s lower-right tile cycles the 18 supplied card PNGs, preserving their baked shadows. Wheel is the default; Proactive card motion in the prototype picker offers Wheel, Rolodex, and Grid as visit-local alternatives. Wheel and Rolodex settle every 3.4 seconds with 750ms transform transitions; Grid replaces one scattered cell every 1.4 seconds with a 600ms fade. Pause is available on the tile. Timers stop offscreen, in hidden tabs, while paused, and with reduced motion; reduced motion shows a static composition. No new motion dependency.
 

@@ -70,7 +70,7 @@ function CardStage({ mode }: { mode: Mode }) {
         const angle = offset * 10;
         const radians = angle * Math.PI / 180;
         const transform = mode === "wheel"
-          ? "translate(-50%, -50%) translate(" + (165 * (Math.cos(radians) - 1)).toFixed(3) + "cqw, " + (165 * Math.sin(radians)).toFixed(3) + "cqw) rotate(" + angle + "deg)"
+          ? "translate(-50%, -50%) translate(" + (150 * (Math.cos(radians) - 1)).toFixed(3) + "cqw, " + (150 * Math.sin(radians)).toFixed(3) + "cqw) rotate(" + angle + "deg)"
           : "translate(-50%, -50%) translateY(" + (offset * 23) + "cqw) rotate(" + (offset * 2) + "deg)";
         return <img key={src} className={styles.card} src={src} alt="" aria-hidden="true" loading="lazy"
           style={{ transform, opacity: Math.abs(offset) > 4 ? 0 : 1, transition: Math.abs(offset) > 4 ? "none" : undefined }} />;
