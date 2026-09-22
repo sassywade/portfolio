@@ -390,3 +390,12 @@ export const caseStudies: Record<string, CaseStudy> = {
     reflection: "The best admin experiences make complexity feel organized without hiding it. Clarity is what lets a system scale beyond the person who first configured it.",
   },
 };
+
+// Homepage reading order and media layouts. Dimensions scale from a 1145px canvas.
+export const featuredWork = [
+  { slug: "psychic", navTitle: "Proactive intelligence", title: "Proactive Intelligence", year: "2026", company: "Glean", layout: "split", summary: "How do you help someone before they ask? As lead designer, I explored how Glean could anticipate people’s needs—turning proactive intelligence into a feeling of relief." },
+  { slug: "homepage", navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to match its growing AI capabilities. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward and close more loops." },
+  { slug: "artifacts", navTitle: "Artifacts", title: "Artifacts", year: "2026", company: "Glean", layout: "split", summary: "Making the jump from chat to editable work." },
+  { slug: "growth", navTitle: "Growth", title: "Growth at Glean", year: "2025", company: "Glean", layout: "trio", summary: "Helping people find value, then come back." },
+  { slug: "snap", navTitle: "Web3 at Snap", title: "Web3 at Snapchat", year: "2022", company: "Snap", layout: "pair", summary: "At Snapchat, I worked on Treasure, an app that brought NFT collections into the real world with Snap’s AR kit, and a feature that brought NFTs into Snapchat as Lenses." },
+] as const;

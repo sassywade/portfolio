@@ -149,10 +149,15 @@ Quiet sidebar matches the original introduction’s responsive text size (clamp(
 
 Grass readability and performance: skyline blades are 30% longer and slightly narrower; fine moving blades are about 34% longer with fewer samples. Dense interior turf remains cached on its own canvas. A separate canvas draws preselected skyline blades and fine tips on each display frame. Only cursor and character contact patches rebuild the interior, using spatial buckets and the original paint order; the passing welcome breeze reads through the skyline and moving tips. Playback changes must not regenerate the terrain. Keep native-pixel restoration, responsive registration, tree shading, and hidden/offscreen/reduced-motion suspension.
 
-The default homepage now uses the quiet study's left Newsreader navigation (Home, Work, Play, Photography, Me, Resume) and top-right breeze/time readout. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. Reserve a left rail beside desktop work; on mobile place navigation and weather above the introduction, with no overlap. The full quiet study remains opt-in.
+The default homepage uses the shared top header with Work, About, Play, and Resume while keeping the breeze/time readout tucked into the bottom-right of the meadow. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. The quiet layout controls remain opt-in only.
 
-Replacing the homepage header with the sidebar must preserve the introduction's original desktop vertical position. Above 700px, retain the old header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
+The homepage header must preserve the introduction's original desktop vertical position. Above 700px, retain the header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
 
 Top-right weather typography is deliberately smaller than navigation: breeze summary 12–14px, time and wind details 11–12px, responsive on desktop and mobile.
 
 Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader, 20px line height, and 16px gaps (36px row rhythm). Keep the restored introduction position.
+
+
+## Inline work sections (current)
+
+The homepage now presents five major project sections in this order: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap. This supersedes the card-grid defaults above. `featuredWork` in `app/projects.ts` owns their copy, order, and media layouts. `WorkSections` renders titles and metadata above black placeholders, with summaries below. `WorkNav` uses same-page anchors and marks the section at the reading position; its desktop rail stays within Work and becomes a horizontal sticky rail on smaller screens. Existing Reveal entrances and hero handoff remain unchanged. Split layouts scale from 1145×500, with a 708×500 main panel, two 417×240 panels, and 20px gaps. A single-panel layout uses 1145×550. Growth has three equal panels and Snap two unequal panels. Await new assets; do not reinsert previous covers or recordings. Legacy case-study URLs redirect to matching homepage anchors.

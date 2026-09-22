@@ -447,7 +447,9 @@ export function HeroMeadow() {
             rollingMeadow={rollingMeadow}
             environmentStyle={environment}
           >
-            {weatherHost ? createPortal(<div className="quiet-weather" data-portfolio-layout={layout}><AlamoWeather onWindUpdate={setWind} /></div>, weatherHost) : <AlamoWeather onWindUpdate={setWind} />}
+            {layout === "quiet" && weatherHost
+              ? createPortal(<div className="quiet-weather" data-portfolio-layout={layout}><AlamoWeather onWindUpdate={setWind} /></div>, weatherHost)
+              : <AlamoWeather onWindUpdate={setWind} />}
           </Meadow>
           <CypressTree
             wind={wind}

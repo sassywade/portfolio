@@ -14,14 +14,14 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 
 ## Non-negotiable defaults
 
-- Homepage navigation uses the quiet left sidebar: `Home`, `Work`, `Play`, `Photography`, `Me`, `Resume`, with breeze and time at the top right. Keep the current introduction and meadow. Other pages retain `Work`, `About`, `Play`, `Resume`. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
+- Homepage navigation uses the shared top header with `Work`, `About`, `Play`, and `Resume`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow. Other pages retain the same shared header. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
 - There is no archive section, promotional footer, or contact/social cluster.
 - The homepage background is white with the subtle studio grid.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.
-- Work is a two-column grid by default. Each project title sits below and outside the tile. One-line descriptions remain available through the prototype picker but are hidden by default. Unfinished projects remain substantial light-gray rounded tiles; never leave title-only empty space.
-- The homepage shows six projects total. Glean order: Homepage redesign, Proactive intelligence, Artifacts, Growth. Snap follows with Treasure and NFTs as Lenses.
-- Every supplied Glean recording fills its tile edge to edge. Snap phone mockups remain inset and fully visible.
+- Work is an inline editorial sequence with titles and metadata above black media placeholders and summaries below. Preserve the existing Reveal entrance and hero handoff. A sticky project rail tracks the section in view; mobile uses a horizontal rail.
+- The homepage shows five major sections: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap (combining Treasure and NFTs as Lenses). Work links jump to sections rather than individual case-study pages.
+- Until new assets arrive, use black rectangles. Split compositions scale from a 1145×500 canvas: 708×500 beside two 417×240 panels with 20px gaps. Single media uses 1145×550; Growth uses three columns and Snap two.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
 - The photographer is already present on the meadow when the homepage loads; clicking `photograph SF` replays the drop-and-shoot sequence.
@@ -31,7 +31,8 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 
 - `app/page.tsx`: homepage composition only.
 - `app/projects.ts`: canonical project content, order inputs, covers, and case-study narratives.
-- `app/project-card.tsx`: company grouping and card links.
+- `app/work-sections.tsx`: homepage project sections; `app/work-nav.tsx`: sticky section navigation.
+- `app/project-card.tsx`: legacy card rendering.
 - `app/project-mockup.tsx`: intentionally minimal work-tile interior.
 - `app/hero-meadow.tsx`: owner of environment/prototype state and hero-to-work handoff.
 - `app/meadow.tsx`, `app/cypress-tree.tsx`, `app/alamo-weather.tsx`: visual environment primitives.

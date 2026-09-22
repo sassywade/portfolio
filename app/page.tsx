@@ -2,7 +2,8 @@ import { HeroMeadow } from "./hero-meadow";
 import { BikeRide } from "./bike-ride";
 import { PhotoDrop } from "./photo-drop";
 import { BackpackWalk } from "./backpack-walk";
-import { ProjectGrid } from "./project-card";
+import { WorkSections } from "./work-sections";
+import { SiteHeader } from "./site-header";
 import { TopPetPull } from "./top-pet-pull";
 
 type CompanyLinkProps = {
@@ -30,16 +31,8 @@ export default function Home() {
   return (
     <>
       <TopPetPull />
-      <main className="site-shell home-portfolio" id="top">
-        <nav className="quiet-sidebar" aria-label="Sidebar navigation">
-          <a href="#top" aria-current="page">Home</a>
-          <a href="#work">Work</a>
-          <a href="/play">Play</a>
-          <a href="/about#about-gallery-title">Photography</a>
-          <a href="/about">Me</a>
-          <a href="/Neel-Saswade-Resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
-        </nav>
-
+      <main className="site-shell page-enter" id="top">
+        <SiteHeader current="work" />
         <section className="pranathi-intro pranathi-intro--home" aria-labelledby="hero-title">
           <p className="pranathi-name" id="hero-title">Neel Saswade</p>
           <div className="pranathi-bio">
@@ -63,9 +56,8 @@ export default function Home() {
           <HeroMeadow />
         </section>
 
-        <section className="pranathi-work" id="work" aria-labelledby="work-title">
-          <h2 className="sr-only" id="work-title">Work</h2>
-          <ProjectGrid />
+        <section className="pranathi-work pranathi-work--editorial" id="work" aria-labelledby="work-title">
+          <WorkSections />
         </section>
 
       </main>

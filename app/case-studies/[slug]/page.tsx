@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { caseStudies, projects, type CaseStudyArtifact } from "../../projects";
 import { Reveal } from "../../reveal";
@@ -38,6 +38,8 @@ function ArtifactFigure({ artifact }: { artifact: CaseStudyArtifact }) {
 
 export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const { slug } = await params;
+  const inlineSlug = ["soft-launch", "pocket-studio"].includes(slug) ? "snap" : slug;
+  if (["psychic", "homepage", "artifacts", "growth", "snap"].includes(inlineSlug)) redirect(`/#work-${inlineSlug}`);
   const projectIndex = projects.findIndex((item) => item.slug === slug);
   const project = projects[projectIndex];
   const narrative = caseStudies[slug];

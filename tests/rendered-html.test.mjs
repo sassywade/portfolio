@@ -30,7 +30,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Neel Saswade — Product designer<\/title>/i);
-  assert.match(html, /class="quiet-sidebar" aria-label="Sidebar navigation"/);
+  assert.match(html, /class="site-header site-header--pages"/);
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I&#x27;m a product designer in San Francisco\. I work at /);
   assert.match(html, /Before that, I designed at /);
@@ -639,10 +639,10 @@ test("documents the portfolio's durable design and change contract", async () =>
   ]);
 
   assert.match(agentContract, /Prefer the smallest complete change/);
-  assert.match(agentContract, /Each project title sits below and outside the tile/);
-  assert.match(agentContract, /descriptions remain available through the prototype picker but are hidden by default/);
-  assert.match(agentContract, /homepage shows six projects total/);
-  assert.match(agentContract, /Every supplied Glean recording fills its tile edge to edge/);
+  assert.match(agentContract, /inline editorial sequence/);
+  assert.match(agentContract, /sticky project rail tracks the section in view/);
+  assert.match(agentContract, /homepage shows five major sections/);
+  assert.match(agentContract, /use black rectangles/);
   assert.match(agentContract, /inspect the final matching rule/);
   assert.match(agentContract, /continuity of Torph/);
   assert.match(systemDoc, /continuity when text changes state/);
@@ -1174,24 +1174,34 @@ test("grass separates cached turf from display-synced tips without rebuilding on
 });
 
 
-test("default homepage uses quiet navigation and top-right weather while keeping its introduction", async () => {
+test("default homepage uses the shared header and meadow weather while keeping its introduction", async () => {
   const [page, hero, css] = await Promise.all(["page.tsx", "hero-meadow.tsx", "globals.css"].map(file => readFile(new URL(`../app/${file}`, import.meta.url), "utf8")));
-  assert.match(page, /home-portfolio/);
-  assert.doesNotMatch(page, /<SiteHeader/);
-  for (const label of ["Home", "Work", "Play", "Photography", "Me", "Resume"]) assert.ok(page.includes(`>${label}</a>`));
+  assert.match(page, /<SiteHeader current="work" \/>/);
+  assert.doesNotMatch(page, /quiet-sidebar/);
   assert.match(page, /pranathi-name/);
-  assert.match(hero, /weatherHost \? createPortal/);
-  assert.match(css, /\.home-portfolio \.quiet-sidebar \{ display: flex/);
+  assert.match(hero, /layout === "quiet" && weatherHost[\s\S]*createPortal/);
+  assert.match(css, /\.quiet-sidebar \{ display: none; \}/);
 });
-
-test("sidebar preserves the original desktop header space above the introduction", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.home-portfolio::before\s*\{[^}]*height: calc\(30px \+ clamp\(15px, 1\.1vw, 18px\) \* 1\.05\)/);
-});
-
 
 test("weather summary and details stay smaller than navigation", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.quiet-weather \.alamo-weather__ascii-primary \{ font-size: clamp\(12px, 0\.9vw, 14px\)/);
   assert.match(css, /\.quiet-weather \.alamo-weather__secondary \{ font-size: clamp\(11px, 0\.8vw, 12px\)/);
+});
+
+
+test("homepage presents five inline projects with black placeholders and anchor navigation", async () => {
+  const html = await (await render()).text();
+  const sections = ["psychic", "homepage", "artifacts", "growth", "snap"];
+  let previous = -1;
+  for (const slug of sections) {
+    const position = html.indexOf(`id="work-${slug}"`);
+    assert.ok(position > previous, `${slug} follows the previous section`);
+    previous = position;
+    assert.ok(html.includes(`href="#work-${slug}"`));
+  }
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 14);
+  assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
+  assert.doesNotMatch(html, /href="\/case-studies\//);
+  assert.doesNotMatch(html, /class="project-work-video/);
 });
