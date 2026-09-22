@@ -1252,19 +1252,102 @@ test("Work has no visible Selected work heading", async () => {
 });
 
 
-test("guided project scrolling preserves native escape paths and centers sections", async () => {
-  const [scroll, sections, css] = await Promise.all([
-    readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/work-sections.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-  ]);
-  assert.match(sections, /<WorkScroll \/>/);
-  assert.match(scroll, /!desktop.matches \|\| reduced.matches \|\| event.ctrlKey/);
-  assert.match(scroll, /if \(!fits\(sections\[nearest\]\)\) return/);
-  assert.match(scroll, /if \(consumed\) \{ event.preventDefault\(\); return; \}/);
-  assert.match(scroll, /window.innerHeight - rect.height/);
-  assert.match(scroll, /window.removeEventListener\("wheel", wheel\)/);
-  assert.match(css, /prefers-reduced-motion: reduce[^}]*scroll-snap-type: none/s);
+test("scroll assistance preserves native input, proximity, and escape to the hero", async () => {
+  const { transpileModule, ModuleKind } = await import("typescript");
+  const { runInNewContext } = await import("node:vm");
+  const source = await readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8");
+  const events = new Map();
+  const timers = new Map();
+  const frames = new Map();
+  let sequence = 0;
+  const desktop = { matches: true, addEventListener() {}, removeEventListener() {} };
+  const reduced = { matches: false, addEventListener() {}, removeEventListener() {} };
+  const win = {
+    innerHeight: 800, scrollY: 1000,
+    matchMedia: query => query.includes("reduced-motion") ? reduced : desktop,
+    addEventListener: (name, callback, options) => events.set(name, { callback, options }),
+    removeEventListener: name => events.delete(name),
+    setTimeout: callback => { timers.set(++sequence, callback); return sequence; },
+    clearTimeout: id => timers.delete(id),
+    scrollTo: ({ top }) => { win.scrollY = top; },
+  };
+  class MockElement {
+    parentElement = null;
+    scrollHeight = 0;
+    clientHeight = 0;
+    closest() { return null; }
+  }
+  const sections = [1000, 2000, 3000].map((target, index) => ({
+    id: `work-${index}`, offsetHeight: 500, dataset: {},
+    getBoundingClientRect: () => ({ top: target + 150 - win.scrollY, height: 500 }),
+  }));
+  let cleanup;
+  const exports = {};
+  runInNewContext(transpileModule(source, { compilerOptions: { module: ModuleKind.CommonJS } }).outputText, {
+    exports, require: () => ({ useEffect: effect => { cleanup = effect(); } }),
+    window: win, document: {
+      documentElement: { dataset: {} }, body: {},
+      querySelectorAll: () => sections, getElementById: () => ({}), querySelector: () => null,
+      addEventListener() {}, removeEventListener() {},
+    },
+    Element: MockElement, getComputedStyle: () => ({ overflowY: "visible" }),
+    IntersectionObserver: class { observe() {} disconnect() {} },
+    ResizeObserver: class { observe() {} disconnect() {} },
+    location: { hash: "" }, performance: { now: () => 0 },
+    requestAnimationFrame: callback => { frames.set(++sequence, callback); return sequence; },
+    cancelAnimationFrame: id => frames.delete(id),
+  });
+  exports.WorkScroll();
+  const wheel = (deltaY, extra = {}) => events.get("wheel").callback({
+    deltaY, deltaX: 0, target: new MockElement(),
+    preventDefault: () => assert.fail("wheel input must never be blocked"), ...extra,
+  });
+  const pause = () => {
+    const callbacks = [...timers.values()];
+    timers.clear();
+    callbacks.forEach(callback => callback());
+  };
+  assert.equal(events.get("wheel").options.passive, true);
+  win.scrollY = 1900;
+  wheel(8);
+  pause();
+  assert.equal(frames.size, 1, "a pause just before a project gently centers it");
+  wheel(-1);
+  assert.equal(frames.size, 0, "even a tiny reversal immediately interrupts");
+  pause();
+  assert.equal(frames.size, 0, "the guide never pulls against the input direction");
+  win.scrollY = 1600;
+  wheel(400);
+  pause();
+  assert.equal(frames.size, 0, "a mid-project stop does not trigger a full-section jump");
+  win.scrollY = 980;
+  wheel(-900);
+  pause();
+  assert.equal(frames.size, 0, "upward movement above the first project freely reaches the hero");
+  win.scrollY = 2900;
+  wheel(2500);
+  win.scrollY = 3400;
+  events.get("scroll").callback();
+  pause();
+  assert.equal(frames.size, 0, "strong input may pass projects and leave Work");
+  win.scrollY = 2100;
+  wheel(-4);
+  events.get("scroll").callback();
+  assert.equal(timers.size, 1, "momentum postpones assistance until scrolling rests");
+  pause();
+  assert.equal(frames.size, 1);
+  events.get("keydown").callback();
+  assert.equal(frames.size, 0, "keyboard input interrupts the assist");
+  for (const preference of [desktop, reduced]) {
+    preference.matches = preference === reduced;
+    wheel(20);
+    pause();
+    assert.equal(frames.size, 0, "touch layouts and reduced motion keep native scrolling");
+    preference.matches = preference === desktop;
+  }
+  cleanup();
+  assert.equal(timers.size, 0);
+  assert.equal(frames.size, 0);
 });
 
 
@@ -1314,7 +1397,6 @@ test("projects reveal as one composition and stay visible on return", async () =
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/reveal.tsx", import.meta.url), "utf8"),
   ]);
-  assert.match(scroll, /const duration = 850/);
   assert.match(scroll, /cancelAnimationFrame\(scrollFrame\)/);
   assert.match(scroll, /removeEventListener\("pointerdown", stopScroll\)/);
   assert.match(reveal, /observer.unobserve\(element\)/);

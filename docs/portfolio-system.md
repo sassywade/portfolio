@@ -172,7 +172,7 @@ The homepage studio grid fades away with the meadow handoff, using the existing 
 
 Do not display a Selected work heading above the projects. Retain the existing opening spacing and an accessible Work heading.
 
-Work uses guided project scrolling: each deliberate desktop wheel gesture moves to the next or previous centered project, with trackpad momentum grouped into that gesture. Reversing direction interrupts the movement. The meadow, the end of Work, nested scrollers, zoom gestures, tall sections, and reduced motion retain ordinary scrolling. Touch uses native proximity snapping; project rail links center the full section. Approaching projects settle with a small 16px shift and fade using the shared ease-out curve; no new animation library or permanent frame loop is used.
+Work preserves native wheel scrolling in both directions. On desktop, after wheel input and native momentum pause for 180ms, a project within 120px (or 14% of viewport height) ahead in the scroll direction may center over 250ms. No wheel event is blocked, there is no per-gesture project limit, and any new wheel, keyboard, touch, pointer, resize, or preference change cancels assistance. Upward scrolling above the first center freely reaches the hero; mid-section stops, tall sections, nested scrollers, zoom, and reduced motion remain native. Touch uses proximity snapping with normal pass-through, never forced stops. Project links retain interruptible centered navigation.
 
 Work metadata keeps a 6px gap between the Glean logo and its text label.
 

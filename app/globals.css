@@ -13351,7 +13351,7 @@ html[data-portfolio-layout="quiet"] .pranathi-work--editorial { background: tran
 }
 html[data-work-snap="on"] .work-feature {
   scroll-snap-align: center;
-  scroll-snap-stop: always;
+  scroll-snap-stop: normal;
   scroll-margin: 32px 0;
 }
 .work-feature:focus { outline: none; }
