@@ -1320,3 +1320,9 @@ test("project transitions settle gradually with staggered media and interruptibl
   assert.match(css, /work-feature__media > :nth-child\(3\) \{ transition-delay: 240ms/);
   assert.match(css, /data-in-view="false"\] \.work-feature__media > \* \{[^}]*transition-delay: 0ms/s);
 });
+
+
+test("project descriptions use a comfortable reading width", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__summary \{[^}]*max-width: 72ch;[^}]*text-wrap: pretty;/);
+});
