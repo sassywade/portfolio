@@ -397,5 +397,29 @@ export const featuredWork = [
   { slug: "homepage", navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to match its growing AI capabilities. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward and close more loops." },
   { slug: "artifacts", navTitle: "Artifacts", title: "Artifacts", year: "2026", company: "Glean", layout: "split", summary: "Making the jump from chat to editable work." },
   { slug: "growth", navTitle: "Growth", title: "Growth at Glean", year: "2025", company: "Glean", layout: "trio", summary: "Helping people find value, then come back." },
-  { slug: "snap", navTitle: "Web3 at Snap", title: "Web3 at Snapchat", year: "2022", company: "Snap", layout: "pair", summary: "At Snapchat, I worked on Treasure, an app that brought NFT collections into the real world with Snap’s AR kit, and a feature that brought NFTs into Snapchat as Lenses." },
+  {
+    slug: "snap",
+    navTitle: "Web3 at Snap",
+    title: "Web3 at Snapchat",
+    year: "2022",
+    company: "Snap",
+    layout: "pair",
+    media: {
+      groups: [
+        {
+          label: "Treasure",
+          images: [
+            { src: "/work/snap/treasure-ar.png", alt: "Treasure augmented reality artwork in a room" },
+            { src: "/work/snap/treasure-collection.png", alt: "Treasure NFT collection profile" },
+            { src: "/work/snap/treasure-feed.png", alt: "Treasure feed with a collectible sneaker" },
+          ],
+        },
+        {
+          label: "NFTs as lenses",
+          images: [{ src: "/work/snap/nft-lens.png", alt: "NFT used as a Snapchat Lens" }],
+        },
+      ],
+    },
+    summary: "At Snapchat, I spent my time on two projects: Treasure, a consumer app that used Snap’s AR kit to let people bring their NFT collections into the real world, and a feature to bring NFTs as lenses inside the core Snapchat app (Techcrunch article).",
+  },
 ] as const;
