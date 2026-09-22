@@ -1,8 +1,8 @@
 "use client";
 
-import { createPortal } from "react-dom";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
+import { usePhotoViewer } from "../photo-viewer";
 
 type PhotoSlot = {
   id: string;
@@ -28,91 +28,9 @@ const lifePhotos: PhotoSlot[] = [
   { id: "san-francisco-from-above", title: "The city from above", description: "Exploring bernal heights with Kelly", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
 
-function FilmPhoto({ photo, index, onOpen }: { photo: PhotoSlot; index: number; onOpen: (trigger: HTMLButtonElement) => void }) {
-  return (
-    <button
-      className={`film-photo film-photo--${photo.orientation} film-photo--${photo.id}`}
-      type="button"
-      onClick={(event) => onOpen(event.currentTarget)}
-      aria-label={`Open ${photo.title}`}
-      style={{ "--photo-index": index } as CSSProperties}
-    >
-      <span className="film-photo__paper">
-        <span className="film-photo__image">
-          <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="(max-width: 700px) 22vw, 84px" unoptimized />
-        </span>
-      </span>
-    </button>
-  );
-}
-
 export function AboutPhotoGallery() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [isClosing, setIsClosing] = useState(false);
+  const { openPhoto, viewer, selectedId } = usePhotoViewer();
   const galleryRef = useRef<HTMLElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const closeTimerRef = useRef<number | null>(null);
-  const tiltRef = useRef<HTMLDivElement>(null);
-  const selectedPhoto = selectedIndex === null ? null : lifePhotos[selectedIndex];
-
-  useEffect(() => {
-    const print = tiltRef.current;
-    if (!print || isClosing) return;
-    const enabled = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
-    let frame = 0;
-    let bounds: DOMRect | null = null;
-    const reset = () => {
-      window.cancelAnimationFrame(frame);
-      frame = 0;
-      bounds = null;
-      print.style.transform = "perspective(2000px) rotateX(0deg) rotateY(0deg)";
-    };
-    const move = (event: PointerEvent) => {
-      if (!enabled.matches || event.pointerType !== "mouse") return;
-      bounds ??= print.getBoundingClientRect();
-      const x = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1));
-      const y = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1));
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        print.style.transform = `perspective(2000px) rotateX(${-y * 3}deg) rotateY(${x * 3}deg)`;
-        frame = 0;
-      });
-    };
-    print.addEventListener("pointermove", move);
-    print.addEventListener("pointerleave", reset);
-    print.addEventListener("pointercancel", reset);
-    enabled.addEventListener("change", reset);
-    window.addEventListener("resize", reset);
-    window.addEventListener("blur", reset);
-    return () => {
-      reset();
-      print.removeEventListener("pointermove", move);
-      print.removeEventListener("pointerleave", reset);
-      print.removeEventListener("pointercancel", reset);
-      enabled.removeEventListener("change", reset);
-      window.removeEventListener("resize", reset);
-      window.removeEventListener("blur", reset);
-    };
-  }, [selectedIndex, isClosing]);
-
-  const closePhoto = useCallback(() => {
-    if (selectedIndex === null || isClosing) return;
-
-    const finishClose = () => {
-      setSelectedIndex(null);
-      setIsClosing(false);
-      window.requestAnimationFrame(() => triggerRef.current?.focus());
-    };
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      finishClose();
-      return;
-    }
-
-    setIsClosing(true);
-    closeTimerRef.current = window.setTimeout(finishClose, 180);
-  }, [isClosing, selectedIndex]);
 
   useEffect(() => {
     const gallery = galleryRef.current;
@@ -137,62 +55,36 @@ export function AboutPhotoGallery() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => () => {
-    if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (selectedIndex === null) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closePhoto();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closePhoto, selectedIndex]);
-
-  const openPhoto = (index: number, trigger: HTMLButtonElement) => {
-    if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
-    triggerRef.current = trigger;
-    setIsClosing(false);
-    setSelectedIndex(index);
-  };
-
   return (
     <>
       <section className="about-page__gallery" aria-labelledby="about-gallery-title" ref={galleryRef}>
         <h2 id="about-gallery-title">Life</h2>
         <div className="about-page__gallery-viewport">
           <div className="about-page__gallery-track">
-            {lifePhotos.map((photo, index) => <FilmPhoto key={photo.id} photo={photo} index={index} onOpen={(trigger) => openPhoto(index, trigger)} />)}
+            {lifePhotos.map((photo, index) => (
+              <button
+                key={photo.id}
+                className={`film-photo film-photo--${photo.orientation} film-photo--${photo.id}`}
+                type="button"
+                aria-label={`Open ${photo.title}`}
+                aria-haspopup="dialog"
+                style={{ "--photo-index": index, visibility: selectedId === photo.id ? "hidden" : undefined } as CSSProperties}
+                onClick={(event) => {
+                  const image = event.currentTarget.querySelector("img")!;
+                  openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 3 / 4 }, event.currentTarget, event.detail !== 0, image);
+                }}
+              >
+                <span className="film-photo__paper">
+                  <span className="film-photo__image">
+                    <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="(max-width: 700px) 22vw, 84px" unoptimized />
+                  </span>
+                </span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
-
-      {selectedPhoto && createPortal(
-        <div className="photo-lightbox" data-state={isClosing ? "closing" : "open"} role="dialog" aria-modal="true" aria-label={selectedPhoto.description}>
-          <button className="photo-lightbox__backdrop" type="button" tabIndex={-1} onClick={closePhoto} aria-label="Close photo viewer" />
-          <button className="photo-lightbox__close" type="button" onClick={closePhoto} aria-label="Close photo viewer" ref={closeButtonRef}>
-            <span>Close</span><strong aria-hidden="true">×</strong>
-          </button>
-          <div className="photo-lightbox__tilt" ref={tiltRef}>
-          <figure className="photo-lightbox__figure">
-            <div className="photo-lightbox__visual">
-              <Image src={selectedPhoto.src} alt={selectedPhoto.alt} width={1800} height={1400} sizes="90vw" draggable={false} unoptimized priority />
-            </div>
-            <figcaption>
-              <p>{selectedPhoto.description}</p>
-            </figcaption>
-          </figure>
-          </div>
-        </div>,
-        document.body,
-      )}
+      {viewer}
     </>
   );
 }

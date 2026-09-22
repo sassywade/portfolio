@@ -121,10 +121,10 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
+  const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
+  assert.match(viewer, /trigger.focus\(\{ preventScroll: true \}\)/);
   assert.match(gallery, /gallery\.dataset\.motionReady = "true"/);
   assert.match(gallery, /gallery\.dataset\.motionVisible = "true"/);
-  assert.match(gallery, /data-state=\{isClosing \? "closing" : "open"\}/);
-  assert.match(gallery, /window\.requestAnimationFrame\(\(\) => triggerRef\.current\?\.focus\(\)\)/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
   assert.match(css, /\.photo-lightbox\[data-state="closing"\]/);
@@ -1139,23 +1139,19 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
 
-test("opened Life prints isolate pointer tilt from entrance and honor input preferences", async () => {
+test("Life photos share the centered viewer without captions or pointer tilt", async () => {
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(gallery, /\(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)/);
-  assert.match(gallery, /event.pointerType !== "mouse"/);
-  assert.match(gallery, /perspective\(2000px\) rotateX/);
-  assert.match(gallery, /print.removeEventListener\("pointerleave", reset\)/);
-  assert.match(gallery, /className="photo-lightbox__tilt" ref=\{tiltRef\}/);
-  assert.match(gallery, /draggable=\{false\}/);
-});
-
-test("Polaroid captions fill the lower border without a sheen overlay", async () => {
+  const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
+  const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
+  assert.match(gallery, /usePhotoViewer/);
+  assert.match(photography, /usePhotoViewer/);
+  assert.doesNotMatch(gallery, /figcaption|pointermove|photo-lightbox__tilt/);
+  assert.match(viewer, /dialog.showModal/);
+  assert.match(viewer, /animation.reverse/);
+  assert.match(viewer, /prefers-reduced-motion/);
+  assert.match(viewer, /draggable=\{false\}/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(css, /\.photo-lightbox__tilt \.photo-lightbox__figure\s*\{\s*gap: 0/);
-  assert.match(css, /figcaption\s*\{\s*display: grid;\s*place-items: center;/);
-  assert.match(css, /\.photo-lightbox__tilt \.photo-lightbox__figure figcaption p\s*\{[^}]*font-family: var\(--serif\)/);
-  assert.doesNotMatch(gallery, /photo-lightbox__sheen/);
+  assert.match(css, /Life prints stay[\s\S]*?transform: rotate\(var\(--photo-rotation, 0deg\)\);[\s\S]*?transition: none/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {

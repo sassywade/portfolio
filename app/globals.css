@@ -13480,3 +13480,13 @@ html:has(.pranathi-intro--home) body,
   --paper: #f5f5f4;
   background-color: #f5f5f4;
 }
+
+/* Life prints stay in their resting position, including hover and keyboard focus. */
+.about-page__gallery-track .film-photo:nth-child(n),
+.about-page__gallery-track .film-photo:nth-child(n):hover,
+.about-page__gallery-track .film-photo:nth-child(n):focus-visible {
+  transform: rotate(var(--photo-rotation, 0deg));
+  transition: none;
+  will-change: auto;
+  z-index: 0;
+}
