@@ -13166,7 +13166,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   position: relative;
   padding-left: 14px;
   color: var(--muted);
-  font: 12px/1.4 var(--sans);
+  font: 14px/1.4 var(--sans);
   text-decoration: none;
 }
 .work-section-nav a[aria-current], .work-section-nav a:hover { color: var(--ink); }
@@ -13239,8 +13239,32 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   .work-feature__meta { margin-top: 14px; gap: 24px; font-size: 12px; }
   .work-feature__media { gap: 8px; }
   .work-feature__summary { margin-top: 16px; font-size: 14px; }
-  .work-section-nav a { font-size: 11px; }
+  .work-section-nav a { font-size: 13px; }
 }
 /* Clip artwork without creating a scroll container that traps the sticky rail. */
 .site-shell:has(.pranathi-work--editorial) { overflow: clip; }
 .work-feature__meta .hero-company__mark { display: inline-block; width: 14px; height: 14px; flex: 0 0 14px; }
+
+/* Reveal the desktop reading rail once the first mockups approach mid-screen. */
+@media (min-width: 1080px) {
+  .work-section-nav[data-reveal-ready="true"] a {
+    transition: opacity 600ms var(--motion-ease-out), transform 600ms var(--motion-ease-out);
+    transition-delay: 150ms;
+  }
+  .work-section-nav[data-reveal-ready="true"] a:nth-child(2) { transition-delay: 200ms; }
+  .work-section-nav[data-reveal-ready="true"] a:nth-child(3) { transition-delay: 250ms; }
+  .work-section-nav[data-reveal-ready="true"] a:nth-child(4) { transition-delay: 300ms; }
+  .work-section-nav[data-reveal-ready="true"] a:nth-child(5) { transition-delay: 350ms; }
+  .work-section-nav[data-reveal-ready="true"]:not([data-revealed="true"]) { visibility: hidden; }
+  .work-section-nav[data-reveal-ready="true"]:not([data-revealed="true"]) a {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-section-nav[data-reveal-ready="true"] a {
+    transform: none !important;
+    transition: opacity 150ms linear;
+    transition-delay: 0ms !important;
+  }
+}
