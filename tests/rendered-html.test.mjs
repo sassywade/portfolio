@@ -1601,6 +1601,7 @@ test("alternate Growth video is the first visit-local prototype and defaults off
 });
 
 test("Growth pairs ordered onboarding screens with a centered video and fading checklist", async () => {
+  assert.match(await (await render()).text(), /id="work-growth-title">Growth<\/h3>/);
   const html = await (await render()).text();
   const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];
   assert.ok(growth);
