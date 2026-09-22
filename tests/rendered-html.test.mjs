@@ -151,6 +151,8 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
+  assert.match(about, /className="about-page__greeting">Hi,</);
+  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--muted\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)/);
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
   assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);

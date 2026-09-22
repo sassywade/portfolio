@@ -13590,6 +13590,14 @@ html:has(.pranathi-intro--home) body,
   }
 }
 
+/* Give the About note the same quiet editorial greeting as the Work titles. */
+.about-page .about-page__greeting {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font: italic clamp(22px, 1.8vw, 28px) / 1.15 var(--serif);
+  letter-spacing: -0.03em;
+}
+
 /* Keep the About page compact enough to read as one desktop composition. */
 @media (min-width: 701px) {
   .about-page__gallery {

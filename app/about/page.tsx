@@ -21,6 +21,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
+            <h2 className="about-page__greeting">Hi,</h2>
             <h1 id="about-title" className="about-page__about-copy">
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
