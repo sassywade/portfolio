@@ -1416,6 +1416,13 @@ test("Glean work metadata separates the logo and label", async () => {
 });
 
 
+test("Work rail clearly distinguishes the selected project with color", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-section-nav a \{[^}]*color: #999691/);
+  assert.match(css, /\.work-section-nav a\[aria-current\][^{]*\{[^}]*color: #43413e/);
+  assert.match(css, /\.work-section-nav__dot \{[^}]*background: #43413e/);
+});
+
 test("Work rail position does not follow project heights", async () => {
   const [scroll, css] = await Promise.all([
     readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
