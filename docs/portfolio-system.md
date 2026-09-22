@@ -224,3 +224,5 @@ The inline Work wrapper stays transparent, including the quiet layout. Only the 
 About's Life photographs reuse the Photography page's centered viewer through `app/photo-viewer.tsx`. Keep the film thumbnails and their resting rotations, but remove hover/focus movement and all visible photo captions. The enlarged view contains only the complete photograph on plain paper, with no film border, pointer tilt, or text; Close and Escape restore the original thumbnail and focus. Both galleries share the 280ms reversible transition and reduced-motion/keyboard behavior. This supersedes the earlier opened-Polaroid caption and tilt directions.
 
 The Life strip contains 11 photos. Omit the two-person Cathedral hiking photo (`high-country-friends.JPG`); keep the remaining strip centered through its content-sized desktop layout.
+
+The Photo page has no visible Photography heading; the gallery follows the shared header directly.

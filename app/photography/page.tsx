@@ -9,8 +9,7 @@ export default function PhotographyPage() {
   return (
     <main className={`site-shell ${styles.page}`}>
       <SiteHeader current="photo" />
-      <section className={styles.content} aria-labelledby="photography-title">
-        <h1 id="photography-title">Photography</h1>
+      <section className={styles.content} aria-label="Photo gallery">
         <PhotographyGallery />
       </section>
     </main>

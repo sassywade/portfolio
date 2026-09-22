@@ -1617,6 +1617,7 @@ test("renders the photography gallery with accessible placeholders and a native 
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
+  assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
   assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
   assert.match(html, /<dialog/);
@@ -1629,6 +1630,7 @@ test("renders the photography gallery with accessible placeholders and a native 
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
+  assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
   assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
   assert.match(html, /<dialog/);
