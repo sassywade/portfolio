@@ -393,6 +393,7 @@ export function PhotoDrop() {
         ref={buttonRef}
         type="button"
         className="photo-word hero-inline-action hero-hobby hero-hobby--photo"
+        id="photo"
         data-photographing="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"

@@ -14,7 +14,7 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 
 ## Non-negotiable defaults
 
-- Homepage navigation uses the shared top header with `Work`, `About`, `Play`, and `Resume`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow. Other pages retain the same shared header. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
+- Homepage navigation uses the shared top header with the `Neel Saswade` wordmark and `Work`, `Photo`, and `About`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow. Other pages retain the same shared header. Work scrolls to `#work`; Photo opens `/photography`, the dedicated masonry gallery. Play and Resume are not in the high-level navigation yet.
 - There is no archive section, promotional footer, or contact/social cluster.
 - The homepage background is #F5F5F4 with the subtle studio grid, which fades away before Work.
 - The default environment is the restrained painterly rolling Alamo Square meadow.

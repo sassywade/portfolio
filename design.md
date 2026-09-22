@@ -91,11 +91,11 @@ Whitespace is structural. It should create calm, not make related content feel d
 
 ### Navigation
 
-The navigation is exactly `Work`, `About`, and `Resume`.
+The navigation is exactly `Work`, `Photo`, and `About`, alongside the `Neel Saswade` wordmark.
 
 - Work scrolls to the homepage project section.
+- Photo opens the dedicated `/photography` gallery.
 - About opens the separate About page.
-- Resume opens the supplied PDF in a new tab.
 
 Keep it quiet, static, and free of decorative hover animation. Use clear color and focus feedback only.
 

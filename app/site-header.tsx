@@ -2,14 +2,13 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 
 type SiteHeaderProps = {
-  current?: "work" | "about" | "play";
+  current?: "work" | "about" | "play" | "photo";
 };
 
 const links = [
   ["work", "Work", "/#work"],
+  ["photo", "Photo", "/photography"],
   ["about", "About", "/about"],
-  ["play", "Play", "/play"],
-  ["resume", "Resume", "/Neel-Saswade-Resume.pdf"],
 ] as const;
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -28,8 +27,6 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             href={id === "work" && current === "work" ? "#work" : href}
             className={current === id ? "is-active" : undefined}
             aria-current={current === id ? "page" : undefined}
-            target={id === "resume" ? "_blank" : undefined}
-            rel={id === "resume" ? "noopener noreferrer" : undefined}
             key={id}
           >
             {label}

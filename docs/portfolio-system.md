@@ -155,7 +155,7 @@ Quiet sidebar matches the original introduction’s responsive text size (clamp(
 
 Grass readability and performance: skyline blades are 30% longer and slightly narrower; fine moving blades are about 34% longer with fewer samples. Dense interior turf remains cached on its own canvas. A separate canvas draws preselected skyline blades and fine tips on each display frame. Only cursor and character contact patches rebuild the interior, using spatial buckets and the original paint order; the passing welcome breeze reads through the skyline and moving tips. Playback changes must not regenerate the terrain. Keep native-pixel restoration, responsive registration, tree shading, and hidden/offscreen/reduced-motion suspension.
 
-The default homepage uses the shared top header with Work, About, Play, and Resume while keeping the breeze/time readout tucked into the bottom-right of the meadow. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. The quiet layout controls remain opt-in only.
+The default homepage uses the shared top header with the Neel Saswade wordmark and Work, Photo, and About links while keeping the breeze/time readout tucked into the bottom-right of the meadow. Photo opens the dedicated `/photography` gallery; Play and Resume are intentionally not in the high-level navigation yet. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. The quiet layout controls remain opt-in only.
 
 The homepage header must preserve the introduction's original desktop vertical position. Above 700px, retain the header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
 
@@ -212,3 +212,8 @@ The shared soundscape gives the first portfolio arrival one quiet, session-local
 Project summaries stay left-aligned beneath their media and span the full mockup composition width, with normal text wrapping and no character-based width cap. Small screens use the available width.
 
 The inline Work wrapper stays transparent, including the quiet layout. Only the full-page paper layer removes the grid during the meadow handoff; never paint a bounded background on the rising Work container, which would cover the meadow as a rectangular bar.
+
+
+## Photography
+
+`/photography` is the dedicated photo gallery, reached through Photo in the shared header. Its layout follows the spacious, unframed masonry rhythm of gallery.jessyin.world: five columns on desktop, two on phones, and mixed portrait, square, and landscape proportions. Keep the 24 slots black until photographs arrive. `app/photography/photography-gallery.tsx` owns the slots and focus interaction; its CSS module isolates the layout. A native modal dialog expands the selected photograph from its gallery position into the viewport center over 280ms using the shared ease-in-out curve, then reverses to its slot. Escape, reduced motion, and keyboard activation are immediate. Preserve focus restoration, native modal focus containment, scroll locking, and global Declarative cues.

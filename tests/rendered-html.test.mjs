@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render() {
+async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request("http://localhost/", {
+    new Request(`http://localhost${path}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -82,17 +82,17 @@ test("pairs Newsreader display type with Geist Sans interface and reading type",
   assert.match(css, /\.play-tile h2\s*\{[^}]*font-family:\s*var\(--sans\)/);
 });
 
-test("keeps the primary navigation simple and links Work to its homepage section", async () => {
+test("keeps the primary navigation simple and links Photo to photography", async () => {
   const header = await readFile(new URL("../app/site-header.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.doesNotMatch(header, /next\/link/);
-  assert.match(header, /\["resume", "Resume", "\/Neel-Saswade-Resume\.pdf"\]/);
-  assert.match(header, /target=\{id === "resume" \? "_blank" : undefined\}/);
   assert.match(header, /href=\{id === "work" && current === "work" \? "#work" : href\}/);
   assert.match(header, /\["work", "Work", "\/#work"\]/);
+  assert.match(header, /\["photo", "Photo", "\/photography"\]/);
   assert.match(header, /\["about", "About", "\/about"\]/);
-  assert.match(header, /\["play", "Play", "\/play"\]/);
+  assert.doesNotMatch(header, /Play|Resume|Neel-Saswade-Resume/);
+  assert.match(await readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8"), /id="photo"/);
   assert.doesNotMatch(header, /site-nav__label--hover/);
   assert.doesNotMatch(css, /site-nav__label--hover/);
 });
@@ -1616,4 +1616,16 @@ test("Growth pairs ordered onboarding screens with a centered video and fading c
   assert.match(css, /grid-template-columns: minmax\(0, 271fr\) minmax\(0, 563fr\) minmax\(0, 271fr\)/);
   assert.match(css, /column-gap: calc\(100% \* 20 \/ 1145\)/);
   assert.match(css, /\.work-feature__checklist::after \{[^}]*height: 18%;[^}]*pointer-events: none;[^}]*linear-gradient/);
+});
+
+
+test("renders the photography gallery with accessible placeholders and a native focus view", async () => {
+  const response = await render("/photography");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
+  assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
+  assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
+  assert.match(html, /<dialog/);
+  assert.match(html, /aria-label="Close photograph"/);
 });
