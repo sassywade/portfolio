@@ -182,7 +182,7 @@ Proactive Intelligence now uses the supplied psychic.mov in its main panel. The 
 
 The homepage paper background is #F5F5F4 across the hero and inline Work, including the grid-fade layer. Video pixels remain part of the supplied asset.
 
-Project transitions use an interruptible 850ms centered scroll with the calm cubic-bezier(0.32, 0.72, 0, 1) curve. Media panels fade and rise 18px in sequence with 80ms stagger; leaving clears delays. Keyboard, touch, pointer interaction, resize, and reduced motion stop the scripted scroll. Reduced motion leaves media static.
+Each complete project (heading, media, and summary) enters once with a 250ms fade and 6px rise using the shared ease-out curve. The existing Reveal observer retains visibility afterward, including when scrolling back. Do not stagger individual media panels or fade projects when they leave view. Reduced motion leaves the composition static. Scroll navigation remains independent of this entrance.
 
 Project summaries stay left-aligned beneath their media, capped at 72ch with pretty text wrapping for a comfortable reading measure. Small screens use the available width.
 

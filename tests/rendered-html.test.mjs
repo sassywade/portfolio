@@ -1308,17 +1308,19 @@ test("homepage uses the requested warm paper background", async () => {
 });
 
 
-test("project transitions settle gradually with staggered media and interruptible scrolling", async () => {
-  const [scroll, css] = await Promise.all([
+test("projects reveal as one composition and stay visible on return", async () => {
+  const [scroll, css, reveal] = await Promise.all([
     readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/reveal.tsx", import.meta.url), "utf8"),
   ]);
   assert.match(scroll, /const duration = 850/);
   assert.match(scroll, /cancelAnimationFrame\(scrollFrame\)/);
   assert.match(scroll, /removeEventListener\("pointerdown", stopScroll\)/);
-  assert.match(css, /prefers-reduced-motion: no-preference[^}]*work-feature__media/s);
-  assert.match(css, /work-feature__media > :nth-child\(3\) \{ transition-delay: 240ms/);
-  assert.match(css, /data-in-view="false"\] \.work-feature__media > \* \{[^}]*transition-delay: 0ms/s);
+  assert.match(reveal, /observer.unobserve\(element\)/);
+  assert.match(css, /\.work-feature > \.reveal\[data-reveal-ready="true"\]\.is-visible \{\s*opacity: 1;\s*transform: none;/);
+  assert.doesNotMatch(css, /\.work-feature\[data-in-view="false"\]/);
+  assert.doesNotMatch(css, /\.work-feature__media > :nth-child/);
 });
 
 
