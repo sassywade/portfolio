@@ -1,4 +1,4 @@
-import { featuredWork } from "./projects";
+import { featuredWork, growthOnboardingScreens } from "./projects";
 import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
 import { ProjectVideo } from "./project-mockup";
@@ -26,7 +26,13 @@ export function WorkSections() {
                 </div>
               </header>
               <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}`} role={"video" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
-                {project.layout === "trio" && <div className="work-feature__placeholder" />}
+                {project.slug === "growth" && (
+                  <div className="work-feature__onboarding">
+                    {growthOnboardingScreens.map((screen) => (
+                      <img key={screen.src} src={screen.src} alt={screen.alt} width={980} height={592} loading="lazy" />
+                    ))}
+                  </div>
+                )}
                 {project.slug === "growth" ? (
                   <GrowthPrototypeVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
                 ) : "video" in project ? (

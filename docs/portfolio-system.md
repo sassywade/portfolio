@@ -166,6 +166,8 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+Growth's left 271×500 panel now stacks the supplied onboarding screens in order: Welcome, Extension, Bookmark. Keep the complete 980×592 PNGs and their baked shadows at 90% panel width, vertically centered as a group on #ECECEC. The right panel stays empty in the same gray until its assets arrive. Preserve the centered video and its prototype toggle.
+
 The first prototype-picker control is Alternate Growth video, off on each page reload. It swaps only the center Growth video and poster, leaving the original as the default. The alternative crops alt_growth.mov inside its border at x=20, y=16, 1556×1380, encoded to 1126×1000. Both versions reuse offscreen pause and reduced-motion posters. The choice is visit-local and never saved.
 
 Growth uses a centered 563×500 video between two 271×500 black placeholders on the 1145×500 canvas, with proportionally scaled 20px gaps. This supersedes the equal-column Growth layout below. The supplied growth_animation.mov is cropped inside its border (1556×1380 at x=8, y=8) and encoded at 1126×1000. Reuse muted inline playback, offscreen suspension, and a content poster for reduced motion.

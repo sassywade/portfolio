@@ -1235,7 +1235,7 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 10);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 9);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
@@ -1605,12 +1605,12 @@ test("alternate Growth video is the first visit-local prototype and defaults off
   assert.match(html, /src="\/work\/growth-main.mp4"/);
 });
 
-test("Growth video sits between equal side placeholders", async () => {
+test("Growth pairs ordered onboarding screens with a centered video and pending right panel", async () => {
   const html = await (await render()).text();
   const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];
   assert.ok(growth);
-  assert.match(growth, /work-feature__placeholder[\s\S]*?<video[\s\S]*?growth-main.mp4[\s\S]*?<\/video>[\s\S]*?work-feature__placeholder/);
-  assert.equal((growth.match(/work-feature__placeholder/g) || []).length, 2);
+  assert.match(growth, /work-feature__onboarding[\s\S]*?growth-welcome.png[\s\S]*?growth-extension.png[\s\S]*?growth-bookmark.png[\s\S]*?<video[\s\S]*?growth-main.mp4[\s\S]*?<\/video>[\s\S]*?work-feature__placeholder/);
+  assert.equal((growth.match(/work-feature__placeholder/g) || []).length, 1);
   assert.match(growth, /poster="\/work\/growth-main-poster.jpg"/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /grid-template-columns: minmax\(0, 271fr\) minmax\(0, 563fr\) minmax\(0, 271fr\)/);

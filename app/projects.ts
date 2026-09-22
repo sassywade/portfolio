@@ -392,6 +392,12 @@ export const caseStudies: Record<string, CaseStudy> = {
 };
 
 // Homepage reading order and media layouts. Dimensions scale from a 1145px canvas.
+export const growthOnboardingScreens = [
+  { src: "/work/growth-welcome.png", alt: "Welcome to Glean onboarding screen" },
+  { src: "/work/growth-extension.png", alt: "Start every tab with Glean extension onboarding screen" },
+  { src: "/work/growth-bookmark.png", alt: "Bookmark Glean onboarding screen" },
+] as const;
+
 export const growthVideoAlternative = {
   src: "/work/growth-alternate.mp4",
   poster: "/work/growth-alternate-poster.jpg",
