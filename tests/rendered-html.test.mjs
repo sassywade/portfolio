@@ -167,9 +167,10 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
   assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
-  assert.match(about, /className="about-page__social-arrow"[\s\S]*<svg viewBox="0 0 12 12"/);
+  assert.match(about, /className="about-page__social-icon"[\s\S]*<svg viewBox="0 0 24 24"/);
+  assert.doesNotMatch(about, /className="about-page__social-arrow"/);
   assert.doesNotMatch(about, /aria-hidden="true">↗/);
-  assert.match(css, /\.about-page__social-arrow svg\s*\{[\s\S]*stroke-linecap: round;[\s\S]*stroke-linejoin: round;/);
+  assert.match(css, /\.about-page__social-icon svg\s*\{[\s\S]*stroke-linecap: round;[\s\S]*stroke-linejoin: round;/);
 });
 
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
