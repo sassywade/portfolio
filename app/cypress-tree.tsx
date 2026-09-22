@@ -6,9 +6,9 @@ import { MEADOW_GUST_EVENT, WELCOME_TRAVEL_MS } from "./grass-interaction";
 import { type WindSettings } from "./wind";
 
 const PET_BLOW_CYPRESS_EVENT = "portfolio:pet-blow-cypress";
-const WELCOME_BREEZE_DELAY = 1250;
+const WELCOME_BREEZE_DELAY = 500;
 const STRONG_AMBIENT_WIND_THRESHOLD = 0.58;
-const WELCOME_BREEZE_STRENGTH = 0.46;
+const WELCOME_BREEZE_STRENGTH = 0.78;
 const WELCOME_BREEZE_DURATION = 1450;
 
 type CypressTreeProps = {

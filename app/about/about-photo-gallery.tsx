@@ -70,7 +70,7 @@ export function AboutPhotoGallery() {
                 style={{ "--photo-index": index, visibility: selectedId === photo.id ? "hidden" : undefined } as CSSProperties}
                 onClick={(event) => {
                   const image = event.currentTarget.querySelector("img")!;
-                  openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 3 / 4 }, event.currentTarget, event.detail !== 0, image);
+                  openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 3 / 4, frame: "film" }, event.currentTarget, event.detail !== 0, image);
                 }}
               >
                 <span className="film-photo__paper">

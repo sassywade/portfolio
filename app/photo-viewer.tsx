@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import styles from "./photography/photography.module.css";
 
-type ViewerPhoto = { id: string | number; ratio: number; label: string; src?: string };
+type ViewerPhoto = { id: string | number; ratio: number; label: string; src?: string; frame?: "film" };
 
 export function usePhotoViewer() {
   const [selected, setSelected] = useState<ViewerPhoto | null>(null);
@@ -85,12 +85,16 @@ export function usePhotoViewer() {
         {selected && (
           <div
             ref={imageRef}
-            className={styles.focusedPhoto}
+            className={`${styles.focusedPhoto}${selected.frame === "film" ? ` ${styles.focusedPhotoFilm}` : ""}`}
             style={{ "--photo-ratio": selected.ratio } as CSSProperties}
             role={selected.src ? undefined : "img"}
             aria-label={selected.src ? undefined : selected.label}
           >
-            {selected.src && <Image src={selected.src} alt={selected.label} fill sizes="100vw" unoptimized priority draggable={false} style={{ objectFit: "contain" }} />}
+            {selected.src && (
+              <span className={selected.frame === "film" ? styles.focusedPhotoFilmImage : undefined}>
+                <Image src={selected.src} alt={selected.label} fill sizes="100vw" unoptimized priority draggable={false} style={{ objectFit: "contain" }} />
+              </span>
+            )}
           </div>
         )}
         <button ref={closeButtonRef} className={styles.close} onClick={(event) => closeRef.current(event.detail === 0)}>Close</button>

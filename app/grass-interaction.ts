@@ -1,7 +1,7 @@
 export const MEADOW_GUST_EVENT = "portfolio:meadow-gust";
 export const WELCOME_TRAVEL_MS = 3200;
 export type MeadowGust = { startedAt: number; origin: number; span?: number; direction: number; strength: number; duration: number };
-export type GrassFootprint = { x: number; y: number; radius: number; at: number; direction: number };
+export type GrassFootprint = { x: number; y: number; radius: number; at: number; direction: number; strength?: number };
 
 export function arrivalGrassWind(now: number, x: number, gust: MeadowGust | null) {
   if (!gust || x < gust.origin) return 0;
@@ -17,7 +17,7 @@ export function grassPressure(x: number, y: number, now: number, footprints: Gra
   for (const foot of footprints) {
     const recovery = Math.max(0, 1 - (now - foot.at) / 1900);
     const distance = ((x - foot.x) / foot.radius) ** 2 + ((y - foot.y) / (foot.radius * 0.65)) ** 2;
-    const local = Math.max(0, 1 - distance) ** 2 * recovery;
+    const local = Math.max(0, 1 - distance) ** 2 * recovery * (foot.strength ?? 1);
     if (local > pressure) { pressure = local; direction = foot.direction; }
   }
   return { pressure, direction };

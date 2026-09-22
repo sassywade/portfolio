@@ -71,6 +71,7 @@ Portfolio copy follows a Typehug- and Torph-inspired rule: short, concrete sente
 
 - Hero interactions may react to pointer movement and local weather only while the hero is visible.
 - Scrolling down should make the meadow, tree, characters, and Philip give way smoothly while work rises into attention.
+- Direct navigation to `/#work` starts at Work without replaying the meadow handoff; scrolling back toward the hero restores the normal transition.
 - Returning upward reconstructs the same scene without random reflow.
 - Philip's state changes are intentional events: following, idle huffing, target interaction, or brief reaction. Pointer speed alone is not a state transition.
 - Hobby words release their matching miniature; they remain real buttons with accessible labels.
@@ -105,6 +106,8 @@ When a new request conflicts with an older experiment, the newest explicit prefe
 
 ## Living terrain
 
+The welcome gust must bend the entire meadow, including its dense interior down to the bottom edge. During the passing pulse, redraw a full-height traveling strip of cached turf even without cursor or character contact. Restore the original turf after the pulse. Tip-only motion does not satisfy this behavior.
+
 The painterly default now includes thousands of fine grass blades sampled from the rolling terrain's opaque green pixels. Roots and colors follow the supplied hill exactly, with perspective-scaled blades and the same image registration. Grass and cypress share a spatial wind field driven by the existing Alamo Square weather observations; the canopy responds with slower branch inertia and finer foliage groups. Keep the white studio grid and existing composition. Grass remains isolated from the flat and alternate art styles. Both renderers suspend animation when paused, offscreen, in a hidden tab, or under reduced motion; the original terrain remains a complete fallback.
 
 The default rolling painterly meadow is now made entirely of generated grass. A dense baked layer of short blades supports the moving tips; both use the reference image only for root placement and color sampling. Hide the reference image after the blade field is ready, retaining it only as a loading/error/no-JavaScript fallback. The Grass meadow toggle in the prototype picker switches between this grass-only field and the original image with no grass overlay. Both modes retain the cypress. The toggle is on by default, visit-local, and applies only to the rolling painterly scene.
@@ -115,7 +118,7 @@ The welcome ripple now bends the dense turf as well as the fine blades, with a s
 
 Miniature ground contact sits 4px lower in the ready grass-only meadow, for the photographer and hiker feet and cyclist tires. Apply the inset to terrain tracking so landing, movement, and contact flattening remain aligned; image-only and flat meadow placement stay unchanged.
 
-The current welcome motion supersedes the dramatic ripple: a soft gust crosses the visible viewport from left to right over 3.2 seconds, with a broad 1.45-second rise and release at each location. The tree receives its welcome gust only when that traveling wind reaches its horizontal position. Cursor contact is a small, low-strength brush (38px by 24px falloff) that relaxes when movement stops. Grass no longer activates Philip's blowing expression or closer follow mode; his existing independent behavior remains.
+The current welcome motion supersedes the dramatic ripple: a stronger gust begins 500ms after arrival and crosses the visible viewport from left to right over 3.2 seconds, with a broad 1.45-second rise and release at each location. The tree receives its welcome gust only when that traveling wind reaches its horizontal position. Cursor contact is a small, low-strength brush (38px by 24px falloff) that relaxes when movement stops. Grass no longer activates Philip's blowing expression or closer follow mode; his existing independent behavior remains.
 
 Grass contact patches must never reveal rectangular seams: copy the baked turf at native backing-pixel scale, align replacement clip edges to those same pixels, and redraw rows in their original back-to-front order.
 
@@ -153,7 +156,7 @@ The prototype picker also includes an opt-in “Visitor bike” study. It is del
 
 Quiet sidebar matches the original introduction’s responsive text size (clamp(16px, 1.32vw, 19px)) on desktop and mobile, including navigation, both weather lines, work text, and prototype controls. The classic layout retains its existing typography.
 
-Grass readability and performance: skyline blades are 30% longer and slightly narrower; fine moving blades are about 34% longer with fewer samples. Dense interior turf remains cached on its own canvas. A separate canvas draws preselected skyline blades and fine tips on each display frame. Only cursor and character contact patches rebuild the interior, using spatial buckets and the original paint order; the passing welcome breeze reads through the skyline and moving tips. Playback changes must not regenerate the terrain. Keep native-pixel restoration, responsive registration, tree shading, and hidden/offscreen/reduced-motion suspension.
+Grass readability and performance: skyline blades are 30% longer and slightly narrower; fine moving blades are about 34% longer with fewer samples. Dense interior turf remains cached on its own canvas. A separate canvas draws preselected skyline blades and fine tips on each display frame, and the passing welcome breeze feeds both visible tip layers across the full meadow. Only cursor and character contact patches rebuild the interior, using spatial buckets and the original paint order. Playback changes must not regenerate the terrain. Keep native-pixel restoration, responsive registration, tree shading, and hidden/offscreen/reduced-motion suspension.
 
 The default homepage uses the shared top header with the Neel Saswade wordmark and Work, Photo, and About links while keeping the breeze/time readout tucked into the bottom-right of the meadow. Photo opens the dedicated `/photography` gallery; Play and Resume are intentionally not in the high-level navigation yet. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. The quiet layout controls remain opt-in only.
 
@@ -165,6 +168,10 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 
 ## Inline work sections (current)
+
+The Growth starter-kit image fades from transparent at its own top edge to fully opaque at 20% image height. Keep this mask attached to the translated image so its lowered position cannot expose a hard horizontal crop; retain its size and offset.
+
+Proactive Intelligence’s upper-right tile uses updated_pop_UI.png with its baked drop shadow, centered at 86% tile width on #ECECEC with clipped overflow and 12px corners. The wider image includes shadow padding, making the visible popup only slightly larger. Preserve the Docs and email fragments around the complete Slack draft; keep the main video and lower-right black placeholder unchanged.
 
 The Growth starter-kit mock sits slightly lower: translate its image downward by 5% of its own height. Keep its size, horizontal inset, tile, and top fade unchanged.
 
@@ -197,7 +204,7 @@ The homepage studio grid fades away with the meadow handoff, using the existing 
 
 Do not display a Selected work heading above the projects. Retain the existing opening spacing and an accessible Work heading.
 
-Work preserves native wheel scrolling in both directions. On desktop, the first downward scroll from the hero always lands on the first fitting project over a calm 900ms ease-in-out handoff. After that opening gesture, native momentum pauses for 140ms before the next fitting project may center over 560ms. The capture radius scales down with peak gesture speed: gentle input captures within 56% of the project spacing (capped at 60% of the viewport), while strong input captures only within 20% (capped at 20% of the viewport). A gentle gesture beginning within 80px of a center and traveling at least 18% toward its neighbor commits to that neighbor. Normalize pixel, line, and page wheel units; reset intent on pauses and reversals. No wheel event is blocked and there is no per-gesture project limit. New wheel, keyboard, touch, pointer, resize, or preference input cancels assistance immediately. Upward escape above the first center freely reaches the hero; tiny adjustments, tall sections, nested scrollers, zoom, and reduced motion remain native. Touch uses proximity snapping with normal pass-through. Project links retain interruptible centered navigation, and the rail never repositions between projects.
+Work preserves native wheel scrolling in both directions. On desktop, the first downward scroll from the hero always lands on the first fitting project over a calm 900ms ease-in-out handoff. After that opening gesture, native momentum pauses for 140ms before the next fitting project may center over 560ms. The capture radius scales down with peak gesture speed: gentle input captures within 56% of the project spacing (capped at 60% of the viewport), while strong input captures only within 20% (capped at 20% of the viewport). A gentle gesture beginning within 80px of a center and traveling at least 18% toward its neighbor commits to that neighbor. Normalize pixel, line, and page wheel units; reset intent on pauses and reversals. No wheel event is blocked and there is no per-gesture project limit. Upward escape above the first center freely reaches the hero; tiny adjustments, tall sections, nested scrollers, zoom, and reduced motion remain native. Touch uses proximity snapping with normal pass-through. Project links retain interruptible centered navigation, and the rail never repositions between projects.
 
 Work metadata keeps a 6px gap between the Glean logo and its text label.
 
@@ -221,8 +228,27 @@ The inline Work wrapper stays transparent, including the quiet layout. Only the 
 `/photography` is the dedicated photo gallery, reached through Photo in the shared header. Its layout follows the spacious, unframed masonry rhythm of gallery.jessyin.world: five columns on desktop, two on phones, and mixed portrait, square, and landscape proportions. Keep the 24 slots black until photographs arrive. `app/photography/photography-gallery.tsx` owns the slots and focus interaction; its CSS module isolates the layout. A native modal dialog expands the selected photograph from its gallery position into the viewport center over 280ms using the shared ease-in-out curve, then reverses to its slot. Escape, reduced motion, and keyboard activation are immediate. Preserve focus restoration, native modal focus containment, scroll locking, and global Declarative cues.
 
 
-About's Life photographs reuse the Photography page's centered viewer through `app/photo-viewer.tsx`. Keep the film thumbnails and their resting rotations, but remove hover/focus movement and all visible photo captions. The enlarged view contains only the complete photograph on plain paper, with no film border, pointer tilt, or text; Close and Escape restore the original thumbnail and focus. Both galleries share the 280ms reversible transition and reduced-motion/keyboard behavior. This supersedes the earlier opened-Polaroid caption and tilt directions.
+About's Life photographs reuse the Photography page's centered viewer through `app/photo-viewer.tsx`. Keep the film thumbnails and their resting rotations; on precise-pointer hover or keyboard focus, lift and expand the active print with a restrained transform while keeping neighboring prints in place. Remove all visible photo captions. The enlarged Life view keeps the complete photograph inside a white film-print mat with a slightly deeper bottom border, without pointer tilt or text; Close and Escape restore the original thumbnail and focus. Both galleries share the 280ms reversible transition and reduced-motion/keyboard behavior. This supersedes the earlier opened-Polaroid caption and tilt directions.
 
 The Life strip contains 11 photos. Omit the two-person Cathedral hiking photo (`high-country-friends.JPG`); keep the remaining strip centered through its content-sized desktop layout.
 
 The Photo page has no visible Photography heading; the gallery follows the shared header directly.
+
+
+## Searchable photography gallery
+
+The Photo page uses all 141 supplied photographs from the Documents portfolio photos folder. WebP thumbnails and larger viewing copies live in `public/photography`; `app/photography/photos.json` owns dimensions, descriptive alt text, subject/location/style tags, color families, and palettes. The quiet search field uses normalized token matching with synonyms, including bike/bicycle and Japanese/Japan. All search terms must match; clear restores the entire gallery. No tags or category headings are printed over the photos.
+
+Color is the default cluster order. Photography style is an alternative in the Photo prototype picker and the shared meadow prototype picker; the session-local choice carries between pages. Both orderings place similar photos near each other in a shortest-column masonry layout.
+
+Search settles after 170ms of typing. Visible non-matches fall downward with a small rotation over roughly 460–535ms; retained photos move toward their new positions over 560ms. This deliberately slower search motion is explicitly requested, including keyboard typing. Snapshot the current animated positions before retargeting, animate only transforms/opacity, and avoid animating offscreen photos. Reduced motion changes results immediately. Hidden results leave the keyboard and accessibility order; announce the result count quietly. The existing shared centered photo viewer is unchanged.
+
+Home, Photo, and About share the warm paper background `#F5F5F4`, including Photo and About viewer backdrops. Scope this color to these pages so case studies retain their white background.
+
+The Photo search bar spans the full gallery width and aligns with its left and right edges at every viewport size.
+
+The empty, unfocused Photo search field rotates “Search bikes,” “Search city,” and “Search sunsets” every three seconds, with 200ms fades and small vertical slides. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps “Search bikes” still.
+
+On Photo page arrival, keep the temporary server column layout hidden until client measurements and the saved grouping resolve before paint. Restoring preferences must never capture positions or trigger the search/reorder animation. Reveal the final gallery with a 200ms opacity-only fade; thumbnails reserve their dimensions and fade in on load, including cached images. Reduced motion makes both reveals immediate.
+
+The Photo search row includes a quiet, right-aligned “Sort by” select with Color and Style. It shares the grouping state and session preference with the prototype picker, preserves the current search, and supports native keyboard selection.

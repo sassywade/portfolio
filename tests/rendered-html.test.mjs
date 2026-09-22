@@ -126,6 +126,7 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
   assert.match(gallery, /gallery\.dataset\.motionReady = "true"/);
   assert.match(gallery, /gallery\.dataset\.motionVisible = "true"/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
+  assert.match(css, /\/\* Lift the About composition toward the homepage hero's starting point\. \*\/[\s\S]*padding-top: clamp\(58px, 8vh, 92px\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
   assert.match(css, /\.photo-lightbox\[data-state="closing"\]/);
   assert.match(css, /\.case-media-shell > \.case-visual\s*\{\s*animation:\s*none;/);
@@ -135,6 +136,27 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
     "the final motion layer must keep case-study media still",
   );
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
+});
+
+test("keeps Life prints playful without overriding reduced motion", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
+
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /@media \(hover: hover\) and \(pointer: fine\)/);
+  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
+});
+
+test("keeps About links concise and opens the resume in a new tab", async () => {
+  const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
+  assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
+  assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
+  assert.match(about, /className="about-page__social-arrow"[\s\S]*<svg viewBox="0 0 12 12"/);
+  assert.doesNotMatch(about, /aria-hidden="true">↗/);
+  assert.match(css, /\.about-page__social-arrow svg\s*\{[\s\S]*stroke-linecap: round;[\s\S]*stroke-linejoin: round;/);
 });
 
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
@@ -715,6 +737,7 @@ test("uses only the standard Cuelume Declarative profile on every action", async
   assert.match(soundscape, /createEntranceSound/);
   assert.match(soundscape, /bandpass/);
   assert.match(soundscape, /prefers-reduced-motion: reduce/);
+  assert.doesNotMatch(soundscape, /addEventListener\("pointerdown", startEntranceSound, \{ once: true/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-toggle=/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-hover="(?!tick")/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-press="(?!press")/);
@@ -782,6 +805,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(prototype, /onPlayingChange\(!isPlaying\)/);
   assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
   assert.match(hero, /const scrollY = Math\.max\(0, window\.scrollY\)/);
+  assert.match(hero, /window\.location\.hash === "#work"/);
+  assert.match(hero, /if \(initialWorkEntryRef\.current\)[\s\S]*?if \(scrollY >= transitionEnd\) return 1;/);
+  assert.match(hero, /targetProgress = initialWorkEntryRef\.current \? 1 : calculateTarget\(\)/);
+  assert.match(hero, /const \[isSceneVisible, setIsSceneVisible\] = useState\(!initialWorkEntry\)/);
   assert.match(hero, /const transitionStart = Math\.max\(0, workTop - viewportHeight \* 1\.06\)/);
   assert.match(hero, /const transitionEnd = Math\.max\(transitionStart \+ 1, workTop - viewportHeight \* 0\.2\)/);
   assert.match(hero, /const smootherProgress = currentProgress \* currentProgress \* currentProgress/);
@@ -818,9 +845,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /portfolio:pet-blow-cypress/);
   assert.match(tree, /treeRef\.current\?\.applyGust/);
   assert.match(tree, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT, handlePetGust\)/);
-  assert.match(tree, /WELCOME_BREEZE_DELAY = 1250/);
+  assert.match(tree, /WELCOME_BREEZE_DELAY = 500/);
   assert.match(tree, /STRONG_AMBIENT_WIND_THRESHOLD = 0\.58/);
-  assert.match(tree, /WELCOME_BREEZE_STRENGTH = 0\.46/);
+  assert.match(tree, /WELCOME_BREEZE_STRENGTH = 0\.78/);
   assert.match(tree, /Math\.max\(currentWind\.breeze, currentWind\.gust \* 0\.72\)/);
   assert.match(tree, /ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD/);
   assert.match(tree, /window\.dispatchEvent\(new CustomEvent\(MEADOW_GUST_EVENT/);
@@ -1061,7 +1088,7 @@ test("arrival breeze travels and character pressure recovers without disturbing 
   const source = await readFile(new URL("../app/grass-interaction.ts", import.meta.url), "utf8");
   const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
   const { arrivalGrassWind, grassPressure } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
-  const gust = { startedAt: 1000, origin: 0, direction: 1, strength: 0.46, duration: 1450 };
+  const gust = { startedAt: 1000, origin: 0, direction: 1, strength: 0.78, duration: 1450 };
   assert.ok(arrivalGrassWind(1500, 0, gust) > 0);
   assert.equal(arrivalGrassWind(1500, 0.8, gust), 0);
   assert.ok(arrivalGrassWind(4100, 0.8, gust) > 0);
@@ -1072,6 +1099,12 @@ test("arrival breeze travels and character pressure recovers without disturbing 
   assert.equal(grassPressure(100, 100, 2900, footprints).pressure, 0);
   assert.equal(grassPressure(130, 100, 1000, footprints).pressure, 0);
   assert.equal(grassPressure(100, 100, 1000, footprints).direction, -1);
+  assert.equal(grassPressure(100, 100, 1000, [{ ...footprints[0], strength: 0.34 }]).pressure, 0.34);
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  assert.match(grass, /isBike \? 0\.28 : isHiker \? 0\.16/);
+  assert.match(grass, /const strength = isBike \? 0\.34 : isHiker \? 0\.28 : 1/);
+  assert.match(grass, /elasticWind\(blade\.x\) \* blade\.crestFlex \+ arrivalGrassWind\(now, blade\.x \/ width, gust\) \* 0\.82/);
+  assert.match(grass, /elasticWind\(blade\.x\) \+ arrivalGrassWind\(now, blade\.x \/ width, gust\) \* 0\.82/);
 });
 
 
@@ -1092,8 +1125,8 @@ test("cursor gently brushes nearby grass without making Philip blow", async () =
   const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
   assert.match(grass, /point.y >= \(ridge/);
   assert.match(grass, /paintGround\(ctx, blade, pressure, direction, flow\)/);
-  assert.doesNotMatch(grass, /backpack-walk-layer:is/);
-  assert.doesNotMatch(grass, /bike-ride-layer:is/);
+  assert.match(grass, /backpack-walk-layer:is/);
+  assert.match(grass, /bike-ride-layer:is/);
   assert.match(source, /const dx = \(x - brush\.x\) \/ 128/);
   assert.match(source, /const dy = \(y - brush\.y\) \/ 88/);
   assert.match(source, /Math\.sin\(now \/ 125/);
@@ -1139,13 +1172,14 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
 
-test("Life photos share the centered viewer without captions or pointer tilt", async () => {
+test("Life photos share the centered viewer and keep playful hover movement", async () => {
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
   assert.equal((gallery.match(/id: "/g) ?? []).length, 11);
   assert.doesNotMatch(gallery, /high-country-friends/);
   assert.match(gallery, /usePhotoViewer/);
+  assert.match(gallery, /frame: "film"/);
   assert.match(photography, /usePhotoViewer/);
   assert.doesNotMatch(gallery, /figcaption|pointermove|photo-lightbox__tilt/);
   assert.match(viewer, /dialog.showModal/);
@@ -1153,7 +1187,11 @@ test("Life photos share the centered viewer without captions or pointer tilt", a
   assert.match(viewer, /prefers-reduced-motion/);
   assert.match(viewer, /draggable=\{false\}/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /Life prints stay[\s\S]*?transform: rotate\(var\(--photo-rotation, 0deg\)\);[\s\S]*?transition: none/);
+  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
+  const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
+  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*background: #fff;/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
@@ -1172,7 +1210,7 @@ test("elastic grass shares spring motion and feathers the moving crest into cach
   assert.match(grass, /windSprings = Array.from\(\{ length: 65 \}/);
   assert.match(grass, /spring.velocity \+=/);
   assert.match(grass, /elasticWind\(blade.x\) \* crestFlex/);
-  assert.match(grass, /\(22 - \(rootY - groundAt\(rootX\)\)\) \/ 14/);
+  assert.match(grass, /1 - terrainDepth \/ 22/);
   assert.match(grass, /lastWindFrame = 0/);
 });
 
@@ -1233,10 +1271,20 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 8);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 7);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
+});
+
+test("Proactive Intelligence keeps the popup artwork above one remaining placeholder", async () => {
+  const html = await (await render()).text();
+  const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];
+  assert.match(psychic, /class="work-feature__popups"/);
+  assert.match(psychic, /src="\/work\/psychic-popups-shadow.png"/);
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__popups img \{[^}]*width: 86%/);
+  assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 1);
 });
 
 test("Snap work renders the supplied Treasure and Lens assets in two groups", async () => {
@@ -1601,6 +1649,9 @@ test("alternate Growth video is the first visit-local prototype and defaults off
 });
 
 test("Growth pairs ordered onboarding screens with a centered video and fading checklist", async () => {
+  const fadeCss = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(fadeCss, /\.work-feature__checklist img \{[^}]*mask-image: linear-gradient\(to bottom, transparent, #000 20%\)/);
+  assert.match(await (await render()).text(), /id="work-growth-title">Growth<\/h3>/);
   const html = await (await render()).text();
   const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];
   assert.ok(growth);
@@ -1615,27 +1666,80 @@ test("Growth pairs ordered onboarding screens with a centered video and fading c
 });
 
 
-test("renders the photography gallery with accessible placeholders and a native focus view", async () => {
+test("renders the tagged photo collection with search and a native focus view", async () => {
   const response = await render("/photography");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
   assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
-  assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
+  assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
+  assert.match(html, /aria-label="Search photos"/);
+  assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
   assert.match(html, /aria-label="Close photograph"/);
 });
 
 
-test("renders the photography gallery with accessible placeholders and a native focus view", async () => {
+test("renders the tagged photo collection with search and a native focus view", async () => {
   const response = await render("/photography");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
   assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
-  assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
+  assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
+  assert.match(html, /aria-label="Search photos"/);
+  assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
   assert.match(html, /aria-label="Close photograph"/);
+});
+
+
+test("photo search matches synonyms and combined tags without changing the catalog", async () => {
+  const { matchesPhoto, clusterPhotos, masonryLayout } = await import("../app/photography/gallery-model.mjs");
+  const photos = JSON.parse(await readFile(new URL("../app/photography/photos.json", import.meta.url), "utf8"));
+  const ids = (query) => photos.filter((photo) => matchesPhoto(photo, query)).map((photo) => photo.id);
+  assert.equal(photos.length, 141);
+  assert.equal(new Set(photos.map((photo) => photo.id)).size, 141);
+  assert.equal(ids("").length, 141);
+  assert.deepEqual(ids("bike"), ids("bicycle"));
+  assert.deepEqual(ids("Japanese"), ids("Japan"));
+  for (const term of ["sunset", "bicycle", "Japan", "city", "street photography"]) assert.ok(ids(term).length > 0, term);
+  const combined = ids("Japan city");
+  assert.ok(combined.length > 0);
+  assert.ok(combined.every((id) => ids("Japan").includes(id) && ids("city").includes(id)));
+  assert.equal(ids("zzzz-no-match").length, 0);
+  for (const photo of photos) {
+    assert.ok(photo.tags.length >= 7 && photo.description && photo.width > 0 && photo.height > 0);
+    assert.ok(Math.abs(photo.ratio - photo.width / photo.height) < 0.00001);
+    await access(new URL(`../public${photo.src}`, import.meta.url));
+    await access(new URL(`../public${photo.thumbnail}`, import.meta.url));
+  }
+  for (const grouping of ["color", "style"]) {
+    const ordered = clusterPhotos(photos, grouping);
+    const key = grouping === "color" ? "color" : "style";
+    const groups = ordered.map((photo) => photo[key]).filter((value, i, all) => i === 0 || value !== all[i - 1]);
+    assert.equal(new Set(groups).size, groups.length, "clusters are contiguous");
+    assert.equal(ordered.length, photos.length);
+    for (const columns of [2, 3, 4, 5]) {
+      const width = columns === 2 ? 342 : 1152;
+      const layout = masonryLayout(ordered, width, columns, 20);
+      const positions = [...layout.positions.values()];
+      assert.equal(positions.length, photos.length);
+      assert.ok(positions.every((position) => position.x >= 0 && position.x + position.width <= width + 0.01));
+      for (let i = 0; i < positions.length; i++) for (let j = i + 1; j < positions.length; j++) {
+        const a = positions[i], b = positions[j];
+        assert.ok(a.x + a.width <= b.x + 0.01 || b.x + b.width <= a.x + 0.01 || a.y + a.height <= b.y + 0.01 || b.y + b.height <= a.y + 0.01, "photos do not overlap");
+      }
+    }
+  }
+});
+
+
+test("Photo and About share the homepage paper color", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /html:has\(\.about-page, \.photography-page\) body,\s*\.about-page,\s*\.photography-page,[^{]+\{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
+  assert.match(await (await render("/photography")).text(), /class="site-shell photography-page /);
+  assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page"/);
 });

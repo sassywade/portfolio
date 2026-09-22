@@ -2381,12 +2381,25 @@ em {
 }
 
 .about-page__social-arrow {
-  margin-left: 0.28em;
+  display: inline-flex;
+  width: 0.72em;
+  height: 0.72em;
+  margin-left: 0.34em;
   color: currentColor;
-  font-size: 0.78em;
-  line-height: 1;
   opacity: 0.62;
   transform: translateY(-0.08em);
+  transition: transform 180ms var(--motion-ease-out, ease-out), opacity 180ms ease;
+}
+
+.about-page__social-arrow svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.15;
 }
 
 .about-page__socials a:hover,
@@ -2397,8 +2410,18 @@ em {
   text-underline-offset: 4px;
 }
 
+.about-page__socials a:hover .about-page__social-arrow,
+.about-page__socials a:focus-visible .about-page__social-arrow {
+  opacity: 0.9;
+  transform: translate(0.1em, -0.18em);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .about-page__socials a {
+    transition: none;
+  }
+
+  .about-page__social-arrow {
     transition: none;
   }
 }
@@ -12781,12 +12804,12 @@ html[data-project-subtext="true"] .project-card__info p {
 
 /* Lift the About composition toward the homepage hero's starting point. */
 .about-page .simple-page {
-  padding-top: clamp(76px, 10.5vh, 112px);
+  padding-top: clamp(58px, 8vh, 92px);
 }
 
 @media (max-width: 700px) {
   .about-page .simple-page {
-    padding-top: 72px;
+    padding-top: 56px;
   }
 }
 
@@ -13308,6 +13331,23 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   width: 90%;
   height: auto;
 }
+.work-feature__popups {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ececec;
+}
+.work-feature__popups img {
+  position: absolute;
+  display: block;
+  width: 86%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .work-feature__checklist {
   position: relative;
   min-width: 0;
@@ -13322,6 +13362,8 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   height: auto;
   margin-left: 6%;
   transform: translateY(5%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%);
+  mask-image: linear-gradient(to bottom, transparent, #000 20%);
 }
 .work-feature__checklist::after {
   content: "";
@@ -13473,7 +13515,10 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
   html[data-work-snap="on"] .work-feature + .work-feature { margin-top: max(200px, 30svh); }
 }
 
-/* Homepage paper color, shared by the meadow handoff and inline Work. */
+/* Shared paper color for Home, Photo, and About. */
+html:has(.about-page, .photography-page) body,
+.about-page,
+.photography-page,
 html:has(.pranathi-intro--home) body,
 .site-shell:has(.pranathi-intro--home),
 .site-shell[data-atmosphere][data-environment-style]:has(.pranathi-intro--home) {
@@ -13481,12 +13526,35 @@ html:has(.pranathi-intro--home) body,
   background-color: #f5f5f4;
 }
 
-/* Life prints stay in their resting position, including hover and keyboard focus. */
-.about-page__gallery-track .film-photo:nth-child(n),
-.about-page__gallery-track .film-photo:nth-child(n):hover,
-.about-page__gallery-track .film-photo:nth-child(n):focus-visible {
+/* Life prints lift and expand again on precise-pointer hover. */
+.about-page__gallery-track .film-photo:nth-child(n) {
   transform: rotate(var(--photo-rotation, 0deg));
-  transition: none;
-  will-change: auto;
+  transition: transform 230ms var(--motion-ease-out), z-index 0ms linear 230ms;
+  will-change: transform;
   z-index: 0;
+}
+
+.about-page__gallery-track .film-photo:focus-visible {
+  transform: translateY(-12px) rotate(0deg) scale(1.22);
+  transition-delay: 0ms;
+  z-index: 10;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-page__gallery-track .film-photo:hover {
+    transform: translateY(-12px) rotate(0deg) scale(1.22);
+    transition-delay: 0ms;
+    z-index: 10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page__gallery-track .film-photo:nth-child(n),
+  .about-page__gallery-track .film-photo:nth-child(n):hover,
+  .about-page__gallery-track .film-photo:nth-child(n):focus-visible {
+    transform: rotate(var(--photo-rotation, 0deg));
+    transition: none;
+    will-change: auto;
+    z-index: 0;
+  }
 }
