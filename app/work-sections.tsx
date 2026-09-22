@@ -7,7 +7,7 @@ export function WorkSections() {
     <div className="work-editorial">
       <WorkNav items={featuredWork.map(({ slug, navTitle }) => ({ slug, title: navTitle }))} />
       <div className="work-editorial__content">
-        <h2 className="work-editorial__label" id="work-title">Selected work</h2>
+        <h2 className="work-editorial__label" id="work-title"><span className="sr-only">Work</span></h2>
         {featuredWork.map((project) => (
           <section className="work-feature" id={`work-${project.slug}`} aria-labelledby={`work-${project.slug}-title`} key={project.slug}>
             <Reveal>

@@ -169,3 +169,5 @@ The desktop Work navigation uses 14px Geist and appears once per visit after the
 All inline Work media placeholders have a 12px corner radius at every viewport size.
 
 The homepage studio grid fades away with the meadow handoff, using the existing dissolve progress to fade in a plain paper layer behind page content. It is fully gone before Proactive Intelligence; all Work sections sit on plain paper. Scrolling back restores the hero grid. Reduced motion follows the existing immediate handoff, and no extra animation loop is added.
+
+Do not display a Selected work heading above the projects. Retain the existing opening spacing and an accessible Work heading.

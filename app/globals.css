@@ -13149,6 +13149,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 }
 .work-editorial__content { min-width: 0; }
 .work-editorial__label {
+  height: 25.2px;
   margin: 0 0 clamp(80px, 9vw, 150px);
   color: var(--muted);
   font: italic 18px/1.4 var(--serif);

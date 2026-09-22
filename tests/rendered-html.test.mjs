@@ -1243,3 +1243,10 @@ test("the hero grid fades into plain paper for inline Work", async () => {
   assert.match(css, /opacity: var\(--work-paper-opacity, 0\)/);
   assert.match(css, /\.pranathi-work--editorial \{ background: var\(--paper\); \}/);
 });
+
+
+test("Work has no visible Selected work heading", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /id="work-title"><span class="sr-only">Work<\/span><\/h2>/);
+  assert.doesNotMatch(html, />Selected work<\/h2>/);
+});
