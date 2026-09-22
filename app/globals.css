@@ -13308,6 +13308,23 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   width: 90%;
   height: auto;
 }
+.work-feature__popups {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ececec;
+}
+.work-feature__popups img {
+  position: absolute;
+  display: block;
+  width: 74%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .work-feature__checklist {
   position: relative;
   min-width: 0;

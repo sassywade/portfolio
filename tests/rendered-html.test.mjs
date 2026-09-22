@@ -1233,10 +1233,18 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 8);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 7);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
+});
+
+test("Proactive Intelligence keeps the popup artwork above one remaining placeholder", async () => {
+  const html = await (await render()).text();
+  const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];
+  assert.match(psychic, /class="work-feature__popups"/);
+  assert.match(psychic, /src="\/work\/psychic-popups.png"/);
+  assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 1);
 });
 
 test("Snap work renders the supplied Treasure and Lens assets in two groups", async () => {

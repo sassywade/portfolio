@@ -166,6 +166,8 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+Proactive Intelligence’s upper-right tile uses the supplied cropped psychic popup image, centered at 74% tile width on #ECECEC with clipped overflow and 12px corners. Preserve the Docs and email fragments around the complete Slack draft; keep the main video and lower-right black placeholder unchanged.
+
 The Growth starter-kit mock sits slightly lower: translate its image downward by 5% of its own height. Keep its size, horizontal inset, tile, and top fade unchanged.
 
 Growth's right panel now uses the supplied cropped UI.png checklist, at 94% panel width with a 6% left inset and its top aligned to the tile. Preserve its baked shadow and bottom profile. A static 18%-height top gradient fades from the #ECECEC tile to transparent before reaching the checklist text. This replaces the empty right panel; the original and alternate center videos remain unchanged.

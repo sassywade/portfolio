@@ -392,6 +392,11 @@ export const caseStudies: Record<string, CaseStudy> = {
 };
 
 // Homepage reading order and media layouts. Dimensions scale from a 1145px canvas.
+export const psychicPopups = {
+  src: "/work/psychic-popups.png",
+  alt: "Proactive drafts for Google Docs, Slack, and email",
+} as const;
+
 export const growthChecklist = {
   src: "/work/growth-checklist.png",
   alt: "Glean getting-started checklist with completed and suggested onboarding tasks",
