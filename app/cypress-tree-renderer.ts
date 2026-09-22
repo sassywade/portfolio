@@ -8,7 +8,7 @@ const global = typeof window !== "undefined" ? window : undefined;
   const DEFAULTS = { breeze: 0.34, gust: 0.52, elasticity: 0.38, tempo: 0.31, direction: 1 };
   const LEAF_GRID_X = 32;
   const LEAF_GRID_Y = 24;
-  const LEAF_OFFSET_LIMIT = 0.009;
+  const LEAF_OFFSET_LIMIT = 0.014;
   const bones = [
     { parent: -1, start: [0.50, 0.03], end: [0.51, 0.60], pivot: [0.50, 0.08], radius: 0.19, stiffness: 4.2, damping: 4.8, mass: 2.8, response: 0.30, gust: 0.26, frequency: 0.52, phase: 0.18, delay: 0.00, maxAngle: 0.040, inherit: 0.00 },
     { parent: 0, start: [0.48, 0.22], end: [0.13, 0.48], pivot: [0.48, 0.22], radius: 0.15, stiffness: 5.0, damping: 3.8, mass: 1.55, response: 0.58, gust: 0.52, frequency: 0.76, phase: 1.60, delay: 0.08, maxAngle: 0.085, inherit: 0.72 },
@@ -99,7 +99,9 @@ const global = typeof window !== "undefined" ? window : undefined;
     void main() {
       vec4 source = texture2D(u_tree, v_uv);
       float green_bias = source.g - source.r;
-      float leafness = max(smoothstep(-0.015, 0.12, green_bias), v_leaf_zone * 0.55) * source.a;
+      // Olive needles contain more red than green: compare green to red AND blue.
+      float foliage_bias = source.g - (source.r + source.b) * 0.5;
+      float leafness = smoothstep(0.025, 0.13, foliage_bias);
       float motion_time = u_time * (0.00031 + u_tempo * 0.0012);
       float leaf_flutter = sin(v_uv.x * 146.0 + v_uv.y * 71.0 - motion_time * 8.0 + hash(floor(v_uv * 18.0)) * 6.2831);
       // Continuous sampling keeps neighboring foliage attached without square seams.
@@ -107,10 +109,13 @@ const global = typeof window !== "undefined" ? window : undefined;
       vec2 leaf_offset = (texture2D(u_leaf_motion, leaf_cell).rg * 2.0 - 1.0) * ${LEAF_OFFSET_LIMIT};
       float wake = exp(-distance(v_uv, u_pointer) * 34.0) * u_pointer_active * v_leaf_zone;
       leaf_offset += vec2(wake * 0.0009, wake * 0.00022) * clamp(u_breeze + u_gust, 0.15, 1.2);
-      vec4 leaf_color = texture2D(u_tree, v_uv + leaf_offset * (0.48 + v_leaf_zone * 0.52));
-      vec4 color = mix(source, leaf_color, smoothstep(0.12, 0.72, leafness));
+      vec4 leaf_color = texture2D(u_tree, v_uv + leaf_offset);
+      float displaced_leafness = smoothstep(0.025, 0.13, leaf_color.g - (leaf_color.r + leaf_color.b) * 0.5);
+      // Include displaced needles so the outer edge moves, rather than ghosting in place.
+      float foliage = max(leafness, displaced_leafness);
+      vec4 color = mix(source, leaf_color, foliage);
       // Gently compress bark contrast; retain the original texture and alpha.
-      float bark = (1.0 - smoothstep(0.005, 0.055, green_bias)) * source.a * u_painterly;
+      float bark = (1.0 - foliage) * source.a * u_painterly;
       color.rgb = mix(color.rgb, color.rgb * 0.88 + vec3(0.48, 0.42, 0.30) * 0.12, bark);
       color.rgb *= 1.0 + (leaf_flutter * 0.5 + 0.5) * 0.026 * u_breeze * leafness;
       gl_FragColor = color;
@@ -275,7 +280,7 @@ export function createCypressTree(options) {
         const gustPulse = Math.pow(gustWave, 6.0);
         const turbulence = 0.72 + 0.28 * Math.sin(delayedTime * bone.frequency * 2.35 + bone.phase * 1.7);
         const sharedFlow = sampleMeadowWind(performance.now() / 1000 - bone.delay, 0.78 + bone.end[0] * 0.1, wind);
-        const windSusceptibility = index === 0 ? 1.0 : index < 8 ? 1.55 : 1.85;
+        const windSusceptibility = index === 0 ? 1.0 : index < 8 ? 2.1 : 2.5;
         const naturalDrive = sharedFlow * (0.035 * bone.response + 0.024 * bone.gust) * turbulence * windSusceptibility;
         const petTurbulence = 0.88 + Math.sin(time * 15.0 + bone.phase * 1.9) * 0.12;
         const petDrive = petGust.direction * petGust.strength * gustEnvelope * petTurbulence * (0.082 + bone.response * 0.068);
@@ -293,15 +298,16 @@ export function createCypressTree(options) {
       updateBonePivots();
       leafGroups.forEach((group) => {
         const state = group.state;
-        const localTime = time * (1.0 + wind.tempo * 0.85) - group.phase * 0.035;
+        const localTime = time * (1.0 + wind.tempo * 0.85);
+        const sprayPhase = group.x * 8.0 + group.y * 11.0;
         const gustWave = Math.max(0, Math.sin(localTime * 0.72 - group.x * 2.3 + group.y * 1.4));
         const gustPulse = Math.pow(gustWave, 6.0);
         const flutter = Math.sin(localTime * (2.8 + wind.tempo * 1.5) + group.phase) * 0.5 + 0.5;
         const petLeafFlutter = 0.82 + Math.sin(time * 17.0 + group.phase * 1.4) * 0.18;
         const petLeafPush = petGust.direction * petGust.strength * gustEnvelope * petLeafFlutter * 0.00255 * group.response;
         const sharedFlow = sampleMeadowWind(performance.now() / 1000 - group.y * 0.18, 0.78 + group.x * 0.1, wind);
-        const targetX = sharedFlow * 0.0062 * group.response + Math.sin(localTime * 2.1 + group.phase) * wind.breeze * 0.0024 * group.response + petLeafPush;
-        const targetY = Math.cos(localTime * 2.35 + group.phase * 1.2) * wind.breeze * 0.0015 * group.response + gustPulse * wind.gust * 0.0008 * group.response + Math.abs(petLeafPush) * 0.16;
+        const targetX = sharedFlow * 0.010 * group.response + Math.sin(localTime * 1.65 + sprayPhase) * wind.breeze * 0.010 * group.response + petLeafPush;
+        const targetY = Math.cos(localTime * 1.85 + sprayPhase * 1.2) * wind.breeze * 0.005 * group.response + gustPulse * wind.gust * 0.0012 * group.response + Math.abs(petLeafPush) * 0.16;
         const spring = group.stiffness * (1.08 - wind.elasticity * 0.16);
         const damping = group.damping * (1.04 - wind.elasticity * 0.10);
         state.velocityX += ((targetX - state.x) * spring - state.velocityX * damping) * dt;
