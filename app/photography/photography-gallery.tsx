@@ -8,7 +8,6 @@ import { clusterPhotos, masonryLayout, matchesPhoto } from "./gallery-model.mjs"
 import { PhotoPrototypePicker, usePhotoGrouping } from "./photo-grouping";
 import styles from "./photography.module.css";
 import { SearchPrompt } from "./search-prompt";
-import { PhotoSortToggle } from "./photo-sort-toggle";
 
 type Snapshot = { left: number; top: number; width: number; height: number; opacity: string };
 
@@ -121,7 +120,6 @@ export function PhotographyGallery() {
             onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
         </div>
         {query && <button type="button" aria-label="Clear search" onClick={() => { setQuery(''); capture(); setAppliedQuery(''); input.current?.focus(); }}>Clear</button>}
-        <PhotoSortToggle grouping={grouping} />
       </div>
       <p className="sr-only" role="status" aria-live="polite">{matching.length} {matching.length === 1 ? 'photo' : 'photos'}{appliedQuery ? ` matching ${appliedQuery}` : ''}</p>
       {!matching.length && <p className={styles.empty}>nothin bout that</p>}

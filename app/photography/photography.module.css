@@ -57,18 +57,3 @@
   .gallery[data-ready="true"] { animation: none; }
   .photo img { transition: none; }
 }
-
-.sort { display: flex; flex: none; align-items: center; gap: 10px; min-width: 0; margin: 0 0 0 10px; padding: 0; border: 0; white-space: nowrap; font: 12px var(--sans); color: var(--muted); }
-.sortOptions { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(2, 1fr); width: 120px; height: 44px; }
-.sortOptions::before { content: ""; position: absolute; inset: 6px 0; z-index: -2; border-radius: 999px; background: rgba(101, 98, 95, 0.08); }
-.sortOptions::after { content: ""; position: absolute; top: 9px; bottom: 9px; left: 3px; width: calc(50% - 3px); z-index: -1; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(36, 35, 33, 0.12), 0 0 0 1px rgba(36, 35, 33, 0.025); transform: translateX(0); transition: transform 200ms var(--motion-ease-in-out); }
-.sortOptions[data-selected="style"]::after { transform: translateX(100%); }
-.sortOptions label { position: relative; display: grid; place-items: center; height: 44px; cursor: pointer; }
-.sortOptions input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: 0; cursor: pointer; }
-.sortOptions label > span { display: grid; place-items: center; width: calc(100% - 6px); height: 26px; border-radius: 999px; pointer-events: none; transition: transform 120ms var(--motion-ease-out); }
-.sortOptions input:checked + span { color: var(--ink); font-weight: 500; }
-.sortOptions input:active + span { transform: scale(0.97); }
-.sortOptions input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 3px; }
-.sortOptions:has(input:focus-visible)::after { transition: none; }
-@media (max-width: 580px) { .sortCaption { display: none; } }
-@media (prefers-reduced-motion: reduce) { .sortOptions::after, .sortOptions label > span { transition: none; } .sortOptions input:active + span { transform: none; } }
