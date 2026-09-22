@@ -23,6 +23,7 @@ import {
 import type { WindKey, WindSettings } from "./wind";
 import type { WorkGridColumns, WorkHandoff } from "./hero-meadow";
 import type { TopPetMode } from "./top-pet";
+import { PhotoGroupingOptions } from "./photography/photo-grouping";
 import { PhilipPickerToggle } from "./philip-toggle";
 import { VisitorBikeEditor, type VisitorBike } from "./visitor-bike";
 import { GrowthVideoToggle } from "./growth-video-prototype";
@@ -202,6 +203,7 @@ export function MeadowSettings({
           </div>
 
           <GrowthVideoToggle />
+          <PhotoGroupingOptions />
 
           <section className="meadow-settings__section" aria-label="Page layout">
             <h2>Page layout</h2>

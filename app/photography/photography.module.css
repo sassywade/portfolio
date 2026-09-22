@@ -1,8 +1,21 @@
-.page { min-height: 100svh; background: var(--paper); }
+.page { min-height: 100svh; background: var(--paper); overflow: clip; }
 .content { padding: 48px clamp(24px, 5vw, 80px) 100px; }
-.content h1 { margin: 0 0 clamp(32px, 4vw, 56px); font-family: var(--sans); font-size: 20px; font-weight: 400; line-height: 1.3; }
-.gallery { columns: 5; column-gap: clamp(20px, 4vw, 52px); }
-.photo { display: block; width: 100%; padding: 0; margin: 0 0 clamp(20px, 4vw, 52px); border: 0; border-radius: 0; background: #000; break-inside: avoid; cursor: zoom-in; }
+.search { display: flex; align-items: center; gap: 10px; width: min(340px, 100%); min-height: 44px; margin: 0 auto clamp(36px, 4vw, 56px); border-bottom: 1px solid #e4e2de; color: var(--muted); }
+.search:focus-within { border-color: var(--ink); }
+.search svg { flex: none; }
+.search input { width: 100%; min-width: 0; padding: 12px 0; border: 0; outline: none; background: transparent; color: var(--ink); font: 14px var(--sans); border-radius: 0; }
+.search input::placeholder { color: #999691; }
+.search input::-webkit-search-cancel-button { appearance: none; }
+.search button { min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: var(--muted); font: 12px var(--sans); cursor: pointer; }
+.search button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.empty { margin: 0; text-align: center; font-size: 14px; color: var(--muted); }
+.gallery { --columns: 5; position: relative; column-gap: clamp(20px, 4vw, 52px); }
+.gallery[data-ready="false"] { columns: var(--columns); }
+.photo { display: block; width: 100%; padding: 0; margin: 0; border: 0; border-radius: 0; background: #eee; break-inside: avoid; cursor: zoom-in; transform-origin: center; }
+.gallery[data-ready="false"] .photo { margin-bottom: clamp(20px, 4vw, 52px); }
+.gallery[data-ready="true"] .photo { position: absolute; }
+.photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photo[data-visible="false"] { opacity: 0; pointer-events: none; }
 .photo:focus-visible, .close:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; }
 .dialog { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; background: transparent; color: var(--ink); }
 .dialog::backdrop { background: transparent; }
@@ -10,7 +23,7 @@
 .dismiss { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; cursor: zoom-out; }
 .focusedPhoto { position: absolute; inset: 0; margin: auto; width: min(calc(100vw - 48px), calc((100dvh - 144px) * var(--photo-ratio))); height: min(calc((100vw - 48px) / var(--photo-ratio)), calc(100dvh - 144px)); aspect-ratio: var(--photo-ratio); background: #000; transform-origin: top left; pointer-events: none; }
 .close { position: absolute; top: 20px; right: clamp(18px, 4vw, 56px); min-height: 44px; padding: 10px; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
-@media (max-width: 1080px) { .gallery { columns: 4; } }
-@media (max-width: 800px) { .gallery { columns: 3; } }
-@media (max-width: 580px) { .gallery { columns: 2; } }
+@media (max-width: 1080px) { .gallery { --columns: 4; } }
+@media (max-width: 800px) { .gallery { --columns: 3; } }
+@media (max-width: 580px) { .gallery { --columns: 2; } }
 @media (prefers-reduced-motion: reduce) { .focusedPhoto { transform: none; } }

@@ -1616,27 +1616,72 @@ test("Growth pairs ordered onboarding screens with a centered video and fading c
 });
 
 
-test("renders the photography gallery with accessible placeholders and a native focus view", async () => {
+test("renders the tagged photo collection with search and a native focus view", async () => {
   const response = await render("/photography");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
   assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
-  assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
+  assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
+  assert.match(html, /aria-label="Search photos"/);
+  assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
   assert.match(html, /aria-label="Close photograph"/);
 });
 
 
-test("renders the photography gallery with accessible placeholders and a native focus view", async () => {
+test("renders the tagged photo collection with search and a native focus view", async () => {
   const response = await render("/photography");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
   assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
-  assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
+  assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
+  assert.match(html, /aria-label="Search photos"/);
+  assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
   assert.match(html, /aria-label="Close photograph"/);
+});
+
+
+test("photo search matches synonyms and combined tags without changing the catalog", async () => {
+  const { matchesPhoto, clusterPhotos, masonryLayout } = await import("../app/photography/gallery-model.mjs");
+  const photos = JSON.parse(await readFile(new URL("../app/photography/photos.json", import.meta.url), "utf8"));
+  const ids = (query) => photos.filter((photo) => matchesPhoto(photo, query)).map((photo) => photo.id);
+  assert.equal(photos.length, 141);
+  assert.equal(new Set(photos.map((photo) => photo.id)).size, 141);
+  assert.equal(ids("").length, 141);
+  assert.deepEqual(ids("bike"), ids("bicycle"));
+  assert.deepEqual(ids("Japanese"), ids("Japan"));
+  for (const term of ["sunset", "bicycle", "Japan", "city", "street photography"]) assert.ok(ids(term).length > 0, term);
+  const combined = ids("Japan city");
+  assert.ok(combined.length > 0);
+  assert.ok(combined.every((id) => ids("Japan").includes(id) && ids("city").includes(id)));
+  assert.equal(ids("zzzz-no-match").length, 0);
+  for (const photo of photos) {
+    assert.ok(photo.tags.length >= 7 && photo.description && photo.width > 0 && photo.height > 0);
+    assert.ok(Math.abs(photo.ratio - photo.width / photo.height) < 0.00001);
+    await access(new URL(`../public${photo.src}`, import.meta.url));
+    await access(new URL(`../public${photo.thumbnail}`, import.meta.url));
+  }
+  for (const grouping of ["color", "style"]) {
+    const ordered = clusterPhotos(photos, grouping);
+    const key = grouping === "color" ? "color" : "style";
+    const groups = ordered.map((photo) => photo[key]).filter((value, i, all) => i === 0 || value !== all[i - 1]);
+    assert.equal(new Set(groups).size, groups.length, "clusters are contiguous");
+    assert.equal(ordered.length, photos.length);
+    for (const columns of [2, 3, 4, 5]) {
+      const width = columns === 2 ? 342 : 1152;
+      const layout = masonryLayout(ordered, width, columns, 20);
+      const positions = [...layout.positions.values()];
+      assert.equal(positions.length, photos.length);
+      assert.ok(positions.every((position) => position.x >= 0 && position.x + position.width <= width + 0.01));
+      for (let i = 0; i < positions.length; i++) for (let j = i + 1; j < positions.length; j++) {
+        const a = positions[i], b = positions[j];
+        assert.ok(a.x + a.width <= b.x + 0.01 || b.x + b.width <= a.x + 0.01 || a.y + a.height <= b.y + 0.01 || b.y + b.height <= a.y + 0.01, "photos do not overlap");
+      }
+    }
+  }
 });

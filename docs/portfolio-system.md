@@ -226,3 +226,12 @@ About's Life photographs reuse the Photography page's centered viewer through `a
 The Life strip contains 11 photos. Omit the two-person Cathedral hiking photo (`high-country-friends.JPG`); keep the remaining strip centered through its content-sized desktop layout.
 
 The Photo page has no visible Photography heading; the gallery follows the shared header directly.
+
+
+## Searchable photography gallery
+
+The Photo page uses all 141 supplied photographs from the Documents portfolio photos folder. WebP thumbnails and larger viewing copies live in `public/photography`; `app/photography/photos.json` owns dimensions, descriptive alt text, subject/location/style tags, color families, and palettes. The quiet search field uses normalized token matching with synonyms, including bike/bicycle and Japanese/Japan. All search terms must match; clear restores the entire gallery. No tags or category headings are printed over the photos.
+
+Color is the default cluster order. Photography style is an alternative in the Photo prototype picker and the shared meadow prototype picker; the session-local choice carries between pages. Both orderings place similar photos near each other in a shortest-column masonry layout.
+
+Search settles after 170ms of typing. Visible non-matches fall downward with a small rotation over roughly 460–535ms; retained photos move toward their new positions over 560ms. This deliberately slower search motion is explicitly requested, including keyboard typing. Snapshot the current animated positions before retargeting, animate only transforms/opacity, and avoid animating offscreen photos. Reduced motion changes results immediately. Hidden results leave the keyboard and accessibility order; announce the result count quietly. The existing shared centered photo viewer is unchanged.
