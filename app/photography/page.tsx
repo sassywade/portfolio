@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Photography — Neel Saswade" };
 
 export default function PhotographyPage() {
   return (
-    <main className={`site-shell ${styles.page}`}>
+    <main className={`site-shell photography-page ${styles.page}`}>
       <SiteHeader current="photo" />
       <section className={styles.content} aria-label="Photo gallery">
         <PhotographyGallery />

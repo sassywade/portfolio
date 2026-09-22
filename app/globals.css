@@ -13490,7 +13490,10 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
   html[data-work-snap="on"] .work-feature + .work-feature { margin-top: max(200px, 30svh); }
 }
 
-/* Homepage paper color, shared by the meadow handoff and inline Work. */
+/* Shared paper color for Home, Photo, and About. */
+html:has(.about-page, .photography-page) body,
+.about-page,
+.photography-page,
 html:has(.pranathi-intro--home) body,
 .site-shell:has(.pranathi-intro--home),
 .site-shell[data-atmosphere][data-environment-style]:has(.pranathi-intro--home) {

@@ -1693,3 +1693,11 @@ test("photo search matches synonyms and combined tags without changing the catal
     }
   }
 });
+
+
+test("Photo and About share the homepage paper color", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /html:has\(\.about-page, \.photography-page\) body,\s*\.about-page,\s*\.photography-page,[^{]+\{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
+  assert.match(await (await render("/photography")).text(), /class="site-shell photography-page /);
+  assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page"/);
+});
