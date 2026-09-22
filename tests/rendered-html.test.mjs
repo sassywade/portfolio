@@ -1615,6 +1615,8 @@ test("alternate Growth video is the first visit-local prototype and defaults off
 });
 
 test("Growth pairs ordered onboarding screens with a centered video and fading checklist", async () => {
+  const fadeCss = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(fadeCss, /\.work-feature__checklist img \{[^}]*mask-image: linear-gradient\(to bottom, transparent, #000 20%\)/);
   assert.match(await (await render()).text(), /id="work-growth-title">Growth<\/h3>/);
   const html = await (await render()).text();
   const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];

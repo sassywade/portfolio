@@ -13339,6 +13339,8 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   height: auto;
   margin-left: 6%;
   transform: translateY(5%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%);
+  mask-image: linear-gradient(to bottom, transparent, #000 20%);
 }
 .work-feature__checklist::after {
   content: "";
