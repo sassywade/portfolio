@@ -106,7 +106,7 @@ When a new request conflicts with an older experiment, the newest explicit prefe
 
 ## Living terrain
 
-The arrival uses the supplied Epidemic Sound “Wind, Gust, Designed Wind Gust, Leaves, Medium Long” MP3 at public/audio/meadow-wind-leaves.mp3. Play it from the meadow gust event at 65% volume; browser autoplay rejection retains the first-gesture fallback. Do not synthesize a replacement or layer a hum underneath.
+The arrival uses the supplied Epidemic Sound “Wind, Gust, Designed Wind Gust, Leaves, Medium Long” MP3 at public/audio/meadow-wind-leaves.mp3. Predecode it and start at 65% volume from the same callback that applies the traveling gust to the tree. If autoplay was blocked, the first gesture unlocks audio and replays the whole gust; the sound still waits for tree impact. Never play a delayed sound by itself. Do not synthesize a replacement or layer a hum underneath.
 
 The welcome gust must bend the entire meadow, including its dense interior down to the bottom edge. During the passing pulse, redraw a full-height traveling strip of cached turf even without cursor or character contact. Restore the original turf after the pulse. Tip-only motion does not satisfy this behavior.
 

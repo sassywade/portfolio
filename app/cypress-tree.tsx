@@ -62,11 +62,13 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
     if (prefersReducedMotion) return;
 
     let treeArrivalTimer: number | undefined;
-    const welcomeTimer = window.setTimeout(() => {
+    const playWelcomeGust = () => {
       const tree = treeRef.current;
       const currentWind = latestWind.current;
       const ambientWind = Math.max(currentWind.breeze, currentWind.gust * 0.72);
       if (!tree || !latestPlaying.current || document.hidden) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      window.clearTimeout(treeArrivalTimer);
       window.dispatchEvent(new CustomEvent(MEADOW_GUST_EVENT, { detail: {
         startedAt: performance.now(), origin: 0,
         direction: 1,
@@ -82,12 +84,20 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
           strength: ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD ? WELCOME_BREEZE_STRENGTH * 0.65 : WELCOME_BREEZE_STRENGTH,
           duration: WELCOME_BREEZE_DURATION,
         });
+        window.dispatchEvent(new Event("portfolio:welcome-tree-impact"));
       }, treePosition * WELCOME_TRAVEL_MS);
-    }, WELCOME_BREEZE_DELAY);
+    };
+    const welcomeTimer = window.setTimeout(playWelcomeGust, WELCOME_BREEZE_DELAY);
+    const replayWelcomeGust = () => {
+      window.clearTimeout(welcomeTimer);
+      playWelcomeGust();
+    };
+    window.addEventListener("portfolio:replay-welcome-gust", replayWelcomeGust);
 
     return () => {
       window.clearTimeout(welcomeTimer);
       window.clearTimeout(treeArrivalTimer);
+      window.removeEventListener("portfolio:replay-welcome-gust", replayWelcomeGust);
     };
   }, []);
 
