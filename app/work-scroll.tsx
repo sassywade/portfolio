@@ -20,7 +20,7 @@ export function WorkScroll() {
     let idleTimer = 0;
     let scrollFrame = 0;
     const HERO_SETTLE_DURATION = 900;
-    const PROJECT_SETTLE_DURATION = 560;
+    const PROJECT_SETTLE_DURATION = 900;
     const stopScroll = () => {
       cancelAnimationFrame(scrollFrame);
       scrollFrame = 0;
@@ -84,7 +84,7 @@ export function WorkScroll() {
         const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
         // Gentle input may settle toward the next project; strong input keeps its
         // native travel so the user can intentionally move farther.
-        const radius = Math.min(gap * (0.56 - intensity * 0.36), window.innerHeight * (0.6 - intensity * 0.4));
+        const radius = Math.min(gap * (0.68 - intensity * 0.48), window.innerHeight * (0.72 - intensity * 0.52));
         const committed = previous !== undefined && intensity < 0.65
           && Math.abs(gestureStart - previous) <= 80
           && (y - gestureStart) * direction >= gap * 0.18;
