@@ -1231,3 +1231,15 @@ test("all inline project placeholders have 12px corners", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__placeholder \{[^}]*border-radius: 12px/);
 });
+
+
+test("the hero grid fades into plain paper for inline Work", async () => {
+  const [hero, css] = await Promise.all([
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.match(hero, /setProperty\("--work-paper-opacity", dissolveProgress.toFixed\(4\)\)/);
+  assert.match(hero, /removeProperty\("--work-paper-opacity"\)/);
+  assert.match(css, /opacity: var\(--work-paper-opacity, 0\)/);
+  assert.match(css, /\.pranathi-work--editorial \{ background: var\(--paper\); \}/);
+});

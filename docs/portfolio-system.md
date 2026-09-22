@@ -167,3 +167,5 @@ The desktop Work rail starts level with the first mockup, below the Selected wor
 The desktop Work navigation uses 14px Geist and appears once per visit after the first mockups reach 55% of viewport height. Links fade and rise 6px over 600ms with a 150ms initial delay and 50ms stagger. Deep links show navigation immediately; reduced motion uses only a short fade. The mobile horizontal rail stays immediately available, with 13px labels.
 
 All inline Work media placeholders have a 12px corner radius at every viewport size.
+
+The homepage studio grid fades away with the meadow handoff, using the existing dissolve progress to fade in a plain paper layer behind page content. It is fully gone before Proactive Intelligence; all Work sections sit on plain paper. Scrolling back restores the hero grid. Reduced motion follows the existing immediate handoff, and no extra animation loop is added.

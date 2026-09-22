@@ -13268,3 +13268,19 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
     transition-delay: 0ms !important;
   }
 }
+
+/* The studio grid belongs to the meadow; Work settles onto plain paper. */
+.site-shell:has(.pranathi-work--editorial) {
+  position: relative;
+  isolation: isolate;
+}
+.site-shell:has(.pranathi-work--editorial)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--paper);
+  opacity: var(--work-paper-opacity, 0);
+}
+.pranathi-work--editorial { background: var(--paper); }

@@ -200,6 +200,7 @@ export function HeroMeadow() {
     const scene = sceneRef.current;
     const work = document.querySelector<HTMLElement>(".pranathi-work");
     if (!scene || !work) return;
+    const shell = scene.closest<HTMLElement>(".site-shell");
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let viewportHeight = Math.max(1, window.visualViewport?.height ?? window.innerHeight);
@@ -221,6 +222,7 @@ export function HeroMeadow() {
       const ceremonialProgress = Math.pow(smootherProgress, 1.08);
       const dissolveProgress = clamp((smootherProgress - 0.12) / 0.88, 0, 1);
       const treeDissolveProgress = clamp((dissolveProgress - 0.16) / 0.84, 0, 1);
+      shell?.style.setProperty("--work-paper-opacity", dissolveProgress.toFixed(4));
       document.documentElement.dataset.meadowPresent =
         !isStudioStatic && dissolveProgress < 0.95 ? "true" : "false";
       const exitDistance = viewportHeight + Math.max(120, viewportHeight * 0.18);
@@ -350,6 +352,7 @@ export function HeroMeadow() {
       window.visualViewport?.removeEventListener("resize", schedule);
       reducedMotion.removeEventListener("change", schedule);
       delete document.documentElement.dataset.meadowPresent;
+      shell?.style.removeProperty("--work-paper-opacity");
       work.style.removeProperty("--work-handoff-y");
       work.style.removeProperty("--work-handoff-opacity");
       work.style.removeProperty("--work-handoff-scale");
