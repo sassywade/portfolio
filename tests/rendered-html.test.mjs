@@ -1318,7 +1318,7 @@ test("scroll assistance preserves native input, proximity, and escape to the her
     frames.clear();
     callbacks.forEach(callback => callback(1000));
   };
-  win.scrollY = 1700;
+  win.scrollY = 1600;
   wheel(8);
   pause();
   assert.equal(frames.size, 1, "gentle input captures the next project from farther away");
@@ -1330,7 +1330,7 @@ test("scroll assistance preserves native input, proximity, and escape to the her
   assert.equal(frames.size, 0, "stronger input at the same position preserves free travel");
   win.scrollY = 1000;
   wheel(8);
-  win.scrollY = 1250;
+  win.scrollY = 1190;
   wheel(8);
   pause();
   assert.equal(frames.size, 1, "a deliberate gentle departure commits to the next project");
@@ -1338,7 +1338,7 @@ test("scroll assistance preserves native input, proximity, and escape to the her
   assert.equal(win.scrollY, 2000);
   win.scrollY = 2000;
   wheel(-8);
-  win.scrollY = 1750;
+  win.scrollY = 1810;
   wheel(-8);
   pause();
   complete();

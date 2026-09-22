@@ -79,10 +79,10 @@ export function WorkScroll() {
         const previous = targets[index - direction];
         const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
         // Gentle gestures capture broadly; strong swipes keep their native travel.
-        const radius = Math.min(gap * (0.48 - intensity * 0.28), window.innerHeight * (0.5 - intensity * 0.3));
+        const radius = Math.min(gap * (0.56 - intensity * 0.36), window.innerHeight * (0.6 - intensity * 0.4));
         const committed = previous !== undefined && intensity < 0.65
           && Math.abs(gestureStart - previous) <= 80
-          && (y - gestureStart) * direction >= gap * 0.22;
+          && (y - gestureStart) * direction >= gap * 0.18;
         return distance <= radius || committed;
       });
       if (targetIndex >= 0) settle(sections[targetIndex], true, 280);
