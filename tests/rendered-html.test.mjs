@@ -1292,10 +1292,11 @@ test("Proactive Intelligence pairs popup artwork with the default card wheel", a
   assert.match(motion, /\["wheel", "rolodex", "grid"\]/);
   assert.match(motion, /visible && !reduced/);
   assert.doesNotMatch(motion, /rotateX|perspective\(600px\)|scale\(/);
-  assert.match(motion, /150 \* Math.sin/);
+  assert.match(motion, /180 \* Math.sin/);
+  assert.match(motion, /const angle = offset \* 7/);
   assert.match(motion, /Flip wheel/);
   assert.match(motion, /let flipped = false/);
-  assert.match(motion, /side \* 150 \* \(Math.cos/);
+  assert.match(motion, /side \* 180 \* \(Math.cos/);
   assert.match(motion, /side \* angle/);
   assert.match(motion, /clearInterval\(timer\)/);
   assert.match(motion, /document\.hidden/);
