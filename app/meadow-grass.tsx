@@ -260,6 +260,17 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       // Animate the dense turf too, within bounded wind/contact patches.
       const patches = footprints.map((foot) => ({ x: foot.x - foot.radius - 22, y: foot.y - foot.radius - 22, w: (foot.radius + 22) * 2, h: (foot.radius + 22) * 2 }));
       if (brush && moving) patches.push({ x: brush.x - 146, y: brush.y - 108, w: 292, h: 216 });
+      // The arrival must invalidate the dense turf too, even with no pointer.
+      // Sweep a full-height strip through every visible column of the meadow.
+      if (moving && gust) {
+        const elapsed = now - gust.startedAt;
+        if (elapsed >= 0 && elapsed <= WELCOME_TRAVEL_MS + gust.duration) {
+          const span = gust.span ?? 1;
+          const left = Math.max(0, (gust.origin + Math.max(0, (elapsed - gust.duration) / WELCOME_TRAVEL_MS) * span) * width - 80);
+          const right = Math.min(width, (gust.origin + Math.min(1, elapsed / WELCOME_TRAVEL_MS) * span) * width + 80);
+          if (right > left) patches.push({ x: left, y: 0, w: right - left, h: height });
+        }
+      }
       // Restore only last/current dirty regions; the rest of the turf stays put.
       if (previousPatches.length || patches.length) {
         ctx.save();
@@ -301,7 +312,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         for (const row of [...rows].sort((a, b) => a - b)) for (const blade of [...(columns.get(row) ?? [])].flatMap(column => groundCells.get(row)?.get(column) ?? []).sort((a, b) => a.order - b.order)) {
           const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
           const crestFlex = blade.crestFlex;
-          const flow = moving ? elasticWind(blade.x) * crestFlex + arrivalGrassWind(now, blade.x / width, gust) * (1 - crestFlex) + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
+          const flow = moving ? elasticWind(blade.x) * crestFlex + arrivalGrassWind(now, blade.x / width, gust) * 1.6 * (1 - crestFlex) + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
           paintGround(ctx, blade, pressure, direction, flow);
         }
         ctx.restore();

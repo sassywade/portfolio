@@ -106,6 +106,8 @@ When a new request conflicts with an older experiment, the newest explicit prefe
 
 ## Living terrain
 
+The welcome gust must bend the entire meadow, including its dense interior down to the bottom edge. During the passing pulse, redraw a full-height traveling strip of cached turf even without cursor or character contact. Restore the original turf after the pulse. Tip-only motion does not satisfy this behavior.
+
 The painterly default now includes thousands of fine grass blades sampled from the rolling terrain's opaque green pixels. Roots and colors follow the supplied hill exactly, with perspective-scaled blades and the same image registration. Grass and cypress share a spatial wind field driven by the existing Alamo Square weather observations; the canopy responds with slower branch inertia and finer foliage groups. Keep the white studio grid and existing composition. Grass remains isolated from the flat and alternate art styles. Both renderers suspend animation when paused, offscreen, in a hidden tab, or under reduced motion; the original terrain remains a complete fallback.
 
 The default rolling painterly meadow is now made entirely of generated grass. A dense baked layer of short blades supports the moving tips; both use the reference image only for root placement and color sampling. Hide the reference image after the blade field is ready, retaining it only as a loading/error/no-JavaScript fallback. The Grass meadow toggle in the prototype picker switches between this grass-only field and the original image with no grass overlay. Both modes retain the cypress. The toggle is on by default, visit-local, and applies only to the rolling painterly scene.
