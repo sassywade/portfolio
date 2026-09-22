@@ -209,7 +209,7 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.match(about, /className="about-page__greeting">Nice to meet you<\/h2>/);
-  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--muted\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
+  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: #373530;[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
   assert.match(about, /aria-label="CV"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
