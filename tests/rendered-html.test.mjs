@@ -1353,7 +1353,7 @@ test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts
   }
   assert.equal((section.match(/data-artifact-panel=/g) ?? []).length, 3);
   assert.doesNotMatch(section, /work-feature__placeholder|assets coming soon/);
-  assert.match(section, /Making the jump from chat to editable work/);
+  assert.match(section, /I led design for Artifacts from its early launch through its growth to nearly 200K weekly active users/);
 });
 
 test("dark work tiles are an opt-in, work-only prototype", async () => {
