@@ -1,7 +1,7 @@
 .page { min-height: 100svh; background: var(--paper); overflow: clip; }
 .content { padding: 48px clamp(24px, 5vw, 80px) 100px; }
-.search { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; margin: 0 auto clamp(36px, 4vw, 56px); border-bottom: 1px solid #e4e2de; color: var(--muted); }
-.search:focus-within { border-color: var(--ink); }
+.search { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; margin: 0 auto clamp(36px, 4vw, 56px); color: var(--muted); }
+.search:focus-within > svg { color: var(--ink); }
 .search svg { flex: none; }
 .search input { width: 100%; min-width: 0; padding: 12px 0; border: 0; outline: none; background: transparent; color: var(--ink); font: 14px/20px var(--sans); border-radius: 0; }
 .search input::placeholder { color: #999691; }
@@ -36,16 +36,17 @@
 .searchField { position: relative; flex: 1; min-width: 0; }
 .searchPrompt { position: absolute; inset: 0; display: flex; align-items: center; gap: 4px; color: #999691; font: 14px var(--sans); pointer-events: none; visibility: hidden; }
 .searchPromptWords { display: grid; }
-.searchPromptWords > span { grid-area: 1 / 1; animation: searchPromptCycle 9s var(--motion-ease-in-out) infinite; animation-play-state: paused; }
-.searchPromptWords > span:nth-child(2) { animation-delay: -6s; }
-.searchPromptWords > span:nth-child(3) { animation-delay: -3s; }
+.searchPromptWords > span { grid-area: 1 / 1; animation: searchPromptCycle 12s var(--motion-ease-in-out) infinite; animation-play-state: paused; }
+.searchPromptWords > span:nth-child(2) { animation-delay: -9s; }
+.searchPromptWords > span:nth-child(3) { animation-delay: -6s; }
+.searchPromptWords > span:nth-child(4) { animation-delay: -3s; }
 .search[data-empty="true"]:not(:focus-within) .searchPrompt { visibility: visible; }
 .search[data-empty="true"]:not(:focus-within) input::placeholder { color: transparent; }
 .search[data-empty="true"][data-viewing="false"]:not(:focus-within) .searchPrompt[data-running="true"] .searchPromptWords > span { animation-play-state: running; }
 @keyframes searchPromptCycle {
-  0%, 31.111% { opacity: 1; transform: translateY(0); }
-  33.333%, 97.777% { opacity: 0; transform: translateY(-30%); }
-  97.778% { opacity: 0; transform: translateY(30%); }
+  0%, 23.333% { opacity: 1; transform: translateY(0); }
+  25%, 98.333% { opacity: 0; transform: translateY(-30%); }
+  98.334% { opacity: 0; transform: translateY(30%); }
   100% { opacity: 1; transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) {

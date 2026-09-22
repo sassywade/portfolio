@@ -25,7 +25,7 @@ export function SearchPrompt() {
   return (
     <span ref={prompt} className={styles.searchPrompt} data-running={running} aria-hidden="true">
       Search <span className={styles.searchPromptWords}>
-        <span>bikes</span><span>city</span><span>sunsets</span>
+        <span>photos</span><span>bikes</span><span>city</span><span>sunsets</span>
       </span>
     </span>
   );
