@@ -13247,6 +13247,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   border-radius: 12px;
   background: #f2f2f2;
 }
+#work-snap .work-feature__asset-group { background: #ECECEC; }
 .work-feature__asset-phones {
   display: flex;
   min-height: 0;

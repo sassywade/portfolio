@@ -1227,6 +1227,11 @@ test("work rail reveals once after entering the first project and respects reduc
 });
 
 
+test("Snapchat image panels use the requested neutral background", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /#work-snap \.work-feature__asset-group \{ background: #ECECEC; \}/);
+});
+
 test("all inline project placeholders have 12px corners", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__placeholder \{[^}]*border-radius: 12px/);
