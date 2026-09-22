@@ -13321,6 +13321,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   width: 94%;
   height: auto;
   margin-left: 6%;
+  transform: translateY(5%);
 }
 .work-feature__checklist::after {
   content: "";

@@ -166,6 +166,8 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+The Growth starter-kit mock sits slightly lower: translate its image downward by 5% of its own height. Keep its size, horizontal inset, tile, and top fade unchanged.
+
 Growth's right panel now uses the supplied cropped UI.png checklist, at 94% panel width with a 6% left inset and its top aligned to the tile. Preserve its baked shadow and bottom profile. A static 18%-height top gradient fades from the #ECECEC tile to transparent before reaching the checklist text. This replaces the empty right panel; the original and alternate center videos remain unchanged.
 
 Growth's left 271×500 panel now stacks the supplied onboarding screens in order: Welcome, Extension, Bookmark. Keep the complete 980×592 PNGs and their baked shadows at 90% panel width, vertically centered as a group on #ECECEC. The right panel stays empty in the same gray until its assets arrive. Preserve the centered video and its prototype toggle.

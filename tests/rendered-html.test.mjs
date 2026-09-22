@@ -1609,6 +1609,7 @@ test("Growth pairs ordered onboarding screens with a centered video and fading c
   assert.match(css, /grid-template-columns: minmax\(0, 271fr\) minmax\(0, 563fr\) minmax\(0, 271fr\)/);
   assert.match(css, /column-gap: calc\(100% \* 20 \/ 1145\)/);
   assert.match(css, /\.work-feature__checklist::after \{[^}]*height: 18%;[^}]*pointer-events: none;[^}]*linear-gradient/);
+  assert.match(css, /\.work-feature__checklist img \{[^}]*transform: translateY\(5%\)/);
 });
 
 
