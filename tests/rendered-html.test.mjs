@@ -1177,8 +1177,8 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
-  assert.equal((gallery.match(/id: "/g) ?? []).length, 11);
-  assert.doesNotMatch(gallery, /high-country-friends/);
+  assert.equal((gallery.match(/id: "/g) ?? []).length, 10);
+  assert.doesNotMatch(gallery, /high-country-friends|ride-through-the-grass/);
   assert.match(gallery, /usePhotoViewer/);
   assert.match(gallery, /frame: "film"/);
   assert.match(photography, /usePhotoViewer/);

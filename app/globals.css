@@ -13589,3 +13589,31 @@ html:has(.pranathi-intro--home) body,
     z-index: 0;
   }
 }
+
+/* Keep the About page compact enough to read as one desktop composition. */
+@media (min-width: 701px) {
+  .about-page__gallery {
+    margin-top: clamp(44px, 5vw, 68px);
+  }
+
+  .about-page__gallery > h2 {
+    margin-bottom: 14px;
+  }
+
+  .about-page__gallery-track {
+    width: min(100%, 860px);
+    margin-inline: auto;
+    padding: 4px 0 10px;
+  }
+
+  .about-page__gallery-track .film-photo,
+  .about-page__gallery-track .film-photo--landscape {
+    flex-basis: clamp(82px, 5.8vw, 104px);
+    width: clamp(82px, 5.8vw, 104px);
+    margin-left: -18px;
+  }
+
+  .about-page__gallery-track .film-photo:first-child {
+    margin-left: 0;
+  }
+}
