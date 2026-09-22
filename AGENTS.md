@@ -19,7 +19,7 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 - The homepage background is white with the subtle studio grid.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.
-- Work is an inline editorial sequence with titles and metadata above black media placeholders and summaries below. Preserve the existing Reveal entrance and hero handoff. A sticky project rail tracks the section in view; mobile uses a horizontal rail.
+- Work is an inline editorial sequence with titles and metadata above black media placeholders and summaries below. Preserve the existing Reveal entrance and hero handoff. A sticky project rail tracks the section in view; hide the rail below 1080px instead of showing mobile navigation.
 - The homepage shows five major sections: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap (combining Treasure and NFTs as Lenses). Work links jump to sections rather than individual case-study pages.
 - Until new assets arrive, use black rectangles. Split compositions scale from a 1145×500 canvas: 708×500 beside two 417×240 panels with 20px gaps. Single media uses 1145×550; Growth uses three columns and Snap two.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.

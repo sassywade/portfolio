@@ -13244,9 +13244,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 }
 @media (max-width: 1079px) {
   .work-editorial { display: block; }
-  .work-editorial__rail { position: sticky; top: 0; z-index: 10; padding: 12px 0; background: var(--paper); }
-  .work-section-nav { display: flex; gap: 24px; overflow-x: auto; padding: 8px 4px; scrollbar-width: none; }
-  .work-section-nav a { flex-shrink: 0; }
+  .work-editorial__rail { display: none; }
   .work-editorial__label { margin-top: 32px; }
 }
 @media (max-width: 600px) {
@@ -13255,7 +13253,6 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   .work-feature__meta { margin-top: 14px; gap: 24px; font-size: 12px; }
   .work-feature__media { gap: 8px; }
   .work-feature__summary { margin-top: 16px; font-size: 14px; }
-  .work-section-nav a { font-size: 13px; }
 }
 /* Clip artwork without creating a scroll container that traps the sticky rail. */
 .site-shell:has(.pranathi-work--editorial) { overflow: clip; }

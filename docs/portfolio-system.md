@@ -160,11 +160,11 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
-The homepage now presents five major project sections in this order: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap. This supersedes the card-grid defaults above. `featuredWork` in `app/projects.ts` owns their copy, order, and media layouts. `WorkSections` renders titles and metadata above black placeholders, with summaries below. `WorkNav` uses same-page anchors and marks the section at the reading position; its desktop rail stays within Work and becomes a horizontal sticky rail on smaller screens. Existing Reveal entrances and hero handoff remain unchanged. Split layouts scale from 1145×500, with a 708×500 main panel, two 417×240 panels, and 20px gaps. A single-panel layout uses 1145×550. Growth has three equal panels and Snap two unequal panels. Await new assets; do not reinsert previous covers or recordings. Legacy case-study URLs redirect to matching homepage anchors.
+The homepage now presents five major project sections in this order: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap. This supersedes the card-grid defaults above. `featuredWork` in `app/projects.ts` owns their copy, order, and media layouts. `WorkSections` renders titles and metadata above black placeholders, with summaries below. `WorkNav` uses same-page anchors and marks the section at the reading position; its desktop rail stays within Work and is hidden below 1080px when the left navigation no longer fits. Existing Reveal entrances and hero handoff remain unchanged. Split layouts scale from 1145×500, with a 708×500 main panel, two 417×240 panels, and 20px gaps. A single-panel layout uses 1145×550. Growth has three equal panels and Snap two unequal panels. Await new assets; do not reinsert previous covers or recordings. Legacy case-study URLs redirect to matching homepage anchors.
 
-The desktop Work rail starts level with the first mockup, below the Selected work label and project heading. Its sticky resting offset matches the 90px section anchor offset plus the responsive heading line and 26px media gap, rather than a viewport-height percentage. Keep the mobile horizontal rail unchanged.
+The desktop Work rail starts level with the first mockup, below the Selected work label and project heading. Its sticky resting offset matches the 90px section anchor offset plus the responsive heading line and 26px media gap, rather than a viewport-height percentage. Hide the rail below 1080px.
 
-The desktop Work navigation uses 14px Geist and appears once per visit after the first mockups reach 55% of viewport height. Links fade and rise 6px over 600ms with a 150ms initial delay and 50ms stagger. Deep links show navigation immediately; reduced motion uses only a short fade. The mobile horizontal rail stays immediately available, with 13px labels.
+The desktop Work navigation uses 14px Geist and appears once per visit after the first mockups reach 55% of viewport height. Links fade and rise 6px over 600ms with a 150ms initial delay and 50ms stagger. Deep links show navigation immediately; reduced motion uses only a short fade. Smaller screens have no project navigation rail.
 
 All inline Work media placeholders have a 12px corner radius at every viewport size.
 
@@ -176,4 +176,4 @@ Work uses guided project scrolling: each deliberate desktop wheel gesture moves 
 
 Work metadata keeps a 6px gap between the Glean logo and its text label.
 
-The Work rail uses one shared active dot that glides between labels over 250ms with the shared ease-in-out curve. It follows measured link positions on desktop and mobile, retargets smoothly, and moves immediately for reduced motion and focused keyboard navigation.
+The Work rail uses one shared active dot that glides between labels over 250ms with the shared ease-in-out curve. It follows measured link positions on desktop, retargets smoothly, and moves immediately for reduced motion and focused keyboard navigation.

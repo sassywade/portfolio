@@ -1286,3 +1286,9 @@ test("Work rail uses one moving indicator with reduced-motion support", async ()
   assert.match(css, /transform 250ms var\(--motion-ease-in-out\)/);
   assert.match(css, /prefers-reduced-motion: reduce[^}]*work-section-nav__dot[^}]*transition: opacity 150ms linear/s);
 });
+
+
+test("project navigation is hidden when the left rail does not fit", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /@media \(max-width: 1079px\) \{\s*\.work-editorial \{[^}]*\}\s*\.work-editorial__rail \{ display: none; \}/);
+});
