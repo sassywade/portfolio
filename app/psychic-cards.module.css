@@ -12,8 +12,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 72%;
-  height: auto;
+  width: 82%;
+  height: calc(82cqw * 271 / 1229);
+  object-fit: contain;
   display: block;
   transition: transform 750ms var(--ease-in-out, cubic-bezier(.77, 0, .175, 1)), opacity 250ms ease;
 }
@@ -23,16 +24,7 @@
 @keyframes card-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .stage[data-running="false"] .swap { animation-play-state: paused; }
 .stage[data-running="false"] .card { transition: none; }
-.pause {
-  position: absolute; right: 8px; bottom: 7px; z-index: 2;
-  border: 0; border-radius: 5px; padding: 4px 7px;
-  background: rgb(236 236 236 / 90%); color: #62605c;
-  font: 11px/1.2 var(--sans); cursor: pointer;
-}
-.pause:focus-visible { outline: 2px solid #43413e; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .card { transition: none; }
   .swap { animation: none; }
-  .pause { display: none; }
 }
-

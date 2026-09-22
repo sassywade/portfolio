@@ -36,7 +36,6 @@ function CardStage({ mode }: { mode: Mode }) {
   const [step, setStep] = useState(0);
   const [visible, setVisible] = useState(false);
   const [reduced, setReduced] = useState(true);
-  const [paused, setPaused] = useState(false);
   useEffect(() => {
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReduced(preference.matches);
@@ -49,7 +48,7 @@ function CardStage({ mode }: { mode: Mode }) {
     document.addEventListener("visibilitychange", visibility);
     return () => { observer.disconnect(); preference.removeEventListener("change", update); document.removeEventListener("visibilitychange", visibility); };
   }, []);
-  const running = visible && !reduced && !paused;
+  const running = visible && !reduced;
   useEffect(() => {
     if (!running) return;
     const timer = setInterval(() => setStep(value => value + 1), mode === "grid" ? 1400 : 3400);
@@ -71,13 +70,11 @@ function CardStage({ mode }: { mode: Mode }) {
         const angle = offset * 10;
         const radians = angle * Math.PI / 180;
         const transform = mode === "wheel"
-          ? "translate(-50%, -50%) translate(" + (90 * (Math.cos(radians) - 1)).toFixed(3) + "cqw, " + (90 * Math.sin(radians)).toFixed(3) + "cqw) rotate(" + angle + "deg)"
-          : "translate(-50%, -50%) translateY(" + (offset * 14.7) + "cqw) perspective(600px) rotateX(" + (-offset * 12) + "deg) scale(" + Math.max(.8, 1 - Math.abs(offset) * .035) + ")";
+          ? "translate(-50%, -50%) translate(" + (165 * (Math.cos(radians) - 1)).toFixed(3) + "cqw, " + (165 * Math.sin(radians)).toFixed(3) + "cqw) rotate(" + angle + "deg)"
+          : "translate(-50%, -50%) translateY(" + (offset * 23) + "cqw) rotate(" + (offset * 2) + "deg)";
         return <img key={src} className={styles.card} src={src} alt="" aria-hidden="true" loading="lazy"
           style={{ transform, opacity: Math.abs(offset) > 4 ? 0 : 1, transition: Math.abs(offset) > 4 ? "none" : undefined }} />;
       })}
     </div>
-    <button type="button" className={styles.pause} aria-label={paused ? "Play proactive card animation" : "Pause proactive card animation"} aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? "Play" : "Pause"}</button>
   </div>;
 }
-

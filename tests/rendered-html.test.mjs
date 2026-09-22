@@ -1287,10 +1287,12 @@ test("Proactive Intelligence pairs popup artwork with the default card wheel", a
   assert.match(css, /\.work-feature__popups img \{[^}]*width: 86%/);
   assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 0);
   assert.match(psychic, /data-mode="wheel"/);
-  assert.match(psychic, /Pause proactive card animation/);
+  assert.doesNotMatch(psychic, /Pause proactive card animation/);
   const motion = await readFile(new URL("../app/psychic-cards.tsx", import.meta.url), "utf8");
   assert.match(motion, /\["wheel", "rolodex", "grid"\]/);
-  assert.match(motion, /visible && !reduced && !paused/);
+  assert.match(motion, /visible && !reduced/);
+  assert.doesNotMatch(motion, /rotateX|perspective\(600px\)|scale\(/);
+  assert.match(motion, /165 \* Math.sin/);
   assert.match(motion, /clearInterval\(timer\)/);
   assert.match(motion, /document\.hidden/);
   assert.match(motion, /prefers-reduced-motion: reduce/);
