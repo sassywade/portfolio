@@ -105,9 +105,12 @@ export function Soundscape() {
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let entranceSoundStarted = reducedMotion;
+    let entranceSoundStarting = false;
     const startEntranceSound = async (userInitiated = true) => {
-      if (entranceSoundStarted) return;
+      if (entranceSoundStarted || entranceSoundStarting) return;
+      entranceSoundStarting = true;
       entranceSoundStarted = await playWindSound(userInitiated);
+      entranceSoundStarting = false;
       if (entranceSoundStarted) {
         setShowWindControl(false);
         removeGestureListeners();
