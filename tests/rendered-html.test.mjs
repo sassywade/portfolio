@@ -1196,6 +1196,9 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
   assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
   assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
+  assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(28px, 4vw, 56px\)/);
+  assert.match(css, /\.about-page__gallery-track\s*\{[\s\S]*width: 100%;[\s\S]*max-width: none;/);
+  assert.match(css, /flex-basis: calc\(\(100% \+ 18px\) \/ 10\);/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
