@@ -13206,6 +13206,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   font: 14px/1.4 var(--sans);
 }
 .work-feature__meta .hero-company { gap: 6px; }
+.work-feature__meta .hero-company--glean { display: inline-flex; align-items: center; gap: 6px; }
 .work-feature__media {
   display: grid;
   grid-template-columns: 708fr 417fr;

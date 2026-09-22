@@ -1266,3 +1266,9 @@ test("guided project scrolling preserves native escape paths and centers section
   assert.match(scroll, /window.removeEventListener\("wheel", wheel\)/);
   assert.match(css, /prefers-reduced-motion: reduce[^}]*scroll-snap-type: none/s);
 });
+
+
+test("Glean work metadata separates the logo and label", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__meta \.hero-company--glean \{[^}]*display: inline-flex;[^}]*gap: 6px/);
+});
