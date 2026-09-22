@@ -1281,6 +1281,21 @@ test("homepage presents five inline projects with black placeholders and anchor 
   assert.doesNotMatch(html, /class="project-work-video/);
 });
 
+test("dark work tiles are an opt-in, work-only prototype", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /data-dark-tiles="false"/);
+  const source = await readFile(new URL("../app/work-tile-prototype.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/work-tile-prototype.module.css", import.meta.url), "utf8");
+  assert.match(source, /let dark = false/);
+  assert.match(source, /aria-label="Dark work tiles" aria-pressed={enabled}/);
+  assert.doesNotMatch(source, /localStorage|sessionStorage/);
+  assert.match(css, /work-feature__media\) > \*/);
+  assert.match(css, /#work-snap/);
+  assert.match(css, /background: #1c1c1c/);
+  assert.match(css, /work-feature__checklist/);
+  assert.match(css, /color: #c9c9c6/);
+});
+
 test("Proactive Intelligence pairs popup artwork with the larger default Rolodex", async () => {
   const html = await (await render()).text();
   const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];

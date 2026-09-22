@@ -171,6 +171,8 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+Dark work tiles is an off-by-default, visit-local prototype picker option. It changes every inline work tile surface to #1C1C1C without changing the page, artwork, video pixels, layout, or motion. The Growth checklist fade uses the same dark color, and Snap captions become light gray. Turning it off restores each original surface; reloading resets it.
+
 The Proactive card motion picker shows a visit-local Flip wheel toggle only in Wheel mode. It mirrors the wheel’s horizontal arc and card rotation, not the artwork or vertical travel. Keep the original left-side center as default; Rolodex and Grid are unaffected.
 
 Wheel cards use an 82%-width, 1229:271 box with contain sizing and no perspective or scaling. The wheel radius is 420cqw at 2.8-degree steps: a broad, shallow arc that reduces triangular outer gaps while preserving separation at the inner ends. Keep the same geometry in either wheel direction. Rolodex is the default, with 80%-width cards to visually match the popup above and proportional 16.35cqw vertical steps. Preserve its intrinsic height, 600px perspective, 12-degree rotateX steps and gentle depth scaling. Never replace Rolodex depth with sideways wheel rotation or apply wheel size changes to it. No Pause button is shown; visibility and reduced-motion suspension remain active.
