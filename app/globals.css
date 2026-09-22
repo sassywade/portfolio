@@ -13645,7 +13645,7 @@ html:has(.pranathi-intro--home) body,
   }
 
   .about-page__gallery-track {
-    width: min(100%, 860px);
+    width: min(100%, 820px);
     max-width: 100%;
     margin-inline: auto;
     padding: 4px 0 10px;
@@ -13653,9 +13653,9 @@ html:has(.pranathi-intro--home) body,
 
   .about-page__gallery-track .film-photo,
   .about-page__gallery-track .film-photo--landscape {
-    flex-basis: clamp(82px, 5.8vw, 104px);
-    width: clamp(82px, 5.8vw, 104px);
-    margin-left: -18px;
+    flex-basis: clamp(80px, 5.4vw, 98px);
+    width: clamp(80px, 5.4vw, 98px);
+    margin-left: -17px;
   }
 
   .about-page__gallery-track .film-photo:first-child {
