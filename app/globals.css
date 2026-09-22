@@ -13618,16 +13618,16 @@ html:has(.pranathi-intro--home) body,
   }
 
   .about-page__gallery-track {
-    width: 100%;
-    max-width: none;
-    margin-inline: 0;
+    width: min(100%, 860px);
+    max-width: 100%;
+    margin-inline: auto;
     padding: 4px 0 10px;
   }
 
   .about-page__gallery-track .film-photo,
   .about-page__gallery-track .film-photo--landscape {
-    flex-basis: calc((100% + 18px) / 10);
-    width: calc((100% + 18px) / 10);
+    flex-basis: clamp(82px, 5.8vw, 104px);
+    width: clamp(82px, 5.8vw, 104px);
     margin-left: -18px;
   }
 
