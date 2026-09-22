@@ -6200,7 +6200,7 @@ html:not([data-meadow-present="true"]) .smiley-cursor {
 .pranathi-name {
   margin-bottom: 13px;
   color: var(--muted);
-  font: italic clamp(26px, 2.3vw, 36px) / 1.15 var(--serif);
+  font: italic 36px / 1.15 var(--serif);
   letter-spacing: normal;
 }
 
@@ -6610,7 +6610,7 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   }
 
   .pranathi-name {
-    font-size: clamp(26px, 2.3vw, 36px);
+    font-size: 36px;
   }
 
   .pranathi-bio {

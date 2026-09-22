@@ -25,7 +25,7 @@ async function render(path = "/") {
 
 test("hero typography preserves the reference sizes and responsive line break", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic clamp\(26px, 2\.3vw, 36px\) \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
+  assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
   assert.match(css, /@media \(max-width: 787px\)\s*\{\s*\.hero-copy-break\s*\{\s*display: none;/);
@@ -1092,7 +1092,7 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /\.site-header__wordmark,[\s\S]*?\.site-header--pages \.site-nav\s*\{[^}]*font-size:\s*clamp\(15px, 1\.1vw, 18px\)/);
   assert.match(css, /\.site-header--pages\s*\{[^}]*gap:\s*32px;[^}]*padding-top:\s*30px/);
-  assert.match(css, /\.pranathi-name\s*\{[^}]*font-size:\s*clamp\(26px, 2\.3vw, 36px\)/);
+  assert.match(css, /\.pranathi-name\s*\{[^}]*font-size:\s*36px/);
   assert.match(css, /\.pranathi-bio\s*\{[^}]*font-size:\s*20px/);
   assert.match(css, /min-height:\s*100svh/);
   assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
