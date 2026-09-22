@@ -734,7 +734,8 @@ test("uses only the standard Cuelume Declarative profile on every action", async
   assert.match(soundscape, /element\.dataset\.cuelumeRelease = "release"/);
   assert.match(soundscape, /new MutationObserver/);
   assert.match(soundscape, /playWindSound/);
-  assert.match(soundscape, /lowpass/);
+  assert.match(soundscape, /meadow-wind-leaves\.mp3/);
+  assert.doesNotMatch(soundscape, /createOscillator|createBufferSource/);
   assert.doesNotMatch(soundscape, /createOscillator|174|261/);
   assert.match(soundscape, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(soundscape, /addEventListener\("pointerdown", startEntranceSound, \{ once: true/);
