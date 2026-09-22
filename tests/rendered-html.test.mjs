@@ -1205,3 +1205,10 @@ test("homepage presents five inline projects with black placeholders and anchor 
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
 });
+
+
+test("desktop work rail aligns with the mockups instead of viewport height", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-editorial__rail \{\s*padding-top: calc\(25\.2px \+ clamp\(80px, 9vw, 150px\) \+ clamp\(29\.9px, 2\.645vw, 41\.4px\) \+ 26px\)/);
+  assert.match(css, /\.work-section-nav \{\s*position: sticky;\s*top: calc\(90px \+ clamp\(29\.9px, 2\.645vw, 41\.4px\) \+ 26px\)/);
+});

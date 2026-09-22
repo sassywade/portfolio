@@ -13153,10 +13153,12 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   color: var(--muted);
   font: italic 18px/1.4 var(--serif);
 }
-.work-editorial__rail { padding-top: clamp(130px, 13vw, 206px); }
+.work-editorial__rail {
+  padding-top: calc(25.2px + clamp(80px, 9vw, 150px) + clamp(29.9px, 2.645vw, 41.4px) + 26px);
+}
 .work-section-nav {
   position: sticky;
-  top: 32vh;
+  top: calc(90px + clamp(29.9px, 2.645vw, 41.4px) + 26px);
   display: grid;
   gap: 16px;
 }
