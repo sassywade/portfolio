@@ -181,3 +181,5 @@ The Work rail uses one shared active dot that glides between labels over 250ms w
 Proactive Intelligence now uses the supplied psychic.mov in its main panel. The encoded MP4 crops the 1444×1024 recording to its white 1416×1000 content at x=14, y=14, matching 708×500 at 2× resolution with no black border. It uses the existing muted, inline looping playback that pauses offscreen and shows a poster for reduced motion. Other panels remain black placeholders.
 
 The homepage paper background is #F5F5F4 across the hero and inline Work, including the grid-fade layer. Video pixels remain part of the supplied asset.
+
+Project transitions use an interruptible 850ms centered scroll with the calm cubic-bezier(0.32, 0.72, 0, 1) curve. Media panels fade and rise 18px in sequence with 80ms stagger; leaving clears delays. Keyboard, touch, pointer interaction, resize, and reduced motion stop the scripted scroll. Reduced motion leaves media static.

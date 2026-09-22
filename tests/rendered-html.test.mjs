@@ -1306,3 +1306,17 @@ test("homepage uses the requested warm paper background", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.site-shell\[data-atmosphere\]\[data-environment-style\]:has\(\.pranathi-intro--home\) \{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
 });
+
+
+test("project transitions settle gradually with staggered media and interruptible scrolling", async () => {
+  const [scroll, css] = await Promise.all([
+    readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.match(scroll, /const duration = 850/);
+  assert.match(scroll, /cancelAnimationFrame\(scrollFrame\)/);
+  assert.match(scroll, /removeEventListener\("pointerdown", stopScroll\)/);
+  assert.match(css, /prefers-reduced-motion: no-preference[^}]*work-feature__media/s);
+  assert.match(css, /work-feature__media > :nth-child\(3\) \{ transition-delay: 240ms/);
+  assert.match(css, /data-in-view="false"\] \.work-feature__media > \* \{[^}]*transition-delay: 0ms/s);
+});

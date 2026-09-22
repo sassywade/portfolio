@@ -13313,7 +13313,7 @@ html[data-work-snap="on"] .work-feature {
   html[data-work-snap="on"] .work-feature > .reveal[data-reveal-ready="true"] {
     opacity: 1;
     transform: none;
-    transition: opacity 400ms var(--motion-ease-out), transform 600ms var(--motion-ease-out);
+    transition: opacity 650ms var(--motion-ease-out), transform 850ms var(--motion-ease-out);
   }
   html[data-work-snap="on"] .work-feature[data-in-view="false"] > .reveal[data-reveal-ready="true"] {
     opacity: 0.35;
@@ -13336,4 +13336,22 @@ html:has(.pranathi-intro--home) body,
 .site-shell[data-atmosphere][data-environment-style]:has(.pranathi-intro--home) {
   --paper: #f5f5f4;
   background-color: #f5f5f4;
+}
+
+/* Media settles in sequence, with no stagger when leaving a project. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-work-snap="on"] .work-feature .work-feature__media > * {
+    opacity: 1;
+    transform: none;
+    transition: opacity 700ms var(--motion-ease-out), transform 850ms var(--motion-ease-out);
+    transition-delay: 80ms;
+  }
+  html[data-work-snap="on"] .work-feature .work-feature__media > :nth-child(2) { transition-delay: 160ms; }
+  html[data-work-snap="on"] .work-feature .work-feature__media > :nth-child(3) { transition-delay: 240ms; }
+  html[data-work-snap="on"] .work-feature[data-in-view="false"] .work-feature__media > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition-duration: 220ms;
+    transition-delay: 0ms;
+  }
 }

@@ -17,13 +17,46 @@ export function WorkScroll() {
     let consumed = false;
     let movingUntil = 0;
 
+    let scrollFrame = 0;
+    const stopScroll = () => {
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = 0;
+      movingUntil = 0;
+      consumed = false;
+    };
+    // Match the calm drawer curve: cubic-bezier(0.32, 0.72, 0, 1).
+    const easeScroll = (progress: number) => {
+      const cubic = (t: number, a: number, b: number) => 3 * (1 - t) ** 2 * t * a + 3 * (1 - t) * t * t * b + t ** 3;
+      let low = 0;
+      let high = 1;
+      for (let i = 0; i < 14; i++) {
+        const t = (low + high) / 2;
+        if (cubic(t, 0.32, 0) < progress) low = t;
+        else high = t;
+      }
+      return cubic((low + high) / 2, 0.72, 1);
+    };
     const center = (section: HTMLElement) => {
       const rect = section.getBoundingClientRect();
       return window.scrollY + rect.top - Math.max(32, (window.innerHeight - rect.height) / 2);
     };
     const fits = (section: HTMLElement) => section.offsetHeight <= window.innerHeight - 64;
     const settle = (section: HTMLElement, smooth: boolean) => {
-      window.scrollTo({ top: center(section), behavior: smooth ? "smooth" : "instant" });
+      cancelAnimationFrame(scrollFrame);
+      const from = window.scrollY;
+      const to = center(section);
+      if (!smooth || reduced.matches) {
+        window.scrollTo({ top: to, behavior: "instant" });
+        return;
+      }
+      const started = performance.now();
+      const duration = 850;
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - started) / duration);
+        window.scrollTo({ top: progress === 1 ? to : from + (to - from) * easeScroll(progress), behavior: "instant" });
+        scrollFrame = progress < 1 ? requestAnimationFrame(step) : 0;
+      };
+      scrollFrame = requestAnimationFrame(step);
     };
     const nestedScroll = (target: EventTarget | null) => {
       if (!(target instanceof Element)) return true;
@@ -41,6 +74,7 @@ export function WorkScroll() {
       const nextDirection = Math.sign(delta);
       const reversed = direction !== nextDirection;
       const newGesture = now - lastWheel > 180 && now > movingUntil;
+      if (reversed) stopScroll();
       if (reversed || newGesture) { accumulated = 0; consumed = false; }
       direction = nextDirection;
       lastWheel = now;
@@ -60,7 +94,7 @@ export function WorkScroll() {
       accumulated += Math.abs(delta);
       if (accumulated < 32) return;
       consumed = true;
-      movingUntil = now + 700;
+      movingUntil = now + 900;
       settle(sections[targetIndex], true);
     };
     const click = (event: MouseEvent) => {
@@ -89,6 +123,7 @@ export function WorkScroll() {
     sections.forEach((section) => resize.observe(section));
     window.addEventListener("resize", alignRail);
     const syncMotion = () => {
+      if (reduced.matches) stopScroll();
       root.dataset.workSnap = reduced.matches ? "off" : "on";
     };
     // Centered sections receive one calm entrance on each approach, in either direction.
@@ -105,8 +140,17 @@ export function WorkScroll() {
     reduced.addEventListener("change", syncMotion);
     window.addEventListener("wheel", wheel, { passive: false });
     document.addEventListener("click", click);
+    window.addEventListener("keydown", stopScroll);
+    window.addEventListener("pointerdown", stopScroll);
+    window.addEventListener("touchstart", stopScroll, { passive: true });
+    window.addEventListener("resize", stopScroll);
     return () => {
       cancelAnimationFrame(initialFrame);
+      stopScroll();
+      window.removeEventListener("keydown", stopScroll);
+      window.removeEventListener("pointerdown", stopScroll);
+      window.removeEventListener("touchstart", stopScroll);
+      window.removeEventListener("resize", stopScroll);
       observer.disconnect();
       resize.disconnect();
       window.removeEventListener("resize", alignRail);
