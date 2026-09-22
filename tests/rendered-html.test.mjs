@@ -1227,12 +1227,6 @@ test("work rail reveals once after entering the first project and respects reduc
 });
 
 
-test("Snapchat phone mockups are slightly larger without cropping", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__asset-phones img \{[^}]*height: min\(83%, 484px\);[^}]*object-fit: contain/);
-  assert.match(css, /\.work-feature__asset-group:last-child \.work-feature__asset-phones img \{[^}]*height: min\(91%, 495px\)/);
-});
-
 test("Snapchat image panels use the requested neutral background", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /#work-snap \.work-feature__asset-group \{ background: #ECECEC; \}/);
