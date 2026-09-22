@@ -1229,7 +1229,7 @@ test("work rail reveals once after entering the first project and respects reduc
 
 test("all Snapchat phones share one height without a larger lens override", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__asset-phones img \{[^}]*height: min\(75%, 440px\)/);
+  assert.match(css, /\.work-feature__asset-phones img \{[^}]*--phone-height: min\(24cqw, 440px\);[^}]*flex: none;[^}]*width: calc\(var\(--phone-height\) \* 576 \/ 1156\);[^}]*height: var\(--phone-height\);[^}]*max-width: none;/);
   assert.doesNotMatch(css, /\.work-feature__asset-group:last-child \.work-feature__asset-phones img \{[^}]*height:/);
 });
 

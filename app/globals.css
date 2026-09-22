@@ -13238,7 +13238,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   column-gap: calc(100% * 20 / 1145);
 }
 .work-feature__media--pair { grid-template-rows: 1fr; }
-.work-feature__media--assets { gap: 20px; }
+.work-feature__media--assets { gap: 20px; container-type: inline-size; }
 .work-feature__asset-group {
   display: flex;
   min-width: 0;
@@ -13260,13 +13260,12 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 }
 .work-feature__asset-phones img {
   display: block;
-  width: auto;
-  height: min(75%, 440px);
-  max-width: 31%;
+  --phone-height: min(24cqw, 440px);
+  flex: none;
+  width: calc(var(--phone-height) * 576 / 1156);
+  height: var(--phone-height);
+  max-width: none;
   object-fit: contain;
-}
-.work-feature__asset-group:last-child .work-feature__asset-phones img {
-  max-width: 100%;
 }
 .work-feature__asset-group > span {
   display: block;
