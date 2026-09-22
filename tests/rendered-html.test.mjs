@@ -1412,9 +1412,7 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   win.scrollY = 1700;
   wheel(120);
   pause();
-  assert.equal(frames.size, 1, "ordinary input at the same position guides to the next project");
-  complete();
-  assert.equal(win.scrollY, 2000);
+  assert.equal(frames.size, 0, "stronger input at the same position preserves free travel");
   win.scrollY = 1000;
   wheel(8);
   win.scrollY = 1190;
@@ -1433,15 +1431,11 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   win.scrollY = 1700;
   wheel(8, { deltaMode: 1 });
   pause();
-  assert.equal(frames.size, 1, "line-mode wheels normalize to pixels before measuring intensity");
-  complete();
-  assert.equal(win.scrollY, 2000);
+  assert.equal(frames.size, 0, "line-mode wheels normalize to pixels before measuring intensity");
   win.scrollY = 1700;
   wheel(1, { deltaMode: 2 });
   pause();
-  assert.equal(frames.size, 1, "page-mode wheels retain directional project travel");
-  complete();
-  assert.equal(win.scrollY, 2000);
+  assert.equal(frames.size, 0, "page-mode wheels retain strong travel");
   win.scrollY = 1000;
   wheel(2);
   win.scrollY = 1020;
@@ -1463,9 +1457,7 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   win.scrollY = 1600;
   wheel(400);
   pause();
-  assert.equal(frames.size, 1, "a mid-project stop guides to the next project");
-  complete();
-  assert.equal(win.scrollY, 2000);
+  assert.equal(frames.size, 0, "a mid-project stop does not trigger a full-section jump");
   win.scrollY = 980;
   wheel(-900);
   pause();
@@ -1496,9 +1488,10 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(frames.size, 0);
 });
 
-test("desktop work uses the same gentle proximity snap as touch", async () => {
+test("touch work uses gentle proximity snap while desktop stays native", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /@media \(min-width: 1080px\), \(pointer: coarse\) \{\s*html\[data-work-snap="on"\] \{ scroll-snap-type: y proximity; \}/);
+  assert.match(css, /@media \(pointer: coarse\) \{\s*html\[data-work-snap="on"\] \{ scroll-snap-type: y proximity; \}/);
+  assert.doesNotMatch(css, /@media \(min-width: 1080px\), \(pointer: coarse\)/);
   assert.match(css, /html\[data-work-snap="on"\] \.work-feature \{[\s\S]*?scroll-snap-stop: normal;/);
 });
 
@@ -1616,6 +1609,18 @@ test("Growth pairs ordered onboarding screens with a centered video and fading c
   assert.match(css, /grid-template-columns: minmax\(0, 271fr\) minmax\(0, 563fr\) minmax\(0, 271fr\)/);
   assert.match(css, /column-gap: calc\(100% \* 20 \/ 1145\)/);
   assert.match(css, /\.work-feature__checklist::after \{[^}]*height: 18%;[^}]*pointer-events: none;[^}]*linear-gradient/);
+});
+
+
+test("renders the photography gallery with accessible placeholders and a native focus view", async () => {
+  const response = await render("/photography");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<title>Photography — Neel Saswade<\/title>/);
+  assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
+  assert.equal((html.match(/aria-label="Open photograph \d+ \(placeholder\)"/g) ?? []).length, 24);
+  assert.match(html, /<dialog/);
+  assert.match(html, /aria-label="Close photograph"/);
 });
 
 

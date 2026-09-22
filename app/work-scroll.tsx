@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Native scrolling with generous, interruptible project centering. */
+/** Native scrolling with calm, intensity-aware project centering. */
 export function WorkScroll() {
   useEffect(() => {
     const root = document.documentElement;
@@ -43,7 +43,7 @@ export function WorkScroll() {
       return window.scrollY + rect.top - Math.max(32, (window.innerHeight - rect.height) / 2);
     };
     const fits = (section: HTMLElement) => section.offsetHeight <= window.innerHeight - 64;
-    const settle = (section: HTMLElement, smooth: boolean, duration = 450) => {
+    const settle = (section: HTMLElement, smooth: boolean, duration = 560) => {
       cancelAnimationFrame(scrollFrame);
       const from = window.scrollY;
       const to = center(section);
@@ -80,15 +80,15 @@ export function WorkScroll() {
         if (distance <= 2 || !fits(sections[index])) return false;
         const previous = targets[index - direction];
         const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
-        // Let ordinary wheel gestures resolve to the next project without requiring
-        // a large swipe, while keeping very strong input interruptible.
-        const radius = Math.min(gap * (0.72 - intensity * 0.18), window.innerHeight * (0.78 - intensity * 0.18));
-        const committed = previous !== undefined && intensity < 0.8
-          && Math.abs(gestureStart - previous) <= 96
-          && (y - gestureStart) * direction >= gap * 0.12;
+        // Gentle input may settle toward the next project; strong input keeps its
+        // native travel so the user can intentionally move farther.
+        const radius = Math.min(gap * (0.56 - intensity * 0.36), window.innerHeight * (0.6 - intensity * 0.4));
+        const committed = previous !== undefined && intensity < 0.65
+          && Math.abs(gestureStart - previous) <= 80
+          && (y - gestureStart) * direction >= gap * 0.18;
         return distance <= radius || committed;
       });
-      if (targetIndex >= 0) settle(sections[targetIndex], true, 280);
+      if (targetIndex >= 0) settle(sections[targetIndex], true, 560);
     };
     const scheduleGuide = () => {
       if (!guideArmed || scrollFrame) return;

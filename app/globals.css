@@ -13440,7 +13440,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 html[data-portfolio-layout="quiet"] .pranathi-work--editorial { background: transparent; }
 
 /* Project-to-project scrolling: center the complete composition, keep it readable. */
-@media (min-width: 1080px), (pointer: coarse) {
+@media (pointer: coarse) {
   html[data-work-snap="on"] { scroll-snap-type: y proximity; }
 }
 html[data-work-snap="on"] .work-feature {
