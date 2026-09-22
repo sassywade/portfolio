@@ -13595,8 +13595,12 @@ html:has(.pranathi-intro--home) body,
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .about-page__gallery-track:hover .film-photo {
+    transform: translateY(-3px) rotate(calc(var(--photo-rotation, 0deg) * 0.72)) scale(1.015);
+  }
+
   .about-page__gallery-track .film-photo:hover {
-    transform: translateY(-12px) rotate(0deg) scale(1.22);
+    transform: translateY(-10px) rotate(0deg) scale(1.14);
     transition-delay: 0ms;
     z-index: 10;
   }

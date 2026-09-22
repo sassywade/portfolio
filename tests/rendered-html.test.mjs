@@ -153,7 +153,8 @@ test("keeps Life prints playful without overriding reduced motion", async () => 
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
 
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /\.about-page__gallery-track:hover \.film-photo\s*\{[\s\S]*transform: translateY\(-3px\) rotate\(calc\(var\(--photo-rotation, 0deg\) \* 0\.72\)\) scale\(1\.015\)/);
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
   assert.match(finalLifeRules, /@media \(hover: hover\) and \(pointer: fine\)/);
   assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
 });
@@ -1203,7 +1204,8 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   assert.match(viewer, /draggable=\{false\}/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /\.about-page__gallery-track:hover \.film-photo\s*\{[\s\S]*transform: translateY\(-3px\) rotate\(calc\(var\(--photo-rotation, 0deg\) \* 0\.72\)\) scale\(1\.015\)/);
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
   assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
   const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
   assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
