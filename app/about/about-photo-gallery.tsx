@@ -23,7 +23,6 @@ const lifePhotos: PhotoSlot[] = [
   { id: "camp-view", title: "10/10 camping spot in Yosemite", description: "The view from camp after a night beside an alpine lake.", alt: "A tent below a mountain peak", orientation: "portrait", src: "/about/camp-view.JPG" },
   { id: "san-francisco-park", title: "Alamo Square", description: "Alamo square on a beautiful day", alt: "People relaxing in Alamo Square with San Francisco in the background", orientation: "portrait", src: "/about/san-francisco-park.JPG" },
   { id: "ride-through-the-grass", title: "Chasing the light", description: "Shenanigans in fort mason with the boy", alt: "Cyclist riding through a grassy field", orientation: "portrait", src: "/about/ride-through-the-grass.JPG" },
-  { id: "high-country-friends", title: "Backpacking Cathedral with Jordan", description: "Backpacking Cathedral with Jordan", alt: "Two friends hiking in the mountains", orientation: "portrait", src: "/about/high-country-friends.JPG" },
   { id: "red-wall-bike", title: "Bike against a red wall", description: "My first bike :)", alt: "A road bike against a red wall", orientation: "portrait", src: "/about/red-wall-bike.JPG" },
   { id: "san-francisco-from-above", title: "The city from above", description: "Exploring bernal heights with Kelly", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
