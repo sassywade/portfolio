@@ -1356,6 +1356,12 @@ test("scroll assistance preserves native input, proximity, and escape to the her
 });
 
 
+test("Snapchat work metadata centers and separates the logo and label", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__meta \.hero-company--snap \{ display: inline-flex; align-items: center; gap: 8px; \}/);
+  assert.match(css, /\.work-feature__meta \.hero-company--snap \.hero-company__mark \{ transform: none; \}/);
+});
+
 test("Glean work metadata separates the logo and label", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__meta \.hero-company--glean \{[^}]*display: inline-flex;[^}]*gap: 6px/);
