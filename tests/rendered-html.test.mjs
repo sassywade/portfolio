@@ -1369,6 +1369,9 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
     callbacks.forEach(callback => callback());
   };
   assert.equal(events.get("wheel").options.passive, false);
+  assert.match(source, /const HERO_SETTLE_DURATION = 900/);
+  assert.match(source, /const PROJECT_SETTLE_DURATION = 560/);
+  assert.match(source, /cubic\(t, 0\.77, 0\.175\)/);
   const complete = () => {
     const callbacks = [...frames.values()];
     frames.clear();

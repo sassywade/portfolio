@@ -19,6 +19,8 @@ export function WorkScroll() {
     let heroLanding = false;
     let idleTimer = 0;
     let scrollFrame = 0;
+    const HERO_SETTLE_DURATION = 900;
+    const PROJECT_SETTLE_DURATION = 560;
     const stopScroll = () => {
       cancelAnimationFrame(scrollFrame);
       scrollFrame = 0;
@@ -26,17 +28,17 @@ export function WorkScroll() {
       guideArmed = false;
       heroLanding = false;
     };
-    // Match the calm drawer curve: cubic-bezier(0.32, 0.72, 0, 1).
+    // Use a calm ease-in-out curve: cubic-bezier(0.77, 0, 0.175, 1).
     const easeScroll = (progress: number) => {
       const cubic = (t: number, a: number, b: number) => 3 * (1 - t) ** 2 * t * a + 3 * (1 - t) * t * t * b + t ** 3;
       let low = 0;
       let high = 1;
       for (let i = 0; i < 14; i++) {
         const t = (low + high) / 2;
-        if (cubic(t, 0.32, 0) < progress) low = t;
+        if (cubic(t, 0.77, 0.175) < progress) low = t;
         else high = t;
       }
-      return cubic((low + high) / 2, 0.72, 1);
+      return cubic((low + high) / 2, 0, 1);
     };
     const center = (section: HTMLElement) => {
       const rect = section.getBoundingClientRect();
@@ -88,7 +90,7 @@ export function WorkScroll() {
           && (y - gestureStart) * direction >= gap * 0.18;
         return distance <= radius || committed;
       });
-      if (targetIndex >= 0) settle(sections[targetIndex], true, 560);
+      if (targetIndex >= 0) settle(sections[targetIndex], true, PROJECT_SETTLE_DURATION);
     };
     const scheduleGuide = () => {
       if (!guideArmed || scrollFrame) return;
@@ -105,7 +107,7 @@ export function WorkScroll() {
         if (!heroLanding) {
           stopScroll();
           heroLanding = true;
-          settle(sections[0], true);
+          settle(sections[0], true, HERO_SETTLE_DURATION);
         }
         window.clearTimeout(idleTimer);
         idleTimer = window.setTimeout(() => { heroLanding = false; }, 140);
