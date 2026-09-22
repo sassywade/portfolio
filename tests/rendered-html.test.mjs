@@ -1194,7 +1194,8 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
   assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
   const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
-  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*background: #fff;/);
+  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
+  assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {

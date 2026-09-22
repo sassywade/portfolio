@@ -13598,6 +13598,11 @@ html:has(.pranathi-intro--home) body,
   letter-spacing: -0.03em;
 }
 
+/* Give the Life prints the same barely-rounded edge as the rest of the system. */
+.about-page__gallery-track .film-photo__paper {
+  border-radius: 2px;
+}
+
 /* Keep the About page compact enough to read as one desktop composition. */
 @media (min-width: 701px) {
   .about-page__gallery {
