@@ -1272,20 +1272,28 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 7);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 6);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
 });
 
-test("Proactive Intelligence keeps the popup artwork above one remaining placeholder", async () => {
+test("Proactive Intelligence pairs popup artwork with the default card wheel", async () => {
   const html = await (await render()).text();
   const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];
   assert.match(psychic, /class="work-feature__popups"/);
   assert.match(psychic, /src="\/work\/psychic-popups-shadow.png"/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__popups img \{[^}]*width: 86%/);
-  assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 1);
+  assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 0);
+  assert.match(psychic, /data-mode="wheel"/);
+  assert.match(psychic, /Pause proactive card animation/);
+  const motion = await readFile(new URL("../app/psychic-cards.tsx", import.meta.url), "utf8");
+  assert.match(motion, /\["wheel", "rolodex", "grid"\]/);
+  assert.match(motion, /visible && !reduced && !paused/);
+  assert.match(motion, /clearInterval\(timer\)/);
+  assert.match(motion, /document\.hidden/);
+  assert.match(motion, /prefers-reduced-motion: reduce/);
 });
 
 test("Snap work renders the supplied Treasure and Lens assets in two groups", async () => {

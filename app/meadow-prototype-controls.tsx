@@ -26,6 +26,7 @@ import type { TopPetMode } from "./top-pet";
 import { PhotoGroupingOptions } from "./photography/photo-grouping";
 import { PhilipPickerToggle } from "./philip-toggle";
 import { GrowthVideoToggle } from "./growth-video-prototype";
+import { PsychicCardsOptions } from "./psychic-cards";
 import { VisitorBikeEditor, type VisitorBike } from "./visitor-bike";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
@@ -203,6 +204,7 @@ export function MeadowSettings({
           </div>
 
           <GrowthVideoToggle />
+          <PsychicCardsOptions />
           <PhotoGroupingOptions />
 
           <section className="meadow-settings__section" aria-label="Page layout">

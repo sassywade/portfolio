@@ -171,6 +171,8 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+Proactive Intelligence’s lower-right tile cycles the 18 supplied card PNGs, preserving their baked shadows. Wheel is the default; Proactive card motion in the prototype picker offers Wheel, Rolodex, and Grid as visit-local alternatives. Wheel and Rolodex settle every 3.4 seconds with 750ms transform transitions; Grid replaces one scattered cell every 1.4 seconds with a 600ms fade. Pause is available on the tile. Timers stop offscreen, in hidden tabs, while paused, and with reduced motion; reduced motion shows a static composition. No new motion dependency.
+
 The Growth starter-kit image fades from transparent at its own top edge to fully opaque at 20% image height. Keep this mask attached to the translated image so its lowered position cannot expose a hard horizontal crop; retain its size and offset.
 
 Proactive Intelligence’s upper-right tile uses updated_pop_UI.png with its baked drop shadow, centered at 86% tile width on #ECECEC with clipped overflow and 12px corners. The wider image includes shadow padding, making the visible popup only slightly larger. Preserve the Docs and email fragments around the complete Slack draft; keep the main video and lower-right black placeholder unchanged.
