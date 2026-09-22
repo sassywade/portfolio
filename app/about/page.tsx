@@ -21,19 +21,12 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
-            <h1 id="about-title">Welcome to my website,</h1>
-            <p>
+            <h1 id="about-title" className="about-page__about-copy">
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
               confusion and curiosity made me interested in how we introduce new
               technology in ways that feel intuitive.
-            </p>
-            <p>
-              Today, my medium is product design. I&apos;m drawn to the puzzle of
-              changing someone&apos;s habit with AI: How do you explain the unfamiliar?
-              How do you get someone to try it? And how do you make the experience
-              feel a little delightful?
-            </p>
+            </h1>
             <nav className="about-page__socials" aria-label="Links">
               <a
                 href="https://x.com/neelsaswade"

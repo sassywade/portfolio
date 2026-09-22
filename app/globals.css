@@ -2481,6 +2481,17 @@ em {
   animation: none;
 }
 
+.about-page .simple-page .about-page__about-copy {
+  max-width: 550px;
+  margin: 0;
+  color: #373530;
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.25vw, 18px);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.58;
+}
+
 .about-page__gallery[data-motion-ready="true"] .film-photo__paper {
   opacity: 0;
   transform: translateY(7px);
