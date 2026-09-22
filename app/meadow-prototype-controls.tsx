@@ -24,6 +24,7 @@ import type { WindKey, WindSettings } from "./wind";
 import type { WorkGridColumns, WorkHandoff } from "./hero-meadow";
 import type { TopPetMode } from "./top-pet";
 import { PhilipPickerToggle } from "./philip-toggle";
+import { VisitorBikeEditor, type VisitorBike } from "./visitor-bike";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },
@@ -70,6 +71,11 @@ type MeadowSettingsProps = {
   onTopPetModeChange: (mode: TopPetMode) => void;
   onWindChange: (key: WindKey, value: number) => void;
   onPlayingChange: (isPlaying: boolean) => void;
+  visitorBikeEnabled: boolean;
+  onVisitorBikeEnabledChange: (enabled: boolean) => void;
+  visitorBike: VisitorBike;
+  onVisitorBikeChange: (patch: Partial<VisitorBike>) => void;
+  onVisitorBikeRace: () => void;
 };
 
 export function MeadowSettings({
@@ -109,6 +115,11 @@ export function MeadowSettings({
   onTopPetModeChange,
   onWindChange,
   onPlayingChange,
+  visitorBikeEnabled,
+  onVisitorBikeEnabledChange,
+  visitorBike,
+  onVisitorBikeChange,
+  onVisitorBikeRace,
 }: MeadowSettingsProps) {
   const panelId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -343,6 +354,15 @@ export function MeadowSettings({
               </div>
               {layout === "quiet" ? <p>Off in this variation</p> : <PhilipPickerToggle />}
             </div>
+          </section>
+
+          <section className="meadow-settings__section visitor-bike-settings" aria-labelledby={`${panelId}-visitor-bike`}>
+            <div className="meadow-settings__section-head">
+              <div><h2 id={`${panelId}-visitor-bike`}>Visitor bike</h2><small>Private bike builder · prototype</small></div>
+              <button type="button" className="meadow-settings__motion-toggle" aria-pressed={visitorBikeEnabled} onClick={() => onVisitorBikeEnabledChange(!visitorBikeEnabled)}>{visitorBikeEnabled ? "On" : "Off"}</button>
+            </div>
+            <p className="meadow-settings__note">Give this bike a name, sign it, and tune the build. It stays in this browser for now.</p>
+            {visitorBikeEnabled && <VisitorBikeEditor bike={visitorBike} onChange={onVisitorBikeChange} onRace={onVisitorBikeRace} />}
           </section>
 
           <section className="meadow-settings__section" aria-labelledby={`${panelId}-top-pull`}>

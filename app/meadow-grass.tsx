@@ -68,7 +68,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       const active = inGrass(local) && now - lastPointerMove < 160;
       announcePresence(active);
       if (active) {
-        brush = { x: local.x, y: local.y, direction: pointerDirection, strength: Math.min(1, (brush?.strength ?? 0) + 0.12 * step) };
+        brush = { x: local.x, y: local.y, direction: pointerDirection, strength: Math.min(1, (brush?.strength ?? 0) + 0.36 * step) };
       } else if (brush) {
         brush.strength *= 0.86 ** step;
         if (brush.strength < 0.02) brush = null;
@@ -94,7 +94,9 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       lastContactSample = now;
       const bounds = canvas.getBoundingClientRect();
       if (!bounds.width || !bounds.height) return;
-      const actors = document.querySelectorAll<HTMLElement>('.backpack-walk-layer:is([data-phase="walk"], [data-phase="land"]) .mini-hiker, .bike-ride-layer:is([data-phase="ride"], [data-phase="land"]) .bike-rider, .photo-drop-layer:is([data-phase="shoot"], [data-phase="land"]) .mini-photographer');
+      // Visitors pass through the meadow without flattening it. Only the camera
+      // drop gets a temporary contact patch, so walking and biking stay light.
+      const actors = document.querySelectorAll<HTMLElement>('.photo-drop-layer:is([data-phase="shoot"], [data-phase="land"]) .mini-photographer');
       actors.forEach((actor) => {
         const rect = actor.getBoundingClientRect();
         const x = (rect.left + rect.width * 0.5 - bounds.left) * width / bounds.width;
@@ -252,7 +254,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       if (moving) { collectFootprints(now); updateBrush(now); }
       // Animate the dense turf too, within bounded wind/contact patches.
       const patches = footprints.map((foot) => ({ x: foot.x - foot.radius - 22, y: foot.y - foot.radius - 22, w: (foot.radius + 22) * 2, h: (foot.radius + 22) * 2 }));
-      if (brush && moving) patches.push({ x: brush.x - 62, y: brush.y - 48, w: 124, h: 96 });
+      if (brush && moving) patches.push({ x: brush.x - 146, y: brush.y - 108, w: 292, h: 216 });
       // Restore only last/current dirty regions; the rest of the turf stays put.
       if (previousPatches.length || patches.length) {
         ctx.save();
@@ -294,7 +296,7 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
         for (const row of [...rows].sort((a, b) => a - b)) for (const blade of [...(columns.get(row) ?? [])].flatMap(column => groundCells.get(row)?.get(column) ?? []).sort((a, b) => a.order - b.order)) {
           const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
           const crestFlex = blade.crestFlex;
-          const flow = moving ? elasticWind(blade.x) * crestFlex + arrivalGrassWind(now, blade.x / width, gust) * (1 - crestFlex) + cursorGrassBend(blade.x, blade.y, brush) : 0;
+          const flow = moving ? elasticWind(blade.x) * crestFlex + arrivalGrassWind(now, blade.x / width, gust) * (1 - crestFlex) + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
           paintGround(ctx, blade, pressure, direction, flow);
         }
         ctx.restore();
@@ -302,11 +304,11 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       // Skyline roots are preselected once. No clipped turf reconstruction per frame.
       for (const blade of crestBlades) {
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
-        const flow = moving ? elasticWind(blade.x) * blade.crestFlex + cursorGrassBend(blade.x, blade.y, brush) : 0;
+        const flow = moving ? elasticWind(blade.x) * blade.crestFlex + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
         paintGround(tipCtx!, blade, pressure, direction, flow);
       }
       for (const blade of blades) {
-        const flow = moving ? elasticWind(blade.x) + cursorGrassBend(blade.x, blade.y, brush) : 0;
+        const flow = moving ? elasticWind(blade.x) + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
         const length = blade.length * (1 - pressure * 0.83);
         const flexibility = blade.flexibility;

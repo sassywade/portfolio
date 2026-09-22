@@ -6676,6 +6676,60 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   z-index: 5;
 }
 
+.hero-meadow > .visitor-bike-layer { z-index: 5; }
+
+.visitor-bike-layer { position: absolute; z-index: 5; inset: 0; overflow: hidden; pointer-events: none; }
+.visitor-bike-ride { position: absolute; left: 0; bottom: 13%; width: 100%; height: 48px; animation: visitor-bike-crossing 16s var(--ease-in-out, cubic-bezier(.77,0,.175,1)) infinite alternate; }
+.visitor-bike-layer[data-playing="false"] .visitor-bike-ride { animation-play-state: paused; }
+.visitor-bike-layer[data-racing="true"] .visitor-bike-ride { animation: visitor-bike-race 2.8s linear 1 both; }
+.visitor-bike-shape { position: absolute; left: 0; bottom: 0; width: 64px; height: 34px; transform: scaleX(-1); filter: drop-shadow(0 2px 1px rgba(35,39,20,.18)); }
+.visitor-bike-wheel { position: absolute; bottom: 0; width: 18px; height: 18px; border: 2px solid #3a3b39; border-radius: 50%; background: rgba(255,255,255,.18); }
+.visitor-bike-wheel--back { left: 5px; } .visitor-bike-wheel--front { right: 5px; }
+.visitor-bike-body { position: absolute; left: 17px; top: 8px; width: 30px; height: 4px; border-radius: 99px; background: var(--visitor-bike-color); transform: rotate(-12deg); }
+.visitor-bike-body::before, .visitor-bike-body::after { position: absolute; content: ""; display: block; width: 3px; height: 18px; background: var(--visitor-bike-color); transform-origin: top; }
+.visitor-bike-body::before { left: 3px; top: 1px; transform: rotate(38deg); } .visitor-bike-body::after { right: 3px; top: 1px; transform: rotate(-48deg); }
+.visitor-bike-body b { position: absolute; top: -8px; left: 12px; color: var(--visitor-bike-color); font: 12px/1 var(--sans); }
+.visitor-bike-signature { position: absolute; left: 0; bottom: 35px; color: rgba(47,49,46,.72); font: 10px/1 var(--sans); white-space: nowrap; }
+@keyframes visitor-bike-crossing { from { transform: translateX(7vw) translateY(1px); } to { transform: translateX(calc(100vw - 90px)) translateY(-4px); } }
+@keyframes visitor-bike-race { from { transform: translateX(8vw) translateY(1px); } to { transform: translateX(calc(100vw - 90px)) translateY(-4px); } }
+.visitor-bike-race-callout { position: absolute; top: 18%; left: 50%; color: rgba(47,49,46,.76); font: 12px/1 var(--sans); transform: translateX(-50%); }
+.visitor-bike-editor { display: grid; gap: 12px; margin-top: 12px; }
+.visitor-bike-editor label, .visitor-bike-editor fieldset { display: grid; gap: 5px; min-width: 0; }
+.visitor-bike-editor label span, .visitor-bike-editor legend { color: rgba(42,43,41,.65); font: 11px/1.2 var(--sans); }
+.visitor-bike-editor input, .visitor-bike-editor select { min-width: 0; border: 1px solid rgba(50,52,48,.18); border-radius: 4px; padding: 7px 8px; background: rgba(255,255,255,.72); color: var(--ink); font: 12px/1.2 var(--sans); }
+.visitor-bike-editor__identity, .visitor-bike-editor__fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.visitor-bike-editor__fields { grid-template-columns: 1fr; }
+.visitor-bike-editor__choices { display: grid; gap: 10px; }
+.visitor-bike-editor fieldset { margin: 0; border: 0; padding: 0; }
+.visitor-bike-swatches, .visitor-bike-decals { display: flex; flex-wrap: wrap; gap: 6px; }
+.visitor-bike-swatch, .visitor-bike-decals button { width: 23px; height: 23px; border: 1px solid rgba(42,43,41,.22); border-radius: 50%; cursor: pointer; }
+.visitor-bike-swatch[aria-pressed="true"], .visitor-bike-decals button[aria-pressed="true"] { outline: 2px solid #002fa7; outline-offset: 2px; }
+.visitor-bike-decals button { display: grid; place-items: center; border-radius: 4px; background: rgba(255,255,255,.7); color: var(--ink); font: 13px/1 var(--sans); }
+.visitor-bike-editor__signature { margin: 0; color: rgba(42,43,41,.66); font: 11px/1.35 var(--sans); }
+.visitor-bike-race-button { justify-self: start; border: 1px solid rgba(0,47,167,.5); border-radius: 4px; padding: 7px 10px; background: transparent; color: #002fa7; cursor: pointer; font: 12px/1 var(--sans); transition: background-color 160ms ease, color 160ms ease; }
+.visitor-bike-race-button:hover, .visitor-bike-race-button:focus-visible { background: #002fa7; color: #fff; }
+.visitor-bike-preview-mark { display: inline-block; width: 9px; height: 9px; margin-right: 4px; border-radius: 50%; vertical-align: -1px; }
+.peloton-page { min-height: 100vh; padding: clamp(80px, 12vw, 160px) clamp(24px, 8vw, 120px); background: var(--paper); color: var(--ink); }
+.peloton-intro { max-width: 520px; margin-bottom: clamp(44px, 8vw, 88px); }
+.peloton-intro .page-kicker { margin: 0 0 14px; color: var(--muted); font: 11px/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+.peloton-intro h1 { margin: 0; color: var(--ink); font: 500 clamp(44px, 7vw, 86px)/.94 var(--serif); letter-spacing: -.045em; }
+.peloton-intro > p:last-child { max-width: 390px; margin: 22px 0 0; font: 16px/1.45 var(--sans); }
+.peloton-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.peloton-card { min-height: 250px; display: grid; align-content: space-between; gap: 22px; border-top: 1px solid var(--line); padding-top: 14px; }
+.peloton-card[data-current="true"] { border-top-color: var(--acid); }
+.peloton-card__bike { position: relative; height: 120px; margin: 10px 14px 0; }
+.peloton-card__wheel { position: absolute; bottom: 6px; width: 58px; height: 58px; border: 2px solid rgba(47,49,46,.52); border-radius: 50%; }
+.peloton-card__wheel--one { left: 12%; } .peloton-card__wheel--two { right: 12%; }
+.peloton-card__frame { position: absolute; left: 28%; right: 28%; bottom: 38px; height: 7px; border-radius: 99px; background: var(--bike-vermillion); transform: rotate(-12deg); }
+.peloton-card__frame::before, .peloton-card__frame::after { position: absolute; width: 4px; height: 48px; border-radius: 99px; background: inherit; content: ""; }
+.peloton-card__frame::before { left: 4px; top: 2px; transform: rotate(38deg); } .peloton-card__frame::after { right: 4px; top: 2px; transform: rotate(-48deg); }
+.peloton-card__words h2 { margin: 0; font: 19px/1.1 var(--sans); }
+.peloton-card__words p, .peloton-card__words small { display: block; margin: 7px 0 0; color: var(--muted); font: 12px/1.35 var(--sans); }
+html { --bike-vermillion: #cf4f38; --bike-cobalt: #315aa6; --bike-moss: #718447; --bike-butter: #e3bd58; --bike-ink: #303334; --bike-cream: #e6dfd0; }
+@media (max-width: 800px) { .peloton-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .peloton-page { padding-inline: 20px; } .peloton-grid { grid-template-columns: 1fr; } .peloton-card { min-height: 220px; } }
+@media (prefers-reduced-motion: reduce) { .visitor-bike-ride { animation: none; transform: translateX(42vw); } .visitor-bike-race-callout { opacity: .8; } }
+
 .hero-meadow > .cypress-tree .cypress-tree__controls {
   z-index: 7;
 }
@@ -13348,7 +13402,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 html[data-portfolio-layout="quiet"] .pranathi-work--editorial { background: transparent; }
 
 /* Project-to-project scrolling: center the complete composition, keep it readable. */
-@media (pointer: coarse) {
+@media (min-width: 1080px), (pointer: coarse) {
   html[data-work-snap="on"] { scroll-snap-type: y proximity; }
 }
 html[data-work-snap="on"] .work-feature {

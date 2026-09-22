@@ -16,6 +16,7 @@ import { Meadow, type FlatMeadowTexture, type MeadowVariant, type RollingMeadow 
 import { MeadowSettings } from "./meadow-prototype-controls";
 import { DEFAULT_TOP_PET_MODE, type TopPetMode } from "./top-pet";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
+import { VisitorBikeLayer, useVisitorBike } from "./visitor-bike";
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const DEFAULT_FLAT_MEADOW_COLOR = "#6f8d45";
@@ -72,6 +73,9 @@ export function HeroMeadow() {
   const [topPetMode, setTopPetMode] = useState<TopPetMode>(DEFAULT_TOP_PET_MODE);
   const [environmentStyle, setEnvironmentStyle] = useState<AlamoStyle>(DEFAULT_ALAMO_STYLE);
   const [asciiGardenTheme, setAsciiGardenTheme] = useState<AsciiGardenTheme>("light");
+  const [visitorBikeEnabled, setVisitorBikeEnabled] = useState(false);
+  const [visitorBike, updateVisitorBike] = useVisitorBike();
+  const [visitorBikeRacing, setVisitorBikeRacing] = useState(false);
   const environment = getAlamoStyle(environmentStyle);
   const isAsciiGarden = environmentStyle === "ascii-garden";
   const isAsciiFieldNotes = environmentStyle === "ascii-field-notes";
@@ -508,7 +512,16 @@ export function HeroMeadow() {
         onTopPetModeChange={setTopPetMode}
         onWindChange={updateWind}
         onPlayingChange={setIsPlaying}
+        visitorBikeEnabled={visitorBikeEnabled}
+        onVisitorBikeEnabledChange={setVisitorBikeEnabled}
+        visitorBike={visitorBike}
+        onVisitorBikeChange={updateVisitorBike}
+        onVisitorBikeRace={() => {
+          setVisitorBikeRacing(true);
+          window.setTimeout(() => setVisitorBikeRacing(false), 3000);
+        }}
       />
+      <VisitorBikeLayer bike={visitorBike} enabled={visitorBikeEnabled} isPlaying={sceneIsPlaying} racing={visitorBikeRacing} />
     </div>
   );
 }

@@ -23,9 +23,11 @@ export function grassPressure(x: number, y: number, now: number, footprints: Gra
   return { pressure, direction };
 }
 
-export function cursorGrassBend(x: number, y: number, brush: { x: number; y: number; direction: number; strength: number } | null) {
+export function cursorGrassBend(x: number, y: number, brush: { x: number; y: number; direction: number; strength: number } | null, now = 0) {
   if (!brush) return 0;
-  const dx = (x - brush.x) / 38;
-  const dy = (y - brush.y) / 24;
-  return Math.max(0, 1 - dx * dx - dy * dy) ** 2 * brush.direction * brush.strength * 0.32;
+  const dx = (x - brush.x) / 128;
+  const dy = (y - brush.y) / 88;
+  const falloff = Math.max(0, 1 - dx * dx - dy * dy) ** 1.65;
+  const flutter = 0.68 + Math.sin(now / 125 + x / 21 + y / 17) * 0.32;
+  return falloff * brush.direction * brush.strength * flutter * 1.12;
 }

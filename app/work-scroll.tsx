@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Native scrolling with intensity-aware, interruptible project centering. */
+/** Native scrolling with generous, interruptible project centering. */
 export function WorkScroll() {
   useEffect(() => {
     const root = document.documentElement;
@@ -80,11 +80,12 @@ export function WorkScroll() {
         if (distance <= 2 || !fits(sections[index])) return false;
         const previous = targets[index - direction];
         const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
-        // Gentle gestures capture broadly; strong swipes keep their native travel.
-        const radius = Math.min(gap * (0.56 - intensity * 0.36), window.innerHeight * (0.6 - intensity * 0.4));
-        const committed = previous !== undefined && intensity < 0.65
-          && Math.abs(gestureStart - previous) <= 80
-          && (y - gestureStart) * direction >= gap * 0.18;
+        // Let ordinary wheel gestures resolve to the next project without requiring
+        // a large swipe, while keeping very strong input interruptible.
+        const radius = Math.min(gap * (0.72 - intensity * 0.18), window.innerHeight * (0.78 - intensity * 0.18));
+        const committed = previous !== undefined && intensity < 0.8
+          && Math.abs(gestureStart - previous) <= 96
+          && (y - gestureStart) * direction >= gap * 0.12;
         return distance <= radius || committed;
       });
       if (targetIndex >= 0) settle(sections[targetIndex], true, 280);

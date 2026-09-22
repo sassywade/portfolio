@@ -288,6 +288,32 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(css, /html\[data-environment-style="studio-static"\] \.hero-inline-action\s*\{[\s\S]*?pointer-events:\s*none/);
 });
 
+test("keeps the visitor bike as an opt-in, locally saved prototype", async () => {
+  const [hero, prototype, visitorBike, peloton, css] = await Promise.all([
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/visitor-bike.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/peloton/peloton-preview.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(hero, /visitorBikeEnabled/);
+  assert.match(prototype, />Visitor bike</);
+  assert.match(prototype, /onVisitorBikeEnabledChange/);
+  assert.match(visitorBike, /neel-portfolio-visitor-bike/);
+  for (const option of ["Aero", "Climbing", "Commuter", "Vintage", "Brompton", "Gravel", "Time trial", "Carbon disc", "Chunky gravel tires"]) {
+    assert.match(visitorBike, new RegExp(option));
+  }
+  assert.match(visitorBike, /bikeName/);
+  assert.match(visitorBike, /riderName/);
+  assert.match(visitorBike, /Race Neel/);
+  assert.match(hero, /visitorBikeRacing/);
+  assert.match(peloton, />The Peloton</);
+  assert.match(peloton, /local for now/);
+  assert.match(css, /\.visitor-bike-layer/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.visitor-bike-ride/);
+});
+
 test("renders ASCII Garden from fixed glyph maps with paired palettes and static filled sprites", async () => {
   const [garden, hero, picker, layout, css] = await Promise.all([
     readFile(new URL("../app/ascii-garden.tsx", import.meta.url), "utf8"),
@@ -685,6 +711,10 @@ test("uses only the standard Cuelume Declarative profile on every action", async
   assert.match(soundscape, /element\.dataset\.cuelumePress = "press"/);
   assert.match(soundscape, /element\.dataset\.cuelumeRelease = "release"/);
   assert.match(soundscape, /new MutationObserver/);
+  assert.match(soundscape, /ENTRANCE_SOUND_KEY/);
+  assert.match(soundscape, /createEntranceSound/);
+  assert.match(soundscape, /bandpass/);
+  assert.match(soundscape, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-toggle=/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-hover="(?!tick")/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-press="(?!press")/);
@@ -1051,10 +1081,10 @@ test("cursor gently brushes nearby grass without making Philip blow", async () =
   const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
   const { cursorGrassBend } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
   const brush = { x: 100, y: 100, direction: 1, strength: 1 };
-  assert.ok(cursorGrassBend(100, 100, brush) <= 0.32);
+  assert.ok(cursorGrassBend(100, 100, brush) <= 1.2);
   assert.equal(cursorGrassBend(100, 100, { ...brush, direction: -1 }), -cursorGrassBend(100, 100, brush));
-  assert.equal(cursorGrassBend(210, 100, brush), 0);
-  assert.equal(cursorGrassBend(100, 170, brush), 0);
+  assert.equal(cursorGrassBend(260, 100, brush), 0);
+  assert.equal(cursorGrassBend(100, 200, brush), 0);
   assert.equal(cursorGrassBend(100, 100, null), 0);
   const pet = await readFile(new URL("../app/smiley-cursor.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(pet, /GRASS_PRESENCE_EVENT|grassActive/);
@@ -1062,6 +1092,11 @@ test("cursor gently brushes nearby grass without making Philip blow", async () =
   const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
   assert.match(grass, /point.y >= \(ridge/);
   assert.match(grass, /paintGround\(ctx, blade, pressure, direction, flow\)/);
+  assert.doesNotMatch(grass, /backpack-walk-layer:is/);
+  assert.doesNotMatch(grass, /bike-ride-layer:is/);
+  assert.match(source, /const dx = \(x - brush\.x\) \/ 128/);
+  assert.match(source, /const dy = \(y - brush\.y\) \/ 88/);
+  assert.match(source, /Math\.sin\(now \/ 125/);
 });
 
 
@@ -1206,11 +1241,27 @@ test("homepage presents five inline projects with black placeholders and anchor 
   assert.doesNotMatch(html, /class="project-work-video/);
 });
 
+test("Snap work renders the supplied Treasure and Lens assets in two groups", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /class="work-feature__media work-feature__media--pair work-feature__media--assets"/);
+  for (const asset of ["treasure-ar.png", "treasure-collection.png", "treasure-feed.png", "nft-lens.png"]) {
+    assert.match(html, new RegExp(`/work/snap/${asset}`));
+  }
+  assert.match(html, />Treasure<\/span>/);
+  assert.match(html, />NFTs as lenses<\/span>/);
+});
+
 
 test("desktop work rail aligns with the mockups instead of viewport height", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-editorial__rail \{\s*padding-top: calc\(25\.2px \+ clamp\(80px, 9vw, 150px\) \+ clamp\(29\.9px, 2\.645vw, 41\.4px\) \+ 26px\)/);
   assert.match(css, /\.work-section-nav \{\s*position: sticky;\s*top: calc\(90px \+ clamp\(29\.9px, 2\.645vw, 41\.4px\) \+ 26px\)/);
+});
+
+test("work rail gives inactive items a lighter color and active item stronger weight", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-section-nav a \{[^}]*color: #999691;[^}]*font: 500 14px\/1\.4 var\(--sans\)/);
+  assert.match(css, /\.work-section-nav a\[aria-current\] \{[^}]*color: #43413e;[^}]*font-weight: 600;/);
 });
 
 
@@ -1222,7 +1273,7 @@ test("work rail reveals once after entering the first project and respects reduc
   assert.match(nav, /firstMedia.getBoundingClientRect\(\).top <= window.innerHeight \* 0.55/);
   assert.match(nav, /rootMargin: "0px 0px -45% 0px"/);
   assert.match(nav, /nav.dataset.revealed = "true";\s*entrance.disconnect\(\)/);
-  assert.match(css, /\.work-section-nav a \{[^}]*font: 14px/);
+  assert.match(css, /\.work-section-nav a \{[^}]*font: 500 14px/);
   assert.match(css, /prefers-reduced-motion: reduce[^}]*work-section-nav[^}]*transition: opacity 150ms linear/s);
 });
 
@@ -1263,7 +1314,7 @@ test("Work has no visible Selected work heading", async () => {
 });
 
 
-test("scroll assistance preserves native input, proximity, and escape to the hero", async () => {
+test("scroll assistance guides ordinary input, preserves reversals, and escapes to the hero", async () => {
   const { transpileModule, ModuleKind } = await import("typescript");
   const { runInNewContext } = await import("node:vm");
   const source = await readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8");
@@ -1361,7 +1412,9 @@ test("scroll assistance preserves native input, proximity, and escape to the her
   win.scrollY = 1700;
   wheel(120);
   pause();
-  assert.equal(frames.size, 0, "stronger input at the same position preserves free travel");
+  assert.equal(frames.size, 1, "ordinary input at the same position guides to the next project");
+  complete();
+  assert.equal(win.scrollY, 2000);
   win.scrollY = 1000;
   wheel(8);
   win.scrollY = 1190;
@@ -1380,11 +1433,15 @@ test("scroll assistance preserves native input, proximity, and escape to the her
   win.scrollY = 1700;
   wheel(8, { deltaMode: 1 });
   pause();
-  assert.equal(frames.size, 0, "line-mode wheels normalize to pixels before measuring intensity");
+  assert.equal(frames.size, 1, "line-mode wheels normalize to pixels before measuring intensity");
+  complete();
+  assert.equal(win.scrollY, 2000);
   win.scrollY = 1700;
   wheel(1, { deltaMode: 2 });
   pause();
-  assert.equal(frames.size, 0, "page-mode wheels retain strong travel");
+  assert.equal(frames.size, 1, "page-mode wheels retain directional project travel");
+  complete();
+  assert.equal(win.scrollY, 2000);
   win.scrollY = 1000;
   wheel(2);
   win.scrollY = 1020;
@@ -1406,7 +1463,9 @@ test("scroll assistance preserves native input, proximity, and escape to the her
   win.scrollY = 1600;
   wheel(400);
   pause();
-  assert.equal(frames.size, 0, "a mid-project stop does not trigger a full-section jump");
+  assert.equal(frames.size, 1, "a mid-project stop guides to the next project");
+  complete();
+  assert.equal(win.scrollY, 2000);
   win.scrollY = 980;
   wheel(-900);
   pause();
@@ -1437,6 +1496,18 @@ test("scroll assistance preserves native input, proximity, and escape to the her
   assert.equal(frames.size, 0);
 });
 
+test("desktop work uses the same gentle proximity snap as touch", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /@media \(min-width: 1080px\), \(pointer: coarse\) \{\s*html\[data-work-snap="on"\] \{ scroll-snap-type: y proximity; \}/);
+  assert.match(css, /html\[data-work-snap="on"\] \.work-feature \{[\s\S]*?scroll-snap-stop: normal;/);
+});
+
+
+test("Snapchat work metadata centers and separates the logo and label", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__meta \.hero-company--snap \{ display: inline-flex; align-items: center; gap: 8px; \}/);
+  assert.match(css, /\.work-feature__meta \.hero-company--snap \.hero-company__mark \{ transform: none; \}/);
+});
 
 test("Snapchat work metadata centers and separates the logo and label", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
