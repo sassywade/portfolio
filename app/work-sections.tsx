@@ -25,8 +25,9 @@ export function WorkSections() {
                 </div>
               </header>
               <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}`} role={"video" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
+                {project.layout === "trio" && <div className="work-feature__placeholder" />}
                 {"video" in project ? (
-                  <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel="Proactive Intelligence product walkthrough" />
+                  <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
                 ) : "media" in project ? project.media.groups.map((group) => (
                   <div className="work-feature__asset-group" key={group.label}>
                     <div className="work-feature__asset-phones">
@@ -36,7 +37,7 @@ export function WorkSections() {
                   </div>
                 )) : <div className="work-feature__placeholder" />}
                 {"media" in project ? null : <div className="work-feature__placeholder" />}
-                {project.layout !== "pair" && !("media" in project) && <div className="work-feature__placeholder" />}
+                {project.layout === "split" && <div className="work-feature__placeholder" />}
               </div>
               <p className="work-feature__summary">{project.summary}</p>
             </Reveal>

@@ -16,6 +16,7 @@ export function WorkScroll() {
     let lastWheelTime = 0;
     let peakSpeed = 0;
     let guideArmed = false;
+    let heroLanding = false;
     let idleTimer = 0;
     let scrollFrame = 0;
     const stopScroll = () => {
@@ -23,6 +24,7 @@ export function WorkScroll() {
       scrollFrame = 0;
       window.clearTimeout(idleTimer);
       guideArmed = false;
+      heroLanding = false;
     };
     // Match the calm drawer curve: cubic-bezier(0.32, 0.72, 0, 1).
     const easeScroll = (progress: number) => {
@@ -93,7 +95,22 @@ export function WorkScroll() {
       idleTimer = window.setTimeout(finishGesture, 140);
     };
     const wheel = (event: WheelEvent) => {
-      // Every new input interrupts scripted navigation; the browser owns all wheel movement.
+      const eligible = desktop.matches && !reduced.matches && !event.ctrlKey && !event.metaKey
+        && Math.abs(event.deltaY) > Math.abs(event.deltaX) && !nestedScroll(event.target);
+      // Only the opening gesture is captured. Its momentum must not skip project one.
+      const startsAtHome = window.scrollY <= 8 && center(sections[0]) > window.innerHeight * 0.5;
+      if (eligible && event.cancelable && event.deltaY > 0 && (heroLanding || startsAtHome)) {
+        event.preventDefault();
+        if (!heroLanding) {
+          stopScroll();
+          heroLanding = true;
+          settle(sections[0], true);
+        }
+        window.clearTimeout(idleTimer);
+        idleTimer = window.setTimeout(() => { heroLanding = false; }, 140);
+        return;
+      }
+      // Reversals interrupt immediately. All wheel movement inside Work stays native.
       const now = performance.now();
       const nextDirection = Math.sign(event.deltaY);
       const newGesture = !guideArmed || nextDirection !== direction || now - lastWheelTime > 180;
@@ -127,7 +144,7 @@ export function WorkScroll() {
     const initial = location.hash === "#work" ? sections[0] : sections.find((section) => `#${section.id}` === location.hash);
     const initialFrame = initial ? requestAnimationFrame(() => settle(initial, false)) : 0;
     reduced.addEventListener("change", syncMotion);
-    window.addEventListener("wheel", wheel, { passive: true });
+    window.addEventListener("wheel", wheel, { passive: false });
     window.addEventListener("scroll", scheduleGuide, { passive: true });
     desktop.addEventListener("change", syncMotion);
     document.addEventListener("click", click);

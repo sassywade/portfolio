@@ -162,7 +162,12 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+Growth uses a centered 563×500 video between two 271×500 black placeholders on the 1145×500 canvas, with proportionally scaled 20px gaps. This supersedes the equal-column Growth layout below. The supplied growth_animation.mov is cropped inside its border (1556×1380 at x=8, y=8) and encoded at 1126×1000. Reuse muted inline playback, offscreen suspension, and a content poster for reduced motion.
+
+On desktop with a fine pointer and normal motion, the first downward wheel gesture from the top of the homepage lands on Proactive Intelligence using the existing 450ms centered navigation. Capture only that gesture and its same-direction momentum until a 140ms input pause; never let it skip the first project. Upward reversal, keyboard, pointer, touch, resize, and preference changes interrupt immediately. Subsequent project scrolling retains intensity-aware native travel. Reduced motion and touch remain native.
+
 The two Snapchat image panels use #ECECEC; the surrounding homepage paper remains #F5F5F4.
+All four Snapchat phones share the same height rule: min(75%, 440px). The lens phone must never have a separate height override. Keep their tops and bottoms aligned across the two panels.
 The Snapchat Work metadata logo and label are vertically centered with an 8px gap and no baseline transform on the logo.
 
 The homepage now presents five major project sections in this order: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap. This supersedes the card-grid defaults above. `featuredWork` in `app/projects.ts` owns their copy, order, and media layouts. `WorkSections` renders titles and metadata above black placeholders, with summaries below. `WorkNav` uses same-page anchors and marks the section at the reading position; its desktop rail stays within Work and is hidden below 1080px when the left navigation no longer fits. Existing Reveal entrances and hero handoff remain unchanged. Split layouts scale from 1145×500, with a 708×500 main panel, two 417×240 panels, and 20px gaps. A single-panel layout uses 1145×550. Growth has three equal panels and Snap two unequal panels. Await new assets; do not reinsert previous covers or recordings. Legacy case-study URLs redirect to matching homepage anchors.
@@ -192,6 +197,6 @@ The homepage paper background is #F5F5F4 across the hero and inline Work, includ
 
 Each complete project (heading, media, and summary) enters once with a 250ms fade and 6px rise using the shared ease-out curve. The existing Reveal observer retains visibility afterward, including when scrolling back. Do not stagger individual media panels or fade projects when they leave view. Reduced motion leaves the composition static. Scroll navigation remains independent of this entrance.
 
-Project summaries stay left-aligned beneath their media, capped at 72ch with pretty text wrapping for a comfortable reading measure. Small screens use the available width.
+Project summaries stay left-aligned beneath their media and span the full mockup composition width, with normal text wrapping and no character-based width cap. Small screens use the available width.
 
 The inline Work wrapper stays transparent, including the quiet layout. Only the full-page paper layer removes the grid during the meadow handoff; never paint a bounded background on the rising Work container, which would cover the meadow as a rectangular bar.

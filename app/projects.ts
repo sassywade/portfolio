@@ -396,7 +396,7 @@ export const featuredWork = [
   { slug: "psychic", video: { src: "/work/psychic-main.mp4", poster: "/work/psychic-main-poster.jpg" }, navTitle: "Proactive intelligence", title: "Proactive Intelligence", year: "2026", company: "Glean", layout: "split", summary: "How do you help someone before they ask? As lead designer, I explored how Glean could anticipate people’s needs—turning proactive intelligence into a feeling of relief." },
   { slug: "homepage", navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to match its growing AI capabilities. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward and close more loops." },
   { slug: "artifacts", navTitle: "Artifacts", title: "Artifacts", year: "2026", company: "Glean", layout: "split", summary: "Making the jump from chat to editable work." },
-  { slug: "growth", navTitle: "Growth", title: "Growth at Glean", year: "2025", company: "Glean", layout: "trio", summary: "Helping people find value, then come back." },
+  { slug: "growth", video: { src: "/work/growth-main.mp4", poster: "/work/growth-main-poster.jpg" }, navTitle: "Growth", title: "Growth at Glean", year: "2025", company: "Glean", layout: "trio", summary: "Helping people find value, then come back." },
   {
     slug: "snap",
     navTitle: "Web3 at Snap",

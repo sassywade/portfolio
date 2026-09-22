@@ -1200,7 +1200,7 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 11);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 10);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
@@ -1226,6 +1226,12 @@ test("work rail reveals once after entering the first project and respects reduc
   assert.match(css, /prefers-reduced-motion: reduce[^}]*work-section-nav[^}]*transition: opacity 150ms linear/s);
 });
 
+
+test("all Snapchat phones share one height without a larger lens override", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__asset-phones img \{[^}]*height: min\(75%, 440px\)/);
+  assert.doesNotMatch(css, /\.work-feature__asset-group:last-child \.work-feature__asset-phones img \{[^}]*height:/);
+});
 
 test("Snapchat image panels use the requested neutral background", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
@@ -1312,12 +1318,40 @@ test("scroll assistance preserves native input, proximity, and escape to the her
     timers.clear();
     callbacks.forEach(callback => callback());
   };
-  assert.equal(events.get("wheel").options.passive, true);
+  assert.equal(events.get("wheel").options.passive, false);
   const complete = () => {
     const callbacks = [...frames.values()];
     frames.clear();
     callbacks.forEach(callback => callback(1000));
   };
+  let captured = 0;
+  win.scrollY = 0;
+  wheel(4, { cancelable: true, preventDefault: () => captured++ });
+  assert.equal(frames.size, 1, "the first small downward scroll starts the homepage handoff");
+  wheel(900, { cancelable: true, preventDefault: () => captured++ });
+  assert.equal(captured, 2, "opening momentum is contained so it cannot skip project one");
+  assert.equal(frames.size, 1, "momentum does not restart the handoff animation");
+  complete();
+  assert.equal(win.scrollY, 1000, "the opening gesture lands precisely on Proactive Intelligence");
+  pause();
+  wheel(100, { cancelable: true });
+  pause();
+  assert.equal(frames.size, 0, "the next gesture inside Work is native again");
+  win.scrollY = 0;
+  wheel(10, { cancelable: true, preventDefault: () => captured++ });
+  wheel(-1, { cancelable: true });
+  assert.equal(frames.size, 0, "upward reversal cancels the homepage handoff immediately");
+  pause();
+  assert.equal(frames.size, 0);
+  win.scrollY = 0;
+  wheel(10, { cancelable: true, ctrlKey: true });
+  assert.equal(frames.size, 0, "zoom gestures never trigger homepage navigation");
+  for (const preference of [desktop, reduced]) {
+    preference.matches = preference === reduced;
+    wheel(10, { cancelable: true });
+    assert.equal(frames.size, 0, "touch and reduced motion preserve native homepage scrolling");
+    preference.matches = preference === desktop;
+  }
   win.scrollY = 1600;
   wheel(8);
   pause();
@@ -1481,7 +1515,19 @@ test("projects reveal as one composition and stay visible on return", async () =
 });
 
 
-test("project descriptions use a comfortable reading width", async () => {
+test("project descriptions fill the mockup width", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__summary \{[^}]*max-width: 72ch;[^}]*text-wrap: pretty;/);
+  assert.match(css, /\.work-feature__summary \{[^}]*max-width: none;[^}]*text-wrap: wrap;/);
+});
+
+test("Growth video sits between equal side placeholders", async () => {
+  const html = await (await render()).text();
+  const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(growth);
+  assert.match(growth, /work-feature__placeholder[\s\S]*?<video[\s\S]*?growth-main.mp4[\s\S]*?<\/video>[\s\S]*?work-feature__placeholder/);
+  assert.equal((growth.match(/work-feature__placeholder/g) || []).length, 2);
+  assert.match(growth, /poster="\/work\/growth-main-poster.jpg"/);
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /grid-template-columns: minmax\(0, 271fr\) minmax\(0, 563fr\) minmax\(0, 271fr\)/);
+  assert.match(css, /column-gap: calc\(100% \* 20 \/ 1145\)/);
 });
