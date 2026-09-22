@@ -1249,6 +1249,7 @@ test("Snap work renders the supplied Treasure and Lens assets in two groups", as
   }
   assert.match(html, />Treasure<\/span>/);
   assert.match(html, />NFTs as lenses<\/span>/);
+  assert.match(html, /href="https:\/\/techcrunch\.com\/2022\/07\/13\/snap-eyes-adding-nfts-as-ar-filters-in-snapchat\/" target="_blank" rel="noopener noreferrer">TechCrunch article<\/a>/);
 });
 
 

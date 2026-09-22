@@ -52,7 +52,10 @@ export function WorkSections() {
                 ) : "media" in project ? null : <div className="work-feature__placeholder" />}
                 {project.layout === "split" && <div className="work-feature__placeholder" />}
               </div>
-              <p className="work-feature__summary">{project.summary}</p>
+              <p className="work-feature__summary">
+                {project.summary}
+                {"summaryLink" in project && <> (<a href={project.summaryLink.href} target="_blank" rel="noopener noreferrer">{project.summaryLink.label}</a>).</>}
+              </p>
             </Reveal>
           </section>
         ))}

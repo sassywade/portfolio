@@ -13368,6 +13368,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   text-align: center;
 }
 .work-feature__media--single { aspect-ratio: 1145 / 550; grid-template-columns: 1fr; grid-template-rows: 1fr; }
+.work-feature__summary a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .work-feature__summary {
   max-width: none;
   margin: 24px 0 0;

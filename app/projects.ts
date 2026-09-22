@@ -436,6 +436,10 @@ export const featuredWork = [
         },
       ],
     },
-    summary: "At Snapchat, I spent my time on two projects: Treasure, a consumer app that used Snap’s AR kit to let people bring their NFT collections into the real world, and a feature to bring NFTs as lenses inside the core Snapchat app (Techcrunch article).",
+    summary: "At Snapchat, I spent my time on two projects: Treasure, a consumer app that used Snap’s AR kit to let people bring their NFT collections into the real world, and a feature to bring NFTs as lenses inside the core Snapchat app",
+    summaryLink: {
+      label: "TechCrunch article",
+      href: "https://techcrunch.com/2022/07/13/snap-eyes-adding-nfts-as-ar-filters-in-snapchat/",
+    },
   },
 ] as const;
