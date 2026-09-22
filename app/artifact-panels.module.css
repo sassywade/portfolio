@@ -1,0 +1,30 @@
+.composition:global(.work-feature__media) {
+  aspect-ratio: 1145 / 450;
+  row-gap: 10px;
+}
+.panel {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ececec;
+}
+.panel img { position: absolute; display: block; height: auto; max-width: none; }
+.panel[data-artifact-panel="document"] img {
+  width: 95%;
+  left: 0;
+  top: 7%;
+}
+.panel[data-artifact-panel="edit"] img {
+  width: 84%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.panel[data-artifact-panel="skins"] img {
+  width: 82%;
+  left: 50%;
+  top: 11%;
+  transform: translateX(-50%);
+}

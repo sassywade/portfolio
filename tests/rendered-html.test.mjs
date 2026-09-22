@@ -1234,6 +1234,8 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
 });
 
 test("Life photos share the centered viewer and keep playful hover movement", async () => {
+  const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
+  assert.match(galleryMarkup, /<h2 id="about-gallery-title">AFK<\/h2>/);
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
@@ -1337,10 +1339,21 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 6);
-  assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="work-feature__media work-feature__media--split(?: |")/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
+});
+
+test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts", async () => {
+  const html = await (await render()).text();
+  const section = html.split('id="work-artifacts"')[1].split("</section>")[0];
+  for (const asset of ["document.png", "edit-with-ai.png", "app-skins.png"]) {
+    assert.ok(section.includes("/work/artifacts/" + asset));
+  }
+  assert.equal((section.match(/data-artifact-panel=/g) ?? []).length, 3);
+  assert.doesNotMatch(section, /work-feature__placeholder|assets coming soon/);
+  assert.match(section, /Making the jump from chat to editable work/);
 });
 
 test("dark work tiles are an opt-in, work-only prototype", async () => {

@@ -6,6 +6,7 @@ import { WorkScroll } from "./work-scroll";
 import { GrowthPrototypeVideo } from "./growth-video-prototype";
 import { PsychicCards } from "./psychic-cards";
 import { WorkTileSurface } from "./work-tile-prototype";
+import artifactStyles from "./artifact-panels.module.css";
 
 export function WorkSections() {
   return (
@@ -27,7 +28,12 @@ export function WorkSections() {
                   </span>
                 </div>
               </header>
-              <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}`} role={"video" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
+              <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}${"panels" in project ? " " + artifactStyles.composition : ""}`} role={"video" in project || "panels" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project || "panels" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
+                {"panels" in project ? project.panels.map(panel => (
+                  <div key={panel.kind} className={artifactStyles.panel} data-artifact-panel={panel.kind}>
+                    <img src={panel.src} alt={panel.alt} width={panel.width} height={panel.height} loading="lazy" />
+                  </div>
+                )) : <>
                 {project.slug === "growth" && (
                   <div className="work-feature__onboarding">
                     {growthOnboardingScreens.map((screen) => (
@@ -57,6 +63,7 @@ export function WorkSections() {
                   </div>
                 ) : "media" in project ? null : <div className="work-feature__placeholder" />}
                 {project.layout === "split" && (project.slug === "psychic" ? <PsychicCards /> : <div className="work-feature__placeholder" />)}
+                </>}
               </div>
               <p className="work-feature__summary">
                 {project.summary}
