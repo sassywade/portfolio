@@ -59,10 +59,10 @@ export function PhotographyGallery() {
   }, []);
 
   useEffect(() => {
-    if (composing) return;
+    if (composing || query === appliedQuery) return;
     const timer = window.setTimeout(() => { capture(); setAppliedQuery(query); }, 170);
     return () => window.clearTimeout(timer);
-  }, [query, composing, capture]);
+  }, [query, appliedQuery, composing, capture]);
 
   const ordered = useMemo(() => clusterPhotos(photographs, grouping), [grouping]);
   const matching = useMemo(() => ordered.filter((photo) => matchesPhoto(photo, appliedQuery)), [ordered, appliedQuery]);
@@ -133,7 +133,8 @@ export function PhotographyGallery() {
               style={{ aspectRatio: photo.ratio, visibility: selectedId === photo.id ? 'hidden' : undefined, ...(measure.width && position ? { left: position.x, top: position.y, width: position.width, height: position.height } : {}) }}
               aria-label={`Open ${photo.description}`} aria-haspopup="dialog" aria-hidden={!shown} tabIndex={shown ? 0 : -1}
               onClick={(event) => openPhoto({ ...photo, label: photo.description }, event.currentTarget, event.detail !== 0)}>
-              <Image src={photo.thumbnail} alt={photo.description} width={photo.width} height={photo.height} sizes="(max-width: 580px) 45vw, (max-width: 800px) 30vw, 20vw" loading={index < 10 ? 'eager' : 'lazy'} unoptimized draggable={false} />
+              <Image ref={(node) => { if (node?.complete && node.naturalWidth > 0) node.dataset.loaded = "true"; }}
+                onLoad={(event) => { event.currentTarget.dataset.loaded = "true"; }} src={photo.thumbnail} alt={photo.description} width={photo.width} height={photo.height} sizes="(max-width: 580px) 45vw, (max-width: 800px) 30vw, 20vw" loading={index < 10 ? 'eager' : 'lazy'} unoptimized draggable={false} />
             </button>
           );
         })}

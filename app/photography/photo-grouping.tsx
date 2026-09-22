@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 export type PhotoGrouping = "color" | "style";
 const eventName = "portfolio:photo-grouping";
@@ -11,8 +11,9 @@ function readGrouping(): PhotoGrouping {
 }
 export function usePhotoGrouping(beforeChange?: () => void) {
   const [grouping, setGrouping] = useState<PhotoGrouping>("color");
-  useEffect(() => {
-    const update = () => { beforeChange?.(); setGrouping(readGrouping()); };
+  useLayoutEffect(() => {
+    // Restore the saved order before paint; only explicit changes should animate.
+    const update = () => { setGrouping(readGrouping()); };
     update();
     const receive = (event: Event) => { beforeChange?.(); setGrouping((event as CustomEvent<PhotoGrouping>).detail); };
     window.addEventListener(eventName, receive);

@@ -246,3 +246,5 @@ Home, Photo, and About share the warm paper background `#F5F5F4`, including Phot
 The Photo search bar spans the full gallery width and aligns with its left and right edges at every viewport size.
 
 The empty, unfocused Photo search field rotates “Search bikes,” “Search city,” and “Search sunsets” every three seconds, with 200ms fades and small vertical slides. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps “Search bikes” still.
+
+On Photo page arrival, keep the temporary server column layout hidden until client measurements and the saved grouping resolve before paint. Restoring preferences must never capture positions or trigger the search/reorder animation. Reveal the final gallery with a 200ms opacity-only fade; thumbnails reserve their dimensions and fade in on load, including cached images. Reduced motion makes both reveals immediate.
