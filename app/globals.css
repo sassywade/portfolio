@@ -12800,7 +12800,7 @@ html[data-project-subtext="true"] .project-card__info p {
 .about-page__gallery-track .film-photo--landscape .film-photo__image {
   width: 100%;
   height: auto;
-     aspect-ratio: 2 / 3;
+  aspect-ratio: 0.72 / 1;
 }
 
 .about-page__gallery-track .film-photo__image img {
@@ -13653,9 +13653,9 @@ html:has(.pranathi-intro--home) body,
 
   .about-page__gallery-track .film-photo,
   .about-page__gallery-track .film-photo--landscape {
-    flex-basis: clamp(80px, 5.4vw, 98px);
-    width: clamp(80px, 5.4vw, 98px);
-    margin-left: -17px;
+    flex-basis: clamp(84px, 5.8vw, 104px);
+    width: clamp(84px, 5.8vw, 104px);
+    margin-left: -28px;
   }
 
   .about-page__gallery-track .film-photo:first-child {

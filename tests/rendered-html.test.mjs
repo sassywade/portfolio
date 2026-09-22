@@ -1212,7 +1212,7 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
   assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(42px, 8vw, 100px\)/);
   assert.match(css, /\.about-page__gallery-track\s*\{[\s\S]*width: min\(100%, 820px\);[\s\S]*max-width: 100%;/);
-  assert.match(css, /flex-basis: clamp\(80px, 5\.4vw, 98px\);/);
+  assert.match(css, /flex-basis: clamp\(84px, 5\.8vw, 104px\);/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
