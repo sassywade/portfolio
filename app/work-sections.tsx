@@ -1,6 +1,7 @@
 import { featuredWork } from "./projects";
 import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
+import { ProjectVideo } from "./project-mockup";
 import { WorkScroll } from "./work-scroll";
 
 export function WorkSections() {
@@ -23,8 +24,10 @@ export function WorkSections() {
                   </span>
                 </div>
               </header>
-              <div className={`work-feature__media work-feature__media--${project.layout}`} role="img" aria-label={`${project.title} — project assets coming soon`}>
-                <div className="work-feature__placeholder" />
+              <div className={`work-feature__media work-feature__media--${project.layout}`} role={"video" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : `${project.title} — project assets coming soon`}>
+                {"video" in project ? (
+                  <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel="Proactive Intelligence product walkthrough" />
+                ) : <div className="work-feature__placeholder" />}
                 <div className="work-feature__placeholder" />
                 {project.layout !== "pair" && <div className="work-feature__placeholder" />}
               </div>

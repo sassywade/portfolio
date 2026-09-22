@@ -11,7 +11,7 @@ type ProjectVideoProps = {
   src: string;
 };
 
-function ProjectVideo({ ariaLabel, className, poster, src }: ProjectVideoProps) {
+export function ProjectVideo({ ariaLabel, className, poster, src }: ProjectVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {

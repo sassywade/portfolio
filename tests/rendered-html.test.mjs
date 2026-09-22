@@ -1200,7 +1200,7 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 14);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 13);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
@@ -1291,4 +1291,12 @@ test("Work rail uses one moving indicator with reduced-motion support", async ()
 test("project navigation is hidden when the left rail does not fit", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /@media \(max-width: 1079px\) \{\s*\.work-editorial \{[^}]*\}\s*\.work-editorial__rail \{ display: none; \}/);
+});
+
+
+test("Proactive Intelligence uses the cropped main video", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /class="work-feature__video"/);
+  assert.match(html, /src="\/work\/psychic-main.mp4"/);
+  assert.match(html, /poster="\/work\/psychic-main-poster.jpg"/);
 });
