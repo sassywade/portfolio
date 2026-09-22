@@ -13308,7 +13308,28 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   width: 90%;
   height: auto;
 }
-#work-growth .work-feature__placeholder { background: #ececec; }
+.work-feature__checklist {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ececec;
+}
+.work-feature__checklist img {
+  display: block;
+  width: 94%;
+  height: auto;
+  margin-left: 6%;
+}
+.work-feature__checklist::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 18%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #ececec, rgb(236 236 236 / 65%) 35%, rgb(236 236 236 / 0));
+}
 .work-feature__media--assets { gap: 20px; container-type: inline-size; }
 .work-feature__asset-group {
   display: flex;

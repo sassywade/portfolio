@@ -392,6 +392,11 @@ export const caseStudies: Record<string, CaseStudy> = {
 };
 
 // Homepage reading order and media layouts. Dimensions scale from a 1145px canvas.
+export const growthChecklist = {
+  src: "/work/growth-checklist.png",
+  alt: "Glean getting-started checklist with completed and suggested onboarding tasks",
+} as const;
+
 export const growthOnboardingScreens = [
   { src: "/work/growth-welcome.png", alt: "Welcome to Glean onboarding screen" },
   { src: "/work/growth-extension.png", alt: "Start every tab with Glean extension onboarding screen" },

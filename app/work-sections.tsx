@@ -1,4 +1,4 @@
-import { featuredWork, growthOnboardingScreens } from "./projects";
+import { featuredWork, growthOnboardingScreens, growthChecklist } from "./projects";
 import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
 import { ProjectVideo } from "./project-mockup";
@@ -45,7 +45,11 @@ export function WorkSections() {
                     <span>{group.label}</span>
                   </div>
                 )) : <div className="work-feature__placeholder" />}
-                {"media" in project ? null : <div className="work-feature__placeholder" />}
+                {project.slug === "growth" ? (
+                  <div className="work-feature__checklist">
+                    <img src={growthChecklist.src} alt={growthChecklist.alt} width={1012} height={1806} loading="lazy" />
+                  </div>
+                ) : "media" in project ? null : <div className="work-feature__placeholder" />}
                 {project.layout === "split" && <div className="work-feature__placeholder" />}
               </div>
               <p className="work-feature__summary">{project.summary}</p>
