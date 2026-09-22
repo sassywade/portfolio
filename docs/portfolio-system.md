@@ -244,3 +244,5 @@ Search settles after 170ms of typing. Visible non-matches fall downward with a s
 Home, Photo, and About share the warm paper background `#F5F5F4`, including Photo and About viewer backdrops. Scope this color to these pages so case studies retain their white background.
 
 The Photo search bar spans the full gallery width and aligns with its left and right edges at every viewport size.
+
+The empty, unfocused Photo search field rotates “Search bikes,” “Search city,” and “Search sunsets” every three seconds, with 200ms fades and small vertical slides. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps “Search bikes” still.

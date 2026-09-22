@@ -7,6 +7,7 @@ import photographs from "./photos.json";
 import { clusterPhotos, masonryLayout, matchesPhoto } from "./gallery-model.mjs";
 import { PhotoPrototypePicker, usePhotoGrouping } from "./photo-grouping";
 import styles from "./photography.module.css";
+import { SearchPrompt } from "./search-prompt";
 
 type Snapshot = { left: number; top: number; width: number; height: number; opacity: string };
 
@@ -110,11 +111,14 @@ export function PhotographyGallery() {
 
   return (
     <>
-      <div className={styles.search} role="search">
+      <div className={styles.search} role="search" data-empty={!query} data-viewing={!!selectedId}>
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
-        <input ref={input} type="search" aria-label="Search photos" placeholder="Search photos" value={query} autoComplete="off" spellCheck={false}
-          onChange={(event) => setQuery(event.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)}
-          onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
+        <div className={styles.searchField}>
+          <SearchPrompt />
+          <input ref={input} type="search" aria-label="Search photos" placeholder="Search photos" value={query} autoComplete="off" spellCheck={false}
+            onChange={(event) => setQuery(event.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)}
+            onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
+        </div>
         {query && <button type="button" aria-label="Clear search" onClick={() => { setQuery(''); capture(); setAppliedQuery(''); input.current?.focus(); }}>Clear</button>}
       </div>
       <p className="sr-only" role="status" aria-live="polite">{matching.length} {matching.length === 1 ? 'photo' : 'photos'}{appliedQuery ? ` matching ${appliedQuery}` : ''}</p>
