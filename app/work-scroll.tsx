@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Native scrolling with a small, interruptible centering assist after a pause. */
+/** Native scrolling with intensity-aware, interruptible project centering. */
 export function WorkScroll() {
   useEffect(() => {
     const root = document.documentElement;
@@ -12,6 +12,9 @@ export function WorkScroll() {
     const desktop = window.matchMedia("(min-width: 1080px) and (pointer: fine)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let direction = 0;
+    let gestureStart = 0;
+    let lastWheelTime = 0;
+    let peakSpeed = 0;
     let guideArmed = false;
     let idleTimer = 0;
     let scrollFrame = 0;
@@ -67,26 +70,41 @@ export function WorkScroll() {
       guideArmed = false;
       const y = window.scrollY;
       const targets = sections.map(center);
-      // Never pull an upward gesture back into Work, or catch the page ending.
-      if (y < targets[0] || y > targets[targets.length - 1]) return;
-      const radius = Math.min(120, window.innerHeight * 0.14);
+      // Upward escape into the hero and downward escape past Work stay native.
+      if ((direction < 0 && y < targets[0]) || (direction > 0 && y > targets[targets.length - 1])) return;
+      const intensity = Math.min(1, peakSpeed / 2.5);
       const targetIndex = targets.findIndex((target, index) => {
         const distance = (target - y) * direction;
-        return distance > 2 && distance <= radius && fits(sections[index]);
+        if (distance <= 2 || !fits(sections[index])) return false;
+        const previous = targets[index - direction];
+        const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
+        // Gentle gestures capture broadly; strong swipes keep their native travel.
+        const radius = Math.min(gap * (0.48 - intensity * 0.28), window.innerHeight * (0.5 - intensity * 0.3));
+        const committed = previous !== undefined && intensity < 0.65
+          && Math.abs(gestureStart - previous) <= 80
+          && (y - gestureStart) * direction >= gap * 0.22;
+        return distance <= radius || committed;
       });
-      if (targetIndex >= 0) settle(sections[targetIndex], true, 250);
+      if (targetIndex >= 0) settle(sections[targetIndex], true, 280);
     };
     const scheduleGuide = () => {
       if (!guideArmed || scrollFrame) return;
       window.clearTimeout(idleTimer);
-      idleTimer = window.setTimeout(finishGesture, 180);
+      idleTimer = window.setTimeout(finishGesture, 140);
     };
     const wheel = (event: WheelEvent) => {
       // Every new input interrupts scripted navigation; the browser owns all wheel movement.
+      const now = performance.now();
+      const nextDirection = Math.sign(event.deltaY);
+      const newGesture = !guideArmed || nextDirection !== direction || now - lastWheelTime > 180;
       stopScroll();
       if (!desktop.matches || reduced.matches || event.ctrlKey || event.metaKey || Math.abs(event.deltaX) > Math.abs(event.deltaY) || nestedScroll(event.target)) return;
       if (!event.deltaY) return;
-      direction = Math.sign(event.deltaY);
+      const delta = Math.abs(event.deltaY) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
+      if (newGesture) { gestureStart = window.scrollY; peakSpeed = 0; }
+      peakSpeed = Math.max(peakSpeed, delta / (newGesture ? 16 : Math.max(16, now - lastWheelTime)));
+      lastWheelTime = now;
+      direction = nextDirection;
       guideArmed = true;
       scheduleGuide();
     };
