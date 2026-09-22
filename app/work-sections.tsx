@@ -3,6 +3,7 @@ import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
 import { ProjectVideo } from "./project-mockup";
 import { WorkScroll } from "./work-scroll";
+import { GrowthPrototypeVideo } from "./growth-video-prototype";
 
 export function WorkSections() {
   return (
@@ -26,7 +27,9 @@ export function WorkSections() {
               </header>
               <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}`} role={"video" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
                 {project.layout === "trio" && <div className="work-feature__placeholder" />}
-                {"video" in project ? (
+                {project.slug === "growth" ? (
+                  <GrowthPrototypeVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
+                ) : "video" in project ? (
                   <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
                 ) : "media" in project ? project.media.groups.map((group) => (
                   <div className="work-feature__asset-group" key={group.label}>

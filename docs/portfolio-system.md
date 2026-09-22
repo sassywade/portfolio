@@ -166,6 +166,8 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
+The first prototype-picker control is Alternate Growth video, off on each page reload. It swaps only the center Growth video and poster, leaving the original as the default. The alternative crops alt_growth.mov inside its border at x=20, y=16, 1556×1380, encoded to 1126×1000. Both versions reuse offscreen pause and reduced-motion posters. The choice is visit-local and never saved.
+
 Growth uses a centered 563×500 video between two 271×500 black placeholders on the 1145×500 canvas, with proportionally scaled 20px gaps. This supersedes the equal-column Growth layout below. The supplied growth_animation.mov is cropped inside its border (1556×1380 at x=8, y=8) and encoded at 1126×1000. Reuse muted inline playback, offscreen suspension, and a content poster for reduced motion.
 
 On desktop with a fine pointer and normal motion, the first downward wheel gesture from the top of the homepage lands on Proactive Intelligence using the existing 450ms centered navigation. Capture only that gesture and its same-direction momentum until a 140ms input pause; never let it skip the first project. Upward reversal, keyboard, pointer, touch, resize, and preference changes interrupt immediately. Subsequent project scrolling retains intensity-aware native travel. Reduced motion and touch remain native.

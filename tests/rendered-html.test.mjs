@@ -1591,6 +1591,20 @@ test("project descriptions fill the mockup width", async () => {
   assert.match(css, /\.work-feature__summary \{[^}]*max-width: none;[^}]*text-wrap: wrap;/);
 });
 
+test("alternate Growth video is the first visit-local prototype and defaults off", async () => {
+  const [picker, prototype, html] = await Promise.all([
+    readFile(new URL("../app/meadow-prototype-controls.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/growth-video-prototype.tsx", import.meta.url), "utf8"),
+    render().then((response) => response.text()),
+  ]);
+  assert.ok(picker.indexOf("<GrowthVideoToggle />") < picker.indexOf('aria-label="Page layout"'));
+  assert.match(prototype, /let alternateEnabled = false/);
+  assert.match(prototype, /aria-pressed=\{enabled\}/);
+  assert.match(prototype, /key=\{media.src\}/);
+  assert.doesNotMatch(prototype, /localStorage|sessionStorage/);
+  assert.match(html, /src="\/work\/growth-main.mp4"/);
+});
+
 test("Growth video sits between equal side placeholders", async () => {
   const html = await (await render()).text();
   const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];

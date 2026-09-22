@@ -25,6 +25,7 @@ import type { WorkGridColumns, WorkHandoff } from "./hero-meadow";
 import type { TopPetMode } from "./top-pet";
 import { PhilipPickerToggle } from "./philip-toggle";
 import { VisitorBikeEditor, type VisitorBike } from "./visitor-bike";
+import { GrowthVideoToggle } from "./growth-video-prototype";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },
@@ -199,6 +200,8 @@ export function MeadowSettings({
               Close
             </button>
           </div>
+
+          <GrowthVideoToggle />
 
           <section className="meadow-settings__section" aria-label="Page layout">
             <h2>Page layout</h2>
