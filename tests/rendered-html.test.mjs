@@ -1243,7 +1243,9 @@ test("Proactive Intelligence keeps the popup artwork above one remaining placeho
   const html = await (await render()).text();
   const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];
   assert.match(psychic, /class="work-feature__popups"/);
-  assert.match(psychic, /src="\/work\/psychic-popups.png"/);
+  assert.match(psychic, /src="\/work\/psychic-popups-shadow.png"/);
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__popups img \{[^}]*width: 86%/);
   assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 1);
 });
 

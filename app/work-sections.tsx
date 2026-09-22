@@ -51,7 +51,7 @@ export function WorkSections() {
                   </div>
                 ) : project.slug === "psychic" ? (
                   <div className="work-feature__popups">
-                    <img src={psychicPopups.src} alt={psychicPopups.alt} width={1247} height={960} loading="lazy" />
+                    <img src={psychicPopups.src} alt={psychicPopups.alt} width={1395} height={960} loading="lazy" />
                   </div>
                 ) : "media" in project ? null : <div className="work-feature__placeholder" />}
                 {project.layout === "split" && <div className="work-feature__placeholder" />}
