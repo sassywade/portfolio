@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { bind, setVolume } from "cuelume";
 
-const ENTRANCE_SOUND_KEY = "portfolio:entrance-sound-played";
+const ENTRANCE_SOUND_KEY = "portfolio:entrance-sound-played-v2";
 
 const actionableSelector = [
   "a[href]",
@@ -47,7 +47,7 @@ function createEntranceSound() {
   const context = new AudioContextConstructor();
   const master = context.createGain();
   master.gain.setValueAtTime(0.0001, context.currentTime);
-  master.gain.exponentialRampToValueAtTime(0.075, context.currentTime + 0.7);
+  master.gain.exponentialRampToValueAtTime(0.14, context.currentTime + 0.7);
   master.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.6);
   master.connect(context.destination);
 
@@ -56,7 +56,7 @@ function createEntranceSound() {
   hum.type = "sine";
   hum.frequency.setValueAtTime(174, context.currentTime);
   humGain.gain.setValueAtTime(0.0001, context.currentTime);
-  humGain.gain.exponentialRampToValueAtTime(0.23, context.currentTime + 0.55);
+  humGain.gain.exponentialRampToValueAtTime(0.34, context.currentTime + 0.55);
   humGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.35);
   hum.connect(humGain).connect(master);
 
@@ -65,7 +65,7 @@ function createEntranceSound() {
   overtone.type = "sine";
   overtone.frequency.setValueAtTime(261, context.currentTime);
   overtoneGain.gain.setValueAtTime(0.0001, context.currentTime);
-  overtoneGain.gain.exponentialRampToValueAtTime(0.06, context.currentTime + 0.8);
+  overtoneGain.gain.exponentialRampToValueAtTime(0.1, context.currentTime + 0.8);
   overtoneGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.1);
   overtone.connect(overtoneGain).connect(master);
 
@@ -85,7 +85,7 @@ function createEntranceSound() {
   windFilter.frequency.exponentialRampToValueAtTime(520, context.currentTime + 3.1);
   windFilter.Q.setValueAtTime(0.45, context.currentTime);
   windGain.gain.setValueAtTime(0.0001, context.currentTime);
-  windGain.gain.exponentialRampToValueAtTime(0.22, context.currentTime + 1.1);
+  windGain.gain.exponentialRampToValueAtTime(0.34, context.currentTime + 1.1);
   windGain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.15);
   wind.connect(windFilter).connect(windGain).connect(master);
 
@@ -98,6 +98,7 @@ function createEntranceSound() {
   wind.stop(startTime + 3.55);
 
   if (context.state === "suspended") {
+    void context.resume().catch(() => {});
     void context.close();
     return false;
   }
@@ -137,9 +138,9 @@ export function Soundscape() {
       window.removeEventListener("touchstart", startEntranceSound);
     };
     if (!entranceSoundStarted) {
-      window.addEventListener("pointerdown", startEntranceSound, { once: true, passive: true });
-      window.addEventListener("keydown", startEntranceSound, { once: true });
-      window.addEventListener("touchstart", startEntranceSound, { once: true, passive: true });
+      window.addEventListener("pointerdown", startEntranceSound, { passive: true });
+      window.addEventListener("keydown", startEntranceSound);
+      window.addEventListener("touchstart", startEntranceSound, { passive: true });
     }
 
     addDeclarativeInteractionCues(document);

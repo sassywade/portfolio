@@ -94,19 +94,20 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       lastContactSample = now;
       const bounds = canvas.getBoundingClientRect();
       if (!bounds.width || !bounds.height) return;
-      // Visitors pass through the meadow without flattening it. Only the camera
-      // drop gets a temporary contact patch, so walking and biking stay light.
-      const actors = document.querySelectorAll<HTMLElement>('.photo-drop-layer:is([data-phase="shoot"], [data-phase="land"]) .mini-photographer');
+      const actors = document.querySelectorAll<HTMLElement>('.backpack-walk-layer:is([data-phase="walk"], [data-phase="land"]) .mini-hiker, .bike-ride-layer:is([data-phase="ride"], [data-phase="land"]) .bike-rider, .photo-drop-layer:is([data-phase="shoot"], [data-phase="land"]) .mini-photographer');
       actors.forEach((actor) => {
         const rect = actor.getBoundingClientRect();
         const x = (rect.left + rect.width * 0.5 - bounds.left) * width / bounds.width;
         const y = (rect.bottom - 3 - bounds.top) * height / bounds.height;
         if (x < 0 || x > width || y < 0 || y > height) return;
-        const radius = Math.max(10, rect.width * (actor.classList.contains("bike-rider") ? 0.34 : 0.2)) * width / bounds.width;
+        const isBike = actor.classList.contains("bike-rider");
+        const isHiker = actor.classList.contains("mini-hiker");
+        const radius = Math.max(10, rect.width * (isBike ? 0.28 : isHiker ? 0.16 : 0.2)) * width / bounds.width;
+        const strength = isBike ? 0.34 : isHiker ? 0.28 : 1;
         const direction = actor.closest('[data-direction]')?.getAttribute('data-direction') === "left" ? -1 : 1;
         const existing = footprints.find((foot) => Math.abs(foot.x - x) < 5 && Math.abs(foot.y - y) < 5);
         if (existing) { existing.at = now; }
-        else footprints.push({ x, y, radius, at: now, direction });
+        else footprints.push({ x, y, radius, at: now, direction, strength });
       });
       footprints = footprints.slice(-36);
       canvas.dataset.contactCount = String(footprints.length);
@@ -196,12 +197,16 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
           const p = (Math.min(sample.height - 1, Math.floor(rootY / height * sample.height)) * sample.width + Math.min(sample.width - 1, Math.floor(rootX / width * sample.width))) * 4;
           if (pixels[p + 3] < 235 || pixels[p + 1] < pixels[p] * 0.9 || pixels[p + 2] > pixels[p + 1] * 0.96) continue;
           const light = 0.80 + random() * 0.30;
-          const crest = Math.min(1, Math.max(0, (rootY - groundAt(rootX)) / 65));
+          const terrainDepth = rootY - groundAt(rootX);
+          const crest = Math.min(1, Math.max(0, terrainDepth / 65));
+          // Let the skyline taper into the turf instead of switching between
+          // two visibly different rows at a hard depth cutoff.
+          const crestBlend = Math.max(0, Math.min(1, 1 - terrainDepth / 22));
           const rootTuft = Math.exp(-Math.pow((rootX - treeX) / (treeWidth * 0.12), 2) - Math.pow((rootY - groundAt(rootX)) / 12, 2));
           const tuft = rootTuft * Math.max(0, Math.sin(rootX * 0.42)) * 0.4;
-          const length = (rootY - groundAt(rootX) < 22 ? 0.91 : 0.7) * spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6) * (0.8 + crest * 0.2 + tuft);
+          const length = (0.7 + crestBlend * 0.12) * spacing * (2.8 + random() * 3.8) * (0.6 + rootY / height * 0.6) * (0.8 + crest * 0.2 + tuft);
           const lean = (random() - 0.3) * length * 0.45;
-          const blade = { x: rootX, y: rootY, length, lean, spacing: spacing * (rootY - groundAt(rootX) < 14 ? 0.82 : 1), color: grassColor(p, light, rootX, rootY), order: groundCount, crestFlex: Math.max(0, Math.min(1, (22 - (rootY - groundAt(rootX))) / 14)) };
+          const blade = { x: rootX, y: rootY, length, lean, spacing: spacing * (0.82 + crestBlend * 0.18), color: grassColor(p, light, rootX, rootY), order: groundCount, crestFlex: crestBlend };
           if (blade.crestFlex > 0) crestBlades.push(blade);
           else paintGround(ground!, blade);
           const row = Math.floor(rootY / 32);
@@ -304,11 +309,11 @@ export function MeadowGrass({ wind, isPlaying, src }: { wind: WindSettings; isPl
       // Skyline roots are preselected once. No clipped turf reconstruction per frame.
       for (const blade of crestBlades) {
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
-        const flow = moving ? elasticWind(blade.x) * blade.crestFlex + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
+        const flow = moving ? elasticWind(blade.x) * blade.crestFlex + arrivalGrassWind(now, blade.x / width, gust) * 0.82 + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
         paintGround(tipCtx!, blade, pressure, direction, flow);
       }
       for (const blade of blades) {
-        const flow = moving ? elasticWind(blade.x) + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
+        const flow = moving ? elasticWind(blade.x) + arrivalGrassWind(now, blade.x / width, gust) * 0.82 + cursorGrassBend(blade.x, blade.y, brush, now) : 0;
         const { pressure, direction } = grassPressure(blade.x, blade.y, now, footprints);
         const length = blade.length * (1 - pressure * 0.83);
         const flexibility = blade.flexibility;

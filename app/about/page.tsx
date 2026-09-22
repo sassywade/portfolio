@@ -21,17 +21,32 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
-            <h1 id="about-title">Hello!</h1>
+            <h1 id="about-title">Hallooo.</h1>
             <p>
-              I&apos;m a product designer interested in making new technology feel
-              natural to use.
+              (Did you get a welcome bike?)
             </p>
             <p>
-              I work across the big product question and the small detail. I like
-              projects that are still taking shape: room to explore, try ideas, and
-              make something useful.
+              You found my site. I&apos;m Neel, a product designer trying to make new
+              technology feel less new.
             </p>
-            <nav className="about-page__socials" aria-label="Social links">
+            <p>
+              I started out studying software engineering. Then I took a design class
+              with Dr. Takeyama and ended up in her human–robot interaction lab,
+              watching people meet unfamiliar machines with a mix of confusion and
+              delight. That moment stuck with me: the instant something strange
+              starts to make sense.
+            </p>
+            <p>
+              Now I work on products that change habits. It&apos;s a puzzle I keep coming
+              back to: how do you explain the unfamiliar? How do you make someone
+              want to try it? How do you make them smile? And how do you respect
+              their time while you&apos;re asking them to change?
+            </p>
+            <p>
+              This space is for the work and, eventually, the photography and writing
+              around it.
+            </p>
+            <nav className="about-page__socials" aria-label="Links">
               <a
                 href="https://x.com/neelsaswade"
                 target="_blank"
@@ -39,20 +54,32 @@ export default function AboutPage() {
                 data-social="twitter"
               >
                 <span>Twitter</span>
-                <span className="about-page__social-arrow" aria-hidden="true">↗</span>
-              </a>
-              <a
-                href="https://www.linkedin.com/in/neelsaswade/"
-                target="_blank"
-                rel="noreferrer"
-                data-social="linkedin"
-              >
-                <span>LinkedIn</span>
-                <span className="about-page__social-arrow" aria-hidden="true">↗</span>
+                <span className="about-page__social-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 12 12" focusable="false">
+                    <path d="M2 10 10 2M4.5 2H10v5.5" />
+                  </svg>
+                </span>
               </a>
               <a href="mailto:neel.saswade@gmail.com" data-social="email">
                 <span>Email</span>
-                <span className="about-page__social-arrow" aria-hidden="true">↗</span>
+                <span className="about-page__social-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 12 12" focusable="false">
+                    <path d="M2 10 10 2M4.5 2H10v5.5" />
+                  </svg>
+                </span>
+              </a>
+              <a
+                href="/Neel-Saswade-Resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                data-social="resume"
+              >
+                <span>Resume</span>
+                <span className="about-page__social-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 12 12" focusable="false">
+                    <path d="M2 10 10 2M4.5 2H10v5.5" />
+                  </svg>
+                </span>
               </a>
             </nav>
           </div>

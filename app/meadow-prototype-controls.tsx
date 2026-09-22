@@ -25,8 +25,8 @@ import type { WorkGridColumns, WorkHandoff } from "./hero-meadow";
 import type { TopPetMode } from "./top-pet";
 import { PhotoGroupingOptions } from "./photography/photo-grouping";
 import { PhilipPickerToggle } from "./philip-toggle";
-import { VisitorBikeEditor, type VisitorBike } from "./visitor-bike";
 import { GrowthVideoToggle } from "./growth-video-prototype";
+import { VisitorBikeEditor, type VisitorBike } from "./visitor-bike";
 
 const windFields: Array<{ key: WindKey; label: string }> = [
   { key: "breeze", label: "Breeze" },

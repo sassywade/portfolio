@@ -126,6 +126,7 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
   assert.match(gallery, /gallery\.dataset\.motionReady = "true"/);
   assert.match(gallery, /gallery\.dataset\.motionVisible = "true"/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
+  assert.match(css, /\/\* Lift the About composition toward the homepage hero's starting point\. \*\/[\s\S]*padding-top: clamp\(58px, 8vh, 92px\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
   assert.match(css, /\.photo-lightbox\[data-state="closing"\]/);
   assert.match(css, /\.case-media-shell > \.case-visual\s*\{\s*animation:\s*none;/);
@@ -135,6 +136,27 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
     "the final motion layer must keep case-study media still",
   );
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
+});
+
+test("keeps Life prints playful without overriding reduced motion", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
+
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /@media \(hover: hover\) and \(pointer: fine\)/);
+  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
+});
+
+test("keeps About links concise and opens the resume in a new tab", async () => {
+  const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
+  assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
+  assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
+  assert.match(about, /className="about-page__social-arrow"[\s\S]*<svg viewBox="0 0 12 12"/);
+  assert.doesNotMatch(about, /aria-hidden="true">↗/);
+  assert.match(css, /\.about-page__social-arrow svg\s*\{[\s\S]*stroke-linecap: round;[\s\S]*stroke-linejoin: round;/);
 });
 
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
@@ -715,6 +737,7 @@ test("uses only the standard Cuelume Declarative profile on every action", async
   assert.match(soundscape, /createEntranceSound/);
   assert.match(soundscape, /bandpass/);
   assert.match(soundscape, /prefers-reduced-motion: reduce/);
+  assert.doesNotMatch(soundscape, /addEventListener\("pointerdown", startEntranceSound, \{ once: true/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-toggle=/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-hover="(?!tick")/);
   assert.doesNotMatch(interactionSources.join("\n"), /data-cuelume-press="(?!press")/);
@@ -822,9 +845,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(tree, /portfolio:pet-blow-cypress/);
   assert.match(tree, /treeRef\.current\?\.applyGust/);
   assert.match(tree, /window\.addEventListener\(PET_BLOW_CYPRESS_EVENT, handlePetGust\)/);
-  assert.match(tree, /WELCOME_BREEZE_DELAY = 1250/);
+  assert.match(tree, /WELCOME_BREEZE_DELAY = 500/);
   assert.match(tree, /STRONG_AMBIENT_WIND_THRESHOLD = 0\.58/);
-  assert.match(tree, /WELCOME_BREEZE_STRENGTH = 0\.46/);
+  assert.match(tree, /WELCOME_BREEZE_STRENGTH = 0\.78/);
   assert.match(tree, /Math\.max\(currentWind\.breeze, currentWind\.gust \* 0\.72\)/);
   assert.match(tree, /ambientWind >= STRONG_AMBIENT_WIND_THRESHOLD/);
   assert.match(tree, /window\.dispatchEvent\(new CustomEvent\(MEADOW_GUST_EVENT/);
@@ -1065,7 +1088,7 @@ test("arrival breeze travels and character pressure recovers without disturbing 
   const source = await readFile(new URL("../app/grass-interaction.ts", import.meta.url), "utf8");
   const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
   const { arrivalGrassWind, grassPressure } = await import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
-  const gust = { startedAt: 1000, origin: 0, direction: 1, strength: 0.46, duration: 1450 };
+  const gust = { startedAt: 1000, origin: 0, direction: 1, strength: 0.78, duration: 1450 };
   assert.ok(arrivalGrassWind(1500, 0, gust) > 0);
   assert.equal(arrivalGrassWind(1500, 0.8, gust), 0);
   assert.ok(arrivalGrassWind(4100, 0.8, gust) > 0);
@@ -1076,6 +1099,12 @@ test("arrival breeze travels and character pressure recovers without disturbing 
   assert.equal(grassPressure(100, 100, 2900, footprints).pressure, 0);
   assert.equal(grassPressure(130, 100, 1000, footprints).pressure, 0);
   assert.equal(grassPressure(100, 100, 1000, footprints).direction, -1);
+  assert.equal(grassPressure(100, 100, 1000, [{ ...footprints[0], strength: 0.34 }]).pressure, 0.34);
+  const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
+  assert.match(grass, /isBike \? 0\.28 : isHiker \? 0\.16/);
+  assert.match(grass, /const strength = isBike \? 0\.34 : isHiker \? 0\.28 : 1/);
+  assert.match(grass, /elasticWind\(blade\.x\) \* blade\.crestFlex \+ arrivalGrassWind\(now, blade\.x \/ width, gust\) \* 0\.82/);
+  assert.match(grass, /elasticWind\(blade\.x\) \+ arrivalGrassWind\(now, blade\.x \/ width, gust\) \* 0\.82/);
 });
 
 
@@ -1143,13 +1172,14 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
 
-test("Life photos share the centered viewer without captions or pointer tilt", async () => {
+test("Life photos share the centered viewer and keep playful hover movement", async () => {
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
   assert.equal((gallery.match(/id: "/g) ?? []).length, 11);
   assert.doesNotMatch(gallery, /high-country-friends/);
   assert.match(gallery, /usePhotoViewer/);
+  assert.match(gallery, /frame: "film"/);
   assert.match(photography, /usePhotoViewer/);
   assert.doesNotMatch(gallery, /figcaption|pointermove|photo-lightbox__tilt/);
   assert.match(viewer, /dialog.showModal/);
@@ -1157,7 +1187,11 @@ test("Life photos share the centered viewer without captions or pointer tilt", a
   assert.match(viewer, /prefers-reduced-motion/);
   assert.match(viewer, /draggable=\{false\}/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /Life prints stay[\s\S]*?transform: rotate\(var\(--photo-rotation, 0deg\)\);[\s\S]*?transition: none/);
+  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
+  const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
+  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*background: #fff;/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
@@ -1176,7 +1210,7 @@ test("elastic grass shares spring motion and feathers the moving crest into cach
   assert.match(grass, /windSprings = Array.from\(\{ length: 65 \}/);
   assert.match(grass, /spring.velocity \+=/);
   assert.match(grass, /elasticWind\(blade.x\) \* crestFlex/);
-  assert.match(grass, /\(22 - \(rootY - groundAt\(rootX\)\)\) \/ 14/);
+  assert.match(grass, /1 - terrainDepth \/ 22/);
   assert.match(grass, /lastWindFrame = 0/);
 });
 
