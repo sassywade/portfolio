@@ -171,3 +171,5 @@ All inline Work media placeholders have a 12px corner radius at every viewport s
 The homepage studio grid fades away with the meadow handoff, using the existing dissolve progress to fade in a plain paper layer behind page content. It is fully gone before Proactive Intelligence; all Work sections sit on plain paper. Scrolling back restores the hero grid. Reduced motion follows the existing immediate handoff, and no extra animation loop is added.
 
 Do not display a Selected work heading above the projects. Retain the existing opening spacing and an accessible Work heading.
+
+Work uses guided project scrolling: each deliberate desktop wheel gesture moves to the next or previous centered project, with trackpad momentum grouped into that gesture. Reversing direction interrupts the movement. The meadow, the end of Work, nested scrollers, zoom gestures, tall sections, and reduced motion retain ordinary scrolling. Touch uses native proximity snapping; project rail links center the full section. Approaching projects settle with a small 16px shift and fade using the shared ease-out curve; no new animation library or permanent frame loop is used.

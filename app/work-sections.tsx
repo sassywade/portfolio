@@ -1,15 +1,17 @@
 import { featuredWork } from "./projects";
 import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
+import { WorkScroll } from "./work-scroll";
 
 export function WorkSections() {
   return (
     <div className="work-editorial">
+      <WorkScroll />
       <WorkNav items={featuredWork.map(({ slug, navTitle }) => ({ slug, title: navTitle }))} />
       <div className="work-editorial__content">
         <h2 className="work-editorial__label" id="work-title"><span className="sr-only">Work</span></h2>
         {featuredWork.map((project) => (
-          <section className="work-feature" id={`work-${project.slug}`} aria-labelledby={`work-${project.slug}-title`} key={project.slug}>
+          <section tabIndex={-1} className="work-feature" id={`work-${project.slug}`} aria-labelledby={`work-${project.slug}-title`} key={project.slug}>
             <Reveal>
               <header className="work-feature__header">
                 <h3 id={`work-${project.slug}-title`}>{project.title}</h3>

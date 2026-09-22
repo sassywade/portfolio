@@ -1250,3 +1250,19 @@ test("Work has no visible Selected work heading", async () => {
   assert.match(html, /id="work-title"><span class="sr-only">Work<\/span><\/h2>/);
   assert.doesNotMatch(html, />Selected work<\/h2>/);
 });
+
+
+test("guided project scrolling preserves native escape paths and centers sections", async () => {
+  const [scroll, sections, css] = await Promise.all([
+    readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/work-sections.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.match(sections, /<WorkScroll \/>/);
+  assert.match(scroll, /!desktop.matches \|\| reduced.matches \|\| event.ctrlKey/);
+  assert.match(scroll, /if \(!fits\(sections\[nearest\]\)\) return/);
+  assert.match(scroll, /if \(consumed\) \{ event.preventDefault\(\); return; \}/);
+  assert.match(scroll, /window.innerHeight - rect.height/);
+  assert.match(scroll, /window.removeEventListener\("wheel", wheel\)/);
+  assert.match(css, /prefers-reduced-motion: reduce[^}]*scroll-snap-type: none/s);
+});
