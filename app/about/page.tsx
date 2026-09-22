@@ -45,8 +45,8 @@ export default function AboutPage() {
               <a href="mailto:neel.saswade@gmail.com" data-social="email" aria-label="Email">
                 <span className="about-page__social-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" focusable="false">
-                    <rect x="2.5" y="4.5" width="19" height="15" rx="1.5" />
-                    <path d="m3.5 6 8.5 7 8.5-7" />
+                    <rect x="2.5" y="5" width="19" height="14" rx="2.5" />
+                    <path d="m4.25 7 7.75 6 7.75-6" />
                   </svg>
                 </span>
               </a>
@@ -55,7 +55,7 @@ export default function AboutPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-social="resume"
-                aria-label="Resume"
+                aria-label="CV"
               >
                 <span className="about-page__social-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" focusable="false">

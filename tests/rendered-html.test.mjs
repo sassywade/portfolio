@@ -166,6 +166,7 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   assert.match(about, /className="about-page__greeting">Hello,</);
   assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--muted\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)/);
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
+  assert.match(about, /aria-label="CV"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
   assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
   assert.match(about, /className="about-page__social-icon"[\s\S]*<svg viewBox="0 0 24 24"/);
