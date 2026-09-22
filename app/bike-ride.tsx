@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
+import { MeadowActivityIcon } from "./meadow-activity-icon";
 
 const FRAME_URLS = [
   "/bike-rider-frame-1.png",
@@ -142,6 +143,7 @@ export function BikeRide() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.riding = next === "idle" ? "false" : "true";
+      button.setAttribute("aria-pressed", String(next !== "idle"));
       if (next === "idle") rider.dataset.turning = "false";
       if (next === "idle") layer.dataset.terrain = "level";
     }
@@ -361,16 +363,16 @@ export function BikeRide() {
       <button
         ref={buttonRef}
         type="button"
-        className="bike-word hero-inline-action hero-hobby hero-hobby--bike"
+        className="bike-word hero-hobby hero-hobby--bike meadow-activity"
         data-riding="false"
+        aria-pressed="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"
         data-cuelume-release="release"
         aria-label="Release miniature Neel on a bike onto the meadow"
         onClick={() => launchRef.current()}
       >
-        <span className="hero-hobby__mark" aria-hidden="true">↝</span>
-        <span>bikes</span>
+        <MeadowActivityIcon activity="cycling" />
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="bike-ride-layer" data-phase="idle" data-direction="right" data-terrain="level" aria-hidden="true">

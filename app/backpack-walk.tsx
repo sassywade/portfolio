@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
+import { MeadowActivityIcon } from "./meadow-activity-icon";
 
 const FRAME_URLS = [
   "/backpacker-frame-1.png",
@@ -147,6 +148,7 @@ export function BackpackWalk() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.walking = next === "idle" ? "false" : "true";
+      button.setAttribute("aria-pressed", String(next !== "idle"));
       if (next === "idle") hiker.dataset.turning = "false";
     }
 
@@ -345,16 +347,16 @@ export function BackpackWalk() {
       <button
         ref={buttonRef}
         type="button"
-        className="backpack-word hero-inline-action hero-hobby hero-hobby--backpack"
+        className="backpack-word hero-hobby hero-hobby--backpack meadow-activity"
         data-walking="false"
+        aria-pressed="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"
         data-cuelume-release="release"
         aria-label="Release miniature Neel backpacking onto the meadow"
         onClick={() => launchRef.current()}
       >
-        <span className="hero-hobby__mark" aria-hidden="true">⌁</span>
-        <span>backpacking</span>
+        <MeadowActivityIcon activity="backpacking" />
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" data-direction="left" aria-hidden="true">

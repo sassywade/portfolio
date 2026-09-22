@@ -34,7 +34,18 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I&#x27;m a product designer in San Francisco\. I work at /);
   assert.match(html, /Before that, I designed at /);
-  assert.match(html, /In my free time, I ride /);
+  assert.match(html, /In my free time<\/span>/);
+  assert.match(html, /hero-activities__icons/);
+  const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];
+  assert.equal(activityButtons.length, 3);
+  for (const [index, activity] of ["photography", "cycling", "backpacking"].entries()) {
+    const button = activityButtons[index][0];
+    assert.match(button, /aria-pressed="false"/);
+    assert.ok(button.includes(`/collectibles/glass-square-v1/${activity}-96.webp`));
+    assert.ok(button.includes(`/collectibles/glass-square-v1/${activity}-selected-96.webp`));
+    await access(new URL(`../public/collectibles/glass-square-v1/${activity}-96.webp`, import.meta.url));
+    await access(new URL(`../public/collectibles/glass-square-v1/${activity}-selected-96.webp`, import.meta.url));
+  }
   assert.match(html, /hero-company--glean[^>]*href="https:\/\/www\.glean\.com\/"/);
   assert.match(html, /hero-company--snap[^>]*href="https:\/\/www\.snap\.com\/"/);
   assert.doesNotMatch(html, /as an intern/);

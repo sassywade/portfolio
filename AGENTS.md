@@ -24,7 +24,7 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 - Until new assets arrive, use black rectangles. Split compositions scale from a 1145×500 canvas: 708×500 beside two 417×240 panels with 20px gaps. Single media uses 1145×550; Growth uses three columns and Snap two.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
-- The photographer is already present on the meadow when the homepage loads; clicking `photograph SF` replays the drop-and-shoot sequence.
+- The introduction ends with “In my free time” and 48×48 glass-box icon buttons in photography, cycling, backpacking order. Use the approved illuminated artwork while each actor is active, driven by that actor's phase. The photographer is already present on load; clicking its icon replays the drop-and-shoot sequence. Keep accessible labels and visible keyboard focus.
 - Every actionable element uses only Cuelume's global Declarative profile: `tick` on hover and the `press`/`release` click pair. Do not add custom cue overrides.
 
 ## Architecture map

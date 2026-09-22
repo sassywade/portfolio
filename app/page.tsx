@@ -5,6 +5,7 @@ import { BackpackWalk } from "./backpack-walk";
 import { WorkSections } from "./work-sections";
 import { SiteHeader } from "./site-header";
 import { TopPetPull } from "./top-pet-pull";
+import "./meadow-activities.css";
 
 type CompanyLinkProps = {
   brand: "glean" | "snap" | "intuitive";
@@ -43,14 +44,13 @@ export default function Home() {
               <CompanyLink brand="snap" href="https://www.snap.com/">Snap</CompanyLink>
               <span className="hero-copy__rest">.</span>
             </p>
-            <p className="hero-copy-line">
-              <span className="hero-copy__rest">In my free time, I ride </span>
-              <BikeRide />
-              <span className="hero-copy__rest">, </span>
-              <PhotoDrop />
-              <span className="hero-copy__rest">, and go </span>
-              <BackpackWalk />
-              <span className="hero-copy__rest">.</span>
+            <p className="hero-copy-line hero-activities">
+              <span className="hero-copy__rest">In my free time</span>
+              <span className="hero-activities__icons">
+                <PhotoDrop />
+                <BikeRide />
+                <BackpackWalk />
+              </span>
             </p>
           </div>
           <HeroMeadow />

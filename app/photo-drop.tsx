@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
+import { MeadowActivityIcon } from "./meadow-activity-icon";
 
 const FRAME_URLS = [
   "/photographer-frame-1-corrected.png",
@@ -193,6 +194,7 @@ export function PhotoDrop() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.photographing = next === "idle" ? "false" : "true";
+      button.setAttribute("aria-pressed", String(next !== "idle"));
       if (next !== "shoot") {
         isRapidBurst = false;
         rapidBurstIndex = 0;
@@ -392,17 +394,17 @@ export function PhotoDrop() {
       <button
         ref={buttonRef}
         type="button"
-        className="photo-word hero-inline-action hero-hobby hero-hobby--photo"
+        className="photo-word hero-hobby hero-hobby--photo meadow-activity"
         id="photo"
         data-photographing="false"
+        aria-pressed="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"
         data-cuelume-release="release"
         aria-label="Release miniature Neel with a camera onto the meadow"
         onClick={() => launchRef.current()}
       >
-        <span className="hero-hobby__mark" aria-hidden="true">◉</span>
-        <span>photograph SF</span>
+        <MeadowActivityIcon activity="photography" />
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" data-burst="false" aria-hidden="true">
