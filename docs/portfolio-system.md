@@ -71,6 +71,7 @@ Portfolio copy follows a Typehug- and Torph-inspired rule: short, concrete sente
 
 - Hero interactions may react to pointer movement and local weather only while the hero is visible.
 - Scrolling down should make the meadow, tree, characters, and Philip give way smoothly while work rises into attention.
+- Direct navigation to `/#work` starts at Work without replaying the meadow handoff; scrolling back toward the hero restores the normal transition.
 - Returning upward reconstructs the same scene without random reflow.
 - Philip's state changes are intentional events: following, idle huffing, target interaction, or brief reaction. Pointer speed alone is not a state transition.
 - Hobby words release their matching miniature; they remain real buttons with accessible labels.

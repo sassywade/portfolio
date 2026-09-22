@@ -25,7 +25,10 @@ export type WorkHandoff = "dissolve" | "rising-tray" | "soft-overlap" | "compact
 
 export function HeroMeadow() {
   const sceneRef = useRef<HTMLDivElement>(null);
-  const sceneVisibleRef = useRef(true);
+  const initialWorkEntry =
+    typeof window !== "undefined" && window.location.hash === "#work";
+  const initialWorkEntryRef = useRef(initialWorkEntry);
+  const sceneVisibleRef = useRef(!initialWorkEntry);
   const previousAtmosphereRef = useRef<PortfolioAtmosphere>("grid");
   const [wind, setWind] = useState<WindSettings>(INITIAL_WIND);
   const [isPlaying, setIsPlaying] = useState(() => (
@@ -33,7 +36,7 @@ export function HeroMeadow() {
       ? true
       : !window.matchMedia("(prefers-reduced-motion: reduce)").matches
   ));
-  const [isSceneVisible, setIsSceneVisible] = useState(true);
+  const [isSceneVisible, setIsSceneVisible] = useState(!initialWorkEntry);
   const [meadowVariant, setMeadowVariant] = useState<MeadowVariant>("living");
   const [grassEnabled, setGrassEnabled] = useState(true);
   const [weatherHost, setWeatherHost] = useState<HTMLElement | null>(null);
@@ -302,6 +305,10 @@ export function HeroMeadow() {
       const workTop = work.offsetTop;
       const transitionStart = Math.max(0, workTop - viewportHeight * 1.06);
       const transitionEnd = Math.max(transitionStart + 1, workTop - viewportHeight * 0.2);
+      if (initialWorkEntryRef.current) {
+        if (scrollY >= transitionEnd) return 1;
+        initialWorkEntryRef.current = false;
+      }
       const progress = clamp(
         (scrollY - transitionStart) / Math.max(1, transitionEnd - transitionStart),
         0,
@@ -342,7 +349,7 @@ export function HeroMeadow() {
       }
     };
 
-    targetProgress = calculateTarget();
+    targetProgress = initialWorkEntryRef.current ? 1 : calculateTarget();
     commitProgress(targetProgress);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);

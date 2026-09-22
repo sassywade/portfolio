@@ -782,6 +782,10 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(prototype, /onPlayingChange\(!isPlaying\)/);
   assert.match(hero, /document\.querySelector<HTMLElement>\("\.pranathi-work"\)/);
   assert.match(hero, /const scrollY = Math\.max\(0, window\.scrollY\)/);
+  assert.match(hero, /window\.location\.hash === "#work"/);
+  assert.match(hero, /if \(initialWorkEntryRef\.current\)[\s\S]*?if \(scrollY >= transitionEnd\) return 1;/);
+  assert.match(hero, /targetProgress = initialWorkEntryRef\.current \? 1 : calculateTarget\(\)/);
+  assert.match(hero, /const \[isSceneVisible, setIsSceneVisible\] = useState\(!initialWorkEntry\)/);
   assert.match(hero, /const transitionStart = Math\.max\(0, workTop - viewportHeight \* 1\.06\)/);
   assert.match(hero, /const transitionEnd = Math\.max\(transitionStart \+ 1, workTop - viewportHeight \* 0\.2\)/);
   assert.match(hero, /const smootherProgress = currentProgress \* currentProgress \* currentProgress/);
