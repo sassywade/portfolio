@@ -81,7 +81,7 @@ function CardStage({ mode, flipped }: { mode: Mode; flipped: boolean }) {
         const side = flipped ? -1 : 1;
         const transform = mode === "wheel"
           ? "translate(-50%, -50%) translate(" + (side * 180 * (Math.cos(radians) - 1)).toFixed(3) + "cqw, " + (180 * Math.sin(radians)).toFixed(3) + "cqw) rotate(" + (side * angle) + "deg)"
-          : "translate(-50%, -50%) translateY(" + (offset * 23) + "cqw) rotate(" + (offset * 2) + "deg)";
+          : "translate(-50%, -50%) translateY(" + (offset * 14.7) + "cqw) perspective(600px) rotateX(" + (-offset * 12) + "deg) scale(" + Math.max(.8, 1 - Math.abs(offset) * .035) + ")";
         return <img key={src} className={styles.card} src={src} alt="" aria-hidden="true" loading="lazy"
           style={{ transform, opacity: Math.abs(offset) > 4 ? 0 : 1, transition: Math.abs(offset) > 4 ? "none" : undefined }} />;
       })}
