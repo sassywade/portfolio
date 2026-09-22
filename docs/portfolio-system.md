@@ -185,3 +185,5 @@ The homepage paper background is #F5F5F4 across the hero and inline Work, includ
 Project transitions use an interruptible 850ms centered scroll with the calm cubic-bezier(0.32, 0.72, 0, 1) curve. Media panels fade and rise 18px in sequence with 80ms stagger; leaving clears delays. Keyboard, touch, pointer interaction, resize, and reduced motion stop the scripted scroll. Reduced motion leaves media static.
 
 Project summaries stay left-aligned beneath their media, capped at 72ch with pretty text wrapping for a comfortable reading measure. Small screens use the available width.
+
+The inline Work wrapper stays transparent, including the quiet layout. Only the full-page paper layer removes the grid during the meadow handoff; never paint a bounded background on the rising Work container, which would cover the meadow as a rectangular bar.

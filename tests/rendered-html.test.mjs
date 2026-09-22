@@ -1241,7 +1241,7 @@ test("the hero grid fades into plain paper for inline Work", async () => {
   assert.match(hero, /setProperty\("--work-paper-opacity", dissolveProgress.toFixed\(4\)\)/);
   assert.match(hero, /removeProperty\("--work-paper-opacity"\)/);
   assert.match(css, /opacity: var\(--work-paper-opacity, 0\)/);
-  assert.match(css, /\.pranathi-work--editorial \{ background: var\(--paper\); \}/);
+  assert.match(css, /html\[data-portfolio-layout="quiet"\] \.pranathi-work--editorial \{ background: transparent; \}/);
 });
 
 

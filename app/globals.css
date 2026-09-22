@@ -13298,7 +13298,9 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   background: var(--paper);
   opacity: var(--work-paper-opacity, 0);
 }
-.pranathi-work--editorial { background: var(--paper); }
+/* The full-page paper layer owns the background; the moving work wrapper stays clear. */
+.pranathi-work.pranathi-work--editorial,
+html[data-portfolio-layout="quiet"] .pranathi-work--editorial { background: transparent; }
 
 /* Project-to-project scrolling: center the complete composition, keep it readable. */
 @media (pointer: coarse) {
