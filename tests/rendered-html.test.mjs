@@ -1234,6 +1234,8 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
 });
 
 test("Life photos share the centered viewer and keep playful hover movement", async () => {
+  const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
+  assert.match(galleryMarkup, /<h2 id="about-gallery-title">AFK<\/h2>/);
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
