@@ -21,14 +21,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
-            <h1 id="about-title">Hallooo.</h1>
-            <p>
-              (Did you get a welcome bike?)
-            </p>
-            <p>
-              Welcome to my website. I&apos;m hoping to use this space to share more of
-              my work, photography, and, eventually, writing.
-            </p>
+            <h1 id="about-title">Welcome to my website,</h1>
             <p>
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
@@ -36,8 +29,8 @@ export default function AboutPage() {
               technology in ways that feel intuitive.
             </p>
             <p>
-              Today, my medium is product design, and the technology is AI. I&apos;m drawn
-              to the puzzle of changing habits: How do you explain the unfamiliar?
+              Today, my medium is product design. I&apos;m drawn to the puzzle of
+              changing someone&apos;s habit with AI: How do you explain the unfamiliar?
               How do you get someone to try it? And how do you make the experience
               feel a little delightful?
             </p>
