@@ -9,6 +9,10 @@ function readGrouping(): PhotoGrouping {
   try { return sessionStorage.getItem(storageKey) === "style" ? "style" : "color"; }
   catch { return "color"; }
 }
+export function setPhotoGrouping(grouping: PhotoGrouping) {
+  try { sessionStorage.setItem(storageKey, grouping); } catch { /* Still applies for this page. */ }
+  window.dispatchEvent(new CustomEvent(eventName, { detail: grouping }));
+}
 export function usePhotoGrouping(beforeChange?: () => void) {
   const [grouping, setGrouping] = useState<PhotoGrouping>("color");
   useLayoutEffect(() => {
@@ -28,10 +32,7 @@ export function PhotoGroupingOptions() {
       <h2>Photo grouping</h2>
       <div className="layout-prototype-options">
         {([['color', 'Color'], ['style', 'Photography style']] as const).map(([value, label]) => (
-          <button type="button" key={value} aria-pressed={grouping === value} onClick={() => {
-            try { sessionStorage.setItem(storageKey, value); } catch { /* Still applies for this page. */ }
-            window.dispatchEvent(new CustomEvent(eventName, { detail: value }));
-          }}>{label}</button>
+          <button type="button" key={value} aria-pressed={grouping === value} onClick={() => setPhotoGrouping(value)}>{label}</button>
         ))}
       </div>
     </section>

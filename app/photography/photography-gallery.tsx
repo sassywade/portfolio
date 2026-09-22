@@ -5,7 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { usePhotoViewer } from "../photo-viewer";
 import photographs from "./photos.json";
 import { clusterPhotos, masonryLayout, matchesPhoto } from "./gallery-model.mjs";
-import { PhotoPrototypePicker, usePhotoGrouping } from "./photo-grouping";
+import { PhotoPrototypePicker, setPhotoGrouping, usePhotoGrouping } from "./photo-grouping";
 import styles from "./photography.module.css";
 import { SearchPrompt } from "./search-prompt";
 
@@ -120,6 +120,13 @@ export function PhotographyGallery() {
             onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
         </div>
         {query && <button type="button" aria-label="Clear search" onClick={() => { setQuery(''); capture(); setAppliedQuery(''); input.current?.focus(); }}>Clear</button>}
+        <label className={styles.sort}>
+          <span>Sort by</span>
+          <select aria-label="Sort photos by" value={grouping} onChange={(event) => setPhotoGrouping(event.target.value === 'style' ? 'style' : 'color')}>
+            <option value="color">Color</option>
+            <option value="style">Style</option>
+          </select>
+        </label>
       </div>
       <p className="sr-only" role="status" aria-live="polite">{matching.length} {matching.length === 1 ? 'photo' : 'photos'}{appliedQuery ? ` matching ${appliedQuery}` : ''}</p>
       {!matching.length && <p className={styles.empty}>nothin bout that</p>}

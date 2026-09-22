@@ -55,3 +55,7 @@
   .gallery[data-ready="true"] { animation: none; }
   .photo img { transition: none; }
 }
+
+.sort { display: flex; flex: none; align-items: center; gap: 6px; margin-left: 10px; white-space: nowrap; font: 12px var(--sans); color: var(--muted); }
+.sort select { min-height: 44px; padding: 0 2px; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: inherit; cursor: pointer; }
+.sort select:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
