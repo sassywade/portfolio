@@ -1225,3 +1225,9 @@ test("work rail reveals once after entering the first project and respects reduc
   assert.match(css, /\.work-section-nav a \{[^}]*font: 14px/);
   assert.match(css, /prefers-reduced-motion: reduce[^}]*work-section-nav[^}]*transition: opacity 150ms linear/s);
 });
+
+
+test("all inline project placeholders have 12px corners", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.work-feature__placeholder \{[^}]*border-radius: 12px/);
+});

@@ -13212,7 +13212,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   gap: 20px;
   aspect-ratio: 1145 / 500;
 }
-.work-feature__placeholder { min-width: 0; background: #000; }
+.work-feature__placeholder { min-width: 0; background: #000; border-radius: 12px; }
 .work-feature__media--split > :first-child { grid-row: 1 / 3; }
 .work-feature__media--trio {
   grid-template-columns: repeat(3, minmax(0, 1fr));
