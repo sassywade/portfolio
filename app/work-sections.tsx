@@ -4,10 +4,12 @@ import { WorkNav } from "./work-nav";
 import { ProjectVideo } from "./project-mockup";
 import { WorkScroll } from "./work-scroll";
 import { GrowthPrototypeVideo } from "./growth-video-prototype";
+import { PsychicCards } from "./psychic-cards";
+import { WorkTileSurface } from "./work-tile-prototype";
 
 export function WorkSections() {
   return (
-    <div className="work-editorial">
+    <WorkTileSurface>
       <WorkScroll />
       <WorkNav items={featuredWork.map(({ slug, navTitle }) => ({ slug, title: navTitle }))} />
       <div className="work-editorial__content">
@@ -54,7 +56,7 @@ export function WorkSections() {
                     <img src={psychicPopups.src} alt={psychicPopups.alt} width={1395} height={960} loading="lazy" />
                   </div>
                 ) : "media" in project ? null : <div className="work-feature__placeholder" />}
-                {project.layout === "split" && <div className="work-feature__placeholder" />}
+                {project.layout === "split" && (project.slug === "psychic" ? <PsychicCards /> : <div className="work-feature__placeholder" />)}
               </div>
               <p className="work-feature__summary">
                 {project.summary}
@@ -64,6 +66,6 @@ export function WorkSections() {
           </section>
         ))}
       </div>
-    </div>
+    </WorkTileSurface>
   );
 }

@@ -1,0 +1,35 @@
+.stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ececec;
+  container-type: inline-size;
+}
+.canvas { position: absolute; inset: 0; overflow: hidden; }
+.card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 82%;
+  height: calc(82cqw * 271 / 1229);
+  object-fit: contain;
+  display: block;
+  transition: transform 750ms var(--ease-in-out, cubic-bezier(.77, 0, .175, 1)), opacity 250ms ease;
+}
+/* Match the popup artwork above while keeping Rolodex independent of the wheel. */
+.stage[data-mode="rolodex"] .card {
+  width: 80%;
+  height: auto;
+}
+.cell { position: absolute; width: 49%; aspect-ratio: 1229 / 271; transform: translate(-50%, -50%); }
+.cell img { position: absolute; inset: 0; width: 100%; height: auto; }
+.swap { animation: card-in 600ms var(--ease-out, cubic-bezier(.23, 1, .32, 1)) both; }
+@keyframes card-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.stage[data-running="false"] .swap { animation-play-state: paused; }
+.stage[data-running="false"] .card { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .swap { animation: none; }
+}

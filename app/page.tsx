@@ -5,6 +5,7 @@ import { BackpackWalk } from "./backpack-walk";
 import { WorkSections } from "./work-sections";
 import { SiteHeader } from "./site-header";
 import { TopPetPull } from "./top-pet-pull";
+import "./meadow-activities.css";
 
 type CompanyLinkProps = {
   brand: "glean" | "snap" | "intuitive";
@@ -37,20 +38,19 @@ export default function Home() {
           <p className="pranathi-name" id="hero-title">Neel Saswade</p>
           <div className="pranathi-bio">
             <p className="hero-copy-line">
-              <span className="hero-copy__rest">I&apos;m a product designer in San Francisco. I work at </span>
+              <span className="hero-copy__rest">I’m a designer based in San Francisco. Currently, I’m a designer at </span>
               <CompanyLink brand="glean" href="https://www.glean.com/">Glean</CompanyLink>
-              <span className="hero-copy__rest"> on proactive intelligence, growth, and artifacts. Before that, I designed at </span>
+              <span className="hero-copy__rest"> working on <br className="hero-copy-break" />Proactivity, Artifacts, and Growth. Previously designed at </span>
               <CompanyLink brand="snap" href="https://www.snap.com/">Snap</CompanyLink>
               <span className="hero-copy__rest">.</span>
             </p>
-            <p className="hero-copy-line">
-              <span className="hero-copy__rest">In my free time, I ride </span>
-              <BikeRide />
-              <span className="hero-copy__rest">, </span>
-              <PhotoDrop />
-              <span className="hero-copy__rest">, and go </span>
-              <BackpackWalk />
-              <span className="hero-copy__rest">.</span>
+            <p className="hero-copy-line hero-activities">
+              <span className="hero-copy__rest">In my free time,</span>
+              <span className="hero-activities__icons">
+                <PhotoDrop />
+                <BikeRide />
+                <BackpackWalk />
+              </span>
             </p>
           </div>
           <HeroMeadow />

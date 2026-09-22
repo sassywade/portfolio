@@ -106,7 +106,7 @@ When a new request conflicts with an older experiment, the newest explicit prefe
 
 ## Living terrain
 
-The arrival uses the supplied Epidemic Sound “Wind, Gust, Designed Wind Gust, Leaves, Medium Long” MP3 at public/audio/meadow-wind-leaves.mp3. Play it from the meadow gust event at 65% volume; browser autoplay rejection retains the first-gesture fallback. Do not synthesize a replacement or layer a hum underneath.
+The arrival uses the supplied Epidemic Sound “Wind, Gust, Designed Wind Gust, Leaves, Medium Long” MP3 at public/audio/meadow-wind-leaves.mp3. Predecode it and start at 65% volume from the same callback that applies the traveling gust to the tree. If autoplay was blocked, the first gesture unlocks audio and replays the whole gust; the sound still waits for tree impact. Never play a delayed sound by itself. Do not synthesize a replacement or layer a hum underneath.
 
 The welcome gust must bend the entire meadow, including its dense interior down to the bottom edge. During the passing pulse, redraw a full-height traveling strip of cached turf even without cursor or character contact. Restore the original turf after the pulse. Tip-only motion does not satisfy this behavior.
 
@@ -144,7 +144,7 @@ The painterly weather readout uses Geist at 13–15px for the summary and 12–1
 
 Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.
 
-The homepage “Neel Saswade” name uses upright Newsreader, not italics.
+The homepage “Neel Saswade” name uses the same light italic Newsreader treatment as the project titles: `clamp(26px, 2.3vw, 36px)`, normal letter spacing, and `--muted`. The introduction and “In my free time,” row use 20px Newsreader in warm gray (`--ink`). On desktop, the introduction breaks before “Proactivity”; below 788px it wraps naturally.
 
 The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
 
@@ -170,6 +170,14 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 
 ## Inline work sections (current)
+
+Dark work tiles is an off-by-default, visit-local prototype picker option. It changes every inline work tile surface to #1C1C1C without changing the page, artwork, video pixels, layout, or motion. The Growth checklist fade uses the same dark color, and Snap captions become light gray. Turning it off restores each original surface; reloading resets it.
+
+The Proactive card motion picker shows a visit-local Flip wheel toggle only in Wheel mode. It mirrors the wheel’s horizontal arc and card rotation, not the artwork or vertical travel. Keep the original left-side center as default; Rolodex and Grid are unaffected.
+
+Wheel cards use an 82%-width, 1229:271 box with contain sizing and no perspective or scaling. The wheel radius is 420cqw at 2.8-degree steps: a broad, shallow arc that reduces triangular outer gaps while preserving separation at the inner ends. Keep the same geometry in either wheel direction. Rolodex is the default, with 80%-width cards to visually match the popup above and proportional 16.35cqw vertical steps. Preserve its intrinsic height, 600px perspective, 12-degree rotateX steps and gentle depth scaling. Never replace Rolodex depth with sideways wheel rotation or apply wheel size changes to it. No Pause button is shown; visibility and reduced-motion suspension remain active.
+
+Proactive Intelligence’s lower-right tile cycles the 18 supplied card PNGs, preserving their baked shadows. Rolodex is the default; Proactive card motion in the prototype picker offers Wheel, Rolodex, and Grid as visit-local alternatives. Wheel and Rolodex settle every 3.4 seconds with 750ms transform transitions; Grid replaces one scattered cell every 1.4 seconds with a 600ms fade. Timers stop offscreen, in hidden tabs, and with reduced motion; reduced motion shows a static composition. No new motion dependency.
 
 The Growth starter-kit image fades from transparent at its own top edge to fully opaque at 20% image height. Keep this mask attached to the translated image so its lowered position cannot expose a hard horizontal crop; retain its size and offset.
 
@@ -232,7 +240,7 @@ The inline Work wrapper stays transparent, including the quiet layout. Only the 
 
 About's Life photographs reuse the Photography page's centered viewer through `app/photo-viewer.tsx`. Keep the film thumbnails and their resting rotations; on precise-pointer hover or keyboard focus, lift and expand the active print with a restrained transform while keeping neighboring prints in place. Remove all visible photo captions. The enlarged Life view keeps the complete photograph inside a white film-print mat with a slightly deeper bottom border, without pointer tilt or text; Close and Escape restore the original thumbnail and focus. Both galleries share the 280ms reversible transition and reduced-motion/keyboard behavior. This supersedes the earlier opened-Polaroid caption and tilt directions.
 
-The Life strip contains 11 photos. Omit the two-person Cathedral hiking photo (`high-country-friends.JPG`); keep the remaining strip centered through its content-sized desktop layout.
+The Life strip contains 11 photos. Omit the two-person Cathedral hiking photo (`high-country-friends.JPG`); keep the remaining strip aligned to the About column, with responsive print widths and a little more space after the identity row on desktop.
 
 The Photo page has no visible Photography heading; the gallery follows the shared header directly.
 
@@ -249,8 +257,10 @@ Home, Photo, and About share the warm paper background `#F5F5F4`, including Phot
 
 The Photo search bar spans the full gallery width and aligns with its left and right edges at every viewport size.
 
-The empty, unfocused Photo search field rotates “Search bikes,” “Search city,” and “Search sunsets” every three seconds, with 200ms fades and small vertical slides. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps “Search bikes” still.
+The Photo search field floats without an underline or enclosing border. On arrival its empty, unfocused prompt starts with “Search photos,” then cycles through “Search bikes,” “Search city,” and “Search sunsets” every four seconds, holding each word for 3.6 seconds before a gentle 400ms crossfade. Opacity blends evenly while a separate, smaller vertical drift uses the shared ease-out curve; the “Search” prefix stays fixed. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps “Search photos” still.
 
 On Photo page arrival, keep the temporary server column layout hidden until client measurements and the saved grouping resolve before paint. Restoring preferences must never capture positions or trigger the search/reorder animation. Reveal the final gallery with a 200ms opacity-only fade; thumbnails reserve their dimensions and fade in on load, including cached images. Reduced motion makes both reveals immediate.
 
-The Photo search row includes a quiet, right-aligned “Sort by” select with Color and Style. It shares the grouping state and session preference with the prototype picker, preserves the current search, and supports native keyboard selection.
+The Photo search row contains only search and its clear action. Color and Style grouping remain available in the prototype picker; do not show a sorting toggle or dropdown beside search.
+
+The shared photo viewer keeps the already-loaded thumbnail as a background preview throughout expansion. Reveal the larger image only after decoding succeeds, using a short 160ms opacity fade; keep the preview if loading or decoding fails. The viewing surface uses paper instead of black, and reduced motion reveals the decoded image immediately. This applies to Photo and About without changing their framing or close behavior.

@@ -4,10 +4,16 @@ import Image from "next/image";
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import styles from "./photography/photography.module.css";
 
-type ViewerPhoto = { id: string | number; ratio: number; label: string; src?: string; frame?: "film" };
+type ViewerPhoto = { id: string | number; ratio: number; label: string; src?: string; thumbnail?: string; frame?: "film" };
+
+function revealDecodedImage(image: HTMLImageElement) {
+  void image.decode().then(() => {
+    if (image.isConnected) image.dataset.ready = "true";
+  }).catch(() => {}); // Keep the cached preview if the larger image cannot decode.
+}
 
 export function usePhotoViewer() {
-  const [selected, setSelected] = useState<ViewerPhoto | null>(null);
+  const [selected, setSelected] = useState<(ViewerPhoto & { previewSrc?: string }) | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -70,7 +76,8 @@ export function usePhotoViewer() {
     triggerRef.current = trigger;
     originRef.current = origin ?? trigger;
     animateRef.current = animate;
-    setSelected(photo);
+    const thumbnail = trigger.querySelector("img");
+    setSelected({ ...photo, previewSrc: thumbnail?.currentSrc || photo.thumbnail || photo.src });
   };
   const viewer = (
       <dialog
@@ -91,8 +98,14 @@ export function usePhotoViewer() {
             aria-label={selected.src ? undefined : selected.label}
           >
             {selected.src && (
-              <span className={selected.frame === "film" ? styles.focusedPhotoFilmImage : undefined}>
-                <Image src={selected.src} alt={selected.label} fill sizes="100vw" unoptimized priority draggable={false} style={{ objectFit: "contain" }} />
+              <span
+                className={`${styles.focusedPhotoMedia}${selected.frame === "film" ? ` ${styles.focusedPhotoFilmImage}` : ""}`}
+                style={{ backgroundImage: selected.previewSrc ? `url(${JSON.stringify(selected.previewSrc)})` : undefined }}
+              >
+                <Image key={selected.src} src={selected.src} alt={selected.label} fill sizes="100vw" unoptimized priority draggable={false}
+                  className={styles.focusedPhotoFull} style={{ objectFit: "contain" }}
+                  ref={(node) => { if (node?.complete && node.naturalWidth > 0) revealDecodedImage(node); }}
+                  onLoad={(event) => revealDecodedImage(event.currentTarget)} />
               </span>
             )}
           </div>

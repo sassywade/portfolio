@@ -2400,6 +2400,29 @@ em {
   transition: color 180ms ease, text-decoration-color 180ms ease;
 }
 
+.about-page__social-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-page__social-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.about-page__social-icon svg path:first-child {
+  fill: currentColor;
+  stroke: none;
+}
+
 .about-page__social-arrow {
   display: inline-flex;
   width: 0.72em;
@@ -2479,6 +2502,17 @@ em {
 .about-page .simple-page h1,
 .about-page .simple-page__copy {
   animation: none;
+}
+
+.about-page .simple-page .about-page__about-copy {
+  max-width: 550px;
+  margin: 0;
+  color: #373530;
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.25vw, 18px);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.58;
 }
 
 .about-page__gallery[data-motion-ready="true"] .film-photo__paper {
@@ -3925,7 +3959,7 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
   color: var(--ink);
   font-family: var(--serif);
   font-size: clamp(40px, 4vw, 50px);
-  font-style: normal;
+  font-style: italic;
   font-weight: 400;
   letter-spacing: -0.06em;
   line-height: 1;
@@ -6165,19 +6199,27 @@ html:not([data-meadow-present="true"]) .smiley-cursor {
 
 .pranathi-name {
   margin-bottom: 13px;
-  font-size: clamp(29px, 2.5vw, 35px);
-  letter-spacing: -0.045em;
+  color: var(--muted);
+  font: italic clamp(26px, 2.3vw, 36px) / 1.15 var(--serif);
+  letter-spacing: normal;
 }
 
 .pranathi-bio {
-  max-width: 710px;
-  font-size: clamp(16px, 1.32vw, 19px);
+  max-width: 740px;
+  color: var(--ink);
+  font-size: 20px;
   letter-spacing: -0.012em;
   line-height: 1.68;
 }
 
 .pranathi-bio p + p {
   margin-top: 32px;
+}
+
+@media (max-width: 787px) {
+  .hero-copy-break {
+    display: none;
+  }
 }
 
 .pranathi-work {
@@ -6568,11 +6610,11 @@ html[data-environment-style="studio-static"] .hero-meadow__style-atmosphere {
   }
 
   .pranathi-name {
-    font-size: 29px;
+    font-size: clamp(26px, 2.3vw, 36px);
   }
 
   .pranathi-bio {
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1.62;
   }
 
@@ -6880,31 +6922,6 @@ html { --bike-vermillion: #cf4f38; --bike-cobalt: #315aa6; --bike-moss: #718447;
   user-select: none;
 }
 
-.bike-rider__sprite::before,
-.bike-rider__sprite::after {
-  position: absolute;
-  z-index: 2;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #002fa7;
-  box-shadow: 12px -8px 0 rgba(0, 47, 167, 0.62), -10px 10px 0 rgba(151, 161, 41, 0.75);
-  content: "";
-  opacity: 0;
-  pointer-events: none;
-}
-
-.bike-rider__sprite::before {
-  top: 22%;
-  left: 22%;
-}
-
-.bike-rider__sprite::after {
-  right: 23%;
-  bottom: 22%;
-  transform: rotate(90deg);
-}
-
 .bike-rider__shadow {
   position: absolute;
   right: 9%;
@@ -6928,11 +6945,6 @@ html { --bike-vermillion: #cf4f38; --bike-cobalt: #315aa6; --bike-moss: #718447;
   animation: miniature-bike-materialize 220ms cubic-bezier(.22,.7,.2,1) both;
 }
 
-.bike-ride-layer[data-phase="spawn"] .bike-rider__sprite::before,
-.bike-ride-layer[data-phase="spawn"] .bike-rider__sprite::after {
-  animation: miniature-bike-sparkle 420ms ease-out both;
-}
-
 .bike-ride-layer[data-phase="land"] .bike-rider__sprite {
   animation: miniature-bike-touchdown 170ms ease-out both;
 }
@@ -6945,11 +6957,6 @@ html { --bike-vermillion: #cf4f38; --bike-cobalt: #315aa6; --bike-moss: #718447;
   from { opacity: 0; transform: scale(0.08) rotate(-8deg); }
   72% { opacity: 1; }
   to { opacity: 1; transform: scale(1) rotate(0); }
-}
-
-@keyframes miniature-bike-sparkle {
-  0%, 100% { opacity: 0; transform: scale(0.2); }
-  45% { opacity: 0.9; transform: scale(1); }
 }
 
 @keyframes miniature-bike-touchdown {
@@ -6966,9 +6973,7 @@ html { --bike-vermillion: #cf4f38; --bike-cobalt: #315aa6; --bike-moss: #718447;
 @media (prefers-reduced-motion: reduce) {
   .bike-rider,
   .bike-rider__shadow,
-  .bike-rider__sprite,
-  .bike-rider__sprite::before,
-  .bike-rider__sprite::after {
+  .bike-rider__sprite {
     animation: none !important;
     transition: none !important;
   }
@@ -12766,7 +12771,7 @@ html[data-project-subtext="true"] .project-card__info p {
 .about-page__gallery-track .film-photo--landscape .film-photo__image {
   width: 100%;
   height: auto;
-     aspect-ratio: 2 / 3;
+  aspect-ratio: 0.72 / 1;
 }
 
 .about-page__gallery-track .film-photo__image img {
@@ -13561,8 +13566,12 @@ html:has(.pranathi-intro--home) body,
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .about-page__gallery-track:hover .film-photo {
+    transform: translateY(-3px) rotate(calc(var(--photo-rotation, 0deg) * 0.72)) scale(1.015);
+  }
+
   .about-page__gallery-track .film-photo:hover {
-    transform: translateY(-12px) rotate(0deg) scale(1.22);
+    transform: translateY(-10px) rotate(0deg) scale(1.14);
     transition-delay: 0ms;
     z-index: 10;
   }
@@ -13576,5 +13585,52 @@ html:has(.pranathi-intro--home) body,
     transition: none;
     will-change: auto;
     z-index: 0;
+  }
+}
+
+/* Give the About note the same quiet editorial greeting as the Work titles. */
+.about-page .about-page__greeting {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font: italic clamp(22px, 1.8vw, 28px) / 1.15 var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+/* Give the Life prints the same barely-rounded edge as the rest of the system. */
+.about-page__gallery-track .film-photo__paper {
+  border-radius: 2px;
+}
+
+/* Keep the About page compact enough to read as one desktop composition. */
+@media (min-width: 701px) {
+  .about-page__identity {
+    gap: clamp(42px, 8vw, 100px);
+  }
+
+  .about-page__gallery {
+    margin-top: clamp(76px, 9vw, 112px);
+  }
+
+  .about-page__gallery > h2 {
+    margin-bottom: 14px;
+  }
+
+  .about-page__gallery-track {
+    width: min(100%, 820px);
+    max-width: 100%;
+    margin-inline: auto;
+    padding: 4px 0 10px;
+  }
+
+  .about-page__gallery-track .film-photo,
+  .about-page__gallery-track .film-photo--landscape {
+    flex-basis: clamp(84px, 5.8vw, 104px);
+    width: clamp(84px, 5.8vw, 104px);
+    margin-left: -28px;
+  }
+
+  .about-page__gallery-track .film-photo:first-child {
+    margin-left: 0;
   }
 }

@@ -21,50 +21,32 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="simple-page__copy about-page__intro">
-            <h1 id="about-title">Hallooo.</h1>
-            <p>
-              (Did you get a welcome bike?)
-            </p>
-            <p>
-              You found my site. I&apos;m Neel, a product designer trying to make new
-              technology feel less new.
-            </p>
-            <p>
-              I started out studying software engineering. Then I took a design class
-              with Dr. Takeyama and ended up in her human–robot interaction lab,
-              watching people meet unfamiliar machines with a mix of confusion and
-              delight. That moment stuck with me: the instant something strange
-              starts to make sense.
-            </p>
-            <p>
-              Now I work on products that change habits. It&apos;s a puzzle I keep coming
-              back to: how do you explain the unfamiliar? How do you make someone
-              want to try it? How do you make them smile? And how do you respect
-              their time while you&apos;re asking them to change?
-            </p>
-            <p>
-              This space is for the work and, eventually, the photography and writing
-              around it.
-            </p>
+            <h2 className="about-page__greeting">Hello,</h2>
+            <h1 id="about-title" className="about-page__about-copy">
+              I found my way to design through a human-robot interaction lab in
+              college. Watching people meet unfamiliar machines with a mix of
+              confusion and curiosity made me interested in how we introduce new
+              technologies to people.
+            </h1>
             <nav className="about-page__socials" aria-label="Links">
               <a
                 href="https://x.com/neelsaswade"
                 target="_blank"
                 rel="noreferrer"
                 data-social="twitter"
+                aria-label="Twitter"
               >
-                <span>Twitter</span>
-                <span className="about-page__social-arrow" aria-hidden="true">
-                  <svg viewBox="0 0 12 12" focusable="false">
-                    <path d="M2 10 10 2M4.5 2H10v5.5" />
+                <span className="about-page__social-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M18.9 2.5h3.7l-8.1 9.3 9.5 9.7h-7.4l-5.8-6-5.2 6H1.9l7.8-8.9L.6 2.5h7.6l5.2 5.5 5.5-5.5Zm-1.3 17.3h2.1L7.5 4.1H5.3l12.3 15.7Z" />
                   </svg>
                 </span>
               </a>
-              <a href="mailto:neel.saswade@gmail.com" data-social="email">
-                <span>Email</span>
-                <span className="about-page__social-arrow" aria-hidden="true">
-                  <svg viewBox="0 0 12 12" focusable="false">
-                    <path d="M2 10 10 2M4.5 2H10v5.5" />
+              <a href="mailto:neel.saswade@gmail.com" data-social="email" aria-label="Email">
+                <span className="about-page__social-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <rect x="2.5" y="5" width="19" height="14" rx="2.5" />
+                    <path d="m4.25 7 7.75 6 7.75-6" />
                   </svg>
                 </span>
               </a>
@@ -73,11 +55,12 @@ export default function AboutPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-social="resume"
+                aria-label="CV"
               >
-                <span>Resume</span>
-                <span className="about-page__social-arrow" aria-hidden="true">
-                  <svg viewBox="0 0 12 12" focusable="false">
-                    <path d="M2 10 10 2M4.5 2H10v5.5" />
+                <span className="about-page__social-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M6 2.5h8.5L19 7v14.5H6z" />
+                    <path d="M14 2.5V7h5M8.5 11h8M8.5 14.5h8M8.5 18h5" />
                   </svg>
                 </span>
               </a>

@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
+import { MeadowActivityIcon } from "./meadow-activity-icon";
 
 const FRAME_URLS = [
   "/bike-rider-frame-1.png",
@@ -56,7 +57,6 @@ export function BikeRide() {
     let phase: RidePhase = "idle";
     let phaseStarted = 0;
     let frameHandle = 0;
-    let reducedTimer = 0;
     let lastTime = 0;
     let inView = true;
     let x = 0;
@@ -142,6 +142,7 @@ export function BikeRide() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.riding = next === "idle" ? "false" : "true";
+      button.setAttribute("aria-pressed", String(next !== "idle"));
       if (next === "idle") rider.dataset.turning = "false";
       if (next === "idle") layer.dataset.terrain = "level";
     }
@@ -250,8 +251,11 @@ export function BikeRide() {
 
     function launch() {
       window.cancelAnimationFrame(frameHandle);
-      window.clearTimeout(reducedTimer);
       frameHandle = 0;
+      if (phase !== "idle") {
+        setPhase("idle");
+        return;
+      }
       lastTime = 0;
       turningUntil = 0;
       rideDistance = 0;
@@ -276,7 +280,6 @@ export function BikeRide() {
         currentTrackAngle = trackAngle(x);
         setPhase("land");
         renderRider(currentTrackAngle);
-        reducedTimer = window.setTimeout(() => setPhase("idle"), 1800);
         return;
       }
 
@@ -339,7 +342,6 @@ export function BikeRide() {
       if (selected === "bike") return;
       window.cancelAnimationFrame(frameHandle);
       frameHandle = 0;
-      window.clearTimeout(reducedTimer);
       setPhase("idle");
     };
     window.addEventListener("portfolio:solo-actor", handleSoloActor);
@@ -348,7 +350,6 @@ export function BikeRide() {
       window.removeEventListener("portfolio:solo-actor", handleSoloActor);
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
-      window.clearTimeout(reducedTimer);
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
       meadowImage.removeEventListener("load", handleMeadowLoad);
@@ -361,16 +362,16 @@ export function BikeRide() {
       <button
         ref={buttonRef}
         type="button"
-        className="bike-word hero-inline-action hero-hobby hero-hobby--bike"
+        className="bike-word hero-hobby hero-hobby--bike meadow-activity"
         data-riding="false"
+        aria-pressed="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"
         data-cuelume-release="release"
-        aria-label="Release miniature Neel on a bike onto the meadow"
+        aria-label="Cyclist on the meadow"
         onClick={() => launchRef.current()}
       >
-        <span className="hero-hobby__mark" aria-hidden="true">↝</span>
-        <span>bikes</span>
+        <MeadowActivityIcon activity="cycling" />
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="bike-ride-layer" data-phase="idle" data-direction="right" data-terrain="level" aria-hidden="true">

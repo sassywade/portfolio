@@ -23,18 +23,40 @@ async function render(path = "/") {
   );
 }
 
+test("hero typography preserves the reference sizes and responsive line break", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic clamp\(26px, 2\.3vw, 36px\) \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
+  assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
+  assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
+  assert.match(css, /@media \(max-width: 787px\)\s*\{\s*\.hero-copy-break\s*\{\s*display: none;/);
+});
+
 test("server-renders the portfolio meadow and shared wind study", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Neel Saswade — Product designer<\/title>/i);
+  assert.match(html, /<title>Neel Saswade’s portfolio<\/title>/i);
+  assert.match(html, /property="og:title" content="Neel Saswade’s portfolio"/i);
+  assert.match(html, /property="og:image" content="[^\"]*\/og\.png"/i);
+  assert.match(html, /name="twitter:title" content="Neel Saswade’s portfolio"/i);
   assert.match(html, /class="site-header site-header--pages"/);
   assert.match(html, />Neel Saswade</);
-  assert.match(html, /I&#x27;m a product designer in San Francisco\. I work at /);
-  assert.match(html, /Before that, I designed at /);
-  assert.match(html, /In my free time, I ride /);
+  assert.match(html, /I’m a designer based in San Francisco\. Currently, I’m a designer at /);
+  assert.match(html, /working on <br class="hero-copy-break"\/>Proactivity, Artifacts, and Growth\. Previously designed at /);
+  assert.match(html, /In my free time,<\/span>/);
+  assert.match(html, /hero-activities__icons/);
+  const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];
+  assert.equal(activityButtons.length, 3);
+  for (const [index, activity] of ["photography", "cycling", "backpacking"].entries()) {
+    const button = activityButtons[index][0];
+    assert.match(button, /aria-pressed="false"/);
+    assert.ok(button.includes(`/collectibles/glass-square-v1/${activity}-96.webp`));
+    assert.ok(button.includes(`/collectibles/glass-square-v1/${activity}-selected-96.webp`));
+    await access(new URL(`../public/collectibles/glass-square-v1/${activity}-96.webp`, import.meta.url));
+    await access(new URL(`../public/collectibles/glass-square-v1/${activity}-selected-96.webp`, import.meta.url));
+  }
   assert.match(html, /hero-company--glean[^>]*href="https:\/\/www\.glean\.com\/"/);
   assert.match(html, /hero-company--snap[^>]*href="https:\/\/www\.snap\.com\/"/);
   assert.doesNotMatch(html, /as an intern/);
@@ -47,14 +69,48 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /class="meadow__visual meadow__visual--flat"/);
   assert.match(html, /data-flat-texture="fine"/);
   assert.match(html, /class="[^"]*\bbike-word\b[^"]*\bhero-hobby--bike\b/);
-  assert.match(html, /Release miniature Neel on a bike onto the meadow/);
+  assert.match(html, /Cyclist on the meadow/);
   assert.match(html, /class="[^"]*\bphoto-word\b[^"]*\bhero-hobby--photo\b/);
-  assert.match(html, /Release miniature Neel with a camera onto the meadow/);
+  assert.match(html, /Photographer on the meadow/);
   assert.match(html, /class="[^"]*\bbackpack-word\b[^"]*\bhero-hobby--backpack\b/);
-  assert.match(html, /Release miniature Neel backpacking onto the meadow/);
+  assert.match(html, /Backpacker on the meadow/);
   assert.match(html, /class="top-pet-pull"/);
   assert.doesNotMatch(html, /Meadow and cypress wind controls|Open secret meadow prototype picker/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
+});
+
+test("the bike arrives without decorative sparkles", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.doesNotMatch(css, /miniature-bike-sparkle|\.bike-rider__sprite::(?:before|after)/);
+  assert.match(css, /miniature-bike-materialize/);
+  assert.match(css, /miniature-bike-touchdown/);
+});
+
+test("hobby icons toggle active characters off before starting a new arrival", async () => {
+  for (const file of ["bike-ride.tsx", "photo-drop.tsx", "backpack-walk.tsx"]) {
+    const source = await readFile(new URL(`../app/${file}`, import.meta.url), "utf8");
+    const launch = source.slice(source.indexOf("function launch()"), source.indexOf("launchRef.current = launch"));
+    assert.match(launch, /cancelAnimationFrame\(frameHandle\)/);
+    assert.match(launch, /if \(phase !== "idle"\) \{\s*setPhase\("idle"\);\s*return;/);
+    assert.ok(launch.indexOf('if (phase !== "idle")') < launch.indexOf('setPhase("spawn")'));
+    assert.match(source, /setAttribute\("aria-pressed", String\(next !== "idle"\)\)/);
+    assert.doesNotMatch(launch, /setTimeout\(\(\) => setPhase\("idle"\)/);
+    if (file === "photo-drop.tsx") {
+      assert.ok(launch.indexOf("clearPhotoLoop()") < launch.indexOf('if (phase !== "idle")'));
+      assert.match(launch, /clearTimeout\(reducedTimer\)/);
+    }
+  }
+});
+
+test("the default photographer starts in the meadow dip rather than below its icon", async () => {
+  const source = await readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8");
+  const placement = source.slice(source.indexOf("function placeOnMeadow()"), source.indexOf("launchRef.current = launch"));
+  assert.ok(source.includes("const PHOTOGRAPHER_ARRIVAL_X_RATIO = 0.44;"));
+  assert.ok(placement.includes("anchoredToMeadowDip = true;"));
+  assert.ok(placement.includes("layerBounds.width * PHOTOGRAPHER_ARRIVAL_X_RATIO"));
+  assert.ok(placement.includes('setPhase("shoot")'));
+  assert.ok(!placement.includes("buttonBounds"));
+  assert.ok(source.includes("anchoredToMeadowDip ? layerWidth * PHOTOGRAPHER_ARRIVAL_X_RATIO : x"));
 });
 
 test("pairs Newsreader display type with Geist Sans interface and reading type", async () => {
@@ -142,7 +198,8 @@ test("keeps Life prints playful without overriding reduced motion", async () => 
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
 
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /\.about-page__gallery-track:hover \.film-photo\s*\{[\s\S]*transform: translateY\(-3px\) rotate\(calc\(var\(--photo-rotation, 0deg\) \* 0\.72\)\) scale\(1\.015\)/);
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
   assert.match(finalLifeRules, /@media \(hover: hover\) and \(pointer: fine\)/);
   assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
 });
@@ -151,12 +208,15 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
+  assert.match(about, /className="about-page__greeting">Hello,</);
+  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--muted\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
+  assert.match(about, /aria-label="CV"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
   assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
-  assert.match(about, /className="about-page__social-arrow"[\s\S]*<svg viewBox="0 0 12 12"/);
+  assert.match(about, /className="about-page__social-icon"[\s\S]*<svg viewBox="0 0 24 24"/);
   assert.doesNotMatch(about, /aria-hidden="true">↗/);
-  assert.match(css, /\.about-page__social-arrow svg\s*\{[\s\S]*stroke-linecap: round;[\s\S]*stroke-linejoin: round;/);
+  assert.match(css, /\.about-page__social-icon svg\s*\{[\s\S]*stroke-linecap: round;[\s\S]*stroke-linejoin: round;/);
 });
 
 test("offers quiet, reactive, and disabled top-edge pet pulls", async () => {
@@ -735,7 +795,7 @@ test("uses only the standard Cuelume Declarative profile on every action", async
   assert.match(soundscape, /new MutationObserver/);
   assert.match(soundscape, /playWindSound/);
   assert.match(soundscape, /meadow-wind-leaves\.mp3/);
-  assert.doesNotMatch(soundscape, /createOscillator|createBufferSource/);
+  assert.doesNotMatch(soundscape, /createOscillator|Math.random/);
   assert.doesNotMatch(soundscape, /createOscillator|174|261/);
   assert.match(soundscape, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(soundscape, /addEventListener\("pointerdown", startEntranceSound, \{ once: true/);
@@ -1032,8 +1092,8 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(css, /--portfolio-reading-width:\s*740px/);
   assert.match(css, /\.site-header__wordmark,[\s\S]*?\.site-header--pages \.site-nav\s*\{[^}]*font-size:\s*clamp\(15px, 1\.1vw, 18px\)/);
   assert.match(css, /\.site-header--pages\s*\{[^}]*gap:\s*32px;[^}]*padding-top:\s*30px/);
-  assert.match(css, /font-size:\s*clamp\(29px, 2\.5vw, 35px\)/);
-  assert.match(css, /font-size:\s*clamp\(16px, 1\.32vw, 19px\)/);
+  assert.match(css, /\.pranathi-name\s*\{[^}]*font-size:\s*clamp\(26px, 2\.3vw, 36px\)/);
+  assert.match(css, /\.pranathi-bio\s*\{[^}]*font-size:\s*20px/);
   assert.match(css, /min-height:\s*100svh/);
   assert.match(css, /\.bike-word,\s*\.photo-word,\s*\.backpack-word\s*\{/);
   assert.match(css, /--miniature-character-height:\s*clamp\(82px, 7vw, 100px\)/);
@@ -1189,10 +1249,14 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   assert.match(viewer, /draggable=\{false\}/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-12px\) rotate\(0deg\) scale\(1\.22\)/);
+  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
   assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
   const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
-  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*background: #fff;/);
+  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
+  assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
+  assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(42px, 8vw, 100px\)/);
+  assert.match(css, /\.about-page__gallery-track\s*\{[\s\S]*width: min\(100%, 820px\);[\s\S]*max-width: 100%;/);
+  assert.match(css, /flex-basis: clamp\(84px, 5\.8vw, 104px\);/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
@@ -1251,6 +1315,7 @@ test("default homepage uses the shared header and meadow weather while keeping i
   assert.match(page, /<SiteHeader current="work" \/>/);
   assert.doesNotMatch(page, /quiet-sidebar/);
   assert.match(page, /pranathi-name/);
+  assert.match(css, /\.pranathi-name\s*\{[\s\S]*?font-style:\s*italic/);
   assert.match(hero, /layout === "quiet" && weatherHost[\s\S]*createPortal/);
   assert.match(css, /\.quiet-sidebar \{ display: none; \}/);
 });
@@ -1272,20 +1337,58 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 7);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 6);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split"/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
 });
 
-test("Proactive Intelligence keeps the popup artwork above one remaining placeholder", async () => {
+test("dark work tiles are an opt-in, work-only prototype", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /data-dark-tiles="false"/);
+  const source = await readFile(new URL("../app/work-tile-prototype.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/work-tile-prototype.module.css", import.meta.url), "utf8");
+  assert.match(source, /let dark = false/);
+  assert.match(source, /aria-label="Dark work tiles" aria-pressed={enabled}/);
+  assert.doesNotMatch(source, /localStorage|sessionStorage/);
+  assert.match(css, /work-feature__media\) > \*/);
+  assert.match(css, /#work-snap/);
+  assert.match(css, /background: #1c1c1c/);
+  assert.match(css, /work-feature__checklist/);
+  assert.match(css, /color: #c9c9c6/);
+});
+
+test("Proactive Intelligence pairs popup artwork with the larger default Rolodex", async () => {
   const html = await (await render()).text();
   const psychic = html.split('id="work-psychic"')[1].split("</section>")[0];
   assert.match(psychic, /class="work-feature__popups"/);
   assert.match(psychic, /src="\/work\/psychic-popups-shadow.png"/);
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.work-feature__popups img \{[^}]*width: 86%/);
-  assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 1);
+  assert.equal((psychic.match(/class="work-feature__placeholder"/g) ?? []).length, 0);
+  assert.match(psychic, /data-mode="rolodex"/);
+  assert.doesNotMatch(psychic, /Pause proactive card animation/);
+  const motion = await readFile(new URL("../app/psychic-cards.tsx", import.meta.url), "utf8");
+  assert.match(motion, /\["wheel", "rolodex", "grid"\]/);
+  assert.match(motion, /visible && !reduced/);
+  const wheelTransform = motion.split('const transform = mode === "wheel"')[1].split('\n        return')[0];
+  assert.doesNotMatch(wheelTransform.split('\n          :')[0], /rotateX|perspective|scale\(/);
+  assert.match(wheelTransform.split('\n          :')[1], /offset \* 16\.35/);
+  assert.match(wheelTransform.split('\n          :')[1], /perspective\(600px\) rotateX/);
+  assert.match(wheelTransform.split('\n          :')[1], /-offset \* 12/);
+  const cardCss = await readFile(new URL("../app/psychic-cards.module.css", import.meta.url), "utf8");
+  assert.match(cardCss, /\[data-mode="rolodex"\] \.card \{\s*width: 80%;\s*height: auto;/);
+  assert.match(motion, /let mode: Mode = "rolodex"/);
+  assert.match(motion, /const serverSnapshot = \(\): Mode => "rolodex"/);
+  assert.match(motion, /420 \* Math.sin/);
+  assert.match(motion, /const angle = offset \* 2\.8/);
+  assert.match(motion, /Flip wheel/);
+  assert.match(motion, /let flipped = false/);
+  assert.match(motion, /side \* 420 \* \(Math.cos/);
+  assert.match(motion, /side \* angle/);
+  assert.match(motion, /clearInterval\(timer\)/);
+  assert.match(motion, /document\.hidden/);
+  assert.match(motion, /prefers-reduced-motion: reduce/);
 });
 
 test("Snap work renders the supplied Treasure and Lens assets in two groups", async () => {

@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
+import { MeadowActivityIcon } from "./meadow-activity-icon";
 
 const FRAME_URLS = [
   "/backpacker-frame-1.png",
@@ -57,7 +58,6 @@ export function BackpackWalk() {
     let phase: WalkPhase = "idle";
     let phaseStarted = 0;
     let frameHandle = 0;
-    let reducedTimer = 0;
     let lastTime = 0;
     let inView = true;
     let x = 0;
@@ -147,6 +147,7 @@ export function BackpackWalk() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.walking = next === "idle" ? "false" : "true";
+      button.setAttribute("aria-pressed", String(next !== "idle"));
       if (next === "idle") hiker.dataset.turning = "false";
     }
 
@@ -235,8 +236,11 @@ export function BackpackWalk() {
 
     function launch() {
       window.cancelAnimationFrame(frameHandle);
-      window.clearTimeout(reducedTimer);
       frameHandle = 0;
+      if (phase !== "idle") {
+        setPhase("idle");
+        return;
+      }
       lastTime = 0;
       turningUntil = 0;
       walkDistance = 0;
@@ -258,7 +262,6 @@ export function BackpackWalk() {
         y = trackY(x) - height * HIKER_GROUND_RATIO;
         setPhase("land");
         renderHiker(trackAngle(x));
-        reducedTimer = window.setTimeout(() => setPhase("idle"), 1800);
         return;
       }
 
@@ -323,7 +326,6 @@ export function BackpackWalk() {
       if (selected === "backpack") return;
       window.cancelAnimationFrame(frameHandle);
       frameHandle = 0;
-      window.clearTimeout(reducedTimer);
       setPhase("idle");
     };
     window.addEventListener("portfolio:solo-actor", handleSoloActor);
@@ -332,7 +334,6 @@ export function BackpackWalk() {
       window.removeEventListener("portfolio:solo-actor", handleSoloActor);
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
-      window.clearTimeout(reducedTimer);
       window.removeEventListener(PET_BLOW_BACKPACKER_EVENT, handlePetBlow);
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
@@ -345,16 +346,16 @@ export function BackpackWalk() {
       <button
         ref={buttonRef}
         type="button"
-        className="backpack-word hero-inline-action hero-hobby hero-hobby--backpack"
+        className="backpack-word hero-hobby hero-hobby--backpack meadow-activity"
         data-walking="false"
+        aria-pressed="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"
         data-cuelume-release="release"
-        aria-label="Release miniature Neel backpacking onto the meadow"
+        aria-label="Backpacker on the meadow"
         onClick={() => launchRef.current()}
       >
-        <span className="hero-hobby__mark" aria-hidden="true">⌁</span>
-        <span>backpacking</span>
+        <MeadowActivityIcon activity="backpacking" />
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="backpack-walk-layer" data-phase="idle" data-frame="0" data-direction="left" aria-hidden="true">

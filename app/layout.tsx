@@ -39,11 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: origin,
-    title: "Neel Saswade — Product designer",
+    title: "Neel Saswade’s portfolio",
     description:
       "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.",
     openGraph: {
-      title: "Neel Saswade — Product designer",
+      title: "Neel Saswade’s portfolio",
       description:
         "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.",
       type: "website",
@@ -53,13 +53,13 @@ export async function generateMetadata(): Promise<Metadata> {
           url: socialImage,
           width: 1200,
           height: 630,
-          alt: "Neel Saswade — Product designer",
+          alt: "Three glass activity icons from Neel Saswade’s portfolio",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Neel Saswade — Product designer",
+      title: "Neel Saswade’s portfolio",
       description:
         "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.",
       images: [socialImage],

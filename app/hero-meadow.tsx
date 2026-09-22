@@ -52,14 +52,12 @@ export function HeroMeadow() {
       const button = (event.target as Element).closest(".bike-word, .photo-word, .backpack-word");
       if (!button) return;
       const actor = button.classList.contains("bike-word") ? "bike" : button.classList.contains("photo-word") ? "photo" : "backpack";
-      document.querySelectorAll(".bike-word, .photo-word, .backpack-word").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
       window.dispatchEvent(new CustomEvent("portfolio:solo-actor", { detail: actor }));
     };
     document.addEventListener("click", select, true);
     return () => {
       document.removeEventListener("click", select, true);
       delete document.documentElement.dataset.portfolioLayout;
-      document.querySelectorAll(".bike-word, .photo-word, .backpack-word").forEach(item => item.removeAttribute("aria-pressed"));
       window.dispatchEvent(new CustomEvent("portfolio:layout", { detail: "classic" }));
     };
   }, [layout]);

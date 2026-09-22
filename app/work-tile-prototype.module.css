@@ -1,0 +1,12 @@
+.dark :global(.work-feature__media) > *,
+.dark :global(#work-snap .work-feature__asset-group) {
+  background: #1c1c1c;
+}
+
+.dark :global(.work-feature__checklist)::after {
+  background: linear-gradient(to bottom, #1c1c1c, rgb(28 28 28 / 65%) 35%, rgb(28 28 28 / 0));
+}
+
+.dark :global(.work-feature__asset-group) > span {
+  color: #c9c9c6;
+}

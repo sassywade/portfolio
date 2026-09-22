@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
+import { MeadowActivityIcon } from "./meadow-activity-icon";
 
 const FRAME_URLS = [
   "/photographer-frame-1-corrected.png",
@@ -40,6 +41,8 @@ const RAPID_BURST_SEQUENCE = [
 const SPAWN_DURATION = 220;
 const LAND_DURATION = 180;
 const PHOTOGRAPHER_GROUND_RATIO = 0.962;
+// Match the reference's quiet position in the main dip, independent of the icon.
+const PHOTOGRAPHER_ARRIVAL_X_RATIO = 0.44;
 const PET_BLOW_PHOTOGRAPHER_EVENT = "portfolio:pet-blow-photographer";
 
 type PhotoPhase = "idle" | "spawn" | "drop" | "land" | "shoot";
@@ -77,6 +80,7 @@ export function PhotoDrop() {
     let sourceHeight = 0;
     let surfaceByColumn = new Float32Array(0);
     let phase: PhotoPhase = "idle";
+    let anchoredToMeadowDip = false;
     let phaseStarted = 0;
     let frameHandle = 0;
     let sequenceTimer = 0;
@@ -193,6 +197,7 @@ export function PhotoDrop() {
       phaseStarted = now;
       layer.dataset.phase = next;
       button.dataset.photographing = next === "idle" ? "false" : "true";
+      button.setAttribute("aria-pressed", String(next !== "idle"));
       if (next !== "shoot") {
         isRapidBurst = false;
         rapidBurstIndex = 0;
@@ -250,6 +255,11 @@ export function PhotoDrop() {
       window.clearTimeout(reducedTimer);
       clearPhotoLoop();
       frameHandle = 0;
+      if (phase !== "idle") {
+        setPhase("idle");
+        return;
+      }
+      anchoredToMeadowDip = false;
       lastTime = 0;
       sequenceIndex = 0;
       rapidBurstIndex = 0;
@@ -293,9 +303,9 @@ export function PhotoDrop() {
       setFrame(0);
 
       const layerBounds = layer.getBoundingClientRect();
-      const buttonBounds = button.getBoundingClientRect();
       const { width, height } = photographerSize();
-      x = clamp(buttonBounds.left + buttonBounds.width * 0.5 - layerBounds.left, width * 0.5, layerBounds.width - width * 0.5);
+      anchoredToMeadowDip = true;
+      x = clamp(layerBounds.width * PHOTOGRAPHER_ARRIVAL_X_RATIO, width * 0.5, layerBounds.width - width * 0.5);
       y = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
       velocityY = 0;
 
@@ -323,7 +333,8 @@ export function PhotoDrop() {
     const resizeObserver = new ResizeObserver(() => {
       if (phase === "land" || phase === "shoot") {
         const { width, height } = photographerSize();
-        x = clamp(x, width * 0.5, layer.getBoundingClientRect().width - width * 0.5);
+        const layerWidth = layer.getBoundingClientRect().width;
+        x = clamp(anchoredToMeadowDip ? layerWidth * PHOTOGRAPHER_ARRIVAL_X_RATIO : x, width * 0.5, layerWidth - width * 0.5);
         y = trackY(x) - height * PHOTOGRAPHER_GROUND_RATIO;
         renderPhotographer();
       }
@@ -392,17 +403,17 @@ export function PhotoDrop() {
       <button
         ref={buttonRef}
         type="button"
-        className="photo-word hero-inline-action hero-hobby hero-hobby--photo"
+        className="photo-word hero-hobby hero-hobby--photo meadow-activity"
         id="photo"
         data-photographing="false"
+        aria-pressed="false"
         data-cuelume-hover="tick"
         data-cuelume-press="press"
         data-cuelume-release="release"
-        aria-label="Release miniature Neel with a camera onto the meadow"
+        aria-label="Photographer on the meadow"
         onClick={() => launchRef.current()}
       >
-        <span className="hero-hobby__mark" aria-hidden="true">◉</span>
-        <span>photograph SF</span>
+        <MeadowActivityIcon activity="photography" />
       </button>
       {meadowHost ? createPortal(
         <span ref={layerRef} className="photo-drop-layer" data-phase="idle" data-frame="0" data-burst="false" aria-hidden="true">

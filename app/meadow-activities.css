@@ -1,0 +1,63 @@
+/* The artwork supplies the glass edge; the control adds no extra chrome. */
+.pranathi-bio .hero-activities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 8px;
+}
+
+.hero-activities__icons {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.pranathi-bio .hero-hobby.meadow-activity {
+  display: block;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  mix-blend-mode: multiply;
+  line-height: 0;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.meadow-activity img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.meadow-activity__selected {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.meadow-activity[aria-pressed="true"] .meadow-activity__selected { opacity: 1; }
+.meadow-activity[aria-pressed="true"] .meadow-activity__rest { opacity: 0; }
+
+.pranathi-bio .meadow-activity:focus-visible {
+  outline: 2px solid #002fa7;
+  outline-offset: 3px;
+}
+
+/* Keep the opt-in solo layout, using the same artwork instead of emoji. */
+html[data-portfolio-layout="quiet"] .pranathi-bio .meadow-activity {
+  background: transparent;
+  border: 0;
+}
+html[data-portfolio-layout="quiet"] .meadow-activity::after { content: none; }
+html[data-portfolio-layout="quiet"] .meadow-activity.photo-word { left: calc(50% - 84px); }
+html[data-portfolio-layout="quiet"] .meadow-activity.bike-word { left: calc(50% - 24px); }
+html[data-portfolio-layout="quiet"] .meadow-activity.backpack-word { left: calc(50% + 36px); }
