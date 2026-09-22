@@ -44,7 +44,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /class="site-header site-header--pages"/);
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I’m a designer based in San Francisco\. Currently, I’m a designer at /);
-  assert.match(html, /working on <br class="hero-copy-break"\/>Proactivity, Artifacts, and Growth\. Previously designed at /);
+  assert.match(html, /working on <br class="hero-copy-break"\/>Proactivity, Artifacts, and Growth\. Previously, I designed at /);
   assert.match(html, /In my free time,<\/span>/);
   assert.match(html, /hero-activities__icons/);
   const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];

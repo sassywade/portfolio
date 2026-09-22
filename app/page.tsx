@@ -40,7 +40,7 @@ export default function Home() {
             <p className="hero-copy-line">
               <span className="hero-copy__rest">I’m a designer based in San Francisco. Currently, I’m a designer at </span>
               <CompanyLink brand="glean" href="https://www.glean.com/">Glean</CompanyLink>
-              <span className="hero-copy__rest"> working on <br className="hero-copy-break" />Proactivity, Artifacts, and Growth. Previously designed at </span>
+              <span className="hero-copy__rest"> working on <br className="hero-copy-break" />Proactivity, Artifacts, and Growth. Previously, I designed at </span>
               <CompanyLink brand="snap" href="https://www.snap.com/">Snap</CompanyLink>
               <span className="hero-copy__rest">.</span>
             </p>
