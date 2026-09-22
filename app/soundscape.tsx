@@ -118,15 +118,18 @@ export function Soundscape() {
         setShowWindControl(true);
       }
     };
+    const handleGesture = () => {
+      void startEntranceSound(true);
+    };
     const removeGestureListeners = () => {
-      window.removeEventListener("pointerdown", startEntranceSound);
-      window.removeEventListener("keydown", startEntranceSound);
-      window.removeEventListener("touchstart", startEntranceSound);
+      window.removeEventListener("pointerdown", handleGesture);
+      window.removeEventListener("keydown", handleGesture);
+      window.removeEventListener("touchstart", handleGesture);
     };
     if (!entranceSoundStarted) {
-      window.addEventListener("pointerdown", startEntranceSound, { passive: true });
-      window.addEventListener("keydown", startEntranceSound);
-      window.addEventListener("touchstart", startEntranceSound, { passive: true });
+      window.addEventListener("pointerdown", handleGesture, { passive: true });
+      window.addEventListener("keydown", handleGesture);
+      window.addEventListener("touchstart", handleGesture, { passive: true });
       void startEntranceSound(false);
     }
 
