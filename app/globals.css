@@ -13329,3 +13329,11 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
 @media (min-width: 1080px) {
   html[data-work-snap="on"] .work-feature + .work-feature { margin-top: max(200px, 30svh); }
 }
+
+/* Homepage paper color, shared by the meadow handoff and inline Work. */
+html:has(.pranathi-intro--home) body,
+.site-shell:has(.pranathi-intro--home),
+.site-shell[data-atmosphere][data-environment-style]:has(.pranathi-intro--home) {
+  --paper: #f5f5f4;
+  background-color: #f5f5f4;
+}

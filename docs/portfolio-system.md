@@ -179,3 +179,5 @@ Work metadata keeps a 6px gap between the Glean logo and its text label.
 The Work rail uses one shared active dot that glides between labels over 250ms with the shared ease-in-out curve. It follows measured link positions on desktop, retargets smoothly, and moves immediately for reduced motion and focused keyboard navigation.
 
 Proactive Intelligence now uses the supplied psychic.mov in its main panel. The encoded MP4 crops the 1444×1024 recording to its white 1416×1000 content at x=14, y=14, matching 708×500 at 2× resolution with no black border. It uses the existing muted, inline looping playback that pauses offscreen and shows a poster for reduced motion. Other panels remain black placeholders.
+
+The homepage paper background is #F5F5F4 across the hero and inline Work, including the grid-fade layer. Video pixels remain part of the supplied asset.

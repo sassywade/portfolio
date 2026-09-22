@@ -1300,3 +1300,9 @@ test("Proactive Intelligence uses the cropped main video", async () => {
   assert.match(html, /src="\/work\/psychic-main.mp4"/);
   assert.match(html, /poster="\/work\/psychic-main-poster.jpg"/);
 });
+
+
+test("homepage uses the requested warm paper background", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.site-shell\[data-atmosphere\]\[data-environment-style\]:has\(\.pranathi-intro--home\) \{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
+});

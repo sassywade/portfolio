@@ -16,7 +16,7 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 
 - Homepage navigation uses the shared top header with `Work`, `About`, `Play`, and `Resume`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow. Other pages retain the same shared header. Work scrolls to `#work`; Play opens its own lightweight project page; Resume opens the supplied PDF in a new tab.
 - There is no archive section, promotional footer, or contact/social cluster.
-- The homepage background is white with the subtle studio grid.
+- The homepage background is #F5F5F4 with the subtle studio grid, which fades away before Work.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.
 - Work is an inline editorial sequence with titles and metadata above black media placeholders and summaries below. Preserve the existing Reveal entrance and hero handoff. A sticky project rail tracks the section in view; hide the rail below 1080px instead of showing mobile navigation.
