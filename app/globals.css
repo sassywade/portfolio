@@ -13606,7 +13606,7 @@ html:has(.pranathi-intro--home) body,
 /* Keep the About page compact enough to read as one desktop composition. */
 @media (min-width: 701px) {
   .about-page__identity {
-    gap: clamp(28px, 4vw, 56px);
+    gap: clamp(42px, 8vw, 100px);
   }
 
   .about-page__gallery {
