@@ -101,32 +101,10 @@ export function WorkScroll() {
       settle(section, event.detail > 0 && !reduced.matches);
       section.focus({ preventScroll: true });
     };
-    const rail = document.querySelector<HTMLElement>(".work-section-nav");
-    let currentSection = sections[0];
-    const alignRail = () => {
-      if (!rail) return;
-      if (!desktop.matches) { rail.style.removeProperty("top"); return; }
-      const heading = currentSection.querySelector<HTMLElement>(".work-feature__header");
-      if (!heading) return;
-      const top = Math.max(32, (window.innerHeight - currentSection.offsetHeight) / 2)
-        + heading.offsetHeight + parseFloat(getComputedStyle(heading).marginBottom);
-      rail.style.top = `${top}px`;
-    };
-    const resize = new ResizeObserver(alignRail);
-    sections.forEach((section) => resize.observe(section));
-    window.addEventListener("resize", alignRail);
     const syncMotion = () => {
       stopScroll();
       root.dataset.workSnap = reduced.matches ? "off" : "on";
     };
-    // Track the visible section for rail placement, independently of scrolling.
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting }) => {
-        (target as HTMLElement).dataset.inView = isIntersecting ? "true" : "false";
-        if (isIntersecting) { currentSection = target as HTMLElement; alignRail(); }
-      });
-    }, { rootMargin: "-12% 0px -12% 0px", threshold: 0.3 });
-    sections.forEach((section) => observer.observe(section));
     syncMotion();
     const initial = location.hash === "#work" ? sections[0] : sections.find((section) => `#${section.id}` === location.hash);
     const initialFrame = initial ? requestAnimationFrame(() => settle(initial, false)) : 0;
@@ -146,11 +124,6 @@ export function WorkScroll() {
       window.removeEventListener("pointerdown", stopScroll);
       window.removeEventListener("touchstart", stopScroll);
       window.removeEventListener("resize", stopScroll);
-      observer.disconnect();
-      resize.disconnect();
-      window.removeEventListener("resize", alignRail);
-      rail?.style.removeProperty("top");
-      sections.forEach((section) => delete section.dataset.inView);
       delete root.dataset.workSnap;
       reduced.removeEventListener("change", syncMotion);
       window.removeEventListener("wheel", wheel);

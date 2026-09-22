@@ -167,6 +167,8 @@ The homepage now presents five major project sections in this order: Proactive i
 
 The desktop Work rail starts level with the first mockup, below the Selected work label and project heading. Its sticky resting offset matches the 90px section anchor offset plus the responsive heading line and 26px media gap, rather than a viewport-height percentage. Hide the rail below 1080px.
 
+The Work rail keeps that single CSS sticky offset across every project. Never recalculate its position from the active project's height; only the active indicator moves between labels.
+
 The desktop Work navigation uses 14px Geist and appears once per visit after the first mockups reach 55% of viewport height. Links fade and rise 6px over 600ms with a 150ms initial delay and 50ms stagger. Deep links show navigation immediately; reduced motion uses only a short fade. Smaller screens have no project navigation rail.
 
 All inline Work media placeholders have a 12px corner radius at every viewport size.

@@ -1368,6 +1368,15 @@ test("Glean work metadata separates the logo and label", async () => {
 });
 
 
+test("Work rail position does not follow project heights", async () => {
+  const [scroll, css] = await Promise.all([
+    readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  assert.doesNotMatch(scroll, /alignRail|currentSection|rail\.style/);
+  assert.match(css, /\.work-section-nav \{\s*position: sticky;\s*top: calc\(90px \+ clamp\(29.9px, 2.645vw, 41.4px\) \+ 26px\)/);
+});
+
 test("Work rail uses one moving indicator with reduced-motion support", async () => {
   const [nav, css] = await Promise.all([
     readFile(new URL("../app/work-nav.tsx", import.meta.url), "utf8"),
