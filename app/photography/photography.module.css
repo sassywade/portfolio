@@ -36,18 +36,24 @@
 .searchField { position: relative; flex: 1; min-width: 0; }
 .searchPrompt { position: absolute; inset: 0; display: flex; align-items: center; gap: 4px; color: #999691; font: 14px var(--sans); pointer-events: none; visibility: hidden; }
 .searchPromptWords { display: grid; }
-.searchPromptWords > span { grid-area: 1 / 1; animation: searchPromptCycle 12s var(--motion-ease-in-out) infinite; animation-play-state: paused; }
-.searchPromptWords > span:nth-child(2) { animation-delay: -9s; }
-.searchPromptWords > span:nth-child(3) { animation-delay: -6s; }
-.searchPromptWords > span:nth-child(4) { animation-delay: -3s; }
+.searchPromptWords > span { grid-area: 1 / 1; animation: searchPromptFade 16s linear infinite, searchPromptDrift 16s var(--motion-ease-out) infinite; animation-play-state: paused; }
+.searchPromptWords > span:nth-child(2) { animation-delay: -12s; }
+.searchPromptWords > span:nth-child(3) { animation-delay: -8s; }
+.searchPromptWords > span:nth-child(4) { animation-delay: -4s; }
 .search[data-empty="true"]:not(:focus-within) .searchPrompt { visibility: visible; }
 .search[data-empty="true"]:not(:focus-within) input::placeholder { color: transparent; }
 .search[data-empty="true"][data-viewing="false"]:not(:focus-within) .searchPrompt[data-running="true"] .searchPromptWords > span { animation-play-state: running; }
-@keyframes searchPromptCycle {
-  0%, 23.333% { opacity: 1; transform: translateY(0); }
-  25%, 98.333% { opacity: 0; transform: translateY(-30%); }
-  98.334% { opacity: 0; transform: translateY(30%); }
-  100% { opacity: 1; transform: translateY(0); }
+/* Let opacity crossfade evenly while the small drift settles independently. */
+@keyframes searchPromptFade {
+  0%, 22.5% { opacity: 1; }
+  25%, 97.5% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes searchPromptDrift {
+  0%, 22.5% { transform: translateY(0); }
+  25%, 97.5% { transform: translateY(-20%); }
+  97.501% { transform: translateY(20%); }
+  100% { transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .searchPromptWords > span { animation: none; opacity: 0; transform: none; }
