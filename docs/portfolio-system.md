@@ -146,7 +146,7 @@ The painterly weather readout uses Geist at 13–15px for the summary and 12–1
 
 Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.
 
-The homepage “Neel Saswade” name uses 36px italic Newsreader on desktop and mobile, with normal letter spacing and the project titles’ light `--muted` color. The introduction and “In my free time,” row use 20px Newsreader in warm gray (`--ink`). On desktop, the introduction breaks before “Proactivity”; below 788px it wraps naturally.
+The homepage “Neel Saswade” name uses 36px italic Newsreader on desktop and mobile, with normal letter spacing and the project titles’ light `--muted` color. The introduction and “In my free time,” row use 20px Newsreader in warm gray (`--ink`). The introduction wraps naturally at every viewport; do not force a break before “proactivity.”
 
 The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
 

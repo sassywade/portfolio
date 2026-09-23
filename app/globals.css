@@ -6216,12 +6216,6 @@ html:not([data-meadow-present="true"]) .smiley-cursor {
   margin-top: 32px;
 }
 
-@media (max-width: 787px) {
-  .hero-copy-break {
-    display: none;
-  }
-}
-
 .pranathi-work {
   width: min(100% - 64px, var(--portfolio-work-width));
   position: relative;

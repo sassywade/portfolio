@@ -23,12 +23,12 @@ async function render(path = "/") {
   );
 }
 
-test("hero typography preserves the reference sizes and responsive line break", async () => {
+test("hero typography preserves the reference sizes and natural wrapping", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
-  assert.match(css, /@media \(max-width: 787px\)\s*\{\s*\.hero-copy-break\s*\{\s*display: none;/);
+  assert.doesNotMatch(css, /hero-copy-break/);
 });
 
 test("server-renders the portfolio meadow and shared wind study", async () => {
@@ -45,7 +45,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /class="site-header site-header--pages"/);
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I’m a product designer based in San Francisco\. Currently, I’m a designer at /);
-  assert.match(html, /working on <br class="hero-copy-break"\/>proactivity, artifacts, and growth\. Previously, I designed at /);
+  assert.match(html, /working on proactivity, artifacts, and growth\. Previously, I designed at /);
   assert.match(html, /In my free time,<\/span>/);
   assert.match(html, /hero-activities__icons/);
   const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];
