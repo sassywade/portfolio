@@ -30,7 +30,7 @@ export default function AboutPage() {
             </h1>
             <nav className="about-page__socials" aria-label="Links">
               <a
-                href="https://x.com/neelsaswade"
+                href="https://x.com/neel_saswade"
                 target="_blank"
                 rel="noreferrer"
                 data-social="twitter"
