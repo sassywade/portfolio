@@ -1346,12 +1346,23 @@ test("homepage presents five inline projects with black placeholders and anchor 
 test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts", async () => {
   const html = await (await render()).text();
   const section = html.split('id="work-artifacts"')[1].split("</section>")[0];
-  for (const asset of ["document.png", "edit-with-ai.png", "app-skins.png"]) {
+  for (const asset of ["document.png", "edit-with-ai.png", "gmail-skin.png", "slack-skin.png", "outlook-skin.png"]) {
     assert.ok(section.includes("/work/artifacts/" + asset));
   }
   assert.equal((section.match(/data-artifact-panel=/g) ?? []).length, 3);
   assert.doesNotMatch(section, /work-feature__placeholder|assets coming soon/);
   assert.match(section, /I led design for Artifacts from its early launch through its growth to nearly 200K weekly active users/);
+});
+
+test("artifact skins include reading holds and suspend when not visible", async () => {
+  const source = await readFile(new URL("../app/artifact-skins.tsx", import.meta.url), "utf8");
+  assert.match(source, /duration: 30000/);
+  assert.match(source, /add\(4\.8/);
+  assert.match(source, /add\(8\.3/);
+  assert.match(source, /IntersectionObserver/);
+  assert.match(source, /visibilitychange/);
+  assert.match(source, /prefers-reduced-motion/);
+  assert.match(source, /animation.cancel\(\)/);
 });
 
 test("dark work tiles are an opt-in, work-only prototype", async () => {

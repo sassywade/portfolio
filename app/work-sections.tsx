@@ -7,6 +7,7 @@ import { GrowthPrototypeVideo } from "./growth-video-prototype";
 import { PsychicCards } from "./psychic-cards";
 import { WorkTileSurface } from "./work-tile-prototype";
 import artifactStyles from "./artifact-panels.module.css";
+import { ArtifactSkins } from "./artifact-skins";
 
 export function WorkSections() {
   return (
@@ -29,7 +30,7 @@ export function WorkSections() {
                 </div>
               </header>
               <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}${"panels" in project ? " " + artifactStyles.composition : ""}`} role={"video" in project || "panels" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project || "panels" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
-                {"panels" in project ? project.panels.map(panel => (
+                {"panels" in project ? project.panels.map(panel => panel.kind === "skins" ? <ArtifactSkins key={panel.kind} /> : (
                   <div key={panel.kind} className={artifactStyles.panel} data-artifact-panel={panel.kind}>
                     <img src={panel.src} alt={panel.alt} width={panel.width} height={panel.height} loading="lazy" />
                   </div>

@@ -173,7 +173,7 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
-Artifacts temporarily uses three supplied static PNGs from public/work/artifacts, configured in featuredWork.panels: document left, centered AI edit bar upper right, stacked app drafts lower right. Its 1145×450 composition clips the document and app stack at the bottom to match the supplied reference. Preserve baked shadows, existing copy, and dark-tile compatibility; replace assets later without redesigning the layout.
+Artifacts uses the supplied document left and centered AI edit bar upper right on a 1145×450 composition. The lower-right tile uses individual Gmail, Slack, and Outlook PNGs with baked shadows. Each ten-second turn lifts the front skin from the stack, holds for 2.5 seconds, pans longer emails to their lower content, holds for two seconds, then returns and shuffles. Slack stays on its short message. Animation pauses offscreen and in hidden tabs; reduced motion keeps a static stack. Preserve copy and dark-tile compatibility.
 
 Dark work tiles is an off-by-default, visit-local prototype picker option. It changes every inline work tile surface to #1C1C1C without changing the page, artwork, video pixels, layout, or motion. The Growth checklist fade uses the same dark color, and Snap captions become light gray. Turning it off restores each original surface; reloading resets it.
 
