@@ -84,6 +84,38 @@ export function HeroMeadow() {
   const isStudioStatic = environmentStyle === "studio-static";
 
   useEffect(() => {
+    if (environmentStyle !== "field-journal") return;
+    const scene = sceneRef.current;
+    const tree = scene?.querySelector<HTMLElement>(".cypress-tree");
+    const surface = scene?.querySelector<HTMLElement>('[data-meadow-surface="active"]');
+    if (!scene || !tree || !surface) return;
+    // Sampled from the journal horizon, in the same coordinates as the actor terrain.
+    const profile = [750, 756, 771, 792, 813, 829, 831, 818, 794, 770, 752, 742, 739];
+    const groundTree = () => {
+      const rootX = tree.offsetLeft + tree.offsetWidth * 0.524;
+      const meadowLeft = (scene.clientWidth - surface.offsetWidth) / 2;
+      const column = clamp((rootX - meadowLeft) / surface.offsetWidth, 0, 1) * 12;
+      const index = Math.min(11, Math.floor(column));
+      const horizon = (profile[index] + (profile[index + 1] - profile[index]) * (column - index)) / 941;
+      const depth = surface.offsetHeight * meadowHeight / 100
+        * (meadowVariant === "living" ? 0.84 * (1 - horizon) : 1);
+      // Match the canvas renderer’s fitted image and the SVG root at y=510 of 520.
+      const imageHeight = Math.min(tree.offsetHeight * 0.96, tree.offsetWidth * 0.94 * 520 / 420);
+      const rootMargin = tree.offsetHeight * 0.99 - imageHeight * 510 / 520;
+      tree.style.bottom = `${depth - rootMargin - 2}px`;
+    };
+    const observer = new ResizeObserver(groundTree);
+    observer.observe(scene);
+    observer.observe(tree);
+    observer.observe(surface);
+    groundTree();
+    return () => {
+      observer.disconnect();
+      tree.style.removeProperty("bottom");
+    };
+  }, [environmentStyle, meadowHeight, meadowVariant]);
+
+  useEffect(() => {
     const savedTheme = document.documentElement.dataset.portfolioTheme;
     if (savedTheme === "dark" || savedTheme === "light") {
       setAsciiGardenTheme(savedTheme);

@@ -41,10 +41,11 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /property="og:title" content="Neel Saswade’s portfolio"/i);
   assert.match(html, /property="og:image" content="[^\"]*\/og\.png"/i);
   assert.match(html, /name="twitter:title" content="Neel Saswade’s portfolio"/i);
+  assert.match(html, /<script defer="" data-domain="neelsaswade\.com" src="https:\/\/plausible\.io\/js\/script\.js"><\/script>/i);
   assert.match(html, /class="site-header site-header--pages"/);
   assert.match(html, />Neel Saswade</);
-  assert.match(html, /I’m a designer based in San Francisco\. Currently, I’m a designer at /);
-  assert.match(html, /working on <br class="hero-copy-break"\/>Proactivity, Artifacts, and Growth\. Previously, I designed at /);
+  assert.match(html, /I’m a product designer based in San Francisco\. Currently, I’m a designer at /);
+  assert.match(html, /working on <br class="hero-copy-break"\/>proactivity, artifacts, and growth\. Previously, I designed at /);
   assert.match(html, /In my free time,<\/span>/);
   assert.match(html, /hero-activities__icons/);
   const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];
@@ -208,8 +209,8 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
-  assert.match(about, /className="about-page__greeting">Hello,</);
-  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--muted\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
+  assert.match(about, /className="about-page__greeting">Hello,<\/h2>/);
+  assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--ink\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
   assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
   assert.match(about, /aria-label="CV"/);
   assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
@@ -310,7 +311,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   ];
   const styleCatalog = styles.split("] as const;")[0];
 
-  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 19);
+  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 20);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
   assert.match(styles, /id: "studio-static"[\s\S]*label: "Studio · no meadow"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
@@ -322,9 +323,9 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(styles, /label: "Watercolor wash"/);
   assert.match(styles, /label: "Marker sketch"/);
   assert.match(styles, /label: "Clay model"/);
-  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 19);
-  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 19);
-  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 19);
+  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 20);
+  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 20);
+  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 20);
   for (const id of styleIds) {
     assert.match(styles, new RegExp(`id: "${id}"`));
     for (const asset of ["rolling", "flat", "tree"]) {
@@ -1235,7 +1236,7 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
 
 test("Life photos share the centered viewer and keep playful hover movement", async () => {
   const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(galleryMarkup, /<h2 id="about-gallery-title">AFK<\/h2>/);
+  assert.match(galleryMarkup, /<h2 id="about-gallery-title">Life<\/h2>/);
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
@@ -1257,8 +1258,6 @@ test("Life photos share the centered viewer and keep playful hover movement", as
   assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
   assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
   assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(42px, 8vw, 100px\)/);
-  assert.match(css, /\.about-page__gallery-track\s*\{[\s\S]*width: min\(100%, 820px\);[\s\S]*max-width: 100%;/);
-  assert.match(css, /flex-basis: clamp\(84px, 5\.8vw, 104px\);/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
@@ -1339,21 +1338,46 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 2);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split(?: |")/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
 });
 
+test("Homepage redesign shows the cropped video inside a rounded shadowed tile", async () => {
+  const html = await (await render()).text();
+  const section = html.split('id="work-homepage"')[1].split("</section>")[0];
+  assert.match(section, /homepage-final.mp4/);
+  assert.match(section, /homepage-final-poster.jpg/);
+  assert.match(section, /loop="" muted="" playsInline=""/);
+  assert.equal((section.match(/work-feature__placeholder/g) ?? []).length, 2);
+  const css = await readFile(new URL("../app/homepage-video.module.css", import.meta.url), "utf8");
+  assert.match(css, /border-radius: 12px/);
+  assert.match(css, /box-shadow:/);
+  assert.match(css, /background: #ececec/);
+});
+
 test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts", async () => {
   const html = await (await render()).text();
   const section = html.split('id="work-artifacts"')[1].split("</section>")[0];
-  for (const asset of ["document.png", "edit-with-ai.png", "app-skins.png"]) {
+  for (const asset of ["document.png", "edit-with-ai.png", "gmail-skin.png", "slack-skin.png", "outlook-skin.png"]) {
     assert.ok(section.includes("/work/artifacts/" + asset));
   }
   assert.equal((section.match(/data-artifact-panel=/g) ?? []).length, 3);
   assert.doesNotMatch(section, /work-feature__placeholder|assets coming soon/);
-  assert.match(section, /Making the jump from chat to editable work/);
+  assert.match(section, /I led design for Artifacts from its early launch through its growth to nearly 200K weekly active users/);
+});
+
+test("artifact skins include reading holds and suspend when not visible", async () => {
+  const source = await readFile(new URL("../app/artifact-skins.tsx", import.meta.url), "utf8");
+  assert.match(source, /duration: 16500/);
+  assert.match(source, /add\(1\.7, depth === 0 \? focused/);
+  assert.match(source, /add\(4\.1, depth === 0 \? focused/);
+  assert.doesNotMatch(source, /const bottom|const revealed/);
+  assert.match(source, /IntersectionObserver/);
+  assert.match(source, /visibilitychange/);
+  assert.match(source, /prefers-reduced-motion/);
+  assert.match(source, /animation.cancel\(\)/);
 });
 
 test("dark work tiles are an opt-in, work-only prototype", async () => {
@@ -1536,6 +1560,8 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(events.get("wheel").options.passive, false);
   assert.match(source, /const HERO_SETTLE_DURATION = 900/);
   assert.match(source, /const PROJECT_SETTLE_DURATION = 900/);
+  assert.match(source, /gap \* \(0\.86 - intensity \* 0\.66\)/);
+  assert.match(source, /window\.innerHeight \* \(0\.9 - intensity \* 0\.7\)/);
   assert.match(source, /cubic\(t, 0\.77, 0\.175\)/);
   const complete = () => {
     const callbacks = [...frames.values()];
@@ -1791,6 +1817,7 @@ test("renders the tagged photo collection with search and a native focus view", 
   assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
   assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
+  assert.equal((html.match(/data-silent-hover="true"/g) ?? []).length, 141);
   assert.match(html, /aria-label="Search photos"/);
   assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
@@ -1859,4 +1886,25 @@ test("Photo and About share the homepage paper color", async () => {
   assert.match(css, /html:has\(\.about-page, \.photography-page\) body,\s*\.about-page,\s*\.photography-page,[^{]+\{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
   assert.match(await (await render("/photography")).text(), /class="site-shell photography-page /);
   assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page"/);
+});
+
+test("Field journal unifies all hero artwork as an explicit reversible prototype", async () => {
+  const [styles, css, hero] = await Promise.all([
+    readFile(new URL("../app/alamo-styles.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/field-journal.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
+  assert.match(styles.split("MEADOW_TREE_OPTIONS")[1], /id: "field-journal"/);
+  assert.match(hero, /if \(environmentStyle !== "field-journal"\) return/);
+  assert.match(hero, /observer\.disconnect\(\);\s*tree\.style\.removeProperty\("bottom"\)/);
+  for (const asset of ["rolling", "flat", "tree", "paper", "icon-photography", "icon-cycling", "icon-backpacking", "photo-0", "photo-1", "photo-2", "photo-3", "photo-4", "bike-0", "bike-1", "bike-2", "hiker-0", "hiker-1", "hiker-2", "philip-idle", "philip-smile", "philip-light", "philip-strong", "philip-strained"]) {
+    await access(new URL(`../public/alamo-styles/field-journal/${asset}.svg`, import.meta.url));
+    assert.ok((styles + css).includes(`/alamo-styles/field-journal/${asset}.svg`), `${asset} is wired into the prototype`);
+  }
+  assert.match(css, /data-environment-style="field-journal"[^}]+:focus-visible/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  const html = await (await render()).text();
+  assert.match(html, /data-environment-style="painterly-realism"/);
+  assert.doesNotMatch(html, /data-environment-style="field-journal"/);
 });

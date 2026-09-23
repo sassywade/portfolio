@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
+import "./field-journal.css";
 import { PhilipToggle } from "./philip-toggle";
 import { PORTFOLIO_THEME_BOOT_SCRIPT } from "./portfolio-theme";
 import { Soundscape } from "./soundscape";
@@ -80,6 +81,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: PORTFOLIO_THEME_BOOT_SCRIPT }} />
+        <script defer data-domain="neelsaswade.com" src="https://plausible.io/js/script.js" />
       </head>
       <body className={`${newsreader.variable} ${geist.variable} ${geistMono.variable} antialiased`}>
         <Soundscape />

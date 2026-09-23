@@ -1,0 +1,146 @@
+/* An explicit prototype: the whole hero shares one ink, paper, and pigment system. */
+html[data-environment-style="field-journal"] {
+  --journal-paper: #f6f3eb;
+  --journal-ink: #4b5140;
+  --journal-olive: #707e59;
+  --paper: var(--journal-paper);
+  --ink: var(--journal-ink);
+  --muted: #777d6b;
+  --acid: var(--journal-olive);
+}
+
+html[data-environment-style="field-journal"] body,
+html[data-environment-style="field-journal"] .site-shell[data-atmosphere][data-environment-style]:has(.pranathi-intro--home) {
+  --paper: var(--journal-paper);
+  --ink: var(--journal-ink);
+  --muted: #777d6b;
+  background-color: var(--journal-paper);
+}
+
+html[data-environment-style="field-journal"] .site-shell[data-atmosphere][data-environment-style] {
+  background-image: url("/alamo-styles/field-journal/paper.svg");
+  background-size: 180px 180px;
+}
+
+html[data-environment-style="field-journal"] .hero-meadow__style-atmosphere::before,
+html[data-environment-style="field-journal"] .hero-meadow__style-atmosphere::after {
+  display: none;
+}
+
+html[data-environment-style="field-journal"] :is(.pranathi-name, .pranathi-bio, .site-header__wordmark, .site-nav a) {
+  color: var(--journal-ink);
+}
+
+html[data-environment-style="field-journal"] .pranathi-name { color: #6c745d; }
+html[data-environment-style="field-journal"] .cypress-tree__canvas { filter: none; }
+.hero-meadow[data-environment-style="field-journal"] > .cypress-tree { transition: none; }
+
+/* Reuse the real buttons, their actor-driven selection, labels, and focus. */
+html[data-environment-style="field-journal"] .pranathi-bio .meadow-activity {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  mix-blend-mode: normal;
+  background: transparent;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+html[data-environment-style="field-journal"] .meadow-activity img { visibility: hidden; }
+html[data-environment-style="field-journal"] .meadow-activity::after { content: none; }
+html[data-environment-style="field-journal"] .meadow-activity::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: center / contain no-repeat;
+  pointer-events: none;
+}
+html[data-environment-style="field-journal"] .photo-word::before { background-image: url("/alamo-styles/field-journal/icon-photography.svg"); }
+html[data-environment-style="field-journal"] .bike-word::before { background-image: url("/alamo-styles/field-journal/icon-cycling.svg"); }
+html[data-environment-style="field-journal"] .backpack-word::before { background-image: url("/alamo-styles/field-journal/icon-backpacking.svg"); }
+html[data-environment-style="field-journal"] .pranathi-bio .meadow-activity[aria-pressed="true"] {
+  background-color: #e5e7d6;
+  border-color: #bbc2a6;
+}
+html[data-environment-style="field-journal"] .pranathi-bio .meadow-activity:focus-visible {
+  outline: 2px solid var(--journal-olive);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  html[data-environment-style="field-journal"] .pranathi-bio .meadow-activity:hover { background-color: #e8e7db; }
+}
+
+/* Swap artwork only; positioning, interruption, phases, and offscreen work retain their owners. */
+html[data-environment-style="field-journal"] :is(.mini-photographer__sprite, .mini-hiker__sprite, .bike-rider__sprite) img { filter: none; }
+html[data-environment-style="field-journal"] :is(.mini-photographer__shadow, .mini-hiker__shadow, .bike-rider__shadow) { display: none; }
+html[data-environment-style="field-journal"] .mini-photographer__sprite img { content: url("/alamo-styles/field-journal/photo-0.svg"); }
+html[data-environment-style="field-journal"] .photo-drop-layer[data-frame="1"] .mini-photographer__sprite img { content: url("/alamo-styles/field-journal/photo-1.svg"); }
+html[data-environment-style="field-journal"] .photo-drop-layer[data-frame="2"] .mini-photographer__sprite img { content: url("/alamo-styles/field-journal/photo-2.svg"); }
+html[data-environment-style="field-journal"] .photo-drop-layer[data-frame="3"] .mini-photographer__sprite img { content: url("/alamo-styles/field-journal/photo-3.svg"); }
+html[data-environment-style="field-journal"] .photo-drop-layer[data-frame="4"] .mini-photographer__sprite img { content: url("/alamo-styles/field-journal/photo-4.svg"); }
+html[data-environment-style="field-journal"] .mini-hiker__sprite img { content: url("/alamo-styles/field-journal/hiker-0.svg"); }
+html[data-environment-style="field-journal"] .mini-hiker__sprite img[src$="frame-2.png"] { content: url("/alamo-styles/field-journal/hiker-1.svg"); }
+html[data-environment-style="field-journal"] .mini-hiker__sprite img[src$="frame-3.png"] { content: url("/alamo-styles/field-journal/hiker-2.svg"); }
+html[data-environment-style="field-journal"] .bike-rider__sprite img { content: url("/alamo-styles/field-journal/bike-0.svg"); }
+html[data-environment-style="field-journal"] .bike-rider__sprite img[src$="frame-2.png"] { content: url("/alamo-styles/field-journal/bike-1.svg"); }
+html[data-environment-style="field-journal"] .bike-rider__sprite img[src$="frame-3.png"] { content: url("/alamo-styles/field-journal/bike-2.svg"); }
+
+html[data-environment-style="field-journal"] .smiley-cursor__asset { filter: none; }
+html[data-environment-style="field-journal"] .smiley-cursor__asset--idle { content: url("/alamo-styles/field-journal/philip-idle.svg"); }
+html[data-environment-style="field-journal"] .smiley-cursor__asset--smile { content: url("/alamo-styles/field-journal/philip-smile.svg"); }
+html[data-environment-style="field-journal"] .smiley-cursor__asset--light { content: url("/alamo-styles/field-journal/philip-light.svg"); }
+html[data-environment-style="field-journal"] .smiley-cursor__asset--strong { content: url("/alamo-styles/field-journal/philip-strong.svg"); }
+html[data-environment-style="field-journal"] .smiley-cursor__asset--strained { content: url("/alamo-styles/field-journal/philip-strained.svg"); }
+html[data-environment-style="field-journal"] .philip-toggle__knob img { content: url("/alamo-styles/field-journal/philip-idle.svg"); object-position: left; }
+
+/* One quiet readout on the same pigment as the landscape. */
+.hero-meadow[data-environment-style="field-journal"] .alamo-weather {
+  right: calc((var(--meadow-render-width) - 100vw) / 2 + clamp(16px, 2.5vw, 36px));
+  bottom: 22px;
+  width: min(420px, calc(100vw - 32px));
+  height: auto;
+  color: #505b42;
+  text-align: right;
+  text-shadow: none;
+  transform: scaleY(calc(1 / var(--living-meadow-scale-y)));
+  transform-origin: bottom right;
+}
+.hero-meadow[data-environment-style="field-journal"] .alamo-weather__ridge { display: none; }
+.hero-meadow[data-environment-style="field-journal"] :is(.alamo-weather__ascii-primary, .alamo-weather__secondary.sr-only) {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  font-family: var(--sans);
+  font-size: clamp(12px, 1vw, 14px);
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: normal;
+}
+.hero-meadow[data-environment-style="field-journal"] .alamo-weather__secondary.sr-only { font-size: clamp(11px, .9vw, 13px); }
+
+html[data-environment-style="field-journal"] :is(.meadow-settings__gear, .meadow-settings__panel) {
+  background: var(--journal-paper);
+  color: var(--journal-ink);
+  border-color: #d6d8c9;
+  box-shadow: 0 6px 24px #4b51400a;
+  backdrop-filter: none;
+}
+html[data-environment-style="field-journal"] .meadow-settings__scene-options button[aria-pressed="true"] {
+  background: #e5e7d6;
+  border-color: #929d7a;
+}
+@media (max-width: 580px) {
+  .hero-meadow[data-environment-style="field-journal"] .alamo-weather { bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-environment-style="field-journal"] .pranathi-bio .meadow-activity { transition: none; }
+}
+
+@media (max-width: 580px) {
+  .hero-meadow[data-environment-style="field-journal"] > .cypress-tree {
+    right: 12px;
+    width: clamp(150px, 44vw, 230px);
+  }
+}

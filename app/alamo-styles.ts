@@ -48,6 +48,18 @@ export const ALAMO_STYLES = [
     treeRootOffset: 0.86,
   },
   {
+    id: "field-journal",
+    label: "Field journal · unified illustration",
+    shortLabel: "Field journal",
+    rollingSrc: "/alamo-styles/field-journal/rolling.svg",
+    flatSrc: "/alamo-styles/field-journal/flat.svg",
+    treeSrc: "/alamo-styles/field-journal/tree.svg",
+    atmosphere: "journal",
+    rollingGroundOffset: 0,
+    flatHorizon: 0,
+    treeRootOffset: 0,
+  },
+  {
     id: "ascii-terminal",
     label: "ASCII terminal garden",
     shortLabel: "ASCII",
@@ -241,6 +253,11 @@ export const MEADOW_TREE_OPTIONS: ReadonlyArray<{
     id: "painterly-realism",
     label: "Current",
     description: "The existing restrained painterly scene.",
+  },
+  {
+    id: "field-journal",
+    label: "Field journal",
+    description: "One drawing language. Warm paper, olive washes, and ink throughout.",
   },
   {
     id: "ascii-field-notes",

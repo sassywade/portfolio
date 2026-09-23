@@ -22,9 +22,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.panel[data-artifact-panel="skins"] img {
+.skins { container-type: inline-size; }
+.panel.skins img {
   width: 82%;
   left: 50%;
-  top: 11%;
-  transform: translateX(-50%);
+  top: 0;
+  transform-origin: top center;
 }

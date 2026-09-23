@@ -18,8 +18,10 @@ const actionableSelector = [
 ].join(",");
 
 function addDeclarativeInteractionCue(element: HTMLElement) {
-  element.dataset.cuelumeHover = "tick";
-  element.dataset.cuelumeAutomaticHover = "true";
+  if (element.dataset.silentHover !== "true") {
+    element.dataset.cuelumeHover = "tick";
+    element.dataset.cuelumeAutomaticHover = "true";
+  }
   delete element.dataset.cuelumeToggle;
   element.dataset.cuelumePress = "press";
   element.dataset.cuelumeRelease = "release";

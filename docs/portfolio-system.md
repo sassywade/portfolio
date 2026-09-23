@@ -1,5 +1,7 @@
 # Portfolio system
 
+The About page uses “Hello,” and “Life” with the homepage ink color. Its resume link reads “CV”. On desktop the Life strip extends slightly beyond the introduction, using responsive card widths and modest overlap; mobile keeps readable cards in a horizontally scrollable strip. Preserve the white film matting and hover lift.
+
 ## 1. Experience model
 
 The portfolio has three user-facing destinations:
@@ -162,6 +164,8 @@ Grass readability and performance: skyline blades are 30% longer and slightly na
 
 The default homepage uses the shared top header with the Neel Saswade wordmark and Work, Photo, and About links while keeping the breeze/time readout tucked into the bottom-right of the meadow. Photo opens the dedicated `/photography` gallery; Play and Resume are intentionally not in the high-level navigation yet. Keep the current introduction, inline hobby words, photographer, meadow, and Philip behavior. Other pages retain their shared header. The quiet layout controls remain opt-in only.
 
+The root layout includes Plausible's cookie-free analytics script for `neelsaswade.com`. Keep the integration lightweight and do not add a consent banner or identify individual visitors. Plausible must be configured for the domain before the dashboard receives data.
+
 The homepage header must preserve the introduction's original desktop vertical position. Above 700px, retain the header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
 
 Top-right weather typography is deliberately smaller than navigation: breeze summary 12–14px, time and wind details 11–12px, responsive on desktop and mobile.
@@ -171,7 +175,9 @@ Desktop sidebar navigation follows the supplied Figma reference: 20px Newsreader
 
 ## Inline work sections (current)
 
-Artifacts temporarily uses three supplied static PNGs from public/work/artifacts, configured in featuredWork.panels: document left, centered AI edit bar upper right, stacked app drafts lower right. Its 1145×450 composition clips the document and app stack at the bottom to match the supplied reference. Preserve baked shadows, existing copy, and dark-tile compatibility; replace assets later without redesigning the layout.
+Homepage redesign's main tile uses homepage_Vid_final.mov cropped to 2560×1664 at (26,20), encoded to 1920×1248 at 30fps. Remove the final two seconds (24.1-second output), fade to white over the final 600ms, and fade in from white over 350ms at replay. The entire cropped screen fits at 90% tile width, with 12px corners and a subtle shadow on #ECECEC. Keep its two right placeholders and shared offscreen/reduced-motion video behavior.
+
+Artifacts uses the supplied document left and centered AI edit bar upper right on a 1145×450 composition. The lower-right tile uses individual Gmail, Slack, and Outlook PNGs with baked shadows. Each 5.5-second turn lifts the front skin once over 700ms, holds for 2.4 seconds, returns over 700ms, and shuffles. Do not pan farther down to the bottom of the card. Animation pauses offscreen and in hidden tabs; reduced motion keeps a static stack. Preserve copy and dark-tile compatibility.
 
 Dark work tiles is an off-by-default, visit-local prototype picker option. It changes every inline work tile surface to #1C1C1C without changing the page, artwork, video pixels, layout, or motion. The Growth checklist fade uses the same dark color, and Snap captions become light gray. Turning it off restores each original surface; reloading resets it.
 
@@ -216,7 +222,7 @@ The homepage studio grid fades away with the meadow handoff, using the existing 
 
 Do not display a Selected work heading above the projects. Retain the existing opening spacing and an accessible Work heading.
 
-Work preserves native wheel scrolling in both directions. On desktop, the first downward scroll from the hero always lands on the first fitting project over a calm 900ms ease-in-out handoff. After that opening gesture, native momentum pauses for 140ms before the next fitting project may center over the same calm 900ms handoff. The capture radius scales down with peak gesture speed: gentle input captures within 68% of the project spacing (capped at 72% of the viewport), while strong input captures only within 20% (capped at 20% of the viewport), so a harder scroll can intentionally travel farther. A gentle gesture beginning within 80px of a center and traveling at least 18% toward its neighbor commits to that neighbor. Normalize pixel, line, and page wheel units; reset intent on pauses and reversals. No wheel event is blocked and there is no per-gesture project limit. Upward escape above the first center freely reaches the hero; tiny adjustments, tall sections, nested scrollers, zoom, and reduced motion remain native. Touch uses proximity snapping with normal pass-through. Project links retain interruptible centered navigation, and the rail never repositions between projects.
+Work preserves native wheel scrolling in both directions. On desktop, the first downward scroll from the hero always lands on the first fitting project over a calm 900ms ease-in-out handoff. After that opening gesture, native momentum pauses for 140ms before the next fitting project may center over the same calm 900ms handoff. The capture radius scales down sharply with peak gesture speed: gentle input captures within 86% of the project spacing (capped at 90% of the viewport), so an ordinary scroll goes directly to the next project, while strong input falls to 20% (capped at 20% of the viewport) so a harder scroll can intentionally travel farther. A gentle gesture beginning within 80px of a center and traveling at least 18% toward its neighbor commits to that neighbor. Normalize pixel, line, and page wheel units; reset intent on pauses and reversals. No wheel event is blocked and there is no per-gesture project limit. Upward escape above the first center freely reaches the hero; tiny adjustments, tall sections, nested scrollers, zoom, and reduced motion remain native. Touch uses proximity snapping with normal pass-through. Project links retain interruptible centered navigation, and the rail never repositions between projects.
 
 Work metadata keeps a 6px gap between the Glean logo and its text label.
 
@@ -266,3 +272,9 @@ On Photo page arrival, keep the temporary server column layout hidden until clie
 The Photo search row contains only search and its clear action. Color and Style grouping remain available in the prototype picker; do not show a sorting toggle or dropdown beside search.
 
 The shared photo viewer keeps the already-loaded thumbnail as a background preview throughout expansion. Reveal the larger image only after decoding succeeds, using a short 160ms opacity fade; keep the preview if loading or decoding fails. The viewing surface uses paper instead of black, and reduced motion reveals the decoded image immediately. This applies to Photo and About without changing their framing or close behavior.
+
+Photo gallery thumbnails stay silent on hover. Mark them with `data-silent-hover="true"` so the shared soundscape skips its automatic hover cue while retaining the standard press/release click feedback. This exception is limited to gallery photos; other controls and About keep their existing cues.
+
+### Field journal prototype
+
+`Field journal` in Meadow + tree is an opt-in, visit-local visual identity. The current painterly scene remains the default. Warm paper replaces the grid; the landscape, people, interest controls, and Philip share olive washes, ochre accents, and a fine charcoal outline. Artwork is authored SVG under `public/alamo-styles/field-journal`; `app/field-journal.css` scopes every override to the chosen environment. The original actor and cursor state machines still own motion, selection, reduced motion, and offscreen behavior. The journal tree registers to its horizon on resize and meadow-height changes. Switching away restores the existing artwork and tree position.

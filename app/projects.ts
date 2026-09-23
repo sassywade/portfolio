@@ -414,16 +414,16 @@ export const growthVideoAlternative = {
 } as const;
 
 export const featuredWork = [
-  { slug: "psychic", video: { src: "/work/psychic-updated.mp4", poster: "/work/psychic-updated-poster.jpg" }, navTitle: "Proactive intelligence", title: "Proactive Intelligence", year: "2026", company: "Glean", layout: "split", summary: "How do you help someone before they ask? As lead designer, I explored how Glean could anticipate people’s needs—turning proactive intelligence into a feeling of relief." },
-  { slug: "homepage", navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to match its growing AI capabilities. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward and close more loops." },
-  { slug: "artifacts", navTitle: "Artifacts", title: "Artifacts", year: "2026", company: "Glean", layout: "split", summary: "Making the jump from chat to editable work.",
+  { slug: "psychic", video: { src: "/work/psychic-updated.mp4", poster: "/work/psychic-updated-poster.jpg" }, navTitle: "Proactive intelligence", title: "Proactive Intelligence", year: "2026", company: "Glean", layout: "split", summary: "How do you help someone before they ask? As lead designer, I explored how Glean could anticipate people’s needs and turn proactive intelligence into a feeling of relief." },
+  { slug: "homepage", video: { src: "/work/homepage-final.mp4", poster: "/work/homepage-final-poster.jpg" }, navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to match its growing AI capabilities. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward and close more loops." },
+  { slug: "artifacts", navTitle: "Artifacts", title: "Artifacts", year: "2026", company: "Glean", layout: "split", summary: "I led design for Artifacts from its early launch through its growth to nearly 200K weekly active users. I helped shape how people create, edit, and share work with AI.",
     panels: [
       { kind: "document", src: "/work/artifacts/document.png", alt: "Glean chat alongside an editable document artifact", width: 2704, height: 1680 },
       { kind: "edit", src: "/work/artifacts/edit-with-ai.png", alt: "Describe your edit toolbar with AI editing and formatting controls", width: 1400, height: 216 },
       { kind: "skins", src: "/work/artifacts/app-skins.png", alt: "Artifact drafts styled for Slack, Outlook, and Gmail", width: 1335, height: 784 },
     ],
   },
-  { slug: "growth", video: { src: "/work/growth-main.mp4", poster: "/work/growth-main-poster.jpg" }, navTitle: "Growth", title: "Growth", year: "2025", company: "Glean", layout: "trio", summary: "Helping people find value, then come back." },
+  { slug: "growth", video: { src: "/work/growth-main.mp4", poster: "/work/growth-main-poster.jpg" }, navTitle: "Growth", title: "Growth", year: "2025", company: "Glean", layout: "trio", summary: "I led Growth design during a period when Glean scaled from 25K to more than 1M weekly active users. My work focused on helping new users experience Glean’s value and build reasons to return." },
   {
     slug: "snap",
     navTitle: "Web3 at Snap",
