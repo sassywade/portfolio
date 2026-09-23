@@ -1337,10 +1337,23 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 2);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split(?: |")/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
+});
+
+test("Homepage redesign shows the cropped video inside a rounded shadowed tile", async () => {
+  const html = await (await render()).text();
+  const section = html.split('id="work-homepage"')[1].split("</section>")[0];
+  assert.match(section, /homepage-final.mp4/);
+  assert.match(section, /homepage-final-poster.jpg/);
+  assert.match(section, /loop="" muted="" playsInline=""/);
+  assert.equal((section.match(/work-feature__placeholder/g) ?? []).length, 2);
+  const css = await readFile(new URL("../app/homepage-video.module.css", import.meta.url), "utf8");
+  assert.match(css, /border-radius: 12px/);
+  assert.match(css, /box-shadow:/);
+  assert.match(css, /background: #ececec/);
 });
 
 test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts", async () => {

@@ -8,6 +8,7 @@ import { PsychicCards } from "./psychic-cards";
 import { WorkTileSurface } from "./work-tile-prototype";
 import artifactStyles from "./artifact-panels.module.css";
 import { ArtifactSkins } from "./artifact-skins";
+import homepageStyles from "./homepage-video.module.css";
 
 export function WorkSections() {
   return (
@@ -44,6 +45,10 @@ export function WorkSections() {
                 )}
                 {project.slug === "growth" ? (
                   <GrowthPrototypeVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
+                ) : project.slug === "homepage" ? (
+                  <div className={homepageStyles.tile}>
+                    <ProjectVideo src={project.video.src} poster={project.video.poster} className={homepageStyles.video} ariaLabel="Glean homepage redesign walkthrough" />
+                  </div>
                 ) : "video" in project ? (
                   <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
                 ) : "media" in project ? project.media.groups.map((group) => (
