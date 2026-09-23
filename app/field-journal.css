@@ -33,6 +33,7 @@ html[data-environment-style="field-journal"] :is(.pranathi-name, .pranathi-bio, 
 
 html[data-environment-style="field-journal"] .pranathi-name { color: #6c745d; }
 html[data-environment-style="field-journal"] .cypress-tree__canvas { filter: none; }
+.hero-meadow[data-environment-style="field-journal"] > .cypress-tree { transition: none; }
 
 /* Reuse the real buttons, their actor-driven selection, labels, and focus. */
 html[data-environment-style="field-journal"] .pranathi-bio .meadow-activity {

@@ -99,8 +99,10 @@ export function HeroMeadow() {
       const horizon = (profile[index] + (profile[index + 1] - profile[index]) * (column - index)) / 941;
       const depth = surface.offsetHeight * meadowHeight / 100
         * (meadowVariant === "living" ? 0.84 * (1 - horizon) : 1);
-      // The renderer reserves a small transparent margin below the illustrated roots.
-      tree.style.bottom = `${depth - tree.offsetHeight * 0.054 - 2}px`;
+      // Match the canvas renderer’s fitted image and the SVG root at y=510 of 520.
+      const imageHeight = Math.min(tree.offsetHeight * 0.96, tree.offsetWidth * 0.94 * 520 / 420);
+      const rootMargin = tree.offsetHeight * 0.99 - imageHeight * 510 / 520;
+      tree.style.bottom = `${depth - rootMargin - 2}px`;
     };
     const observer = new ResizeObserver(groundTree);
     observer.observe(scene);
