@@ -9,22 +9,22 @@ const skins = [
   { name: "Outlook", file: "outlook-skin.png", width: 1335, height: 1775 },
 ];
 
-// Each 5.5-second turn lifts once, holds, and returns to the stack.
+// Each 5-second turn lifts once, holds, and returns to the stack.
 function frames(index: number) {
   const result: Keyframe[] = [];
   for (let turn = 0; turn < 3; turn++) {
     const depth = (index - turn + 3) % 3;
     const nextDepth = (index - turn + 2) % 3;
     const stack = (d: number) => `translate(-50%, ${24 - d * 9}cqw) scale(${1 - d * .06})`;
-    const focused = "translate(-50%, 3cqw) scale(1)";
+    const focused = "translate(-50%, 7cqw) scale(1)";
     const add = (time: number, transform: string, opacity: number, zIndex: number) =>
-      result.push({ offset: (turn * 5.5 + time) / 16.5, transform, opacity, zIndex, easing: "cubic-bezier(.77, 0, .175, 1)" });
+      result.push({ offset: (turn * 5 + time) / 15, transform, opacity, zIndex, easing: "cubic-bezier(.77, 0, .175, 1)" });
     add(0, stack(depth), 1, 3 - depth);
-    add(1, stack(depth), 1, 3 - depth);
-    add(1.7, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
-    add(4.1, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
-    add(4.8, stack(depth), 1, 3 - depth);
-    add(5.5, stack(nextDepth), 1, 3 - nextDepth);
+    add(.9, stack(depth), 1, 3 - depth);
+    add(1.5, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
+    add(3.8, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
+    add(4.4, stack(depth), 1, 3 - depth);
+    add(5, stack(nextDepth), 1, 3 - nextDepth);
   }
   return result;
 }
@@ -36,7 +36,7 @@ export function ArtifactSkins() {
     if (!node) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const animations = Array.from(node.querySelectorAll("img")).map((image, index) => {
-      const animation = image.animate(frames(index), { duration: 16500, iterations: Infinity, fill: "both" });
+      const animation = image.animate(frames(index), { duration: 15000, iterations: Infinity, fill: "both" });
       animation.pause();
       return animation;
     });
