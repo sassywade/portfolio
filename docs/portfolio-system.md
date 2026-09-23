@@ -268,3 +268,5 @@ On Photo page arrival, keep the temporary server column layout hidden until clie
 The Photo search row contains only search and its clear action. Color and Style grouping remain available in the prototype picker; do not show a sorting toggle or dropdown beside search.
 
 The shared photo viewer keeps the already-loaded thumbnail as a background preview throughout expansion. Reveal the larger image only after decoding succeeds, using a short 160ms opacity fade; keep the preview if loading or decoding fails. The viewing surface uses paper instead of black, and reduced motion reveals the decoded image immediately. This applies to Photo and About without changing their framing or close behavior.
+
+Photo gallery thumbnails stay silent on hover. Mark them with `data-silent-hover="true"` so the shared soundscape skips its automatic hover cue while retaining the standard press/release click feedback. This exception is limited to gallery photos; other controls and About keep their existing cues.

@@ -1789,6 +1789,7 @@ test("renders the tagged photo collection with search and a native focus view", 
   assert.doesNotMatch(html, /<h1[^>]*>Photography<\/h1>/);
   assert.match(html, /href="\/photography"[^>]*aria-current="page"/);
   assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
+  assert.equal((html.match(/data-silent-hover="true"/g) ?? []).length, 141);
   assert.match(html, /aria-label="Search photos"/);
   assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);

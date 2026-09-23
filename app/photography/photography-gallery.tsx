@@ -129,7 +129,7 @@ export function PhotographyGallery() {
           const shown = visible.has(photo.id);
           return (
             <button key={photo.id} ref={(node) => { if (node) cards.current.set(photo.id, node); else cards.current.delete(photo.id); }}
-              className={styles.photo} type="button" data-photo-id={photo.id} data-visible={shown} data-color={photo.color} data-style={photo.style}
+              className={styles.photo} type="button" data-photo-id={photo.id} data-silent-hover="true" data-visible={shown} data-color={photo.color} data-style={photo.style}
               style={{ aspectRatio: photo.ratio, visibility: selectedId === photo.id ? 'hidden' : undefined, ...(measure.width && position ? { left: position.x, top: position.y, width: position.width, height: position.height } : {}) }}
               aria-label={`Open ${photo.description}`} aria-haspopup="dialog" aria-hidden={!shown} tabIndex={shown ? 0 : -1}
               onClick={(event) => openPhoto({ ...photo, label: photo.description }, event.currentTarget, event.detail !== 0)}>
