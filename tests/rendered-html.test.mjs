@@ -1909,3 +1909,23 @@ test("Field journal unifies all hero artwork as an explicit reversible prototype
   assert.match(html, /data-environment-style="painterly-realism"/);
   assert.doesNotMatch(html, /data-environment-style="field-journal"/);
 });
+
+
+test("Selected work leads with the umbrella and Neel's 28 selections without losing photos", async () => {
+  const { clusterPhotos, selectedPhotoIds, masonryLayout } = await import("../app/photography/gallery-model.mjs");
+  const photos = JSON.parse(await readFile(new URL("../app/photography/photos.json", import.meta.url), "utf8"));
+  const before = JSON.stringify(photos);
+  const ordered = clusterPhotos(photos, "selected");
+  assert.equal(selectedPhotoIds.length, 28);
+  assert.equal(new Set(selectedPhotoIds).size, 28);
+  assert.equal(ordered[0].id, "087");
+  assert.deepEqual(ordered.slice(0, 28).map(photo => photo.id), selectedPhotoIds);
+  assert.deepEqual(ordered.map(photo => photo.id).sort(), photos.map(photo => photo.id).sort());
+  assert.deepEqual(clusterPhotos([...photos].reverse(), "selected"), ordered);
+  assert.equal(JSON.stringify(photos), before);
+  for (const columns of [2, 5]) {
+    const layout = masonryLayout(ordered, columns === 2 ? 342 : 1152, columns, 20);
+    assert.equal(layout.positions.get("087").y, 0);
+    assert.equal(layout.positions.get("087").x, 0);
+  }
+});

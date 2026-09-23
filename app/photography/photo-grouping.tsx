@@ -2,11 +2,14 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
-export type PhotoGrouping = "color" | "style";
+export type PhotoGrouping = "color" | "style" | "selected";
 const eventName = "portfolio:photo-grouping";
 const storageKey = "portfolio:photo-grouping";
 function readGrouping(): PhotoGrouping {
-  try { return sessionStorage.getItem(storageKey) === "style" ? "style" : "color"; }
+  try {
+    const saved = sessionStorage.getItem(storageKey);
+    return saved === "style" || saved === "selected" ? saved : "color";
+  }
   catch { return "color"; }
 }
 export function setPhotoGrouping(grouping: PhotoGrouping) {
@@ -31,7 +34,7 @@ export function PhotoGroupingOptions() {
     <section className="meadow-settings__section" aria-label="Photo grouping">
       <h2>Photo grouping</h2>
       <div className="layout-prototype-options">
-        {([['color', 'Color'], ['style', 'Photography style']] as const).map(([value, label]) => (
+        {([['color', 'Color'], ['style', 'Photography style'], ['selected', 'Selected work']] as const).map(([value, label]) => (
           <button type="button" key={value} aria-pressed={grouping === value} onClick={() => setPhotoGrouping(value)}>{label}</button>
         ))}
       </div>
