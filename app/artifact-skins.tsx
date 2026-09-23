@@ -9,7 +9,7 @@ const skins = [
   { name: "Outlook", file: "outlook-skin.png", width: 1335, height: 1775 },
 ];
 
-// Each ten-second turn includes two reading holds, not continuous scrolling.
+// Each 5.5-second turn lifts once, holds, and returns to the stack.
 function frames(index: number) {
   const result: Keyframe[] = [];
   for (let turn = 0; turn < 3; turn++) {
@@ -17,19 +17,14 @@ function frames(index: number) {
     const nextDepth = (index - turn + 2) % 3;
     const stack = (d: number) => `translate(-50%, ${24 - d * 9}cqw) scale(${1 - d * .06})`;
     const focused = "translate(-50%, 3cqw) scale(1)";
-    // Slack's content is near the top. Emails reveal their lower body on the second hold.
-    const bottom = index === 1 ? 3 : Math.min(3, 49 - 82 * skins[index].height / skins[index].width);
-    const revealed = `translate(-50%, ${bottom}cqw) scale(1)`;
     const add = (time: number, transform: string, opacity: number, zIndex: number) =>
-      result.push({ offset: (turn * 10 + time) / 30, transform, opacity, zIndex, easing: "cubic-bezier(.77, 0, .175, 1)" });
+      result.push({ offset: (turn * 5.5 + time) / 16.5, transform, opacity, zIndex, easing: "cubic-bezier(.77, 0, .175, 1)" });
     add(0, stack(depth), 1, 3 - depth);
-    add(1.4, stack(depth), 1, 3 - depth);
-    add(2.3, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
-    add(4.8, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
-    add(6.3, depth === 0 ? revealed : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
-    add(8.3, depth === 0 ? revealed : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
-    add(9.2, stack(depth), 1, 3 - depth);
-    add(10, stack(nextDepth), 1, 3 - nextDepth);
+    add(1, stack(depth), 1, 3 - depth);
+    add(1.7, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
+    add(4.1, depth === 0 ? focused : stack(depth), depth === 0 ? 1 : 0, 3 - depth);
+    add(4.8, stack(depth), 1, 3 - depth);
+    add(5.5, stack(nextDepth), 1, 3 - nextDepth);
   }
   return result;
 }
@@ -41,7 +36,7 @@ export function ArtifactSkins() {
     if (!node) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const animations = Array.from(node.querySelectorAll("img")).map((image, index) => {
-      const animation = image.animate(frames(index), { duration: 30000, iterations: Infinity, fill: "both" });
+      const animation = image.animate(frames(index), { duration: 16500, iterations: Infinity, fill: "both" });
       animation.pause();
       return animation;
     });

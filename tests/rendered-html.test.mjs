@@ -1369,9 +1369,10 @@ test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts
 
 test("artifact skins include reading holds and suspend when not visible", async () => {
   const source = await readFile(new URL("../app/artifact-skins.tsx", import.meta.url), "utf8");
-  assert.match(source, /duration: 30000/);
-  assert.match(source, /add\(4\.8/);
-  assert.match(source, /add\(8\.3/);
+  assert.match(source, /duration: 16500/);
+  assert.match(source, /add\(1\.7, depth === 0 \? focused/);
+  assert.match(source, /add\(4\.1, depth === 0 \? focused/);
+  assert.doesNotMatch(source, /const bottom|const revealed/);
   assert.match(source, /IntersectionObserver/);
   assert.match(source, /visibilitychange/);
   assert.match(source, /prefers-reduced-motion/);
