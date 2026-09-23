@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
+import "./field-journal.css";
 import { PhilipToggle } from "./philip-toggle";
 import { PORTFOLIO_THEME_BOOT_SCRIPT } from "./portfolio-theme";
 import { Soundscape } from "./soundscape";

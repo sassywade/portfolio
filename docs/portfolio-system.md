@@ -270,3 +270,7 @@ The Photo search row contains only search and its clear action. Color and Style 
 The shared photo viewer keeps the already-loaded thumbnail as a background preview throughout expansion. Reveal the larger image only after decoding succeeds, using a short 160ms opacity fade; keep the preview if loading or decoding fails. The viewing surface uses paper instead of black, and reduced motion reveals the decoded image immediately. This applies to Photo and About without changing their framing or close behavior.
 
 Photo gallery thumbnails stay silent on hover. Mark them with `data-silent-hover="true"` so the shared soundscape skips its automatic hover cue while retaining the standard press/release click feedback. This exception is limited to gallery photos; other controls and About keep their existing cues.
+
+### Field journal prototype
+
+`Field journal` in Meadow + tree is an opt-in, visit-local visual identity. The current painterly scene remains the default. Warm paper replaces the grid; the landscape, people, interest controls, and Philip share olive washes, ochre accents, and a fine charcoal outline. Artwork is authored SVG under `public/alamo-styles/field-journal`; `app/field-journal.css` scopes every override to the chosen environment. The original actor and cursor state machines still own motion, selection, reduced motion, and offscreen behavior. The journal tree registers to its horizon on resize and meadow-height changes. Switching away restores the existing artwork and tree position.

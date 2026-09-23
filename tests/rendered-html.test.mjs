@@ -310,7 +310,7 @@ test("offers the original art directions, the unchanged control, and an isolated
   ];
   const styleCatalog = styles.split("] as const;")[0];
 
-  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 19);
+  assert.equal((styleCatalog.match(/\n\s+id: "/g) ?? []).length, 20);
   assert.match(styles, /id: "control"[\s\S]*treeSrc: "\/monterey-cypress\.png"/);
   assert.match(styles, /id: "studio-static"[\s\S]*label: "Studio · no meadow"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
   assert.match(styles, /id: "ascii-garden"[\s\S]*rollingSrc: null[\s\S]*flatSrc: null/);
@@ -322,9 +322,9 @@ test("offers the original art directions, the unchanged control, and an isolated
   assert.match(styles, /label: "Watercolor wash"/);
   assert.match(styles, /label: "Marker sketch"/);
   assert.match(styles, /label: "Clay model"/);
-  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 19);
-  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 19);
-  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 19);
+  assert.equal((styles.match(/rollingGroundOffset:/g) ?? []).length, 20);
+  assert.equal((styles.match(/flatHorizon:/g) ?? []).length, 20);
+  assert.equal((styles.match(/treeRootOffset:/g) ?? []).length, 20);
   for (const id of styleIds) {
     assert.match(styles, new RegExp(`id: "${id}"`));
     for (const asset of ["rolling", "flat", "tree"]) {
@@ -1858,4 +1858,25 @@ test("Photo and About share the homepage paper color", async () => {
   assert.match(css, /html:has\(\.about-page, \.photography-page\) body,\s*\.about-page,\s*\.photography-page,[^{]+\{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
   assert.match(await (await render("/photography")).text(), /class="site-shell photography-page /);
   assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page"/);
+});
+
+test("Field journal unifies all hero artwork as an explicit reversible prototype", async () => {
+  const [styles, css, hero] = await Promise.all([
+    readFile(new URL("../app/alamo-styles.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/field-journal.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/hero-meadow.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(styles, /DEFAULT_ALAMO_STYLE: AlamoStyle = "painterly-realism"/);
+  assert.match(styles.split("MEADOW_TREE_OPTIONS")[1], /id: "field-journal"/);
+  assert.match(hero, /if \(environmentStyle !== "field-journal"\) return/);
+  assert.match(hero, /observer\.disconnect\(\);\s*tree\.style\.removeProperty\("bottom"\)/);
+  for (const asset of ["rolling", "flat", "tree", "paper", "icon-photography", "icon-cycling", "icon-backpacking", "photo-0", "photo-1", "photo-2", "photo-3", "photo-4", "bike-0", "bike-1", "bike-2", "hiker-0", "hiker-1", "hiker-2", "philip-idle", "philip-smile", "philip-light", "philip-strong", "philip-strained"]) {
+    await access(new URL(`../public/alamo-styles/field-journal/${asset}.svg`, import.meta.url));
+    assert.ok((styles + css).includes(`/alamo-styles/field-journal/${asset}.svg`), `${asset} is wired into the prototype`);
+  }
+  assert.match(css, /data-environment-style="field-journal"[^}]+:focus-visible/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  const html = await (await render()).text();
+  assert.match(html, /data-environment-style="painterly-realism"/);
+  assert.doesNotMatch(html, /data-environment-style="field-journal"/);
 });
