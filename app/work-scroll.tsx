@@ -84,7 +84,7 @@ export function WorkScroll() {
         const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
         // Gentle input may settle toward the next project; strong input keeps its
         // native travel so the user can intentionally move farther.
-        const radius = Math.min(gap * (0.68 - intensity * 0.48), window.innerHeight * (0.72 - intensity * 0.52));
+        const radius = Math.min(gap * (0.86 - intensity * 0.66), window.innerHeight * (0.9 - intensity * 0.7));
         const committed = previous !== undefined && intensity < 0.65
           && Math.abs(gestureStart - previous) <= 80
           && (y - gestureStart) * direction >= gap * 0.18;
