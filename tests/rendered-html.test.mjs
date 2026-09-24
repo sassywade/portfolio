@@ -23,12 +23,12 @@ async function render(path = "/") {
   );
 }
 
-test("hero typography preserves the reference sizes and responsive line break", async () => {
+test("hero typography preserves the reference sizes and natural wrapping", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
-  assert.match(css, /@media \(max-width: 787px\)\s*\{\s*\.hero-copy-break\s*\{\s*display: none;/);
+  assert.doesNotMatch(css, /hero-copy-break/);
 });
 
 test("server-renders the portfolio meadow and shared wind study", async () => {
@@ -45,7 +45,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /class="site-header site-header--pages"/);
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I’m a product designer based in San Francisco\. Currently, I’m a designer at /);
-  assert.match(html, /working on <br class="hero-copy-break"\/>proactivity, artifacts, and growth\. Previously, I designed at /);
+  assert.match(html, /working on proactivity, artifacts, and growth\. Previously, I designed at /);
   assert.match(html, /In my free time,<\/span>/);
   assert.match(html, /hero-activities__icons/);
   const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];
@@ -180,8 +180,8 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
 
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   assert.match(viewer, /trigger.focus\(\{ preventScroll: true \}\)/);
-  assert.match(gallery, /gallery\.dataset\.motionReady = "true"/);
-  assert.match(gallery, /gallery\.dataset\.motionVisible = "true"/);
+  assert.match(gallery, /tabIndex=\{0\}/);
+  assert.doesNotMatch(gallery, /usePhotoViewer|onClick|aria-haspopup/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
   assert.match(css, /\/\* Lift the About composition toward the homepage hero's starting point\. \*\/[\s\S]*padding-top: clamp\(58px, 8vh, 92px\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
@@ -195,25 +195,28 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
 });
 
-test("keeps Life prints playful without overriding reduced motion", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
-
-  assert.match(finalLifeRules, /\.about-page__gallery-track:hover \.film-photo\s*\{[\s\S]*transform: translateY\(-3px\) rotate\(calc\(var\(--photo-rotation, 0deg\) \* 0\.72\)\) scale\(1\.015\)/);
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
-  assert.match(finalLifeRules, /@media \(hover: hover\) and \(pointer: fine\)/);
-  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
+test("Life hover expands only one print and types its caption", async () => {
+  const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
+  assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
+  assert.match(css, /transform: rotate\(var\(--print-angle\)\)/);
+  assert.match(css, /--letter-index/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  assert.match(css, /hover: hover/);
+  assert.doesNotMatch(css, /life-gallery__track:hover/);
 });
 
 test("keeps About links concise and opens the resume in a new tab", async () => {
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
-  assert.match(about, /className="about-page__greeting">Hello,<\/h2>/);
+  assert.match(about, /className="about-page__greeting">Hello!<\/h1>/);
   assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--ink\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
-  assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
-  assert.match(about, /aria-label="CV"/);
-  assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
+  assert.match(about, /data-social="resume"[\s\S]*data-social="twitter"[\s\S]*data-social="email"/);
+  assert.match(about, /aria-label="Resume"/);
+  assert.match(about, /2077068857160700242/);
+  for (const asset of ["passport.png", "underwallet.png", "task-valley.png"]) {
+    assert.ok(about.includes(`/about/${asset}`));
+  }
   assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
   assert.match(about, /className="about-page__social-icon"[\s\S]*<svg viewBox="0 0 24 24"/);
   assert.doesNotMatch(about, /aria-hidden="true">↗/);
@@ -1234,30 +1237,19 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
 
-test("Life photos share the centered viewer and keep playful hover movement", async () => {
-  const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(galleryMarkup, /<h2 id="about-gallery-title">Life<\/h2>/);
+test("Life has eleven captioned prints and no click-to-open viewer", async () => {
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
-  const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
   assert.equal((gallery.match(/id: "/g) ?? []).length, 11);
-  assert.doesNotMatch(gallery, /high-country-friends/);
-  assert.match(gallery, /usePhotoViewer/);
-  assert.match(gallery, /frame: "film"/);
+  assert.match(gallery, /Recents from life/);
+  assert.match(gallery, /<figure/);
+  assert.match(gallery, /<figcaption/);
+  assert.match(gallery, /tabIndex=\{0\}/);
+  assert.doesNotMatch(gallery, /usePhotoViewer|onClick|aria-haspopup|<button/);
+  for (const caption of ["Sunset in Kyoto", "My first road race", "Cathedral lakes", "The spirit of gravel?"]) {
+    assert.ok(gallery.includes(caption));
+  }
+  const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
   assert.match(photography, /usePhotoViewer/);
-  assert.doesNotMatch(gallery, /figcaption|pointermove|photo-lightbox__tilt/);
-  assert.match(viewer, /dialog.showModal/);
-  assert.match(viewer, /animation.reverse/);
-  assert.match(viewer, /prefers-reduced-motion/);
-  assert.match(viewer, /draggable=\{false\}/);
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
-  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
-  const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
-  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
-  assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
-  assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(42px, 8vw, 100px\)/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
@@ -1820,6 +1812,8 @@ test("renders the tagged photo collection with search and a native focus view", 
   assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
   assert.equal((html.match(/data-silent-hover="true"/g) ?? []).length, 141);
   assert.match(html, /aria-label="Search photos"/);
+  assert.match(html, /placeholder="type “bikes”"/);
+  assert.match(html, /“nature”/);
   assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
   assert.match(html, /aria-label="Close photograph"/);
@@ -1886,7 +1880,7 @@ test("Photo and About share the homepage paper color", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /html:has\(\.about-page, \.photography-page\) body,\s*\.about-page,\s*\.photography-page,[^{]+\{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
   assert.match(await (await render("/photography")).text(), /class="site-shell photography-page /);
-  assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page"/);
+  assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page about-page--journal"/);
 });
 
 test("Field journal unifies all hero artwork as an explicit reversible prototype", async () => {
@@ -1908,4 +1902,39 @@ test("Field journal unifies all hero artwork as an explicit reversible prototype
   const html = await (await render()).text();
   assert.match(html, /data-environment-style="painterly-realism"/);
   assert.doesNotMatch(html, /data-environment-style="field-journal"/);
+});
+
+
+test("Selected work leads with the umbrella and Neel's 28 selections without losing photos", async () => {
+  const { clusterPhotos, selectedPhotoIds, masonryLayout } = await import("../app/photography/gallery-model.mjs");
+  const photos = JSON.parse(await readFile(new URL("../app/photography/photos.json", import.meta.url), "utf8"));
+  const before = JSON.stringify(photos);
+  const ordered = clusterPhotos(photos, "selected");
+  assert.equal(selectedPhotoIds.length, 28);
+  assert.equal(new Set(selectedPhotoIds).size, 28);
+  assert.equal(ordered[0].id, "087");
+  assert.deepEqual(ordered.slice(0, 28).map(photo => photo.id), selectedPhotoIds);
+  assert.deepEqual(ordered.map(photo => photo.id).sort(), photos.map(photo => photo.id).sort());
+  assert.deepEqual(clusterPhotos([...photos].reverse(), "selected"), ordered);
+  assert.equal(JSON.stringify(photos), before);
+  for (const columns of [2, 5]) {
+    const layout = masonryLayout(ordered, columns === 2 ? 342 : 1152, columns, 20);
+    assert.equal(layout.positions.get("087").y, 0);
+    assert.equal(layout.positions.get("087").x, 0);
+  }
+});
+
+
+test("photo search waits for visible departures and a short pause before gathering", async () => {
+  const { photoGatherDelay, photoFallDuration } = await import("../app/photography/search-motion.mjs");
+  const snapshots = new Map([
+    ["001", { top: 100, height: 200, opacity: "1" }],
+    ["003", { top: 300, height: 200, opacity: "1" }],
+    ["007", { top: 1500, height: 200, opacity: "1" }],
+    ["011", { top: 100, height: 200, opacity: "0" }],
+  ]);
+  assert.equal(photoGatherDelay(snapshots, new Set(["001"]), 800), photoFallDuration("003") + 180);
+  assert.equal(photoGatherDelay(snapshots, new Set(["003"]), 800), photoFallDuration("001") + 180);
+  assert.equal(photoGatherDelay(snapshots, new Set(["001", "003"]), 800), 0);
+  assert.equal(photoGatherDelay(new Map(), new Set(), 800), 0);
 });

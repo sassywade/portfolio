@@ -8,8 +8,9 @@ import { clusterPhotos, masonryLayout, matchesPhoto } from "./gallery-model.mjs"
 import { PhotoPrototypePicker, usePhotoGrouping } from "./photo-grouping";
 import styles from "./photography.module.css";
 import { SearchPrompt } from "./search-prompt";
+import { photoFallDuration, photoGatherDelay } from "./search-motion.mjs";
 
-type Snapshot = { left: number; top: number; width: number; height: number; opacity: string };
+type Snapshot = { left: number; top: number; width: number; height: number; opacity: string; rotation: number };
 
 export function PhotographyGallery() {
   const { openPhoto, viewer, selectedId } = usePhotoViewer();
@@ -27,9 +28,17 @@ export function PhotographyGallery() {
 
   const capture = useCallback(() => {
     snapshots.current.clear();
+    const bounds = gallery.current!.getBoundingClientRect();
     cards.current.forEach((node, id) => {
-      const rect = node.getBoundingClientRect();
-      snapshots.current.set(id, { left: rect.left, top: rect.top, width: rect.width, height: rect.height, opacity: getComputedStyle(node).opacity });
+      const css = getComputedStyle(node);
+      const transform = new DOMMatrixReadOnly(css.transform === 'none' ? undefined : css.transform);
+      // Keep the current translation and rotation when a new query interrupts a fall.
+      snapshots.current.set(id, {
+        left: bounds.left + node.offsetLeft + transform.m41,
+        top: bounds.top + node.offsetTop + transform.m42,
+        width: node.offsetWidth, height: node.offsetHeight, opacity: css.opacity,
+        rotation: Math.atan2(transform.m12, transform.m11) * 180 / Math.PI,
+      });
     });
   }, []);
 
@@ -76,6 +85,7 @@ export function PhotographyGallery() {
     if (measure.width && !reduced.current && snapshots.current.size) {
       const bounds = gallery.current!.getBoundingClientRect();
       const easing = getComputedStyle(gallery.current!).getPropertyValue('--motion-ease-in-out').trim();
+      const gatherDelay = photoGatherDelay(snapshots.current, visible, innerHeight);
       cards.current.forEach((node, id) => {
         const old = snapshots.current.get(id);
         if (!old) return;
@@ -86,22 +96,22 @@ export function PhotographyGallery() {
         const enteringScreen = bounds.top + destination.y < innerHeight && bounds.top + destination.y + destination.height > 0;
         if (visible.has(id) && (onscreen || enteringScreen)) {
           const returning = !previousVisible.current.has(id);
-          const start = returning && Number(old.opacity) < 0.05 ? `translate(0px, 28px)` : `translate(${dx}px, ${dy}px)`;
+          const start = returning && Number(old.opacity) < 0.05 ? `translate(0px, 28px) rotate(0deg)` : `translate(${dx}px, ${dy}px) rotate(${old.rotation}deg)`;
           const animation = node.animate([
             { transform: start, opacity: returning ? old.opacity : 1 },
-            { transform: 'translate(0px, 0px)', opacity: 1 },
-          ], { duration: 560, easing, fill: 'both' });
+            { transform: 'translate(0px, 0px) rotate(0deg)', opacity: 1 },
+          ], { duration: 600, delay: gatherDelay, easing, fill: 'both' });
           animations.current.push(animation);
         } else if (!visible.has(id) && Number(old.opacity) > 0.01 && onscreen) {
-          const distance = Math.max(320, innerHeight - old.top + old.height);
-          const tilt = Number(id) % 2 ? 10 : -10;
+          const distance = Math.max(440, innerHeight - old.top + old.height * 1.5);
+          const tilt = (Number(id) % 2 ? 1 : -1) * (22 + Number(id) % 3 * 4);
           // A sampled parabola gives the drop acceleration; only transforms and opacity animate.
-          const frames = [0, 0.25, 0.5, 0.75, 1].map((t) => ({
+          const frames = [0, 0.2, 0.4, 0.6, 0.8, 1].map((t) => ({
             offset: t,
-            transform: `translate(${dx + tilt * t * 2}px, ${dy + distance * t * t}px) rotate(${tilt * t}deg)`,
-            opacity: Number(old.opacity) * (t < 0.5 ? 1 : 2 * (1 - t)),
+            transform: `translate(${dx + tilt * t * t * 3}px, ${dy + distance * t * t}px) rotate(${old.rotation + tilt * t * t}deg)`,
+            opacity: Number(old.opacity) * (t <= 0.6 ? 1 : (1 - t) / 0.4),
           }));
-          animations.current.push(node.animate(frames, { duration: 460 + Number(id) % 4 * 25, easing: 'linear', fill: 'both' }));
+          animations.current.push(node.animate(frames, { duration: photoFallDuration(id), easing: 'linear', fill: 'both' }));
         }
       });
     }
@@ -115,7 +125,7 @@ export function PhotographyGallery() {
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
         <div className={styles.searchField}>
           <SearchPrompt />
-          <input ref={input} type="search" aria-label="Search photos" placeholder="Search photos" value={query} autoComplete="off" spellCheck={false}
+          <input ref={input} type="search" aria-label="Search photos" placeholder="type “bikes”" value={query} autoComplete="off" spellCheck={false}
             onChange={(event) => setQuery(event.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)}
             onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
         </div>

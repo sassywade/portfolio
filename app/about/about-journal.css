@@ -1,0 +1,182 @@
+/* About: the supplied September editorial composition. */
+/* Life is a hover-only contact sheet; shared viewer styles do not own these prints. */
+.life-gallery__viewport { overflow: visible; }
+.life-gallery__track { display: flex; align-items: flex-end; padding: 8px 0; }
+.life-print {
+  position: relative;
+  flex: 0 0 calc((100% + 80px) / 11);
+  min-width: 0;
+  margin: 0 0 0 -8px;
+  aspect-ratio: 2 / 3;
+  cursor: default;
+  z-index: 0;
+}
+.life-print:first-child { margin-left: 0; }
+.life-print__composition { position: absolute; inset: 0; transform: rotate(var(--print-angle)); transform-origin: bottom center; }
+.life-print__paper {
+  height: 100%;
+  padding: 3px;
+  border-radius: 3px;
+  background: white;
+  transform-origin: bottom center;
+}
+.life-print__paper img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1px; }
+.life-print__caption {
+  position: absolute;
+  top: -85%;
+  left: calc(142.5% + 12px);
+  width: 180px;
+  margin: 0;
+  color: var(--muted);
+  font: 400 16px/1.45 var(--serif);
+  pointer-events: none;
+  opacity: 0;
+}
+.life-print__word { white-space: nowrap; }
+.life-print__letter { opacity: 0; }
+.life-print:focus-visible { outline: 2px solid var(--muted); outline-offset: 6px; z-index: 20; }
+.life-print:focus-visible .life-print__paper { transform: scale(1.85); }
+.life-print:focus-visible .life-print__caption,
+.life-print:focus-visible .life-print__letter { opacity: 1; transition: none; }
+/* Keyboard selection takes precedence if the pointer is resting on another print. */
+.life-gallery__track:has(:focus-visible) .life-print:not(:focus-visible) .life-print__paper { transform: none; }
+.life-gallery__track:has(:focus-visible) .life-print:not(:focus-visible) .life-print__caption { opacity: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .life-print:hover { z-index: 20; }
+  .life-print:hover .life-print__paper { transform: scale(1.85); }
+  .life-print:hover .life-print__caption { opacity: 1; }
+  .life-print:hover .life-print__letter { opacity: 1; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .life-print__paper { transition: transform 250ms var(--motion-ease-out); }
+  .life-print:hover .life-print__letter { transition: opacity 1ms step-end; transition-delay: calc(100ms + var(--letter-index) * 22ms); }
+  .life-print:focus-visible .life-print__paper,
+  .life-print:focus-visible .life-print__letter { transition: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .life-print__paper, .life-print__letter { transition: none; }
+}
+@media (min-width: 701px) and (max-width: 1200px) {
+  .life-print:nth-last-child(-n + 3) .life-print__caption { left: auto; right: calc(142.5% + 12px); text-align: right; }
+}
+@media (max-width: 700px), (hover: none) {
+  .life-gallery__viewport { overflow-x: auto; padding: 12px 8px 16px; margin-inline: -8px; }
+  .life-gallery__track { width: max-content; gap: 20px; align-items: flex-start; }
+  .life-print { flex: 0 0 140px; width: 140px; margin: 0; aspect-ratio: auto; }
+  .life-print__composition { position: relative; transform: none; }
+  .life-print__paper { height: 210px; }
+  .life-print:hover .life-print__paper, .life-print:focus-visible .life-print__paper { transform: none; }
+  .life-print .life-print__caption { position: static; width: 140px; margin-top: 12px; opacity: 1; font-size: 15px; text-align: left; }
+  .life-print .life-print__letter { opacity: 1; transition: none; }
+}
+.about-page--journal .simple-page {
+  width: min(888px, calc(100% - 64px));
+  padding-top: clamp(88px, 10vw, 160px);
+  padding-bottom: 160px;
+}
+.about-page--journal .about-page__identity {
+  grid-template-columns: minmax(0, 1fr) 272px;
+  gap: 72px;
+  align-items: center;
+  margin-top: 0;
+}
+.about-page--journal .about-page__identity .about-page__intro { max-width: none; }
+.about-page--journal .simple-page .about-page__greeting {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font: italic 400 36px/1.2 var(--serif);
+  letter-spacing: -0.03em;
+}
+.about-page--journal .about-page__identity .about-page__intro p {
+  margin: 0;
+  color: var(--muted);
+  font: 400 18px/40px var(--serif);
+  letter-spacing: -0.012em;
+  max-width: none;
+}
+.about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 40px; }
+.about-page--journal .about-page__portrait-card {
+  width: 272px;
+  padding: 10px;
+  border: 0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: none;
+  transform: rotate(1.5deg);
+}
+.about-page--journal .about-page__portrait-photo {
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.about-page--journal .about-page__socials {
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 36px;
+}
+.about-page--journal .about-page__socials a { gap: 6px; font-size: 16px; }
+.about-page--journal .about-page__social-icon { width: 16px; height: 16px; }
+.about-page--journal .about-page__social-icon svg path { fill: none; stroke: currentColor; }
+.about-page--journal [data-social="twitter"] svg path { fill: currentColor; stroke: none; }
+.about-page__social-divider { width: 1px; height: 24px; background: var(--line); margin-inline: -6px; }
+.about-page--journal .about-page__gallery { margin-top: 100px; }
+.about-page--journal .about-page__gallery > h2,
+.about-page--journal .about-page__quests > h2 {
+  margin: 0 0 32px;
+  color: var(--muted);
+  font: italic 400 24px/1.2 var(--serif);
+  letter-spacing: -0.02em;
+}
+.about-page--journal .about-page__gallery-track {
+  width: 100%;
+  max-width: none;
+  padding: 8px 0;
+  flex: 0 0 auto;
+}
+.about-page--journal .about-page__gallery-track .film-photo {
+  flex: 0 0 calc((100% + 80px) / 11);
+  width: calc((100% + 80px) / 11);
+  margin-left: -8px;
+}
+.about-page--journal .about-page__gallery-track .film-photo:first-child { margin-left: 0; }
+.about-page--journal .film-photo__paper { padding: 3px; border: 0; border-radius: 3px; }
+.about-page--journal .film-photo__image { border-radius: 1px; }
+.about-page--journal .film-photo:nth-child(1) { --photo-rotation: -5deg; }
+.about-page--journal .film-photo:nth-child(2) { --photo-rotation: -4deg; }
+.about-page--journal .film-photo:nth-child(3) { --photo-rotation: 0deg; }
+.about-page--journal .film-photo:nth-child(4) { --photo-rotation: 2deg; }
+.about-page--journal .film-photo:nth-child(5) { --photo-rotation: -4deg; }
+.about-page--journal .film-photo:nth-child(6) { --photo-rotation: 1deg; }
+.about-page--journal .film-photo:nth-child(7) { --photo-rotation: 2deg; }
+.about-page--journal .film-photo:nth-child(8) { --photo-rotation: -3deg; }
+.about-page--journal .film-photo:nth-child(9) { --photo-rotation: 1deg; }
+.about-page--journal .film-photo:nth-child(10) { --photo-rotation: 0deg; }
+.about-page--journal .film-photo:nth-child(11) { --photo-rotation: 5deg; }
+.about-page__quests { margin-top: 96px; }
+.about-page__quest-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+.about-page__quest-art { display: block; width: 100%; aspect-ratio: 1.6; margin-bottom: 28px; }
+.about-page__quest-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.about-page__quest h3 { margin: 0 0 8px; color: var(--muted); font: 400 20px/1.3 var(--serif); }
+.about-page__quest p { margin: 0; color: #a09a94; font: 400 16px/1.5 var(--serif); }
+.about-page__quest p a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.about-page__quests a:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .about-page__quest-art img { transition: transform 220ms var(--motion-ease-out); }
+  .about-page__quest-art:hover img { transform: rotate(-1.5deg) scale(1.015); }
+  .about-page__quest:nth-child(2) .about-page__quest-art:hover img { transform: rotate(1.5deg) scale(1.015); }
+}
+@media (max-width: 700px) {
+  .about-page--journal .simple-page { width: calc(100% - 40px); padding-top: 56px; padding-bottom: 80px; }
+  .about-page--journal .about-page__identity { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .about-page--journal .about-page__portrait-card { width: 200px; }
+  .about-page--journal .about-page__identity .about-page__intro p { font-size: 18px; line-height: 1.8; }
+  .about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 28px; }
+  .about-page--journal .about-page__socials { margin-top: 28px; }
+  .about-page--journal .about-page__gallery { margin-top: 64px; }
+  .about-page--journal .about-page__gallery-track { width: max-content; }
+  .about-page--journal .about-page__gallery-track .film-photo { flex: 0 0 92px; width: 92px; }
+  .about-page__quests { margin-top: 64px; }
+  .about-page__quest-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-page__quest-art { max-width: 320px; margin: 0 auto 20px; }
+}

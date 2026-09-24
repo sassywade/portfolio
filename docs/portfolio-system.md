@@ -1,5 +1,9 @@
 # Portfolio system
 
+About's “Recents from life” is now an independent hover contact sheet. Each print expands upward from its bottom edge, retaining its rotation; neighbors remain still. A matching angled caption types beside that print, using Neel's supplied captions. Clicking does nothing and About no longer uses the photo viewer. Keyboard focus shows the complete caption immediately; reduced motion removes transitions and typing. Touch layouts show static captions below scrollable prints. Photography retains its existing modal viewer. This supersedes earlier About viewer and whole-row-hover directions below.
+
+The September 24 About design is implemented in `app/about/about-journal.css`: “Hello!”, two introductory paragraphs, a rounded white portrait mat, right-aligned Resume and social links, an angled “Recents from life” strip, and three Side quests using supplied transparent assets. Glean Passport links to Neel’s supplied X post. Preserve the existing photo viewer and reduced-motion behavior. This design supersedes the earlier one-screen About composition.
+
 The About page uses “Hello,” and “Life” with the homepage ink color. Its resume link reads “CV”. On desktop the Life strip extends slightly beyond the introduction, using responsive card widths and modest overlap; mobile keeps readable cards in a horizontally scrollable strip. Preserve the white film matting and hover lift.
 
 ## 1. Experience model
@@ -146,7 +150,7 @@ The painterly weather readout uses Geist at 13–15px for the summary and 12–1
 
 Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.
 
-The homepage “Neel Saswade” name uses 36px italic Newsreader on desktop and mobile, with normal letter spacing and the project titles’ light `--muted` color. The introduction and “In my free time,” row use 20px Newsreader in warm gray (`--ink`). On desktop, the introduction breaks before “Proactivity”; below 788px it wraps naturally.
+The homepage “Neel Saswade” name uses 36px italic Newsreader on desktop and mobile, with normal letter spacing and the project titles’ light `--muted` color. The introduction and “In my free time,” row use 20px Newsreader in warm gray (`--ink`). The introduction wraps naturally at every viewport; do not force a break before “proactivity.”
 
 The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
 
@@ -259,13 +263,13 @@ The Photo page uses all 141 supplied photographs from the Documents portfolio ph
 
 Color is the default cluster order. Photography style is an alternative in the Photo prototype picker and the shared meadow prototype picker; the session-local choice carries between pages. Both orderings place similar photos near each other in a shortest-column masonry layout.
 
-Search settles after 170ms of typing. Visible non-matches fall downward with a small rotation over roughly 460–535ms; retained photos move toward their new positions over 560ms. This deliberately slower search motion is explicitly requested, including keyboard typing. Snapshot the current animated positions before retargeting, animate only transforms/opacity, and avoid animating offscreen photos. Reduced motion changes results immediately. Hidden results leave the keyboard and accessibility order; announce the result count quietly. The existing shared centered photo viewer is unchanged.
+Search settles after 170ms of typing. Visible non-matches fall farther with accelerating sideways drift and 22–30 degrees of rotation over 600–690ms, staying opaque for the first 60% of the fall. Matching photos hold their sampled positions until the last visible fall ends, pause for 180ms, then gather toward the search bar over 600ms. Skip the pause when no visible photos fall; clearing and regrouping remain direct. Retarget from the current translation, rotation, and opacity if typing interrupts any phase. This deliberately slower search motion is explicitly requested, including keyboard typing. Snapshot the current animated positions before retargeting, animate only transforms/opacity, and avoid animating offscreen photos. Reduced motion changes results immediately. Hidden results leave the keyboard and accessibility order; announce the result count quietly. The existing shared centered photo viewer is unchanged.
 
 Home, Photo, and About share the warm paper background `#F5F5F4`, including Photo and About viewer backdrops. Scope this color to these pages so case studies retain their white background.
 
 The Photo search bar spans the full gallery width and aligns with its left and right edges at every viewport size.
 
-The Photo search field floats without an underline or enclosing border. On arrival its empty, unfocused prompt starts with “Search photos,” then cycles through “Search bikes,” “Search city,” and “Search sunsets” every four seconds, holding each word for 3.6 seconds before a gentle 400ms crossfade. Opacity blends evenly while a separate, smaller vertical drift uses the shared ease-out curve; the “Search” prefix stays fixed. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps “Search photos” still.
+The Photo search field floats without an underline or enclosing border. On arrival its empty, unfocused prompt starts with `type “bikes”`, then cycles through `type “nature”`, `type “city”`, and `type “sunsets”` every four seconds, holding each word for 3.6 seconds before a gentle 400ms crossfade. Opacity blends evenly while a separate, smaller vertical drift uses the shared ease-out curve; the lowercase “type” prefix stays fixed. Keep the accessible label “Search photos.” Focusing shows the static input placeholder; typing hides the suggestions. Pause cycling offscreen, in a hidden tab, or while viewing a photo. Reduced motion keeps `type “bikes”` still.
 
 On Photo page arrival, keep the temporary server column layout hidden until client measurements and the saved grouping resolve before paint. Restoring preferences must never capture positions or trigger the search/reorder animation. Reveal the final gallery with a 200ms opacity-only fade; thumbnails reserve their dimensions and fade in on load, including cached images. Reduced motion makes both reveals immediate.
 
@@ -278,3 +282,5 @@ Photo gallery thumbnails stay silent on hover. Mark them with `data-silent-hover
 ### Field journal prototype
 
 `Field journal` in Meadow + tree is an opt-in, visit-local visual identity. The current painterly scene remains the default. Warm paper replaces the grid; the landscape, people, interest controls, and Philip share olive washes, ochre accents, and a fine charcoal outline. Artwork is authored SVG under `public/alamo-styles/field-journal`; `app/field-journal.css` scopes every override to the chosen environment. The original actor and cursor state machines still own motion, selection, reduced motion, and offscreen behavior. The journal tree registers to its horizon on resize and meadow-height changes. Switching away restores the existing artwork and tree position.
+
+Selected work is an opt-in grouping in both prototype pickers. It leads with the 28 photos Neel selected on September 23, 2026, with the pink umbrella (`087`) first. `selectedPhotoIds` in the gallery model owns their authored sequence, moving through related subjects and tones. The remaining photos follow by palette similarity with a small preference for matching photography style, creating one continuous gallery. Preserve all 141 photos, search, silent thumbnail hover, and the shared viewer. Color remains the default; Selected work restores only when explicitly chosen in the current session.
