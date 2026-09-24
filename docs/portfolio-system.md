@@ -1,5 +1,7 @@
 # Portfolio system
 
+About's “Recents from life” is now an independent hover contact sheet. Each print expands upward from its bottom edge, retaining its rotation; neighbors remain still. A matching angled caption types beside that print, using Neel's supplied captions. Clicking does nothing and About no longer uses the photo viewer. Keyboard focus shows the complete caption immediately; reduced motion removes transitions and typing. Touch layouts show static captions below scrollable prints. Photography retains its existing modal viewer. This supersedes earlier About viewer and whole-row-hover directions below.
+
 The September 24 About design is implemented in `app/about/about-journal.css`: “Hello!”, two introductory paragraphs, a rounded white portrait mat, right-aligned Resume and social links, an angled “Recents from life” strip, and three Side quests using supplied transparent assets. Glean Passport links to Neel’s supplied X post. Preserve the existing photo viewer and reduced-motion behavior. This design supersedes the earlier one-screen About composition.
 
 The About page uses “Hello,” and “Life” with the homepage ink color. Its resume link reads “CV”. On desktop the Life strip extends slightly beyond the introduction, using responsive card widths and modest overlap; mobile keeps readable cards in a horizontally scrollable strip. Preserve the white film matting and hover lift.

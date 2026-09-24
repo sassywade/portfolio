@@ -180,8 +180,8 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
 
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   assert.match(viewer, /trigger.focus\(\{ preventScroll: true \}\)/);
-  assert.match(gallery, /gallery\.dataset\.motionReady = "true"/);
-  assert.match(gallery, /gallery\.dataset\.motionVisible = "true"/);
+  assert.match(gallery, /tabIndex=\{0\}/);
+  assert.doesNotMatch(gallery, /usePhotoViewer|onClick|aria-haspopup/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
   assert.match(css, /\/\* Lift the About composition toward the homepage hero's starting point\. \*\/[\s\S]*padding-top: clamp\(58px, 8vh, 92px\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
@@ -195,14 +195,14 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
 });
 
-test("keeps Life prints playful without overriding reduced motion", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
-
-  assert.match(finalLifeRules, /\.about-page__gallery-track:hover \.film-photo\s*\{[\s\S]*transform: translateY\(-3px\) rotate\(calc\(var\(--photo-rotation, 0deg\) \* 0\.72\)\) scale\(1\.015\)/);
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
-  assert.match(finalLifeRules, /@media \(hover: hover\) and \(pointer: fine\)/);
-  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
+test("Life hover expands only one print and types its caption", async () => {
+  const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
+  assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
+  assert.match(css, /transform: rotate\(var\(--print-angle\)\)/);
+  assert.match(css, /--letter-index/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  assert.match(css, /hover: hover/);
+  assert.doesNotMatch(css, /life-gallery__track:hover/);
 });
 
 test("keeps About links concise and opens the resume in a new tab", async () => {
@@ -1237,30 +1237,19 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
 
-test("Life photos share the centered viewer and keep playful hover movement", async () => {
-  const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(galleryMarkup, /<h2 id="about-gallery-title">Recents from life<\/h2>/);
+test("Life has eleven captioned prints and no click-to-open viewer", async () => {
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
-  const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
   assert.equal((gallery.match(/id: "/g) ?? []).length, 11);
-  assert.doesNotMatch(gallery, /high-country-friends/);
-  assert.match(gallery, /usePhotoViewer/);
-  assert.match(gallery, /frame: "film"/);
+  assert.match(gallery, /Recents from life/);
+  assert.match(gallery, /<figure/);
+  assert.match(gallery, /<figcaption/);
+  assert.match(gallery, /tabIndex=\{0\}/);
+  assert.doesNotMatch(gallery, /usePhotoViewer|onClick|aria-haspopup|<button/);
+  for (const caption of ["Sunset in Kyoto", "My first road race", "Cathedral lakes", "The spirit of gravel?"]) {
+    assert.ok(gallery.includes(caption));
+  }
+  const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
   assert.match(photography, /usePhotoViewer/);
-  assert.doesNotMatch(gallery, /figcaption|pointermove|photo-lightbox__tilt/);
-  assert.match(viewer, /dialog.showModal/);
-  assert.match(viewer, /animation.reverse/);
-  assert.match(viewer, /prefers-reduced-motion/);
-  assert.match(viewer, /draggable=\{false\}/);
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  const finalLifeRules = css.slice(css.lastIndexOf("/* Life prints lift and expand again"));
-  assert.match(finalLifeRules, /\.film-photo:hover\s*\{[\s\S]*transform: translateY\(-10px\) rotate\(0deg\) scale\(1\.14\)/);
-  assert.match(finalLifeRules, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.film-photo:nth-child\(n\):hover[\s\S]*transform: rotate\(var\(--photo-rotation/);
-  const viewerCss = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
-  assert.match(viewerCss, /\.focusedPhotoFilm\s*\{[\s\S]*padding: 14px 14px 34px;[\s\S]*border-radius: 2px;[\s\S]*background: #fff;/);
-  assert.match(css, /\.about-page__gallery-track \.film-photo__paper\s*\{[\s\S]*border-radius: 2px;/);
-  assert.match(css, /@media \(min-width: 701px\)[\s\S]*\.about-page__identity\s*\{[\s\S]*gap: clamp\(42px, 8vw, 100px\)/);
 });
 
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
