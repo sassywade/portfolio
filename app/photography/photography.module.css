@@ -1,4 +1,4 @@
-.page { min-height: 100svh; background: var(--paper); overflow: clip; }
+.page { min-height: 100svh; background-color: var(--paper); overflow: clip; }
 .content { padding: 48px clamp(24px, 5vw, 80px) 100px; }
 .search { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; margin: 0 auto clamp(36px, 4vw, 56px); color: var(--muted); }
 .search:focus-within > svg { color: var(--ink); }

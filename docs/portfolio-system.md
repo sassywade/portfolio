@@ -269,7 +269,7 @@ Color is the default cluster order. Photography style is an alternative in the P
 
 Search settles after 170ms of typing. Visible non-matches fall farther with accelerating sideways drift and 22–30 degrees of rotation over 600–690ms, staying opaque for the first 60% of the fall. Matching photos hold their sampled positions until the last visible fall ends, pause for 180ms, then gather toward the search bar over 600ms. Skip the pause when no visible photos fall; clearing and regrouping remain direct. Retarget from the current translation, rotation, and opacity if typing interrupts any phase. This deliberately slower search motion is explicitly requested, including keyboard typing. Snapshot the current animated positions before retargeting, animate only transforms/opacity, and avoid animating offscreen photos. Reduced motion changes results immediately. Hidden results leave the keyboard and accessibility order; announce the result count quietly. The existing shared centered photo viewer is unchanged.
 
-Home, Photo, and About share the warm paper background `#F5F5F4`, including Photo and About viewer backdrops. Scope this color to these pages so case studies retain their white background.
+Home, Photo, and About share the warm paper background `#F5F5F4`, including Photo and About viewer backdrops. Scope this color to these pages so case studies retain their white background. Photo retains the shared subtle 40px studio grid throughout the gallery; use background-color rather than a background shorthand so the grid is not reset.
 
 The Photo search bar spans the full gallery width and aligns with its left and right edges at every viewport size.
 

@@ -11,6 +11,13 @@ test("expanded film photos retain their image ratio with an even white mat", asy
   assert.match(frame, /100dvh - 174px/);
 });
 
+test("photography preserves the shared studio grid over its paper color", async () => {
+  const css = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
+  const page = css.match(/\.page \{([^}]+)\}/)[1];
+  assert.match(page, /background-color: var\(--paper\)/);
+  assert.doesNotMatch(page, /background\s*:/);
+});
+
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
@@ -1394,7 +1401,7 @@ test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts
   }
   assert.equal((section.match(/data-artifact-panel=/g) ?? []).length, 3);
   assert.doesNotMatch(section, /work-feature__placeholder|assets coming soon/);
-  assert.match(section, /I led design for Artifacts from its early launch through its growth to nearly 200K weekly active users/);
+  assert.match(section, /I led design for Artifacts, helping Glean expand from answering questions to helping people create finished work/);
 });
 
 test("artifact skins include reading holds and suspend when not visible", async () => {
@@ -1827,7 +1834,7 @@ test("alternate Growth video is the first visit-local prototype and defaults off
 test("Growth pairs ordered onboarding screens with a centered video and fading checklist", async () => {
   const fadeCss = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(fadeCss, /\.work-feature__checklist img \{[^}]*mask-image: linear-gradient\(to bottom, transparent, #000 20%\)/);
-  assert.match(await (await render()).text(), /id="work-growth-title">Growth<\/h3>/);
+  assert.match(await (await render()).text(), /id="work-growth-title">Growth at Glean<\/h3>/);
   const html = await (await render()).text();
   const growth = html.match(/id="work-growth"[\s\S]*?<\/section>/)?.[0];
   assert.ok(growth);
