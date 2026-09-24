@@ -2,6 +2,15 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
+test("expanded film photos retain their image ratio with an even white mat", async () => {
+  const css = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
+  const frame = css.match(/\.focusedPhotoFilm \{([^}]+)\}/)[1];
+  assert.match(frame, /box-sizing: content-box/);
+  assert.match(frame, /padding: 14px;/);
+  assert.match(frame, /100vw - 78px/);
+  assert.match(frame, /100dvh - 174px/);
+});
+
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
@@ -31,6 +40,13 @@ test("hero typography preserves the reference sizes and natural wrapping", async
   assert.doesNotMatch(css, /hero-copy-break/);
 });
 
+test("homepage has a deliberate narrow-screen work layout", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /@media \(max-width: 700px\) \{[\s\S]*?\.hero-meadow\s*\{\s*display: none;/);
+  assert.match(css, /\.work-feature__media--trio,[\s\S]*?grid-template-columns: 1fr;/);
+  assert.match(css, /\.work-feature__media--assets > \*\s*\{\s*aspect-ratio: 1 \/ 1\.08;/);
+});
+
 test("server-renders the portfolio meadow and shared wind study", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -38,6 +54,9 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Neel Saswade’s portfolio<\/title>/i);
+  assert.match(html, /rel="icon" href="\/favicon\.svg\?v=3" type="image\/svg\+xml"/i);
+  assert.match(html, /rel="shortcut icon" href="\/favicon\.svg\?v=3"/i);
+  await access(new URL("../public/favicon.svg", import.meta.url));
   assert.match(html, /property="og:title" content="Neel Saswade’s portfolio"/i);
   assert.match(html, /property="og:image" content="[^\"]*\/og\.png"/i);
   assert.match(html, /name="twitter:title" content="Neel Saswade’s portfolio"/i);
@@ -46,7 +65,7 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I’m a product designer based in San Francisco\. Currently, I’m a designer at /);
   assert.match(html, /working on proactivity, artifacts, and growth\. Previously, I designed at /);
-  assert.match(html, /In my free time,<\/span>/);
+  assert.match(html, /class="hero-copy__rest hero-copy__free-time">In my free time,<\/span>/);
   assert.match(html, /hero-activities__icons/);
   const activityButtons = [...html.matchAll(/<button[^>]*class="[^"]*meadow-activity[^"]*"[^>]*>[\s\S]*?<\/button>/g)];
   assert.equal(activityButtons.length, 3);
@@ -180,8 +199,8 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
 
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   assert.match(viewer, /trigger.focus\(\{ preventScroll: true \}\)/);
-  assert.match(gallery, /tabIndex=\{0\}/);
-  assert.doesNotMatch(gallery, /usePhotoViewer|onClick|aria-haspopup/);
+  assert.match(gallery, /usePhotoViewer/);
+  assert.match(gallery, /aria-haspopup="dialog"/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
   assert.match(css, /\/\* Lift the About composition toward the homepage hero's starting point\. \*\/[\s\S]*padding-top: clamp\(58px, 8vh, 92px\)/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\)/);
@@ -200,9 +219,20 @@ test("Life hover expands only one print and types its caption", async () => {
   assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
   assert.match(css, /transform: rotate\(var\(--print-angle\)\)/);
   assert.match(css, /--letter-index/);
+  assert.ok(css.includes("calc(150ms + var(--letter-index) * 30ms)"));
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /hover: hover/);
   assert.doesNotMatch(css, /life-gallery__track:hover/);
+});
+
+test("About keeps one biography paragraph and a softly tilting 2px portrait", async () => {
+  const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
+  const intro = about.slice(about.indexOf('className="simple-page__copy about-page__intro"'), about.indexOf('<nav className="about-page__socials"'));
+  assert.equal((intro.match(/<p /g) ?? []).length, 1);
+  assert.ok(css.includes("border-radius: 2px;"));
+  assert.ok(css.includes(".about-page--journal .about-page__portrait-card:hover { transform: rotate(-1deg) scale(1.01); }"));
+  assert.ok(css.includes("(prefers-reduced-motion: no-preference)"));
 });
 
 test("keeps About links concise and opens the resume in a new tab", async () => {
@@ -1007,6 +1037,9 @@ test("keeps the meadow scene, miniature visitors, and cursor pet lightweight", a
   assert.match(smiley, /const IDLE_HUFF_SEQUENCE = \["light", "light", "strong", "strong", "strong"\]/);
   assert.match(smiley, /IDLE_HUFF_SEQUENCE\[cycleIndex\] \?\? "strained"/);
   assert.match(smiley, /const HAPPY_FLASH_DURATION = 560/);
+  assert.match(smiley, /document\.querySelector<HTMLElement>\("\.hero-copy__free-time"\)/);
+  assert.match(smiley, /if \(!hasPointerPosition && freeTimeLabel\)/);
+  assert.match(smiley, /event\.clientY <= freeTimeBounds\.bottom/);
   assert.doesNotMatch(smiley, /heroSection|getBoundingClientRect\(\)\.bottom <= 0/);
   assert.match(smiley, /root\.dataset\.meadowPresent !== "true"/);
   assert.match(smiley, /new MutationObserver\(handleMeadowPresenceChange\)/);
@@ -1237,14 +1270,18 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
   assert.match(renderer, /const stride = \(4 \+ bones.length\) \* 4/);
 });
 
-test("Life has eleven captioned prints and no click-to-open viewer", async () => {
+test("Life has eleven captioned prints with the shared click-to-open viewer", async () => {
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   assert.equal((gallery.match(/id: "/g) ?? []).length, 11);
   assert.match(gallery, /Recents from life/);
   assert.match(gallery, /<figure/);
   assert.match(gallery, /<figcaption/);
-  assert.match(gallery, /tabIndex=\{0\}/);
-  assert.doesNotMatch(gallery, /usePhotoViewer|onClick|aria-haspopup|<button/);
+  assert.match(gallery, /usePhotoViewer/);
+  assert.match(gallery, /frame: "film"/);
+  assert.match(gallery, /captionLines/);
+  const quest = await readFile(new URL("../app/about/quest-image.tsx", import.meta.url), "utf8");
+  assert.match(quest, /usePhotoViewer/);
+  assert.match(quest, /aria-haspopup="dialog"/);
   for (const caption of ["Sunset in Kyoto", "My first road race", "Cathedral lakes", "The spirit of gravel?"]) {
     assert.ok(gallery.includes(caption));
   }
@@ -1530,7 +1567,7 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
     exports, require: () => ({ useEffect: effect => { cleanup = effect(); } }),
     window: win, document: {
       documentElement: { dataset: {} }, body: {},
-      querySelectorAll: () => sections, getElementById: () => ({}), querySelector: () => null,
+      querySelectorAll: () => sections, getElementById: id => id === "work" ? { getBoundingClientRect: () => ({ top: 0, bottom: 5000 }) } : null, querySelector: () => null,
       addEventListener() {}, removeEventListener() {},
     },
     Element: MockElement, getComputedStyle: () => ({ overflowY: "visible" }),
@@ -1543,7 +1580,7 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   exports.WorkScroll();
   const wheel = (deltaY, extra = {}) => events.get("wheel").callback({
     deltaY, deltaX: 0, target: new MockElement(),
-    preventDefault: () => assert.fail("wheel input must never be blocked"), ...extra,
+    preventDefault: () => {}, ...extra,
   });
   const pause = () => {
     const callbacks = [...timers.values()];
@@ -1553,8 +1590,8 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(events.get("wheel").options.passive, false);
   assert.match(source, /const HERO_SETTLE_DURATION = 900/);
   assert.match(source, /const PROJECT_SETTLE_DURATION = 900/);
-  assert.match(source, /gap \* \(0\.86 - intensity \* 0\.66\)/);
-  assert.match(source, /window\.innerHeight \* \(0\.9 - intensity \* 0\.7\)/);
+  assert.match(source, /projectLandingDirection/);
+  assert.match(source, /event\.preventDefault\(\);/);
   assert.match(source, /cubic\(t, 0\.77, 0\.175\)/);
   const complete = () => {
     const callbacks = [...frames.values()];
@@ -1572,8 +1609,9 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(win.scrollY, 1000, "the opening gesture lands precisely on Proactive Intelligence");
   pause();
   wheel(100, { cancelable: true });
+  assert.equal(frames.size, 1, "any ordinary project scroll goes directly to the next project");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "the next gesture inside Work is native again");
   win.scrollY = 0;
   wheel(10, { cancelable: true, preventDefault: () => captured++ });
   wheel(-1, { cancelable: true });
@@ -1597,8 +1635,9 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(win.scrollY, 2000, "the assist finishes at the exact project center");
   win.scrollY = 1700;
   wheel(120);
+  assert.equal(frames.size, 1, "stronger input still advances one project directly");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "stronger input at the same position preserves free travel");
   win.scrollY = 1000;
   wheel(8);
   win.scrollY = 1190;
@@ -1616,17 +1655,20 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(win.scrollY, 1000, "gentle upward intent centers the previous project");
   win.scrollY = 1700;
   wheel(8, { deltaMode: 1 });
+  assert.equal(frames.size, 1, "line-mode wheels advance directly");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "line-mode wheels normalize to pixels before measuring intensity");
   win.scrollY = 1700;
   wheel(1, { deltaMode: 2 });
+  assert.equal(frames.size, 1, "page-mode wheels advance directly");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "page-mode wheels retain strong travel");
   win.scrollY = 1000;
   wheel(2);
   win.scrollY = 1020;
+  assert.equal(frames.size, 1, "tiny adjustments advance directly");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "tiny adjustments do not jump to a new project");
   win.scrollY = 750;
   wheel(8);
   pause();
@@ -1634,16 +1676,15 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(win.scrollY, 1000, "approaching Work from the hero can center the first project");
   win.scrollY = 1900;
   wheel(8);
-  pause();
-  assert.equal(frames.size, 1, "a pause just before a project gently centers it");
+  assert.equal(frames.size, 1, "a pause just before a project centers it directly");
   wheel(-1);
-  assert.equal(frames.size, 0, "even a tiny reversal immediately interrupts");
+  assert.equal(frames.size, 1, "a reversal retargets the handoff without a jump");
   pause();
-  assert.equal(frames.size, 0, "the guide never pulls against the input direction");
   win.scrollY = 1600;
   wheel(400);
+  assert.equal(frames.size, 1, "a mid-project scroll still advances directly");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "a mid-project stop does not trigger a full-section jump");
   win.scrollY = 980;
   wheel(-900);
   pause();
@@ -1652,14 +1693,13 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   wheel(2500);
   win.scrollY = 3400;
   events.get("scroll").callback();
+  assert.equal(frames.size, 1, "a scroll before the last project centers it directly");
+  complete();
   pause();
-  assert.equal(frames.size, 0, "strong input may pass projects and leave Work");
   win.scrollY = 2100;
   wheel(-4);
   events.get("scroll").callback();
-  assert.equal(timers.size, 1, "momentum postpones assistance until scrolling rests");
-  pause();
-  assert.equal(frames.size, 1);
+  assert.equal(frames.size, 1, "project scrolling does not wait for momentum to settle");
   events.get("keydown").callback();
   assert.equal(frames.size, 0, "keyboard input interrupts the assist");
   for (const preference of [desktop, reduced]) {

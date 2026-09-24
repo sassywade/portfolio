@@ -13534,6 +13534,104 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
   html[data-work-snap="on"] .work-feature + .work-feature { margin-top: max(200px, 30svh); }
 }
 
+/* Mobile keeps the introduction readable and turns each work composition into a
+   short, touch-friendly sequence. The meadow is a desktop-scale backdrop and
+   adds noise and fixed-layer work on narrow screens, so it yields to the work. */
+@media (max-width: 700px) {
+  .hero-meadow {
+    display: none;
+  }
+
+  .pranathi-intro--home {
+    min-height: auto;
+    padding-top: 104px;
+    padding-bottom: 64px;
+  }
+
+  .pranathi-bio {
+    font-size: clamp(18px, 5.3vw, 20px);
+    line-height: 1.58;
+  }
+
+  .pranathi-bio p + p {
+    margin-top: 28px;
+  }
+
+  .pranathi-work.pranathi-work--editorial {
+    width: calc(100% - 32px);
+    background: var(--paper);
+    padding-top: 20px;
+    padding-bottom: 84px;
+  }
+
+  .work-editorial__label {
+    height: 0;
+    margin: 0;
+  }
+
+  .work-feature + .work-feature {
+    margin-top: 76px;
+  }
+
+  .work-feature__header {
+    margin-bottom: 16px;
+  }
+
+  .work-feature__header h3 {
+    font-size: clamp(25px, 8vw, 32px);
+    line-height: 1.05;
+  }
+
+  .work-feature__meta {
+    margin-top: 10px;
+    gap: 18px;
+    font-size: 12px;
+  }
+
+  .work-feature__media,
+  .work-feature__media--trio,
+  .work-feature__media--pair {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    aspect-ratio: auto;
+    gap: 8px;
+  }
+
+  .work-feature__media--split > :first-child {
+    grid-row: auto;
+  }
+
+  .work-feature__media > *,
+  .work-feature__media--assets > * {
+    min-height: clamp(190px, 58vw, 300px);
+  }
+
+  .work-feature__media--single > *,
+  .work-feature__media--split > *,
+  .work-feature__media--trio > *,
+  .work-feature__media--pair > * {
+    aspect-ratio: 16 / 10;
+  }
+
+  .work-feature__media--assets > * {
+    aspect-ratio: 1 / 1.08;
+  }
+
+  .work-feature__asset-group {
+    padding: 18px 14px 16px;
+  }
+
+  .work-feature__asset-phones img {
+    --phone-height: min(52cqw, 330px);
+  }
+
+  .work-feature__summary {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.52;
+  }
+}
+
 /* Shared paper color for Home, Photo, and About. */
 html:has(.about-page, .photography-page) body,
 .about-page,

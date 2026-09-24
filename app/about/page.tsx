@@ -1,6 +1,7 @@
 import { SiteHeader } from "../site-header";
 import { AboutPhotoGallery } from "./about-photo-gallery";
 import Image from "next/image";
+import { QuestImage } from "./quest-image";
 import "./about-journal.css";
 
 export default function AboutPage() {
@@ -25,9 +26,7 @@ export default function AboutPage() {
             <h1 id="about-title" className="about-page__greeting">Hello!</h1>
             <p className="about-page__lead">
               I’m a designer who likes to tackle ambiguous problems, enjoying all
-              the bits of systems-thinking to delightfully crafted interactions.
-            </p>
-            <p className="about-page__about-copy">
+              the bits of systems-thinking to delightfully crafted interactions.{" "}
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
               confusion and curiosity made me interested in how we introduce new
@@ -84,12 +83,12 @@ export default function AboutPage() {
               <p>I thought it’d be fun to visualize a work passport for all the projects you&apos;ve worked on (<a href="https://x.com/neel_saswade/status/2077068857160700242?s=20" target="_blank" rel="noreferrer">posted on X</a>).</p>
             </article>
             <article className="about-page__quest">
-              <div className="about-page__quest-art"><Image src="/about/underwallet.png" alt="A handmade leather wallet shaped like underwear" width={1080} height={675} /></div>
+              <QuestImage src="/about/underwallet.png" alt="A handmade leather wallet shaped like underwear" title="The Underwallet" />
               <h3>The Underwallet</h3>
               <p>I recently got into leather-making and accidentally designed a wallet that looked like underwear.</p>
             </article>
             <article className="about-page__quest">
-              <div className="about-page__quest-art"><Image src="/about/task-valley.png" alt="Task Valley, a pixel-art game with characters working on tasks" width={1080} height={675} /></div>
+              <QuestImage src="/about/task-valley.png" alt="Task Valley, a pixel-art game with characters working on tasks" title="Task Valley" />
               <h3>Task Valley</h3>
               <p>I created a game using Glean’s API to find work I need to do and have NPCs work on it for me.</p>
             </article>

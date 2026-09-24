@@ -29,3 +29,16 @@
   top: 0;
   transform-origin: top center;
 }
+
+@media (max-width: 700px) {
+  .composition:global(.work-feature__media) {
+    aspect-ratio: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .composition .panel {
+    min-height: clamp(190px, 58vw, 300px);
+    aspect-ratio: 16 / 10;
+  }
+}

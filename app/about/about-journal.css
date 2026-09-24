@@ -49,7 +49,7 @@
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .life-print__paper { transition: transform 250ms var(--motion-ease-out); }
-  .life-print:hover .life-print__letter { transition: opacity 1ms step-end; transition-delay: calc(100ms + var(--letter-index) * 22ms); }
+  .life-print:hover .life-print__letter { transition: opacity 1ms step-end; transition-delay: calc(150ms + var(--letter-index) * 30ms); }
   .life-print:focus-visible .life-print__paper,
   .life-print:focus-visible .life-print__letter { transition: none; }
 }
@@ -99,10 +99,13 @@
   width: 272px;
   padding: 10px;
   border: 0;
-  border-radius: 18px;
+  border-radius: 2px;
   background: #fff;
   box-shadow: none;
   transform: rotate(1.5deg);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .about-page--journal .about-page__portrait-card:hover { transform: rotate(-1deg) scale(1.01); }
 }
 .about-page--journal .about-page__portrait-photo {
   min-height: 0;

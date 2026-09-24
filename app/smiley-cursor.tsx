@@ -68,6 +68,7 @@ export function SmileyCursor() {
     const root = document.documentElement;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const hasFinePointer = window.matchMedia("(pointer: fine)");
+    const freeTimeLabel = document.querySelector<HTMLElement>(".hero-copy__free-time");
 
     if (!cursor || pathname !== "/" || !hasFinePointer.matches || prefersReducedMotion.matches) {
       return;
@@ -516,6 +517,13 @@ export function SmileyCursor() {
 
       if (isPastHero) {
         return;
+      }
+
+      if (!hasPointerPosition && freeTimeLabel) {
+        const freeTimeBounds = freeTimeLabel.getBoundingClientRect();
+        if (event.clientY <= freeTimeBounds.bottom) {
+          return;
+        }
       }
 
       const timestamp = performance.now();

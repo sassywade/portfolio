@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { usePhotoViewer } from "../photo-viewer";
 
 type PhotoSlot = {
   id: string;
@@ -24,10 +27,26 @@ const lifePhotos: PhotoSlot[] = [
   { id: "san-francisco-from-above", title: "The city from above", description: "Exploring Bernal Heights with the gf", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
 
+const captionLines = [
+  ["Seeing the milky way for", "the first time in Big Sur"],
+  ["Riding out of Stinson", "beach in June"],
+  ["Sunset in Kyoto"],
+  ["My first road race"],
+  ["My new bike!", "Meet Dark Envy (aka Eric)"],
+  ["Reading on my ultralight", "chair after making camp"],
+  ["Cathedral lakes"],
+  ["Alamo square during", "SF summer"],
+  ["The spirit of gravel?"],
+  ["My first bike"],
+  ["Exploring Bernal", "Heights with the gf"],
+];
+
 const rotations = [-5, -4, 0, 2, -4, 1, 2, -3, 1, 0, 5];
 
 export function AboutPhotoGallery() {
+  const { openPhoto, viewer, selectedId } = usePhotoViewer();
   return (
+    <>
     <section className="about-page__gallery life-gallery" aria-labelledby="about-gallery-title">
       <h2 id="about-gallery-title">Recents from life</h2>
       <div className="life-gallery__viewport">
@@ -38,20 +57,24 @@ export function AboutPhotoGallery() {
               <figure
                 key={photo.id}
                 className="life-print"
-                tabIndex={0}
                 aria-label={photo.description}
                 style={{ "--print-angle": `${rotations[index]}deg` } as CSSProperties}
               >
                 <div className="life-print__composition">
-                  <div className="life-print__paper">
+                  <button className="life-print__paper" type="button" aria-label={`Open ${photo.title}`} aria-haspopup="dialog"
+                    style={{ visibility: selectedId === photo.id ? "hidden" : undefined }}
+                    onClick={(event) => {
+                      const image = event.currentTarget.querySelector("img")!;
+                      openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 2 / 3, frame: "film" }, event.currentTarget, event.detail !== 0, image);
+                    }}>
                     <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="180px" unoptimized draggable={false} />
-                  </div>
+                  </button>
                   <figcaption className="life-print__caption">
                     <span className="sr-only">{photo.description}</span>
                     <span aria-hidden="true">
-                      {photo.description.split(/(\s+)/).map((word, wordIndex) => word.trim() === "" ? word : (
-                        <span className="life-print__word" key={wordIndex}>
-                          {Array.from(word).map((letter) => {
+                      {captionLines[index].map((line, lineIndex) => (
+                        <span className="life-print__line" key={lineIndex}>
+                          {Array.from(line).map((letter) => {
                             const position = character++;
                             return <span className="life-print__letter" key={position} style={{ "--letter-index": position } as CSSProperties}>{letter}</span>;
                           })}
@@ -66,5 +89,7 @@ export function AboutPhotoGallery() {
         </div>
       </div>
     </section>
+    {viewer}
+    </>
   );
 }

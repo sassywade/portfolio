@@ -45,7 +45,7 @@ export default function Home() {
               <span className="hero-copy__rest">.</span>
             </p>
             <p className="hero-copy-line hero-activities">
-              <span className="hero-copy__rest">In my free time,</span>
+              <span className="hero-copy__rest hero-copy__free-time">In my free time,</span>
               <span className="hero-activities__icons">
                 <PhotoDrop />
                 <BikeRide />
