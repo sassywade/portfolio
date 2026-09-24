@@ -1923,3 +1923,18 @@ test("Selected work leads with the umbrella and Neel's 28 selections without los
     assert.equal(layout.positions.get("087").x, 0);
   }
 });
+
+
+test("photo search waits for visible departures and a short pause before gathering", async () => {
+  const { photoGatherDelay, photoFallDuration } = await import("../app/photography/search-motion.mjs");
+  const snapshots = new Map([
+    ["001", { top: 100, height: 200, opacity: "1" }],
+    ["003", { top: 300, height: 200, opacity: "1" }],
+    ["007", { top: 1500, height: 200, opacity: "1" }],
+    ["011", { top: 100, height: 200, opacity: "0" }],
+  ]);
+  assert.equal(photoGatherDelay(snapshots, new Set(["001"]), 800), photoFallDuration("003") + 180);
+  assert.equal(photoGatherDelay(snapshots, new Set(["003"]), 800), photoFallDuration("001") + 180);
+  assert.equal(photoGatherDelay(snapshots, new Set(["001", "003"]), 800), 0);
+  assert.equal(photoGatherDelay(new Map(), new Set(), 800), 0);
+});
