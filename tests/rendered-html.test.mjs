@@ -11,11 +11,10 @@ test("expanded film photos retain their image ratio with an even white mat", asy
   assert.match(frame, /100dvh - 174px/);
 });
 
-test("photography preserves the shared studio grid over its paper color", async () => {
+test("photography uses plain paper without the studio grid", async () => {
   const css = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
   const page = css.match(/\.page \{([^}]+)\}/)[1];
-  assert.match(page, /background-color: var\(--paper\)/);
-  assert.doesNotMatch(page, /background\s*:/);
+  assert.match(page, /background: var\(--paper\)/);
 });
 
 async function render(path = "/") {
@@ -61,8 +60,8 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Neel Saswade’s portfolio<\/title>/i);
-  assert.match(html, /rel="icon" href="\/favicon\.svg\?v=3" type="image\/svg\+xml"/i);
-  assert.match(html, /rel="shortcut icon" href="\/favicon\.svg\?v=3"/i);
+  assert.match(html, /rel="icon" href="\/lmo-square-tree\.png\?v=4" type="image\/png" sizes="64x64"/i);
+  assert.match(html, /rel="shortcut icon" href="\/lmo-square-tree\.png\?v=4"/i);
   await access(new URL("../public/favicon.svg", import.meta.url));
   assert.match(html, /property="og:title" content="Neel Saswade’s portfolio"/i);
   assert.match(html, /property="og:image" content="[^\"]*\/og\.png"/i);
@@ -1401,6 +1400,7 @@ test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts
   }
   assert.equal((section.match(/data-artifact-panel=/g) ?? []).length, 3);
   assert.doesNotMatch(section, /work-feature__placeholder|assets coming soon/);
+  assert.match(section, /id="work-artifacts-title">Glean Artifacts<\/h3>/);
   assert.match(section, /I led design for Artifacts, helping Glean expand from answering questions to helping people create finished work/);
 });
 
@@ -1984,4 +1984,37 @@ test("photo search waits for visible departures and a short pause before gatheri
   assert.equal(photoGatherDelay(snapshots, new Set(["003"]), 800), photoFallDuration("001") + 180);
   assert.equal(photoGatherDelay(snapshots, new Set(["001", "003"]), 800), 0);
   assert.equal(photoGatherDelay(new Map(), new Set(), 800), 0);
+});
+
+test("glass hover remains reversible and gated for motion and pointer preferences", async () => {
+  const css = await readFile(new URL("../app/meadow-activities.css", import.meta.url), "utf8");
+  assert.match(css, /transition: transform 250ms var\(--motion-ease-out\), opacity 250ms ease/);
+  assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?transform: none/);
+  assert.doesNotMatch(css, /@keyframes|transition: all/);
+});
+
+test("photo search coalesces typing and waits for the active gallery motion", async () => {
+  const { schedulePhotoSearch } = await import("../app/photography/search-motion.mjs");
+  const jobs = new Map();
+  let next = 0;
+  const timers = {
+    setTimeout(fn, delay) { assert.equal(delay, 600); jobs.set(++next, fn); return next; },
+    clearTimeout(id) { jobs.delete(id); },
+  };
+  const applied = [];
+  let finish;
+  const motion = new Promise(resolve => { finish = resolve; });
+  const wait = () => motion;
+  const cancelI = schedulePhotoSearch(() => applied.push("i"), wait, timers);
+  cancelI();
+  const cancelIC = schedulePhotoSearch(() => applied.push("ic"), wait, timers);
+  const pendingIC = [...jobs.values()][0](); // A typing pause while photos still move.
+  cancelIC();
+  schedulePhotoSearch(() => applied.push("ice"), wait, timers);
+  const pendingIce = [...jobs.values()][0]();
+  assert.deepEqual(applied, []);
+  finish();
+  await Promise.all([pendingIC, pendingIce]);
+  assert.deepEqual(applied, ["ice"]);
 });

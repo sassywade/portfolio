@@ -8,7 +8,7 @@ import { clusterPhotos, masonryLayout, matchesPhoto } from "./gallery-model.mjs"
 import { PhotoPrototypePicker, usePhotoGrouping } from "./photo-grouping";
 import styles from "./photography.module.css";
 import { SearchPrompt } from "./search-prompt";
-import { photoFallDuration, photoGatherDelay } from "./search-motion.mjs";
+import { photoFallDuration, photoGatherDelay, schedulePhotoSearch } from "./search-motion.mjs";
 
 type Snapshot = { left: number; top: number; width: number; height: number; opacity: string; rotation: number };
 
@@ -23,11 +23,13 @@ export function PhotographyGallery() {
   const cards = useRef(new Map<string, HTMLButtonElement>());
   const snapshots = useRef(new Map<string, Snapshot>());
   const animations = useRef<Animation[]>([]);
+  const capturedHeight = useRef(0);
   const previousVisible = useRef(new Set(photographs.map((photo) => photo.id)));
   const reduced = useRef(false);
 
   const capture = useCallback(() => {
     snapshots.current.clear();
+    capturedHeight.current = gallery.current!.offsetHeight;
     const bounds = gallery.current!.getBoundingClientRect();
     cards.current.forEach((node, id) => {
       const css = getComputedStyle(node);
@@ -69,8 +71,10 @@ export function PhotographyGallery() {
 
   useEffect(() => {
     if (composing || query === appliedQuery) return;
-    const timer = window.setTimeout(() => { capture(); setAppliedQuery(query); }, 170);
-    return () => window.clearTimeout(timer);
+    return schedulePhotoSearch(
+      () => { capture(); setAppliedQuery(query); },
+      () => Promise.all(animations.current.map((animation) => animation.finished.catch(() => {}))),
+    );
   }, [query, appliedQuery, composing, capture]);
 
   const ordered = useMemo(() => clusterPhotos(photographs, grouping), [grouping]);
@@ -82,10 +86,15 @@ export function PhotographyGallery() {
   useLayoutEffect(() => {
     animations.current.forEach((animation) => animation.cancel());
     animations.current = [];
+    const node = gallery.current!;
+    const targetHeight = Math.max(layout.height, visible.size ? 0 : 120);
+    let cancelled = false;
     if (measure.width && !reduced.current && snapshots.current.size) {
       const bounds = gallery.current!.getBoundingClientRect();
       const easing = getComputedStyle(gallery.current!).getPropertyValue('--motion-ease-in-out').trim();
       const gatherDelay = photoGatherDelay(snapshots.current, visible, innerHeight);
+      // Keep the page from collapsing and clipping the departing photos mid-fall.
+      node.style.height = `${Math.max(capturedHeight.current, targetHeight)}px`;
       cards.current.forEach((node, id) => {
         const old = snapshots.current.get(id);
         if (!old) return;
@@ -115,8 +124,12 @@ export function PhotographyGallery() {
         }
       });
     }
+    Promise.all(animations.current.map((animation) => animation.finished.catch(() => {}))).then(() => {
+      if (!cancelled) node.style.height = `${targetHeight}px`;
+    });
     previousVisible.current = visible;
     snapshots.current.clear();
+    return () => { cancelled = true; };
   }, [layout, fullLayout, visible, measure.width]);
 
   return (

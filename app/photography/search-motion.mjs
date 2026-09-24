@@ -9,3 +9,13 @@ export function photoGatherDelay(snapshots, visible, viewportHeight) {
   }
   return lastFall ? lastFall + 180 : 0;
 }
+
+// A new query waits for both a typing pause and the active gallery sequence.
+export function schedulePhotoSearch(commit, waitForMotion, timers = globalThis) {
+  let cancelled = false;
+  const timer = timers.setTimeout(async () => {
+    await waitForMotion();
+    if (!cancelled) commit();
+  }, 600);
+  return () => { cancelled = true; timers.clearTimeout(timer); };
+}

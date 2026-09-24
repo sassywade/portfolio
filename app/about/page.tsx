@@ -26,7 +26,7 @@ export default function AboutPage() {
             <h1 id="about-title" className="about-page__greeting">Hello!</h1>
             <p className="about-page__lead">
               I’m a designer who likes to tackle ambiguous problems, enjoying all
-              the bits of systems-thinking to delightfully crafted interactions.{" "}
+              the bits of systems-thinking to delightfully crafted interactions.<br />
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
               confusion and curiosity made me interested in how we introduce new

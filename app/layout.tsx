@@ -67,10 +67,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     icons: {
       icon: [
-        { url: "/favicon.svg?v=3", type: "image/svg+xml" },
-        { url: "/lmo-square-tree.png?v=3", type: "image/png", sizes: "64x64" },
+        { url: "/lmo-square-tree.png?v=4", type: "image/png", sizes: "64x64" },
+        { url: "/favicon.svg?v=4", type: "image/svg+xml" },
       ],
-      shortcut: "/favicon.svg?v=3",
+      shortcut: "/lmo-square-tree.png?v=4",
     },
   };
 }
@@ -83,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/lmo-square-tree.png?v=4" type="image/png" sizes="64x64" />
         <script dangerouslySetInnerHTML={{ __html: PORTFOLIO_THEME_BOOT_SCRIPT }} />
         <script defer data-domain="neelsaswade.com" src="https://plausible.io/js/script.js" />
       </head>

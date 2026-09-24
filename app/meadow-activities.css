@@ -38,6 +38,9 @@
   clip-path: inset(7% 8% 9% round 2px);
   pointer-events: none;
   user-select: none;
+  transform: perspective(240px) rotateX(0deg) rotateY(0deg);
+  transform-origin: 50% 52%;
+  transition: transform 250ms var(--motion-ease-out), opacity 250ms ease;
 }
 
 .meadow-activity__selected {
@@ -54,7 +57,8 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 140ms ease;
+  /* Counter-turn the angled artwork so both views travel in the same direction. */
+  transform: perspective(240px) rotateX(-4deg) rotateY(16deg);
 }
 .meadow-activity .meadow-activity__hover--photography {
   clip-path: polygon(11% 12%, 22% 7.5%, 87.8% 9%, 89% 10%, 89% 82.6%, 79.5% 91.6%, 12% 89.1%, 11% 88%);
@@ -66,14 +70,26 @@
   clip-path: polygon(8.6% 12%, 24% 6.4%, 90% 8.8%, 91.3% 10%, 91.3% 84%, 79% 93.4%, 9.4% 88.4%, 8.6% 87%);
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .pranathi-bio .meadow-activity:hover img { transform: none; }
   .pranathi-bio .meadow-activity:hover .meadow-activity__rest,
-  .pranathi-bio .meadow-activity:hover .meadow-activity__selected { opacity: 0; }
-  .pranathi-bio .meadow-activity:hover .meadow-activity__hover { opacity: 1; }
+  .pranathi-bio .meadow-activity:hover .meadow-activity__selected {
+    opacity: 0;
+    transform: perspective(240px) rotateX(4deg) rotateY(-16deg);
+  }
+  .pranathi-bio .meadow-activity:hover .meadow-activity__hover {
+    opacity: 1;
+    transform: perspective(240px) rotateX(0deg) rotateY(0deg);
+  }
   .pranathi-bio .meadow-activity[aria-pressed="true"]:hover .meadow-activity__hover {
     filter: sepia(0.3) saturate(1.2);
   }
   .pranathi-bio .meadow-activity:hover::after { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pranathi-bio .meadow-activity img {
+    transform: none;
+    transition: opacity 140ms ease;
+  }
 }
 
 .pranathi-bio .meadow-activity:focus-visible {
