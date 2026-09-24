@@ -1812,6 +1812,8 @@ test("renders the tagged photo collection with search and a native focus view", 
   assert.equal((html.match(/data-photo-id="/g) ?? []).length, 141);
   assert.equal((html.match(/data-silent-hover="true"/g) ?? []).length, 141);
   assert.match(html, /aria-label="Search photos"/);
+  assert.match(html, /placeholder="type “bikes”"/);
+  assert.match(html, /“nature”/);
   assert.doesNotMatch(html, /\(placeholder\)/);
   assert.match(html, /<dialog/);
   assert.match(html, /aria-label="Close photograph"/);

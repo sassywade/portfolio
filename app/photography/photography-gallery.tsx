@@ -115,7 +115,7 @@ export function PhotographyGallery() {
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
         <div className={styles.searchField}>
           <SearchPrompt />
-          <input ref={input} type="search" aria-label="Search photos" placeholder="Search photos" value={query} autoComplete="off" spellCheck={false}
+          <input ref={input} type="search" aria-label="Search photos" placeholder="type “bikes”" value={query} autoComplete="off" spellCheck={false}
             onChange={(event) => setQuery(event.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)}
             onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
         </div>
