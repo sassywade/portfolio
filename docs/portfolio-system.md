@@ -1,5 +1,7 @@
 # Portfolio system
 
+The September 24 About design is implemented in `app/about/about-journal.css`: “Hello!”, two introductory paragraphs, a rounded white portrait mat, right-aligned Resume and social links, an angled “Recents from life” strip, and three Side quests using supplied transparent assets. Glean Passport links to Neel’s supplied X post. Preserve the existing photo viewer and reduced-motion behavior. This design supersedes the earlier one-screen About composition.
+
 The About page uses “Hello,” and “Life” with the homepage ink color. Its resume link reads “CV”. On desktop the Life strip extends slightly beyond the introduction, using responsive card widths and modest overlap; mobile keeps readable cards in a horizontally scrollable strip. Preserve the white film matting and hover lift.
 
 ## 1. Experience model

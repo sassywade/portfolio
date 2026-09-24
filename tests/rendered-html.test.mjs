@@ -209,11 +209,14 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
-  assert.match(about, /className="about-page__greeting">Hello,<\/h2>/);
+  assert.match(about, /className="about-page__greeting">Hello!<\/h1>/);
   assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--ink\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
-  assert.match(about, /data-social="twitter"[\s\S]*data-social="email"[\s\S]*data-social="resume"/);
-  assert.match(about, /aria-label="CV"/);
-  assert.doesNotMatch(about, /LinkedIn|data-social="linkedin"/);
+  assert.match(about, /data-social="resume"[\s\S]*data-social="twitter"[\s\S]*data-social="email"/);
+  assert.match(about, /aria-label="Resume"/);
+  assert.match(about, /2077068857160700242/);
+  for (const asset of ["passport.png", "underwallet.png", "task-valley.png"]) {
+    assert.ok(about.includes(`/about/${asset}`));
+  }
   assert.match(about, /href="\/Neel-Saswade-Resume\.pdf"[\s\S]*target="_blank"/);
   assert.match(about, /className="about-page__social-icon"[\s\S]*<svg viewBox="0 0 24 24"/);
   assert.doesNotMatch(about, /aria-hidden="true">↗/);
@@ -1236,7 +1239,7 @@ test("fine cypress articulation keeps foliage continuous and child flex bounded"
 
 test("Life photos share the centered viewer and keep playful hover movement", async () => {
   const galleryMarkup = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
-  assert.match(galleryMarkup, /<h2 id="about-gallery-title">Life<\/h2>/);
+  assert.match(galleryMarkup, /<h2 id="about-gallery-title">Recents from life<\/h2>/);
   const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");
@@ -1886,7 +1889,7 @@ test("Photo and About share the homepage paper color", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /html:has\(\.about-page, \.photography-page\) body,\s*\.about-page,\s*\.photography-page,[^{]+\{\s*--paper: #f5f5f4;\s*background-color: #f5f5f4;/);
   assert.match(await (await render("/photography")).text(), /class="site-shell photography-page /);
-  assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page"/);
+  assert.match(await (await render("/about")).text(), /class="site-shell page-enter about-page about-page--journal"/);
 });
 
 test("Field journal unifies all hero artwork as an explicit reversible prototype", async () => {
