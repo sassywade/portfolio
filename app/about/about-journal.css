@@ -89,9 +89,13 @@
 .about-page__quest-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .about-page__quest h3 { margin: 0 0 8px; color: var(--muted); font: 400 20px/1.3 var(--serif); }
 .about-page__quest p { margin: 0; color: #a09a94; font: 400 16px/1.5 var(--serif); }
-.about-page__quest p a { color: inherit; text-decoration: none; }
-.about-page__quest p a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.about-page__quest p a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .about-page__quests a:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .about-page__quest-art img { transition: transform 220ms var(--motion-ease-out); }
+  .about-page__quest-art:hover img { transform: rotate(-1.5deg) scale(1.015); }
+  .about-page__quest:nth-child(2) .about-page__quest-art:hover img { transform: rotate(1.5deg) scale(1.015); }
+}
 @media (max-width: 700px) {
   .about-page--journal .simple-page { width: calc(100% - 40px); padding-top: 56px; padding-bottom: 80px; }
   .about-page--journal .about-page__identity { grid-template-columns: minmax(0, 1fr); gap: 36px; }
