@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Native scrolling with calm, intensity-aware project centering. */
+/** Calm, direct project-to-project scrolling with an interruptible handoff. */
 export function WorkScroll() {
   useEffect(() => {
     const root = document.documentElement;
@@ -17,7 +17,10 @@ export function WorkScroll() {
     let peakSpeed = 0;
     let guideArmed = false;
     let heroLanding = false;
+    let projectLanding = false;
+    let projectLandingDirection = 0;
     let idleTimer = 0;
+    let projectLandingTimer = 0;
     let scrollFrame = 0;
     const HERO_SETTLE_DURATION = 900;
     const PROJECT_SETTLE_DURATION = 900;
@@ -25,8 +28,11 @@ export function WorkScroll() {
       cancelAnimationFrame(scrollFrame);
       scrollFrame = 0;
       window.clearTimeout(idleTimer);
+      window.clearTimeout(projectLandingTimer);
       guideArmed = false;
       heroLanding = false;
+      projectLanding = false;
+      projectLandingDirection = 0;
     };
     // Use a calm ease-in-out curve: cubic-bezier(0.77, 0, 0.175, 1).
     const easeScroll = (progress: number) => {
@@ -45,6 +51,10 @@ export function WorkScroll() {
       return window.scrollY + rect.top - Math.max(32, (window.innerHeight - rect.height) / 2);
     };
     const fits = (section: HTMLElement) => section.offsetHeight <= window.innerHeight - 64;
+    const projectInView = () => {
+      const rect = work.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    };
     const settle = (section: HTMLElement, smooth: boolean, duration = 560) => {
       cancelAnimationFrame(scrollFrame);
       const from = window.scrollY;
@@ -113,9 +123,28 @@ export function WorkScroll() {
         idleTimer = window.setTimeout(() => { heroLanding = false; }, 140);
         return;
       }
+      const nextDirection = Math.sign(event.deltaY);
+      if (eligible && nextDirection && projectInView() && !heroLanding) {
+        const targets = sections.map(center);
+        const nextIndex = nextDirection > 0
+          ? targets.findIndex(target => target > window.scrollY + 2)
+          : targets.findLastIndex(target => target < window.scrollY - 2);
+        if (nextIndex >= 0 && nextIndex < sections.length && fits(sections[nextIndex])) {
+          if (event.cancelable) event.preventDefault();
+          if (projectLanding && nextDirection === projectLandingDirection) return;
+          stopScroll();
+          projectLanding = true;
+          projectLandingDirection = nextDirection;
+          settle(sections[nextIndex], true, PROJECT_SETTLE_DURATION);
+          projectLandingTimer = window.setTimeout(() => {
+            projectLanding = false;
+            projectLandingDirection = 0;
+          }, PROJECT_SETTLE_DURATION + 160);
+          return;
+        }
+      }
       // Reversals interrupt immediately. All wheel movement inside Work stays native.
       const now = performance.now();
-      const nextDirection = Math.sign(event.deltaY);
       const newGesture = !guideArmed || nextDirection !== direction || now - lastWheelTime > 180;
       stopScroll();
       if (!desktop.matches || reduced.matches || event.ctrlKey || event.metaKey || Math.abs(event.deltaX) > Math.abs(event.deltaY) || nestedScroll(event.target)) return;
