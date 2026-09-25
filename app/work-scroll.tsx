@@ -21,7 +21,7 @@ export function WorkScroll() {
     let projectLandingDirection = 0;
     let idleTimer = 0;
     let projectLandingTimer = 0;
-    const WHEEL_QUIET_WINDOW = 320;
+    const WHEEL_QUIET_WINDOW = 180;
     let scrollFrame = 0;
     const HERO_SETTLE_DURATION = 900;
     const PROJECT_SETTLE_DURATION = 900;
