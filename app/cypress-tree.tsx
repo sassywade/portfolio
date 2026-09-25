@@ -62,6 +62,7 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
     if (prefersReducedMotion) return;
 
     let treeArrivalTimer: number | undefined;
+    let soundTimer: number | undefined;
     const playWelcomeGust = () => {
       const tree = treeRef.current;
       const currentWind = latestWind.current;
@@ -77,6 +78,11 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
 
       const bounds = canvasRef.current?.getBoundingClientRect();
       const treePosition = bounds ? Math.max(0, Math.min(1, (bounds.left + bounds.width * 0.5) / window.innerWidth)) : 0.82;
+      // Let the recording's attack rise into the visible tree movement.
+      soundTimer = window.setTimeout(() => {
+        if (!latestPlaying.current || document.hidden || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        window.dispatchEvent(new Event("portfolio:welcome-gust-sound"));
+      }, Math.max(0, treePosition * WELCOME_TRAVEL_MS - 350));
       treeArrivalTimer = window.setTimeout(() => {
         if (!latestPlaying.current || document.hidden || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         tree.applyGust({
@@ -88,16 +94,11 @@ export function CypressTree({ wind, isPlaying, assetUrl }: CypressTreeProps) {
       }, treePosition * WELCOME_TRAVEL_MS);
     };
     const welcomeTimer = window.setTimeout(playWelcomeGust, WELCOME_BREEZE_DELAY);
-    const replayWelcomeGust = () => {
-      window.clearTimeout(welcomeTimer);
-      playWelcomeGust();
-    };
-    window.addEventListener("portfolio:replay-welcome-gust", replayWelcomeGust);
 
     return () => {
       window.clearTimeout(welcomeTimer);
       window.clearTimeout(treeArrivalTimer);
-      window.removeEventListener("portfolio:replay-welcome-gust", replayWelcomeGust);
+      window.clearTimeout(soundTimer);
     };
   }, []);
 

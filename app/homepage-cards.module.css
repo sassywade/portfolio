@@ -1,0 +1,51 @@
+.stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ececec;
+  container-type: inline-size;
+}
+.track {
+  position: absolute;
+  top: 4cqw;
+  left: 10cqw;
+  display: flex;
+  flex-direction: column;
+  width: 80cqw;
+  align-items: center;
+  animation: stream 32s linear infinite;
+  animation-play-state: paused;
+}
+.group {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 4cqw;
+  padding-bottom: 4cqw;
+}
+.group img {
+  display: block;
+  flex: none;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 3%)) drop-shadow(0 4px 6px rgb(0 0 0 / 5%));
+}
+@keyframes stream {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.stage[data-running="true"] .track { animation-play-state: running; }
+.stage:focus-within .track { animation-play-state: paused; }
+.stage:focus-visible { outline: 2px solid var(--muted); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) {
+  .stage:hover .track { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage { overflow-y: auto; }
+  .track { animation: none; }
+  .group[aria-hidden="true"] { display: none; }
+}

@@ -12,9 +12,9 @@ const styles = ['street', 'architecture', 'sports', 'documentary', 'landscape', 
 // The pink umbrella is the lead image; these are editorial choices, not a quality score.
 export const selectedPhotoIds = [
   '087', '108', '100', '062', '133', '089', '014', '046',
-  '137', '120', '130', '131', '140', '022', '042', '132',
+  '137', '120', '130', '140', '022', '042', '132',
   '080', '136', '065', '063', '109', '125', '112', '068',
-  '067', '043', '004', '141',
+  '067', '043', '004', '131', '141',
 ];
 
 function paletteDistance(a, b) {

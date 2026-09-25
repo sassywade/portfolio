@@ -1373,7 +1373,7 @@ test("homepage presents five inline projects with black placeholders and anchor 
     previous = position;
     assert.ok(html.includes(`href="#work-${slug}"`));
   }
-  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 2);
+  assert.equal((html.match(/class="work-feature__placeholder"/g) ?? []).length, 0);
   assert.equal((html.match(/class="work-feature__media work-feature__media--split(?: |")/g) ?? []).length, 3);
   assert.doesNotMatch(html, /href="\/case-studies\//);
   assert.doesNotMatch(html, /class="project-work-video/);
@@ -1383,13 +1383,34 @@ test("Homepage redesign shows the cropped video inside a rounded shadowed tile",
   const html = await (await render()).text();
   const section = html.split('id="work-homepage"')[1].split("</section>")[0];
   assert.match(section, /homepage-final.mp4/);
+  assert.match(section, /homepage-before.png/);
+  assert.match(section, /data-comparison="after"/);
+  assert.match(section, /aria-label="Show Before homepage" aria-pressed="false"/);
+  assert.match(section, /aria-label="Show After homepage" aria-pressed="true"/);
   assert.match(section, /homepage-final-poster.jpg/);
+  assert.match(section, /homepage-company-corner.png/);
+  assert.match(section, /work-feature__company-corner/);
+  assert.match(section, /Before/);
+  assert.match(section, /After/);
+  const comparison = await readFile(new URL("../app/homepage-comparison.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(comparison, /timeupdate|currentTime < 2.3/);
+  assert.match(comparison, /visibilitychange/);
+  assert.match(comparison, /prefers-reduced-motion/);
   assert.match(section, /loop="" muted="" playsInline=""/);
-  assert.equal((section.match(/work-feature__placeholder/g) ?? []).length, 2);
+  assert.equal((section.match(/work-feature__placeholder/g) ?? []).length, 0);
+  assert.match(section, /data-homepage-cards="vertical"/);
+  const cardMotion = await readFile(new URL("../app/homepage-cards.module.css", import.meta.url), "utf8");
+  assert.match(cardMotion, /stream 32s linear infinite/);
+  assert.match(cardMotion, /drop-shadow\(0 4px 6px rgb\(0 0 0 \/ 5%\)\)/);
+  assert.equal((cardMotion.match(/transform: translateY\(/g) ?? []).length, 2);
+  assert.equal((section.match(/src="\/work\/homepage-cards\//g) ?? []).length, 20);
+  assert.doesNotMatch(section, /Homepage card motion|Living wall|Featured card/);
   const css = await readFile(new URL("../app/homepage-video.module.css", import.meta.url), "utf8");
   assert.match(css, /border-radius: 12px/);
   assert.match(css, /box-shadow:/);
   assert.match(css, /background: #ececec/);
+  const globalCss = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(globalCss, /\.work-feature__company-corner img \{[\s\S]*?box-shadow:/);
 });
 
 test("Artifacts shows the supplied document, AI edit bar, and stacked app drafts", async () => {
@@ -1597,6 +1618,7 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(events.get("wheel").options.passive, false);
   assert.match(source, /const HERO_SETTLE_DURATION = 900/);
   assert.match(source, /const PROJECT_SETTLE_DURATION = 900/);
+  assert.match(source, /const WHEEL_QUIET_WINDOW = 180/);
   assert.match(source, /projectLandingDirection/);
   assert.match(source, /event\.preventDefault\(\);/);
   assert.match(source, /cubic\(t, 0\.77, 0\.175\)/);
@@ -1986,13 +2008,7 @@ test("photo search waits for visible departures and a short pause before gatheri
   assert.equal(photoGatherDelay(new Map(), new Set(), 800), 0);
 });
 
-test("glass hover remains reversible and gated for motion and pointer preferences", async () => {
-  const css = await readFile(new URL("../app/meadow-activities.css", import.meta.url), "utf8");
-  assert.match(css, /transition: transform 250ms var\(--motion-ease-out\), opacity 250ms ease/);
-  assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?transform: none/);
-  assert.doesNotMatch(css, /@keyframes|transition: all/);
-});
+
 
 test("photo search coalesces typing and waits for the active gallery motion", async () => {
   const { schedulePhotoSearch } = await import("../app/photography/search-motion.mjs");
@@ -2017,4 +2033,38 @@ test("photo search coalesces typing and waits for the active gallery motion", as
   finish();
   await Promise.all([pendingIC, pendingIce]);
   assert.deepEqual(applied, ["ice"]);
+});
+
+
+
+
+test("Selected work separates the foggy peaks and black-sand beach across gallery widths", async () => {
+  const { clusterPhotos, masonryLayout } = await import("../app/photography/gallery-model.mjs");
+  const photos = JSON.parse(await readFile(new URL("../app/photography/photos.json", import.meta.url), "utf8"));
+  const ordered = clusterPhotos(photos, "selected");
+  for (const [width, columns, gap] of [[342, 2, 20], [700, 3, 28], [940, 4, 40], [1152, 5, 48]]) {
+    const { positions } = masonryLayout(ordered, width, columns, gap);
+    const peaks = positions.get("130"), beach = positions.get("131");
+    assert.ok(beach.y - (peaks.y + peaks.height) > 3 * peaks.height,
+      `leave at least three landscape-photo heights between these images at ${columns} columns`);
+  }
+});
+
+test("Photo defaults to Selected work and offers sorting beside search", async () => {
+  const response = await render("/photography");
+  const html = await response.text();
+  assert.match(html, /data-grouping="selected"/);
+  assert.match(html, /aria-label="Sort photos: Selected work"/);
+  assert.match(html, /role="group" aria-label="Sort photos"/);
+  assert.match(html, /aria-pressed="true"><span>Selected work<\/span>/);
+  assert.ok(html.indexOf('data-photo-id="087"') < html.indexOf('data-photo-id="108"'));
+});
+
+
+test("glass activity artwork stays still on hover", async () => {
+  const css = await readFile(new URL("../app/meadow-activities.css", import.meta.url), "utf8");
+  const icon = await readFile(new URL("../app/meadow-activity-icon.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(css, /rotate[XYZ]\(|perspective\(|transition:|:hover/);
+  assert.doesNotMatch(icon, /hover-v1|meadow-activity__hover/);
+  assert.match(css, /\.meadow-activity\[aria-pressed="true"\] \.meadow-activity__selected \{ opacity: 1; \}/);
 });

@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { bind, setVolume } from "cuelume";
+
+const WIND_VISIT_KEY = "portfolio:welcome-wind-played";
+let windPlayedInDocument = false;
+function hasPlayedWind() {
+  try { return windPlayedInDocument || window.sessionStorage.getItem(WIND_VISIT_KEY) === "true"; }
+  catch { return windPlayedInDocument; }
+}
 
 const actionableSelector = [
   "a[href]",
@@ -38,20 +45,18 @@ function addDeclarativeInteractionCues(root: ParentNode) {
     .forEach(addDeclarativeInteractionCue);
 }
 
-function playWindSound(context: AudioContext, buffer: AudioBuffer) {
+function playWindSound(context: AudioContext, buffer: AudioBuffer, offset = 0) {
   const source = context.createBufferSource();
   const gain = context.createGain();
   gain.gain.value = 0.65;
   source.buffer = buffer;
   source.connect(gain).connect(context.destination);
-  source.start();
+  source.start(0, offset);
   source.onended = () => { source.disconnect(); gain.disconnect(); };
   return source;
 }
 
 export function Soundscape() {
-  const [showWindControl, setShowWindControl] = useState(false);
-
   useEffect(() => {
     setVolume(0.55);
     bind();
@@ -61,10 +66,9 @@ export function Soundscape() {
       ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     const context = !reducedMotion.matches && AudioContextClass ? new AudioContextClass() : null;
     let disposed = false;
-    let entranceSoundStarted = false;
-    let impactPassed = false;
+    let entranceSoundStarted = hasPlayedWind();
+    let cueStartedAt: number | null = null;
     let unlocking = false;
-    let replayRequested = false;
     let buffer: AudioBuffer | null = null;
     let source: AudioBufferSourceNode | null = null;
     const loading = context ? fetch("/audio/meadow-wind-leaves.mp3")
@@ -73,34 +77,35 @@ export function Soundscape() {
         return response.arrayBuffer();
       })
       .then(bytes => context.decodeAudioData(bytes))
-      .then(decoded => { buffer = decoded; })
+      .then(decoded => { buffer = decoded; startSyncedSound(); })
       .catch(() => {}) : Promise.resolve();
     const canPlay = () => !disposed && !document.hidden && !reducedMotion.matches
       && document.documentElement.dataset.meadowPresent !== "false";
-    const handleTreeImpact = () => {
-      impactPassed = true;
-      replayRequested = false;
-      if (entranceSoundStarted || !canPlay() || !context || context.state !== "running" || !buffer) return;
-      // This event is dispatched in the same callback that bends the tree.
-      source = playWindSound(context, buffer);
+    const startSyncedSound = () => {
+      if (cueStartedAt === null || entranceSoundStarted || hasPlayedWind() || !canPlay() || !context || context.state !== "running" || !buffer) return;
+      const offset = Math.max(0, (performance.now() - cueStartedAt) / 1000);
+      // Join only the actual moving gust, at the matching point in the recording.
+      // Never replay a finished gust or start a delayed sound on a later click.
+      if (offset > 1.8 || offset >= buffer.duration) return;
+      windPlayedInDocument = true;
       entranceSoundStarted = true;
-      setShowWindControl(false);
+      try { window.sessionStorage.setItem(WIND_VISIT_KEY, "true"); } catch {}
+      source = playWindSound(context, buffer, offset);
       removeGestureListeners();
     };
+    const handleSoundCue = () => {
+      if (cueStartedAt !== null) return;
+      cueStartedAt = performance.now();
+      startSyncedSound();
+    };
     const handleGesture = () => {
-      if (entranceSoundStarted || unlocking || replayRequested || !canPlay() || !context) return;
+      if (entranceSoundStarted || hasPlayedWind() || unlocking || !canPlay() || !context) return;
       unlocking = true;
       // Resume inside the real gesture; decoding may finish asynchronously.
       void Promise.all([context.resume(), loading]).then(() => {
         if (!canPlay() || entranceSoundStarted || context.state !== "running" || !buffer) return;
-        setShowWindControl(false);
-        if (impactPassed) {
-          replayRequested = true;
-          window.dispatchEvent(new Event("portfolio:replay-welcome-gust"));
-        }
-      }).catch(() => {
-        if (!disposed) setShowWindControl(true);
-      }).finally(() => { unlocking = false; });
+        startSyncedSound();
+      }).catch(() => {}).finally(() => { unlocking = false; });
     };
     const removeGestureListeners = () => {
       window.removeEventListener("pointerdown", handleGesture);
@@ -111,7 +116,7 @@ export function Soundscape() {
       window.addEventListener("pointerdown", handleGesture, { passive: true });
       window.addEventListener("keydown", handleGesture);
       window.addEventListener("touchstart", handleGesture, { passive: true });
-      window.addEventListener("portfolio:welcome-tree-impact", handleTreeImpact);
+      window.addEventListener("portfolio:welcome-gust-sound", handleSoundCue);
     }
 
     addDeclarativeInteractionCues(document);
@@ -132,7 +137,7 @@ export function Soundscape() {
       disposed = true;
       source?.stop();
       if (context) void context.close();
-      window.removeEventListener("portfolio:welcome-tree-impact", handleTreeImpact);
+      window.removeEventListener("portfolio:welcome-gust-sound", handleSoundCue);
       removeGestureListeners();
       observer.disconnect();
       document
@@ -151,17 +156,5 @@ export function Soundscape() {
     };
   }, []);
 
-  if (!showWindControl) return null;
-  return (
-    <button
-      className="entrance-wind-control"
-      type="button"
-      aria-label="Play the entrance wind sound"
-      onClick={() => {
-        window.dispatchEvent(new Event("pointerdown"));
-      }}
-    >
-      Play wind
-    </button>
-  );
+  return null;
 }

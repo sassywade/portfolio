@@ -413,9 +413,14 @@ export const growthVideoAlternative = {
   poster: "/work/growth-alternate-poster.jpg",
 } as const;
 
+export const homepageCompanyCorner = {
+  src: "/work/homepage-company-corner.png",
+  alt: "Glean Company Corner panel with announcements and agents",
+} as const;
+
 export const featuredWork = [
-  { slug: "psychic", video: { src: "/work/psychic-updated.mp4", poster: "/work/psychic-updated-poster.jpg" }, navTitle: "Proactive intelligence", title: "Proactive Intelligence at Glean", year: "2026", company: "Glean", layout: "split", summary: "I led design for Glean’s proactive intelligent experience. The challenge was making AI feel helpful before a user even asked, without becoming noisy or distracting. We explored how relevance, timing, and context could turn proactive suggestions into useful starting points for getting work done." },
-  { slug: "homepage", video: { src: "/work/homepage-final.mp4", poster: "/work/homepage-final-poster.jpg" }, navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to make it more AI-forward and drive usage of Glean Assistant. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward." },
+  { slug: "psychic", video: { src: "/work/psychic-updated.mp4", poster: "/work/psychic-updated-poster.jpg" }, navTitle: "Proactive intelligence", title: "Proactive Intelligence at Glean", year: "2026", company: "Glean", layout: "split", summary: "I led design for Glean’s proactive assistant, exploring how Glean could get a head start on your work before you asked. We focused on making proactive work feel relevant, well-timed, and actually useful instead of just adding more noise." },
+  { slug: "homepage", video: { src: "/work/homepage-before-after.mp4", poster: "/work/homepage-final-poster.jpg" }, navTitle: "Homepage redesign", title: "Redesigning the Glean homepage", year: "2026", company: "Glean", layout: "split", summary: "I led design and product strategy for a redesign of the Glean homepage to make it more AI-forward and drive usage of Glean Assistant. We moved from a traditional intranet-style homepage to a starting point that helped people move work forward." },
   { slug: "artifacts", navTitle: "Artifacts", title: "Glean Artifacts", year: "2026", company: "Glean", layout: "split", summary: "I led design for Artifacts, helping Glean expand from answering questions to helping people create finished work. We designed an AI-native editing and collaboration experience for documents, slides, and other outputs, and grew the product from an early concept into a widely used part of Glean (200k+ weekly active users)",
     panels: [
       { kind: "document", src: "/work/artifacts/document.png", alt: "Glean chat alongside an editable document artifact", width: 2704, height: 1680 },

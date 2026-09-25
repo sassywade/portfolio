@@ -2,22 +2,24 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
+import styles from "./photography.module.css";
+
 export type PhotoGrouping = "color" | "style" | "selected";
 const eventName = "portfolio:photo-grouping";
 const storageKey = "portfolio:photo-grouping";
 function readGrouping(): PhotoGrouping {
   try {
     const saved = sessionStorage.getItem(storageKey);
-    return saved === "style" || saved === "selected" ? saved : "color";
+    return saved === "color" || saved === "style" || saved === "selected" ? saved : "selected";
   }
-  catch { return "color"; }
+  catch { return "selected"; }
 }
 export function setPhotoGrouping(grouping: PhotoGrouping) {
   try { sessionStorage.setItem(storageKey, grouping); } catch { /* Still applies for this page. */ }
   window.dispatchEvent(new CustomEvent(eventName, { detail: grouping }));
 }
 export function usePhotoGrouping(beforeChange?: () => void) {
-  const [grouping, setGrouping] = useState<PhotoGrouping>("color");
+  const [grouping, setGrouping] = useState<PhotoGrouping>("selected");
   useLayoutEffect(() => {
     // Restore the saved order before paint; only explicit changes should animate.
     const update = () => { setGrouping(readGrouping()); };
@@ -62,5 +64,44 @@ export function PhotoPrototypePicker() {
         <PhotoGroupingOptions />
       </div>}
     </div>
+  );
+}
+
+export function PhotoSort() {
+  const grouping = usePhotoGrouping();
+  const menu = useRef<HTMLDetailsElement>(null);
+  const options = [['selected', 'Selected work'], ['color', 'Color'], ['style', 'Photography style']] as const;
+  const currentLabel = options.find(([value]) => value === grouping)![1];
+  useEffect(() => {
+    const dismiss = (event: PointerEvent) => {
+      if (menu.current && !menu.current.contains(event.target as Node)) menu.current.open = false;
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && menu.current?.open) {
+        event.stopPropagation();
+        menu.current.open = false;
+        menu.current.querySelector('summary')?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', dismiss);
+    document.addEventListener('keydown', escape);
+    return () => { document.removeEventListener('pointerdown', dismiss); document.removeEventListener('keydown', escape); };
+  }, []);
+  return (
+    <details ref={menu} className={styles.sort}>
+      <summary aria-label={`Sort photos: ${currentLabel}`}>
+        <span className={styles.sortLabel}>Sort by</span>
+        <span>{currentLabel}</span>
+        <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </summary>
+      <div className={styles.sortOptions} role="group" aria-label="Sort photos">
+        {options.map(([value, label]) => (
+          <button key={value} className={styles.sortOption} type="button" aria-pressed={grouping === value}
+            onClick={() => { if (value !== grouping) setPhotoGrouping(value); menu.current!.open = false; menu.current!.querySelector('summary')?.focus(); }}>
+            <span>{label}</span><span aria-hidden="true" className={styles.sortCheck}>{grouping === value ? '✓' : ''}</span>
+          </button>
+        ))}
+      </div>
+    </details>
   );
 }

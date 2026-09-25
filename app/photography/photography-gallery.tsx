@@ -5,7 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { usePhotoViewer } from "../photo-viewer";
 import photographs from "./photos.json";
 import { clusterPhotos, masonryLayout, matchesPhoto } from "./gallery-model.mjs";
-import { PhotoPrototypePicker, usePhotoGrouping } from "./photo-grouping";
+import { PhotoPrototypePicker, PhotoSort, usePhotoGrouping } from "./photo-grouping";
 import styles from "./photography.module.css";
 import { SearchPrompt } from "./search-prompt";
 import { photoFallDuration, photoGatherDelay, schedulePhotoSearch } from "./search-motion.mjs";
@@ -64,9 +64,13 @@ export function PhotographyGallery() {
       setMeasure((current) => current.width === next.width && current.columns === next.columns && current.gap === next.gap ? current : next);
     };
     resize();
-    const observer = new ResizeObserver(resize);
+    let resizeFrame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(resize);
+    });
     observer.observe(node);
-    return () => { observer.disconnect(); preference.removeEventListener('change', updatePreference); animations.current.forEach((animation) => animation.cancel()); };
+    return () => { cancelAnimationFrame(resizeFrame); observer.disconnect(); preference.removeEventListener('change', updatePreference); animations.current.forEach((animation) => animation.cancel()); };
   }, []);
 
   useEffect(() => {
@@ -105,9 +109,10 @@ export function PhotographyGallery() {
         const enteringScreen = bounds.top + destination.y < innerHeight && bounds.top + destination.y + destination.height > 0;
         if (visible.has(id) && (onscreen || enteringScreen)) {
           const returning = !previousVisible.current.has(id);
-          const start = returning && Number(old.opacity) < 0.05 ? `translate(0px, 28px) rotate(0deg)` : `translate(${dx}px, ${dy}px) rotate(${old.rotation}deg)`;
+          const emerging = !onscreen || (returning && Number(old.opacity) < 0.05);
+          const start = emerging ? `translate(0px, 72px) rotate(0deg)` : `translate(${dx}px, ${dy}px) rotate(${old.rotation}deg)`;
           const animation = node.animate([
-            { transform: start, opacity: returning ? old.opacity : 1 },
+            { transform: start, opacity: emerging ? 0 : old.opacity },
             { transform: 'translate(0px, 0px) rotate(0deg)', opacity: 1 },
           ], { duration: 600, delay: gatherDelay, easing, fill: 'both' });
           animations.current.push(animation);
@@ -143,6 +148,7 @@ export function PhotographyGallery() {
             onKeyDown={(event) => { if (event.key === 'Escape') { setQuery(''); capture(); setAppliedQuery(''); } }} />
         </div>
         {query && <button type="button" aria-label="Clear search" onClick={() => { setQuery(''); capture(); setAppliedQuery(''); input.current?.focus(); }}>Clear</button>}
+        <PhotoSort />
       </div>
       <p className="sr-only" role="status" aria-live="polite">{matching.length} {matching.length === 1 ? 'photo' : 'photos'}{appliedQuery ? ` matching ${appliedQuery}` : ''}</p>
       {!matching.length && <p className={styles.empty}>nothin bout that</p>}

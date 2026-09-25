@@ -1,4 +1,4 @@
-import { featuredWork, growthOnboardingScreens, growthChecklist, psychicPopups } from "./projects";
+import { featuredWork, growthOnboardingScreens, growthChecklist, homepageCompanyCorner, psychicPopups } from "./projects";
 import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
 import { ProjectVideo } from "./project-mockup";
@@ -8,7 +8,8 @@ import { PsychicCards } from "./psychic-cards";
 import { WorkTileSurface } from "./work-tile-prototype";
 import artifactStyles from "./artifact-panels.module.css";
 import { ArtifactSkins } from "./artifact-skins";
-import homepageStyles from "./homepage-video.module.css";
+import { HomepageComparison } from "./homepage-comparison";
+import { HomepageCards } from "./homepage-cards";
 
 export function WorkSections() {
   return (
@@ -46,9 +47,7 @@ export function WorkSections() {
                 {project.slug === "growth" ? (
                   <GrowthPrototypeVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
                 ) : project.slug === "homepage" ? (
-                  <div className={homepageStyles.tile}>
-                    <ProjectVideo src={project.video.src} poster={project.video.poster} className={homepageStyles.video} ariaLabel="Glean homepage redesign walkthrough" />
-                  </div>
+                  <HomepageComparison src="/work/homepage-final.mp4" poster={project.video.poster} />
                 ) : "video" in project ? (
                   <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
                 ) : "media" in project ? project.media.groups.map((group) => (
@@ -67,8 +66,12 @@ export function WorkSections() {
                   <div className="work-feature__popups">
                     <img src={psychicPopups.src} alt={psychicPopups.alt} width={1395} height={960} loading="lazy" />
                   </div>
-                ) : "media" in project ? null : <div className="work-feature__placeholder" />}
-                {project.layout === "split" && (project.slug === "psychic" ? <PsychicCards /> : <div className="work-feature__placeholder" />)}
+                ) : "media" in project ? null : project.slug === "homepage" ? (
+                  <div className="work-feature__company-corner">
+                    <img src={homepageCompanyCorner.src} alt={homepageCompanyCorner.alt} width={1586} height={796} loading="lazy" />
+                  </div>
+                ) : <div className="work-feature__placeholder" />}
+                {project.layout === "split" && (project.slug === "psychic" ? <PsychicCards /> : project.slug === "homepage" ? <HomepageCards /> : <div className="work-feature__placeholder" />)}
                 </>}
               </div>
               <p className="work-feature__summary">
