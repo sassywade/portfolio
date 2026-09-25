@@ -21,6 +21,7 @@ export function WorkScroll() {
     let projectLandingDirection = 0;
     let idleTimer = 0;
     let projectLandingTimer = 0;
+    const WHEEL_QUIET_WINDOW = 320;
     let scrollFrame = 0;
     const HERO_SETTLE_DURATION = 900;
     const PROJECT_SETTLE_DURATION = 900;
@@ -131,7 +132,14 @@ export function WorkScroll() {
           : targets.findLastIndex(target => target < window.scrollY - 2);
         if (nextIndex >= 0 && nextIndex < sections.length && fits(sections[nextIndex])) {
           if (event.cancelable) event.preventDefault();
-          if (projectLanding && nextDirection === projectLandingDirection) return;
+          if (projectLanding && nextDirection === projectLandingDirection) {
+            window.clearTimeout(projectLandingTimer);
+            projectLandingTimer = window.setTimeout(() => {
+              projectLanding = false;
+              projectLandingDirection = 0;
+            }, WHEEL_QUIET_WINDOW);
+            return;
+          }
           stopScroll();
           projectLanding = true;
           projectLandingDirection = nextDirection;
@@ -139,7 +147,7 @@ export function WorkScroll() {
           projectLandingTimer = window.setTimeout(() => {
             projectLanding = false;
             projectLandingDirection = 0;
-          }, PROJECT_SETTLE_DURATION + 160);
+          }, WHEEL_QUIET_WINDOW);
           return;
         }
       }
