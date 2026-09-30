@@ -33,37 +33,45 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol =
     forwardedProtocol?.split(",")[0]?.trim() ??
     (host?.startsWith("localhost") ? "http" : "https");
-  const origin = host ? new URL(`${protocol}://${host}`) : undefined;
-  const socialImage = origin
-    ? new URL("/og.png", origin).toString()
-    : "/og.png";
+  const origin = host ? new URL(`${protocol}://${host}`) : new URL("https://neelsaswade.com");
+  const socialImage = new URL("/og.png", origin).toString();
+  const title = "Neel Saswade’s portfolio";
+  const description =
+    "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.";
+  const imageAlt = "Three glass activity icons from Neel Saswade’s portfolio";
 
   return {
     metadataBase: origin,
-    title: "Neel Saswade’s portfolio",
-    description:
-      "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.",
+    title,
+    description,
+    alternates: {
+      canonical: "/",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: "Neel Saswade’s portfolio",
-      description:
-        "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.",
+      title,
+      description,
       type: "website",
-      url: origin?.toString(),
+      url: "/",
+      siteName: "Neel Saswade",
+      locale: "en_US",
       images: [
         {
           url: socialImage,
           width: 1200,
           height: 630,
-          alt: "Three glass activity icons from Neel Saswade’s portfolio",
+          alt: imageAlt,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Neel Saswade’s portfolio",
-      description:
-        "The portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.",
-      images: [socialImage],
+      title,
+      description,
+      images: [{ url: socialImage, alt: imageAlt }],
     },
     icons: {
       icon: [

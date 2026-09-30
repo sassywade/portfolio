@@ -33,12 +33,21 @@
 @media (max-width: 700px) {
   .composition:global(.work-feature__media) {
     aspect-ratio: auto;
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 12px;
   }
 
-  .composition .panel {
-    min-height: clamp(190px, 58vw, 300px);
+  .composition > :first-child {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-height: clamp(218px, 67vw, 310px);
     aspect-ratio: 16 / 10;
+  }
+
+  .composition > :not(:first-child) {
+    grid-row: 2;
+    min-height: clamp(116px, 36vw, 164px);
+    aspect-ratio: 4 / 3;
   }
 }

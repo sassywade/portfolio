@@ -15,16 +15,20 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 ## Non-negotiable defaults
 
 - Homepage navigation uses the shared top header with the `Neel Saswade` wordmark and `Work`, `Photo`, and `About`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow. Other pages retain the same shared header. Work scrolls to `#work`; Photo opens `/photography`, the dedicated masonry gallery. Play and Resume are not in the high-level navigation yet.
-- There is no archive section, promotional footer, or contact/social cluster.
+- On mobile, balance the shared header across the viewport: the wordmark stays left, the 14px navigation sits right, top padding is 16px, and link gaps are 16px. Preserve the established desktop header spacing and type.
+- There is no archive section, promotional footer, or contact/social cluster. The homepage ends with a basic footer row showing the year, name, and a Back to top link.
 - The homepage background is #F5F5F4 with the subtle studio grid, which fades away before Work.
 - The default environment is the restrained painterly rolling Alamo Square meadow.
 - Newsreader is for the homepage name, case-study titles, and editorial display moments. Geist is for navigation, body copy, metadata, controls, labels, and project titles. Geist Mono is only for code-like or ASCII artwork.
 - Work is an inline editorial sequence with titles and metadata above black media placeholders and summaries below. Preserve the existing Reveal entrance and hero handoff. A sticky project rail tracks the section in view; hide the rail below 1080px instead of showing mobile navigation.
+- On mobile, preserve the desktop media hierarchy: three-panel projects use one full-width primary frame with two smaller supporting frames below. Growth's center video becomes the mobile primary. Pair and single compositions retain their authored order at full width.
+- Growth's mobile starter-kit tile crops into the checklist card and removes the desktop fade overlay so the mock stays visible in the compact supporting row. Preserve the full desktop treatment.
+- On mobile and touch layouts, the Life photo strip has no visible per-photo subtitles. Preserve the accessible descriptions and desktop hover/focus captions.
 - The homepage shows five major sections: Proactive intelligence, Homepage redesign, Artifacts, Growth, and Web3 at Snap (combining Treasure and NFTs as Lenses). Work links jump to sections rather than individual case-study pages.
 - Until new assets arrive, use black rectangles. Split compositions scale from a 1145×500 canvas: 708×500 beside two 417×240 panels with 20px gaps. Single media uses 1145×550; Growth uses three columns and Snap two.
 - Case studies use a plain white background, no grid, no top navigation, and a quiet narrative layout.
 - Philip is optional, follows only in the hero, disappears after the hero, and must never change expression merely because pointer speed changes.
-- The introduction ends with “In my free time” and 48×48 glass-box icon buttons in photography, cycling, backpacking order. Use the approved illuminated artwork while each actor is active, driven by that actor's phase. The photographer is already present on load; clicking any active icon removes its character and clears its selected state. Clicking an inactive icon starts its arrival. This also works during arrival and in the solo layout; reduced-motion characters remain static until toggled off. Keep accessible labels and visible keyboard focus.
+- The introduction ends with “In my free time” and 48×48 glass-box icon buttons in photography, cycling, backpacking order. Use the approved illuminated artwork while each actor is active, driven by that actor's phase. The photographer is already present on desktop load; at 700px and below, the backpacker arrives and walks by default in the restored bottom-anchored meadow. Clicking any active icon removes its character and clears its selected state. Clicking an inactive icon starts its arrival. This also works during arrival and in the solo layout; reduced-motion characters remain static until toggled off. Keep accessible labels and visible keyboard focus.
 - Every actionable element uses only Cuelume's global Declarative profile: `tick` on hover and the `press`/`release` click pair. Do not add custom cue overrides.
 
 ## Architecture map
@@ -50,7 +54,7 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 4. When a preference becomes durable, update this contract or `docs/portfolio-system.md` and add a focused regression assertion.
 5. Run `npm test`.
 6. For visual or interaction changes, verify the actual rendered page at desktop and mobile. Check computed styles when cascade order matters.
-7. Publish the exact tested commit through Sites. Rebase on the latest remote before pushing, then rerun tests.
+7. Development is local and preview-only by default. Do not push to GitHub `main`, deploy, or change hosting settings unless Neel explicitly says to publish the reviewed change. A request to edit, fix, clean up, or finish work is not publishing authorization. Production is hosted on Cloudflare; pushing `main` can publish the site. When publishing is explicitly requested, inspect the latest GitHub `main`, preserve unrelated work, rerun tests, push only the reviewed and tested commit, and verify the matching Cloudflare deployment. Do not use ChatGPT Sites or recreate its retired Git remote.
 
 ## Resource and quality rules
 
@@ -65,4 +69,4 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 
 ## Definition of done
 
-A change is done only when the requested behavior is visible, unrelated behavior is preserved, tests pass, the relevant viewport is checked, and the deployed version matches the tested commit.
+A local change is ready for review when the requested behavior is visible, unrelated behavior is preserved, tests pass, and the relevant desktop and mobile viewports are checked. Show the local previews to Neel. Publishing is a separate, explicitly authorized step; only then verify that the deployed version matches the tested commit.

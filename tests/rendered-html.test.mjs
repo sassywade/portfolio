@@ -38,19 +38,64 @@ async function render(path = "/") {
   );
 }
 
+test("mobile hero copy is concise while desktop retains the full introduction", async () => {
+  const html = await (await render()).text();
+  const intro = html.match(/<p class="hero-copy-line">([\s\S]*?)<\/p>/)[1];
+  const copyFor = (viewport) => intro
+    .replace(new RegExp(`<span[^>]*data-copy-viewport="${viewport === "mobile" ? "desktop" : "mobile"}"[^>]*>[\\s\\S]*?<\\/span>`, "g"), "")
+    .replace(/<[^>]+>/g, "")
+    .trim();
+  assert.equal(copyFor("mobile"), "I’m a product designer based in San Francisco. Currently, at Glean. Previously at Snap.");
+  assert.equal(copyFor("desktop"), "I’m a product designer based in San Francisco. Currently, I’m a designer at Glean working on proactivity, artifacts, and growth. Previously, I designed at Snap.");
+});
+
 test("hero typography preserves the reference sizes and natural wrapping", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
+  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: none;[^}]*text-wrap: pretty;/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
   assert.doesNotMatch(css, /hero-copy-break/);
 });
 
-test("homepage has a deliberate narrow-screen work layout", async () => {
+test("mobile hero balances the intro and keeps weather inside the oversized meadow", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /@media \(max-width: 700px\) \{[\s\S]*?\.hero-meadow\s*\{\s*display: none;/);
-  assert.match(css, /\.work-feature__media--trio,[\s\S]*?grid-template-columns: 1fr;/);
-  assert.match(css, /\.work-feature__media--assets > \*\s*\{\s*aspect-ratio: 1 \/ 1\.08;/);
+  const mobile = css.slice(css.indexOf("/* Mobile keeps the complete Alamo scene"));
+  assert.match(mobile, /@media \(max-width: 700px\)/);
+  assert.match(mobile, /\.pranathi-intro--home\s*\{[^}]*padding-top: calc\(clamp\(40px, 8svh, 76px\) \+ 12px\)/);
+  assert.match(mobile, /\.pranathi-name\s*\{\s*font-size: 30px/);
+  assert.match(mobile, /--cypress-display-width: clamp\(216px, 56vw, 232px\)/);
+  assert.match(mobile, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*width: var\(--cypress-display-width\)/);
+  const weather = mobile.match(/\.hero-meadow\[data-environment-style="painterly-realism"\] \.alamo-weather\s*\{([^}]+)\}/)[1];
+  assert.match(weather, /right: calc\(\(var\(--meadow-render-width\) - 100vw\) \/ 2 \+ 16px\)/);
+  assert.match(weather, /width: min\(280px, calc\(100vw - 32px\)\)/);
+});
+
+test("mobile meadow exits without drifting behind an opaque Work rectangle", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const mobile = css.slice(css.indexOf("/* Mobile keeps the complete Alamo scene"));
+  const scene = mobile.match(/\.hero-meadow\s*\{([^}]+)\}/)[1];
+  assert.match(scene, /position: absolute/);
+  assert.match(scene, /transform: translate3d\(-50%, 0, 0\)/);
+  assert.match(scene, /opacity: calc\(1 - var\(--work-paper-opacity, 0\)\)/);
+  const work = mobile.match(/\.pranathi-work\.pranathi-work--editorial\s*\{([^}]+)\}/)[1];
+  assert.match(work, /background: transparent/);
+});
+
+test("homepage has a deliberate narrow-screen work layout", async () => {
+  const [css, backpack] = await Promise.all([
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/backpack-walk.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(css, /Mobile keeps the complete Alamo scene[\s\S]*?@media \(max-width: 700px\) \{[\s\S]*?\.hero-meadow\s*\{[\s\S]*?--meadow-render-width: max\(100vw, 680px\);[\s\S]*?display: block;[\s\S]*?position: absolute;[\s\S]*?height: 100%;/);
+  assert.match(css, /\.pranathi-intro--home\s*\{\s*min-height: calc\(100svh - 33px\);[\s\S]*?padding-bottom: clamp\(220px, 31svh, 276px\);/);
+  assert.match(backpack, /matchMedia\("\(max-width: 700px\)"\)[\s\S]*?detail: "backpack"[\s\S]*?launch\(\);/);
+  assert.match(css, /\.work-feature__media--split,[\s\S]*?\.work-feature__media--trio\s*\{[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
+  assert.match(css, /\.work-feature__media--split > :first-child,[\s\S]*?\.work-feature__media--trio > :nth-child\(2\)[\s\S]*?grid-column: 1 \/ -1;/);
+  assert.match(css, /\.work-feature__media--trio > :first-child,[\s\S]*?\.work-feature__media--trio > :nth-child\(3\)[\s\S]*?grid-row: 2;/);
+  assert.match(css, /#work-growth \.work-feature__checklist img\s*\{[\s\S]*?object-fit: cover;[\s\S]*?object-position: center 44%;[\s\S]*?mask-image: none;/);
+  assert.match(css, /#work-growth \.work-feature__checklist::after\s*\{\s*display: none;/);
+  assert.match(css, /\.work-feature__media--assets > \*\s*\{\s*min-height: clamp\(190px, 58vw, 300px\);\s*aspect-ratio: 1 \/ 1\.08;/);
 });
 
 test("server-renders the portfolio meadow and shared wind study", async () => {
@@ -64,10 +109,21 @@ test("server-renders the portfolio meadow and shared wind study", async () => {
   assert.match(html, /rel="shortcut icon" href="\/lmo-square-tree\.png\?v=4"/i);
   await access(new URL("../public/favicon.svg", import.meta.url));
   assert.match(html, /property="og:title" content="Neel Saswade’s portfolio"/i);
-  assert.match(html, /property="og:image" content="[^\"]*\/og\.png"/i);
+  assert.match(html, /property="og:type" content="website"/i);
+  assert.match(html, /property="og:url" content="https:\/\/neelsaswade\.com"/i);
+  assert.match(html, /property="og:site_name" content="Neel Saswade"/i);
+  assert.match(html, /property="og:locale" content="en_US"/i);
+  assert.match(html, /property="og:image" content="[^"]*\/og\.png"/i);
   assert.match(html, /name="twitter:title" content="Neel Saswade’s portfolio"/i);
+  assert.match(html, /name="twitter:card" content="summary_large_image"/i);
+  assert.match(html, /rel="canonical" href="https:\/\/neelsaswade\.com"/i);
+  assert.match(html, /name="robots" content="index, follow"/i);
+  for (const file of ["robots.txt", "HUMANS.txt", "llms.txt", "sitemap.xml"]) {
+    await access(new URL(`../public/${file}`, import.meta.url));
+  }
   assert.match(html, /<script defer="" data-domain="neelsaswade\.com" src="https:\/\/plausible\.io\/js\/script\.js"><\/script>/i);
   assert.match(html, /class="site-header site-header--pages"/);
+  assert.match(html, /<footer class="site-footer pranathi-footer"[^>]*>\s*<div class="footer-bottomline">[\s\S]*© 2026 Neel Saswade[\s\S]*href="#top">Back to top<\/a>/);
   assert.match(html, />Neel Saswade</);
   assert.match(html, /I’m a product designer based in San Francisco\. Currently, I’m a designer at /);
   assert.match(html, /working on proactivity, artifacts, and growth\. Previously, I designed at /);
@@ -177,6 +233,7 @@ test("keeps the primary navigation simple and links Photo to photography", async
   assert.match(await readFile(new URL("../app/photo-drop.tsx", import.meta.url), "utf8"), /id="photo"/);
   assert.doesNotMatch(header, /site-nav__label--hover/);
   assert.doesNotMatch(css, /site-nav__label--hover/);
+  assert.match(css, /@media \(max-width: 680px\) \{[\s\S]*?\.site-header--pages\s*\{[\s\S]*?justify-content: space-between;[\s\S]*?padding-top: 16px;[\s\S]*?font-size: 14px;[\s\S]*?\.site-header--pages \.site-nav\s*\{\s*gap: 16px;/);
 });
 
 test("renders Play as a compact three-column project grid", async () => {
@@ -205,6 +262,9 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
 
   const viewer = await readFile(new URL("../app/photo-viewer.tsx", import.meta.url), "utf8");
   assert.match(viewer, /trigger.focus\(\{ preventScroll: true \}\)/);
+  assert.match(viewer, /onCancel=\{\(event\) => \{ event\.preventDefault\(\); playKeyboardCloseCue\(\); closeRef\.current\(false\); \}\}/);
+  assert.match(viewer, /new PointerEvent\("pointerdown", eventInit\)/);
+  assert.match(viewer, /new PointerEvent\("pointerup", eventInit\)/);
   assert.match(gallery, /usePhotoViewer/);
   assert.match(gallery, /aria-haspopup="dialog"/);
   assert.match(css, /\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
@@ -223,6 +283,11 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
 test("Life hover expands only one print and types its caption", async () => {
   const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
   assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
+  assert.match(css, /\.life-print__caption \{[\s\S]*?top: 12px;[\s\S]*?left: calc\(142\.5% \+ 12px\);/);
+  assert.doesNotMatch(css, /caption-rise/);
+  assert.ok(css.includes(".life-gallery:has(.life-print:hover) > h2 { opacity: 0.12; }"));
+  assert.ok(css.includes(".life-gallery:has(.life-print :focus-visible, .life-print:focus-visible) > h2 { opacity: 0.12; }"));
+  assert.match(css, /@media \(max-width: 700px\), \(hover: none\)[\s\S]*?\.life-print \.life-print__caption \{ display: none; \}/);
   assert.match(css, /transform: rotate\(var\(--print-angle\)\)/);
   assert.match(css, /--letter-index/);
   assert.ok(css.includes("calc(150ms + var(--letter-index) * 30ms)"));
@@ -247,7 +312,8 @@ test("keeps About links concise and opens the resume in a new tab", async () => 
 
   assert.match(about, /className="about-page__greeting">Hello!<\/h1>/);
   assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--ink\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
-  assert.match(about, /data-social="resume"[\s\S]*data-social="twitter"[\s\S]*data-social="email"/);
+  assert.match(about, /data-social="resume"[\s\S]*data-social="twitter"[\s\S]*data-social="linkedin"/);
+  assert.doesNotMatch(about, /mailto:|data-social="email"/);
   assert.match(about, /aria-label="Resume"/);
   assert.match(about, /2077068857160700242/);
   for (const asset of ["passport.png", "underwallet.png", "task-valley.png"]) {
@@ -1560,7 +1626,7 @@ test("Work has no visible Selected work heading", async () => {
 });
 
 
-test("scroll assistance guides ordinary input, preserves reversals, and escapes to the hero", async () => {
+test("scroll assistance only captures the intentional hero handoff", async () => {
   const { transpileModule, ModuleKind } = await import("typescript");
   const { runInNewContext } = await import("node:vm");
   const source = await readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8");
@@ -1617,9 +1683,8 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   };
   assert.equal(events.get("wheel").options.passive, false);
   assert.match(source, /const HERO_SETTLE_DURATION = 900/);
-  assert.match(source, /const PROJECT_SETTLE_DURATION = 900/);
-  assert.match(source, /const WHEEL_QUIET_WINDOW = 180/);
-  assert.match(source, /projectLandingDirection/);
+  assert.doesNotMatch(source, /PROJECT_SETTLE_DURATION|projectLandingDirection|finishGesture/);
+  assert.match(source, /every wheel event in Work remains native/);
   assert.match(source, /event\.preventDefault\(\);/);
   assert.match(source, /cubic\(t, 0\.77, 0\.175\)/);
   const complete = () => {
@@ -1628,6 +1693,29 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
     callbacks.forEach(callback => callback(1000));
   };
   let captured = 0;
+  win.scrollY = 0;
+  wheel(4, { cancelable: true, preventDefault: () => captured++ });
+  assert.equal(captured, 1, "the first downward scroll starts the homepage handoff");
+  assert.equal(frames.size, 1);
+  wheel(900, { cancelable: true, preventDefault: () => captured++ });
+  assert.equal(captured, 2, "same-gesture momentum is debounced into the existing handoff");
+  assert.equal(frames.size, 1, "momentum does not restart the handoff animation");
+  wheel(1200, { cancelable: false, preventDefault: () => captured++ });
+  assert.equal(frames.size, 1, "non-cancelable momentum does not cancel the handoff");
+  complete();
+  assert.equal(win.scrollY, 1000);
+  pause();
+  win.scrollY = 1000;
+  let workCapture = 0;
+  wheel(100, { cancelable: true, preventDefault: () => workCapture++ });
+  wheel(100, { cancelable: true, preventDefault: () => workCapture++ });
+  assert.equal(frames.size, 0, "normal Work scrolling does not start a scripted animation");
+  assert.equal(workCapture, 0, "normal Work scrolling is not scrolljacked");
+  cleanup();
+  assert.equal(timers.size, 0);
+  assert.equal(frames.size, 0);
+  return;
+
   win.scrollY = 0;
   wheel(4, { cancelable: true, preventDefault: () => captured++ });
   assert.equal(frames.size, 1, "the first small downward scroll starts the homepage handoff");
@@ -1743,9 +1831,9 @@ test("scroll assistance guides ordinary input, preserves reversals, and escapes 
   assert.equal(frames.size, 0);
 });
 
-test("touch work uses gentle proximity snap while desktop stays native", async () => {
+test("touch work stays natively scrollable after the opening swipe", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /@media \(pointer: coarse\) \{\s*html\[data-work-snap="on"\] \{ scroll-snap-type: y proximity; \}/);
+  assert.match(css, /@media \(pointer: coarse\) \{\s*html\[data-work-snap="on"\] \{ scroll-snap-type: none; \}/);
   assert.doesNotMatch(css, /@media \(min-width: 1080px\), \(pointer: coarse\)/);
   assert.match(css, /html\[data-work-snap="on"\] \.work-feature \{[\s\S]*?scroll-snap-stop: normal;/);
 });
@@ -1834,9 +1922,9 @@ test("projects reveal as one composition and stay visible on return", async () =
 });
 
 
-test("project descriptions fill the mockup width", async () => {
+test("project descriptions span the work section and wrap cleanly", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__summary \{[^}]*max-width: none;[^}]*text-wrap: wrap;/);
+  assert.match(css, /\.work-feature__summary \{[^}]*max-width: none;[^}]*text-wrap: pretty;/);
 });
 
 test("alternate Growth video is the first visit-local prototype and defaults off", async () => {

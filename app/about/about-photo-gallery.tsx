@@ -65,7 +65,8 @@ export function AboutPhotoGallery() {
                     style={{ visibility: selectedId === photo.id ? "hidden" : undefined }}
                     onClick={(event) => {
                       const image = event.currentTarget.querySelector("img")!;
-                      openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 2 / 3, frame: "film" }, event.currentTarget, event.detail !== 0, image);
+                      openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 2 / 3, frame: "film" }, event.currentTarget, event.detail !== 0, image,
+                        lifePhotos.map((item) => ({ id: item.id, src: item.src, label: item.alt, ratio: 2 / 3, frame: "film" })));
                     }}>
                     <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="180px" unoptimized draggable={false} />
                   </button>

@@ -1,0 +1,21 @@
+# Neel Saswade
+
+> Portfolio of Neel Saswade, a product designer and creative partner based in San Francisco.
+
+## About
+
+- [About Neel](https://neelsaswade.com/about): Background, experience, and side quests.
+- [Photography](https://neelsaswade.com/photography): A searchable gallery of photographs from life and travel.
+
+## Selected work
+
+- [Homepage](https://neelsaswade.com/#work): Selected work across product design, systems, and creative direction.
+- [Proactive intelligence](https://neelsaswade.com/#work-psychic): Designing proactive product experiences at Glean.
+- [Homepage redesign](https://neelsaswade.com/#work-homepage): Reworking the Glean homepage.
+- [Artifacts](https://neelsaswade.com/#work-artifacts): Making work artifacts easier to create and use.
+- [Growth](https://neelsaswade.com/#work-growth): Product work focused on activation and growth.
+- [Web3 at Snap](https://neelsaswade.com/#work-snap): Treasure and NFTs as lenses for exploring Snapchat.
+
+## Contact
+
+- [Resume](https://neelsaswade.com/Neel-Saswade-Resume.pdf)

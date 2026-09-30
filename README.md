@@ -18,9 +18,15 @@ npm run dev
 npm test
 ```
 
+## Deployment
+
+Development is local and preview-only by default. Production is hosted on Cloudflare and connected to GitHub `main`; pushing that branch can publish the website. Do not push to `main`, deploy, or change hosting settings unless Neel explicitly asks to publish the reviewed change. Editing, cleanup, testing, and finishing a task do not authorize publishing.
+
+For an explicitly authorized release, run `npm test`, push only the reviewed and tested commit, then confirm that Cloudflare deployed that commit and that `neelsaswade.com` serves it. ChatGPT Sites is no longer part of the deployment path.
+
 ## Live site
 
-[neel-saswade-portfolio.glean.chatgpt.site](https://neel-saswade-portfolio.glean.chatgpt.site/)
+[neelsaswade.com](https://neelsaswade.com/)
 
 ## Environment
 

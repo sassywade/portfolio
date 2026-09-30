@@ -47,7 +47,7 @@ export function HomepageComparison({ src, poster }: { src: string; poster: strin
         </button>
         <button type="button" className={styles.screen} aria-label="Show After homepage" aria-pressed={!before} onClick={event => select(false, event)}>
       <video ref={ref} className={styles.video} aria-label="Redesigned Glean homepage"
-        loop muted playsInline disablePictureInPicture poster={poster} preload="metadata">
+        loop muted playsInline disablePictureInPicture poster={poster} preload="none">
         <source src={src} type="video/mp4" />
       </video>
         </button>

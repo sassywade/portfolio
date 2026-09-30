@@ -49,7 +49,9 @@ export function ProjectVideo({ ariaLabel, className, poster, src }: ProjectVideo
       muted
       playsInline
       poster={poster}
-      preload="metadata"
+      // Work media is below the fold. Let the intersection observer start the
+      // request when the tile is actually approaching the viewport.
+      preload="none"
     >
       <source src={src} type="video/mp4" />
     </video>

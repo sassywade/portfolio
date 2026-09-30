@@ -38,9 +38,11 @@ export default function Home() {
           <p className="pranathi-name" id="hero-title">Neel Saswade</p>
           <div className="pranathi-bio">
             <p className="hero-copy-line">
-              <span className="hero-copy__rest">I’m a product designer based in San Francisco. Currently, I’m a designer at </span>
+              <span className="hero-copy__rest" data-copy-viewport="desktop">I’m a product designer based in San Francisco. Currently, I’m a designer at </span>
+              <span className="hero-copy__rest" data-copy-viewport="mobile">I’m a product designer based in San Francisco. Currently, at </span>
               <CompanyLink brand="glean" href="https://www.glean.com/">Glean</CompanyLink>
-              <span className="hero-copy__rest"> working on proactivity, artifacts, and growth. Previously, I designed at </span>
+              <span className="hero-copy__rest" data-copy-viewport="desktop"> working on proactivity, artifacts, and growth. Previously, I designed at </span>
+              <span className="hero-copy__rest" data-copy-viewport="mobile">. Previously at </span>
               <CompanyLink brand="snap" href="https://www.snap.com/">Snap</CompanyLink>
               <span className="hero-copy__rest">.</span>
             </p>
@@ -59,6 +61,13 @@ export default function Home() {
         <section className="pranathi-work pranathi-work--editorial" id="work" aria-labelledby="work-title">
           <WorkSections />
         </section>
+
+        <footer className="site-footer pranathi-footer" aria-label="Site footer">
+          <div className="footer-bottomline">
+            <span>© 2026 Neel Saswade</span>
+            <a href="#top">Back to top</a>
+          </div>
+        </footer>
 
       </main>
     </>

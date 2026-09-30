@@ -13,6 +13,7 @@ import { AsciiGarden, type AsciiGardenTheme } from "./ascii-garden";
 import { type PortfolioAtmosphere } from "./atmospheres";
 import { CypressTree } from "./cypress-tree";
 import { Meadow, type FlatMeadowTexture, type MeadowVariant, type RollingMeadow } from "./meadow";
+import { MeadowChatter } from "./meadow-chatter";
 import { MeadowSettings } from "./meadow-prototype-controls";
 import { DEFAULT_TOP_PET_MODE, type TopPetMode } from "./top-pet";
 import { INITIAL_WIND, type WindKey, type WindSettings } from "./wind";
@@ -22,6 +23,71 @@ const clamp = (value: number, min: number, max: number) => Math.max(min, Math.mi
 const DEFAULT_FLAT_MEADOW_COLOR = "#6f8d45";
 export type WorkGridColumns = 2 | 3;
 export type WorkHandoff = "dissolve" | "rising-tray" | "soft-overlap" | "compact";
+
+type ImageProfile = {
+  width: number;
+  height: number;
+  aspect: number;
+  rootY: number;
+  trunkLeft: number;
+  trunkRight: number;
+  ridgeAt: (u: number) => number;
+};
+
+async function loadImageProfile(src: string): Promise<ImageProfile | null> {
+  const image = new Image();
+  image.src = src;
+  try {
+    await image.decode();
+  } catch {
+    return null;
+  }
+  const width = Math.min(840, image.naturalWidth);
+  const height = Math.max(1, Math.round(width * image.naturalHeight / image.naturalWidth));
+  const sampler = document.createElement("canvas");
+  sampler.width = width;
+  sampler.height = height;
+  const context = sampler.getContext("2d", { willReadFrequently: true });
+  if (!context) return null;
+  context.drawImage(image, 0, 0, width, height);
+  const pixels = context.getImageData(0, 0, width, height).data;
+  const opaque = (x: number, y: number, threshold: number) => pixels[(y * width + x) * 4 + 3] >= threshold;
+
+  const ridge = Array.from({ length: width }, (_, x) => {
+    for (let y = 0; y < height; y++) if (opaque(x, y, 200)) return y / height;
+    return 1;
+  });
+
+  let rootRow = 0;
+  for (let y = height - 1; y >= 0 && !rootRow; y--) {
+    for (let x = Math.floor(width * 0.3); x < width * 0.7; x++) {
+      if (opaque(x, y, 40)) { rootRow = y; break; }
+    }
+  }
+  let trunkLeft = 0.45;
+  let trunkRight = 0.55;
+  const band = Math.max(1, Math.round(height * 0.03));
+  const columns: number[] = [];
+  for (let x = Math.floor(width * 0.25); x < width * 0.75; x++) {
+    for (let y = rootRow; y > rootRow - band; y--) {
+      if (opaque(x, y, 40)) { columns.push(x); break; }
+    }
+  }
+  if (columns.length) {
+    trunkLeft = columns[0] / width;
+    trunkRight = columns[columns.length - 1] / width;
+  }
+
+  return {
+    width: image.naturalWidth,
+    height: image.naturalHeight,
+    aspect: image.naturalWidth / image.naturalHeight,
+    rootY: (rootRow + 1) / height,
+    trunkLeft,
+    trunkRight,
+    ridgeAt: (u) => ridge[Math.round(clamp(u, 0, 1) * (width - 1))],
+  };
+}
 
 export function HeroMeadow() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -114,6 +180,86 @@ export function HeroMeadow() {
       tree.style.removeProperty("bottom");
     };
   }, [environmentStyle, meadowHeight, meadowVariant]);
+
+  useEffect(() => {
+    if (meadowVariant !== "living" || isAsciiScene || isStudioStatic || environmentStyle === "field-journal") return;
+    const scene = sceneRef.current;
+    const tree = scene?.querySelector<HTMLElement>(".cypress-tree");
+    const canvas = tree?.querySelector<HTMLCanvasElement>(".cypress-tree__canvas");
+    if (!scene || !tree || !canvas) return;
+    let disposed = false;
+    let frame = 0;
+    const profiles = new Map<string, Promise<ImageProfile | null>>();
+    const profile = (src: string) => {
+      if (!profiles.has(src)) profiles.set(src, loadImageProfile(src));
+      return profiles.get(src)!;
+    };
+
+    const groundTree = async () => {
+      const ground = scene.querySelector<HTMLImageElement>('.meadow__visual--living .meadow__image[data-meadow-image-active="true"]');
+      if (!ground?.currentSrc && !ground?.src) return;
+      const [hill, cypress] = await Promise.all([profile(ground.currentSrc || ground.src), profile(environment.treeSrc)]);
+      if (disposed || !hill || !cypress) return;
+
+      tree.style.removeProperty("bottom");
+      const cssBottom = parseFloat(getComputedStyle(tree).bottom) || 0;
+      const canvasRect = canvas.getBoundingClientRect();
+      const groundRect = ground.getBoundingClientRect();
+      const canvasWidth = canvas.offsetWidth;
+      const canvasHeight = canvas.offsetHeight;
+      if (!canvasWidth || !canvasHeight || !ground.offsetWidth || !ground.offsetHeight) return;
+
+      // Mirror the renderer's fitted tree rectangle inside its canvas.
+      const treeHeight = Math.min(canvasHeight * 0.96, canvasWidth * 0.94 / cypress.aspect);
+      const treeWidth = treeHeight * cypress.aspect;
+      const canvasScaleY = canvasRect.height / canvasHeight;
+      const canvasScaleX = canvasRect.width / canvasWidth;
+      const rootY = canvasRect.top + (canvasHeight * 0.01 + cypress.rootY * treeHeight) * canvasScaleY;
+      const treeLeft = canvasRect.left + (canvasWidth - treeWidth) / 2 * canvasScaleX;
+
+      // Mirror object-fit: contain for the hill, including the meadow's scaleY.
+      const fit = Math.min(ground.offsetWidth / hill.width, ground.offsetHeight / hill.height);
+      const fittedWidth = hill.width * fit;
+      const fittedHeight = hill.height * fit;
+      const offsetX = (ground.offsetWidth - fittedWidth) / 2;
+      const offsetY = (ground.offsetHeight - fittedHeight) / 2;
+      const groundScaleX = groundRect.width / ground.offsetWidth;
+      const groundScaleY = groundRect.height / ground.offsetHeight;
+
+      // Plant on the lowest point under the trunk so no side of it hangs in the air.
+      let groundY = -Infinity;
+      for (let step = 0; step <= 8; step++) {
+        const screenX = treeLeft + (cypress.trunkLeft + (cypress.trunkRight - cypress.trunkLeft) * step / 8) * treeWidth * canvasScaleX;
+        const u = ((screenX - groundRect.left) / groundScaleX - offsetX) / fittedWidth;
+        groundY = Math.max(groundY, groundRect.top + (offsetY + hill.ridgeAt(u) * fittedHeight) * groundScaleY);
+      }
+      if (!Number.isFinite(groundY)) return;
+
+      const exitScale = parseFloat(scene.style.getPropertyValue("--meadow-exit-scale")) || 1;
+      const meadowLayerY = parseFloat(scene.style.getPropertyValue("--meadow-layer-y")) || 0;
+      const treeLayerY = parseFloat(scene.style.getPropertyValue("--tree-layer-y")) || 0;
+      const rootSink = Math.max(4, treeHeight * 0.012);
+      const shift = (groundY - rootY) / exitScale - meadowLayerY + treeLayerY + rootSink;
+      tree.style.bottom = `${(cssBottom - shift).toFixed(1)}px`;
+    };
+
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => { void groundTree(); });
+    };
+    tree.style.transition = "none";
+    const observer = new ResizeObserver(schedule);
+    observer.observe(scene);
+    observer.observe(tree);
+    schedule();
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      tree.style.removeProperty("bottom");
+      tree.style.removeProperty("transition");
+    };
+  }, [environment.treeSrc, environmentStyle, isAsciiScene, isStudioStatic, layout, meadowHeight, meadowVariant, rollingMeadow]);
 
   useEffect(() => {
     const savedTheme = document.documentElement.dataset.portfolioTheme;
@@ -502,6 +648,7 @@ export function HeroMeadow() {
           />
         </>
       )}
+      <MeadowChatter />
       <MeadowSettings
         layout={layout}
         onLayoutChange={setLayout}

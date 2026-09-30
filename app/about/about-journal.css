@@ -21,17 +21,19 @@
   transform-origin: bottom center;
 }
 .life-print__paper img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1px; }
+/* Keep every caption at the same top-right anchor when its print expands. */
 .life-print__caption {
   position: absolute;
-  top: -85%;
+  top: 12px;
   left: calc(142.5% + 12px);
-  width: 180px;
+  width: max-content;
   margin: 0;
   color: var(--muted);
   font: 400 16px/1.45 var(--serif);
   pointer-events: none;
   opacity: 0;
 }
+.life-print__line { display: block; white-space: nowrap; }
 .life-print__word { white-space: nowrap; }
 .life-print__letter { opacity: 0; }
 .life-print:focus-visible { outline: 2px solid var(--muted); outline-offset: 6px; z-index: 20; }
@@ -66,8 +68,7 @@
   .life-print__composition { position: relative; transform: none; }
   .life-print__paper { height: 210px; }
   .life-print:hover .life-print__paper, .life-print:focus-visible .life-print__paper { transform: none; }
-  .life-print .life-print__caption { position: static; width: 140px; margin-top: 12px; opacity: 1; font-size: 15px; text-align: left; }
-  .life-print .life-print__letter { opacity: 1; transition: none; }
+  .life-print .life-print__caption { display: none; }
 }
 .about-page--journal .simple-page {
   width: min(888px, calc(100% - 64px));
@@ -173,7 +174,8 @@
   .about-page--journal .simple-page { width: calc(100% - 40px); padding-top: 56px; padding-bottom: 80px; }
   .about-page--journal .about-page__identity { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .about-page--journal .about-page__portrait-card { width: 200px; }
-  .about-page--journal .about-page__identity .about-page__intro p { font-size: 18px; line-height: 1.8; }
+  .about-page--journal .simple-page .about-page__greeting { font-size: 30px; }
+  .about-page--journal .about-page__identity .about-page__intro p { font-size: 16px; line-height: 1.75; }
   .about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 28px; }
   .about-page--journal .about-page__socials { margin-top: 28px; }
   .about-page--journal .about-page__gallery { margin-top: 64px; }
@@ -182,4 +184,15 @@
   .about-page__quests { margin-top: 64px; }
   .about-page__quest-grid { grid-template-columns: 1fr; gap: 40px; }
   .about-page__quest-art { max-width: 320px; margin: 0 auto 20px; }
+}
+
+/* Keep the title quiet consistently while any print is active. */
+@media (min-width: 701px) {
+  .life-gallery:has(.life-print :focus-visible, .life-print:focus-visible) > h2 { opacity: 0.12; }
+}
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .life-gallery:has(.life-print:hover) > h2 { opacity: 0.12; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .life-gallery > h2 { transition: opacity 180ms linear; }
 }

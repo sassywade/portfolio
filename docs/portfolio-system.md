@@ -44,6 +44,8 @@ The environment frames the introduction and then yields to the work. It should n
 
 ## 2. Stable defaults
 
+At 700px and below, the hero introduction reads “I’m a product designer based in San Francisco. Currently, at Glean. Previously at Snap.” Keep the linked company names and the free-time activity row. Wider layouts retain the full introduction unchanged.
+
 | Concern | Default |
 | --- | --- |
 | Environment | Restrained painterly |
@@ -160,7 +162,7 @@ The painterly weather readout uses Geist at 13–15px for the summary and 12–1
 
 Life captions now use the site's Newsreader serif instead of the marker font. Size the opened paper to the photo's natural aspect ratio: auto image dimensions bounded by viewport width and height, with no inner letterbox or cropping. Retain the outer paper border, centered caption, sheen, and tilt.
 
-The homepage “Neel Saswade” name uses 36px italic Newsreader on desktop and mobile, with normal letter spacing and the project titles’ light `--muted` color. The introduction and “In my free time,” row use 20px Newsreader in warm gray (`--ink`). The introduction wraps naturally at every viewport; do not force a break before “proactivity.”
+The homepage “Neel Saswade” name uses 36px italic Newsreader on desktop and 32px on phones, with normal letter spacing and the project titles’ light `--muted` color. The introduction and “In my free time,” row use 20px Newsreader on desktop and 17–18px on phones in warm gray (`--ink`). The introduction wraps naturally at every viewport; do not force a break before “proactivity.”
 
 The About page ends with the Life photo gallery. Do not show an Experience section or employment-history list.
 
@@ -181,6 +183,8 @@ The default homepage uses the shared top header with the Neel Saswade wordmark a
 The root layout includes Plausible's cookie-free analytics script for `neelsaswade.com`. Keep the integration lightweight and do not add a consent banner or identify individual visitors. Plausible must be configured for the domain before the dashboard receives data.
 
 The homepage header must preserve the introduction's original desktop vertical position. Above 700px, retain the header's exact layout space (30px top padding plus its responsive 1.05 line height); do not move the introduction upward when changing navigation.
+
+On mobile, the shared header uses the available width instead of forming one left-heavy cluster: the wordmark anchors the left edge and the 14px navigation anchors the right, with 16px top padding and 16px link gaps. Desktop spacing and type remain unchanged.
 
 Top-right weather typography is deliberately smaller than navigation: breeze summary 12–14px, time and wind details 11–12px, responsive on desktop and mobile.
 
@@ -236,9 +240,25 @@ All inline Work media placeholders have a 12px corner radius at every viewport s
 
 The homepage studio grid fades away with the meadow handoff, using the existing dissolve progress to fade in a plain paper layer behind page content. It is fully gone before Proactive Intelligence; all Work sections sit on plain paper. Scrolling back restores the hero grid. Reduced motion follows the existing immediate handoff, and no extra animation loop is added.
 
+On screens up to 700px wide, the painterly meadow is anchored to the bottom of the hero, with a reserved landscape area below the copy. The header and hero together fill the first viewport; short screens or enlarged text can grow the hero to avoid overlap. The existing hero-to-Work dissolve remains. Phone type and cypress are smaller; the backpacker remains the default mobile visitor and desktop keeps the photographer. All hobby toggles and reduced-motion static visitors remain available.
+
+The mobile intro block sits 12px below its original responsive offset, with a 30px name. The cypress uses its mobile width token explicitly (216–232px), overriding legacy fixed-width rules. The weather readout compensates for the centered meadow artwork's extra width so its right edge stays 16px inside the phone; both weather lines may wrap within the viewport. Desktop remains unchanged.
+
+The mobile hero-to-Work handoff keeps the scene in the hero's natural scroll position instead of applying the desktop's downward exit translation and scale. Fade the whole scene using the inverse of the existing full-page paper opacity, including its miniature visitors. The mobile Work wrapper stays transparent so no inset rectangle cuts across the landscape. Reuse the existing reversible scroll progress and reduced-motion handling; do not add a second animation loop or change the desktop handoff.
+
+On touch devices, tilting steers the cyclist and backpacker in screen coordinates, with a dead zone and smoothly increasing speed up to 3× normal. The two actors share one orientation listener. iOS permission is requested directly by an activity-button tap, never by the automatic backpacker arrival. Denial and unsupported sensors leave ordinary actor behavior intact. Reduced motion disables tilt. Touch hides Philip's tooltip and actor speech; navigation stays single-label. Opening a photo by touch focuses the labelled dialog instead of Close; keyboard opening still focuses Close with its visible ring. The About greeting is 30px and intro body is 16px on phones.
+
+Mobile Work preserves each desktop composition's visual hierarchy instead of stacking every panel equally. Three-panel projects show the desktop primary frame full-width, followed by the two supporting frames in a compact two-up row. Growth promotes its center video to that primary position. Two-panel and single-panel projects keep their authored sequence at a readable full width.
+
+In Growth's mobile supporting row, crop the tall starter-kit checklist around its actual card content. Remove its desktop top mask and overlay at this breakpoint so the mock remains legible inside the shallow tile; desktop keeps the full-image fade and offset.
+
+Mobile Work compositions have a 12px gap in both directions, including Artifacts. Each panel has a definite 100% width within its grid column, so its aspect ratio and minimum height cannot expand into the neighboring tile. Growth's three onboarding screenshots fit within three equal, shrinkable rows, with 10px inner padding and contained images; the stack must never spill into the summary. Desktop composition spacing and sizing are unchanged.
+
+The mobile Life strip shows the photographs without visible per-photo subtitles. Keep the descriptions available through the existing accessible figure and open-photo labels; desktop retains its hover and keyboard captions.
+
 Do not display a Selected work heading above the projects. Retain the existing opening spacing and an accessible Work heading.
 
-Work preserves scrolling in both directions. On desktop, the first downward scroll from the hero lands on the first fitting project over a calm 900ms ease-in-out handoff. Once a project is in view, any ordinary wheel gesture immediately chooses the adjacent project and centers it over the same calm 900ms handoff; repeated momentum in that direction is contained until the wheel stream has been quiet for 180ms, so one gesture cannot skip ahead while the next deliberate scroll stays easy to trigger. A reversal interrupts the current handoff and chooses the adjacent project in the new direction. Upward escape above the first center and downward escape past Work remain native; nested scrollers, zoom, and reduced motion remain native. Touch uses proximity snapping with normal pass-through. Project links retain interruptible centered navigation, and the rail never repositions between projects.
+Work preserves scrolling in both directions. On desktop, only the first intentional downward scroll from the hero is captured for a calm 900ms ease-in-out handoff to the first fitting project. Same-gesture momentum is contained in that existing handoff, so multiple wheel inputs do not restart or retarget the animation. Once Work is in view, wheel input remains native and never chooses projects or prevents ordinary scrolling. On touch, the first upward swipe from the top lands with the first project title 24px below the viewport edge over 560ms (immediately for reduced motion). Subsequent swipes remain native without project snapping. Nested controls, horizontal gestures, downward pulls, and pinching are excluded; new interactions and reversals cancel the handoff. Project links retain interruptible centered navigation, and the rail never repositions between projects.
 
 Work metadata keeps a 6px gap between the Glean logo and its text label.
 
@@ -300,3 +320,9 @@ Selected work is the default grouping, also available in both prototype pickers.
 
 
 The glass activity controls stay still on hover, with no rotation, image swap, or fade. Preserve the 48px controls, active illumination, actor toggles, keyboard focus, and shared sound cues.
+
+The root metadata owns the canonical URL, description, favicon, and 1200×630 Open Graph image. Keep the social image dimensions and alt text in sync when the artwork changes. `public/llms.txt`, `public/robots.txt`, and `public/HUMANS.txt` are the crawler and project-credits entry points; keep their links and site URL current.
+
+## Hosting
+
+Cloudflare is the production host for `neelsaswade.com`. The GitHub `main` branch is the production source, and pushing it can publish the site. Development is local and preview-only by default. Do not push to `main`, deploy, or change hosting settings unless Neel explicitly requests publication of the reviewed change. Editing, cleanup, testing, and finishing work do not authorize publishing. Show desktop and mobile previews before any release. For an explicitly authorized release, test the exact reviewed commit before pushing, then verify the matching Cloudflare deployment and live domain. ChatGPT Sites, its `.openai/hosting.json` manifest, packaging plugin, and Git remote are retired and must not be restored.

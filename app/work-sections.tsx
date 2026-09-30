@@ -53,7 +53,7 @@ export function WorkSections() {
                 ) : "media" in project ? project.media.groups.map((group) => (
                   <div className="work-feature__asset-group" key={group.label}>
                     <div className="work-feature__asset-phones">
-                      {group.images.map((image) => <img key={image.src} src={image.src} alt={image.alt} />)}
+                      {group.images.map((image) => <img key={image.src} src={image.src} alt={image.alt} width={image.src.includes("treasure-collection") ? 565 : 576} height={1156} loading="lazy" decoding="async" />)}
                     </div>
                     <span>{group.label}</span>
                   </div>

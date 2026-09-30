@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Calm, direct project-to-project scrolling with an interruptible handoff. */
+/** Assist the intentional hero-to-Work handoff while keeping Work natively scrollable. */
 export function WorkScroll() {
   useEffect(() => {
     const root = document.documentElement;
@@ -10,30 +10,19 @@ export function WorkScroll() {
     const work = document.getElementById("work");
     if (!work || !sections.length) return;
     const desktop = window.matchMedia("(min-width: 1080px) and (pointer: fine)");
+    const touch = window.matchMedia("(pointer: coarse)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let direction = 0;
-    let gestureStart = 0;
-    let lastWheelTime = 0;
-    let peakSpeed = 0;
-    let guideArmed = false;
+    let touchGesture: { x: number; y: number; lastY: number; captured: boolean; landed: boolean } | null = null;
     let heroLanding = false;
-    let projectLanding = false;
-    let projectLandingDirection = 0;
     let idleTimer = 0;
-    let projectLandingTimer = 0;
-    const WHEEL_QUIET_WINDOW = 180;
     let scrollFrame = 0;
     const HERO_SETTLE_DURATION = 900;
-    const PROJECT_SETTLE_DURATION = 900;
     const stopScroll = () => {
       cancelAnimationFrame(scrollFrame);
       scrollFrame = 0;
       window.clearTimeout(idleTimer);
-      window.clearTimeout(projectLandingTimer);
-      guideArmed = false;
       heroLanding = false;
-      projectLanding = false;
-      projectLandingDirection = 0;
+      touchGesture = null;
     };
     // Use a calm ease-in-out curve: cubic-bezier(0.77, 0, 0.175, 1).
     const easeScroll = (progress: number) => {
@@ -51,15 +40,10 @@ export function WorkScroll() {
       const rect = section.getBoundingClientRect();
       return window.scrollY + rect.top - Math.max(32, (window.innerHeight - rect.height) / 2);
     };
-    const fits = (section: HTMLElement) => section.offsetHeight <= window.innerHeight - 64;
-    const projectInView = () => {
-      const rect = work.getBoundingClientRect();
-      return rect.top < window.innerHeight && rect.bottom > 0;
-    };
-    const settle = (section: HTMLElement, smooth: boolean, duration = 560) => {
+    const settle = (section: HTMLElement, smooth: boolean, duration = 560, alignTop = false) => {
       cancelAnimationFrame(scrollFrame);
       const from = window.scrollY;
-      const to = center(section);
+      const to = alignTop ? window.scrollY + section.getBoundingClientRect().top - 24 : center(section);
       if (!smooth || reduced.matches) {
         window.scrollTo({ top: to, behavior: "instant" });
         return;
@@ -80,42 +64,47 @@ export function WorkScroll() {
       }
       return false;
     };
-    const finishGesture = () => {
-      if (!guideArmed || !desktop.matches || reduced.matches) return;
-      guideArmed = false;
-      const y = window.scrollY;
-      const targets = sections.map(center);
-      // Upward escape into the hero and downward escape past Work stay native.
-      if ((direction < 0 && y < targets[0]) || (direction > 0 && y > targets[targets.length - 1])) return;
-      const intensity = Math.min(1, peakSpeed / 2.5);
-      const targetIndex = targets.findIndex((target, index) => {
-        const distance = (target - y) * direction;
-        if (distance <= 2 || !fits(sections[index])) return false;
-        const previous = targets[index - direction];
-        const gap = previous === undefined ? window.innerHeight : Math.abs(target - previous);
-        // Gentle input may settle toward the next project; strong input keeps its
-        // native travel so the user can intentionally move farther.
-        const radius = Math.min(gap * (0.86 - intensity * 0.66), window.innerHeight * (0.9 - intensity * 0.7));
-        const committed = previous !== undefined && intensity < 0.65
-          && Math.abs(gestureStart - previous) <= 80
-          && (y - gestureStart) * direction >= gap * 0.18;
-        return distance <= radius || committed;
-      });
-      if (targetIndex >= 0) settle(sections[targetIndex], true, PROJECT_SETTLE_DURATION);
+    const touchStart = (event: TouchEvent) => {
+      stopScroll();
+      if (!touch.matches || window.scrollY > 8 || event.touches.length !== 1 || nestedScroll(event.target)) return;
+      if (event.target instanceof Element && event.target.closest('a, button, summary, [role="button"]')) return;
+      const finger = event.touches[0];
+      touchGesture = { x: finger.clientX, y: finger.clientY, lastY: finger.clientY, captured: false, landed: false };
     };
-    const scheduleGuide = () => {
-      if (!guideArmed || scrollFrame) return;
-      window.clearTimeout(idleTimer);
-      idleTimer = window.setTimeout(finishGesture, 140);
+    const touchMove = (event: TouchEvent) => {
+      const gesture = touchGesture;
+      if (!gesture) return;
+      if (event.touches.length !== 1) { stopScroll(); return; }
+      const finger = event.touches[0];
+      const upward = gesture.y - finger.clientY;
+      const horizontal = Math.abs(finger.clientX - gesture.x);
+      if (upward < -12 || horizontal > Math.max(12, Math.abs(upward)) || (gesture.captured && finger.clientY - gesture.lastY > 12)) {
+        stopScroll();
+        return;
+      }
+      gesture.lastY = Math.min(gesture.lastY, finger.clientY);
+      // Capture the first upward move before the browser commits to momentum.
+      if (!gesture.captured && (upward <= 0 || upward < horizontal * 1.2)) return;
+      if (!event.cancelable) { stopScroll(); return; }
+      // Only this opening swipe is owned here; no listener captures gestures in Work.
+      event.preventDefault();
+      gesture.captured = true;
+      if (!gesture.landed && upward >= 40) {
+        gesture.landed = true;
+        settle(sections[0], !reduced.matches, 560, true);
+      }
     };
+    const touchEnd = () => { touchGesture = null; };
     const wheel = (event: WheelEvent) => {
       const eligible = desktop.matches && !reduced.matches && !event.ctrlKey && !event.metaKey
         && Math.abs(event.deltaY) > Math.abs(event.deltaX) && !nestedScroll(event.target);
-      // Only the opening gesture is captured. Its momentum must not skip project one.
+      // Only the intentional opening gesture is captured. Its momentum stays inside
+      // the same handoff, while every wheel event in Work remains native.
       const startsAtHome = window.scrollY <= 8 && center(sections[0]) > window.innerHeight * 0.5;
-      if (eligible && event.cancelable && event.deltaY > 0 && (heroLanding || startsAtHome)) {
-        event.preventDefault();
-        if (!heroLanding) {
+      if (eligible && event.deltaY > 0 && (heroLanding || startsAtHome || scrollFrame)) {
+        if (event.cancelable) event.preventDefault();
+        if (!heroLanding && !scrollFrame) {
+          if (!event.cancelable) return;
           stopScroll();
           heroLanding = true;
           settle(sections[0], true, HERO_SETTLE_DURATION);
@@ -124,46 +113,9 @@ export function WorkScroll() {
         idleTimer = window.setTimeout(() => { heroLanding = false; }, 140);
         return;
       }
-      const nextDirection = Math.sign(event.deltaY);
-      if (eligible && nextDirection && projectInView() && !heroLanding) {
-        const targets = sections.map(center);
-        const nextIndex = nextDirection > 0
-          ? targets.findIndex(target => target > window.scrollY + 2)
-          : targets.findLastIndex(target => target < window.scrollY - 2);
-        if (nextIndex >= 0 && nextIndex < sections.length && fits(sections[nextIndex])) {
-          if (event.cancelable) event.preventDefault();
-          if (projectLanding && nextDirection === projectLandingDirection) {
-            window.clearTimeout(projectLandingTimer);
-            projectLandingTimer = window.setTimeout(() => {
-              projectLanding = false;
-              projectLandingDirection = 0;
-            }, WHEEL_QUIET_WINDOW);
-            return;
-          }
-          stopScroll();
-          projectLanding = true;
-          projectLandingDirection = nextDirection;
-          settle(sections[nextIndex], true, PROJECT_SETTLE_DURATION);
-          projectLandingTimer = window.setTimeout(() => {
-            projectLanding = false;
-            projectLandingDirection = 0;
-          }, WHEEL_QUIET_WINDOW);
-          return;
-        }
-      }
-      // Reversals interrupt immediately. All wheel movement inside Work stays native.
-      const now = performance.now();
-      const newGesture = !guideArmed || nextDirection !== direction || now - lastWheelTime > 180;
+      // Reversals and all normal Work scrolling stay native.
       stopScroll();
       if (!desktop.matches || reduced.matches || event.ctrlKey || event.metaKey || Math.abs(event.deltaX) > Math.abs(event.deltaY) || nestedScroll(event.target)) return;
-      if (!event.deltaY) return;
-      const delta = Math.abs(event.deltaY) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
-      if (newGesture) { gestureStart = window.scrollY; peakSpeed = 0; }
-      peakSpeed = Math.max(peakSpeed, delta / (newGesture ? 16 : Math.max(16, now - lastWheelTime)));
-      lastWheelTime = now;
-      direction = nextDirection;
-      guideArmed = true;
-      scheduleGuide();
     };
     const click = (event: MouseEvent) => {
       const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('.work-section-nav a[href^="#work-"], .site-header a[href="#work"]') : null;
@@ -185,24 +137,28 @@ export function WorkScroll() {
     const initialFrame = initial ? requestAnimationFrame(() => settle(initial, false)) : 0;
     reduced.addEventListener("change", syncMotion);
     window.addEventListener("wheel", wheel, { passive: false });
-    window.addEventListener("scroll", scheduleGuide, { passive: true });
     desktop.addEventListener("change", syncMotion);
     document.addEventListener("click", click);
     window.addEventListener("keydown", stopScroll);
     window.addEventListener("pointerdown", stopScroll);
-    window.addEventListener("touchstart", stopScroll, { passive: true });
+    window.addEventListener("touchstart", touchStart, { passive: true });
+    window.addEventListener("touchmove", touchMove, { passive: false });
+    window.addEventListener("touchend", touchEnd, { passive: true });
+    window.addEventListener("touchcancel", stopScroll, { passive: true });
     window.addEventListener("resize", stopScroll);
     return () => {
       cancelAnimationFrame(initialFrame);
       stopScroll();
       window.removeEventListener("keydown", stopScroll);
       window.removeEventListener("pointerdown", stopScroll);
-      window.removeEventListener("touchstart", stopScroll);
+      window.removeEventListener("touchstart", touchStart);
+      window.removeEventListener("touchmove", touchMove);
+      window.removeEventListener("touchend", touchEnd);
+      window.removeEventListener("touchcancel", stopScroll);
       window.removeEventListener("resize", stopScroll);
       delete root.dataset.workSnap;
       reduced.removeEventListener("change", syncMotion);
       window.removeEventListener("wheel", wheel);
-      window.removeEventListener("scroll", scheduleGuide);
       desktop.removeEventListener("change", syncMotion);
       document.removeEventListener("click", click);
     };

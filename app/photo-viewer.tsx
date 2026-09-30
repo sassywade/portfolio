@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import styles from "./photography/photography.module.css";
 
-type ViewerPhoto = { id: string | number; ratio: number; label: string; src?: string; thumbnail?: string; frame?: "film" };
+export type ViewerPhoto = { id: string | number; ratio: number; label: string; src?: string; thumbnail?: string; frame?: "film" };
 
 function revealDecodedImage(image: HTMLImageElement) {
   void image.decode().then(() => {
@@ -14,6 +14,7 @@ function revealDecodedImage(image: HTMLImageElement) {
 
 export function usePhotoViewer() {
   const [selected, setSelected] = useState<(ViewerPhoto & { previewSrc?: string }) | null>(null);
+  const [sequence, setSequence] = useState<ViewerPhoto[]>([]);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -21,19 +22,38 @@ export function usePhotoViewer() {
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const originRef = useRef<HTMLElement | null>(null);
   const animateRef = useRef(true);
+  const touchOpenedRef = useRef(false);
+  const navigatingRef = useRef(false);
+  const originalOverflowRef = useRef<string | null>(null);
   const closeRef = useRef<(immediate?: boolean) => void>(() => {});
+
+  const playKeyboardCloseCue = () => {
+    const button = closeButtonRef.current;
+    if (!button) return;
+    const eventInit: PointerEventInit = { bubbles: true, cancelable: true, pointerType: "keyboard" };
+    button.dispatchEvent(new PointerEvent("pointerdown", eventInit));
+    button.dispatchEvent(new PointerEvent("pointerup", eventInit));
+  };
 
   useLayoutEffect(() => {
     if (!selected) return;
     const dialog = dialogRef.current!;
     const image = imageRef.current!;
-    const trigger = triggerRef.current!;
-    const origin = (originRef.current ?? trigger).getBoundingClientRect();
-    const oldOverflow = document.body.style.overflow;
+    const trigger = triggerRef.current;
+    const navigating = navigatingRef.current;
+    navigatingRef.current = false;
+    const origin = (originRef.current ?? trigger ?? image).getBoundingClientRect();
+    const oldOverflow = originalOverflowRef.current ?? document.body.style.overflow;
+    if (!navigating) originalOverflowRef.current = oldOverflow;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     document.body.style.overflow = "hidden";
-    dialog.showModal();
-    closeButtonRef.current?.focus({ preventScroll: true });
+    if (!dialog.open) dialog.showModal();
+    if (!navigating) {
+      // A tap focuses the labelled dialog, keeping Close quiet. Keyboard users
+      // still land on Close and retain its visible focus ring.
+      const initialFocus = touchOpenedRef.current ? dialog : closeButtonRef.current;
+      initialFocus?.focus({ preventScroll: true });
+    }
     const destination = image.getBoundingClientRect();
     const ease = getComputedStyle(image).getPropertyValue("--motion-ease-in-out").trim();
     const animations = animateRef.current && !reduced.matches ? [
@@ -66,25 +86,52 @@ export function usePhotoViewer() {
       animations.forEach((animation) => animation.cancel());
       window.removeEventListener("resize", reset);
       reduced.removeEventListener("change", reset);
-      dialog.close();
-      document.body.style.overflow = oldOverflow;
-      trigger.focus({ preventScroll: true });
+      if (!navigatingRef.current) {
+        dialog.close();
+        document.body.style.overflow = oldOverflow;
+        originalOverflowRef.current = null;
+        if (trigger) trigger.focus({ preventScroll: true });
+      }
     };
   }, [selected]);
   
-  const openPhoto = (photo: ViewerPhoto, trigger: HTMLButtonElement, animate: boolean, origin?: HTMLElement) => {
+  const openPhoto = (photo: ViewerPhoto, trigger: HTMLButtonElement, animate: boolean, origin?: HTMLElement, photos?: ViewerPhoto[]) => {
     triggerRef.current = trigger;
     originRef.current = origin ?? trigger;
     animateRef.current = animate;
+    touchOpenedRef.current = animate && window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    setSequence(photos ?? [photo]);
     const thumbnail = trigger.querySelector("img");
     setSelected({ ...photo, previewSrc: thumbnail?.currentSrc || photo.thumbnail || photo.src });
+  };
+  const selectedIndex = selected ? sequence.findIndex((photo) => photo.id === selected.id) : -1;
+  const showPhoto = (offset: -1 | 1) => {
+    const next = sequence[selectedIndex + offset];
+    if (!next) return;
+    navigatingRef.current = true;
+    triggerRef.current = null;
+    originRef.current = null;
+    animateRef.current = false;
+    setSelected({ ...next, previewSrc: next.thumbnail || next.src });
+  };
+  const handleKeyDown = (event: KeyboardEvent<HTMLDialogElement>) => {
+    if (event.key === "ArrowLeft" && selectedIndex > 0) {
+      event.preventDefault();
+      showPhoto(-1);
+    } else if (event.key === "ArrowRight" && selectedIndex >= 0 && selectedIndex < sequence.length - 1) {
+      event.preventDefault();
+      showPhoto(1);
+    }
   };
   const viewer = (
       <dialog
         ref={dialogRef}
         className={styles.dialog}
+        tabIndex={-1}
+        data-touch-opened={touchOpenedRef.current ? "true" : undefined}
         aria-label={selected?.label ?? "Photograph"}
-        onCancel={(event) => { event.preventDefault(); closeRef.current(true); }}
+        onKeyDown={handleKeyDown}
+        onCancel={(event) => { event.preventDefault(); playKeyboardCloseCue(); closeRef.current(false); }}
         onClose={() => setSelected(null)}
       >
         <div ref={backdropRef} className={styles.backdrop} aria-hidden="true" />
@@ -110,6 +157,10 @@ export function usePhotoViewer() {
             )}
           </div>
         )}
+        <nav className={styles.navigation} aria-label="Browse photographs">
+          <button type="button" className={styles.navigationButton} aria-label="Previous photograph" onClick={() => showPhoto(-1)} disabled={selectedIndex <= 0}>←</button>
+          <button type="button" className={styles.navigationButton} aria-label="Next photograph" onClick={() => showPhoto(1)} disabled={selectedIndex < 0 || selectedIndex >= sequence.length - 1}>→</button>
+        </nav>
         <button ref={closeButtonRef} className={styles.close} onClick={(event) => closeRef.current(event.detail === 0)}>Close</button>
       </dialog>
   );

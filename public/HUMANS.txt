@@ -1,0 +1,10 @@
+/* TEAM */
+Name: Neel Saswade
+Role: Product designer
+Site: https://neelsaswade.com
+
+/* SITE */
+Last update: 2026/09/25
+Language: English
+Standards: HTML5, CSS3
+Software: Next.js, React

@@ -58,14 +58,6 @@ export default function AboutPage() {
                   <svg viewBox="0 0 24 24" focusable="false"><circle cx="5" cy="5" r="2" /><path d="M3.5 10h3v11h-3zM11 10h3v1.5c1-2.5 7-2.5 7 2.5v7h-3v-6c0-3-4-3-4 0v6h-3z" /></svg>
                 </span>
               </a>
-              <a href="mailto:neel.saswade@gmail.com" data-social="email" aria-label="Email">
-                <span className="about-page__social-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" focusable="false">
-                    <rect x="2.5" y="5" width="19" height="14" rx="2.5" />
-                    <path d="m4.25 7 7.75 6 7.75-6" />
-                  </svg>
-                </span>
-              </a>
             </nav>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
 import { MeadowActivityIcon } from "./meadow-activity-icon";
+import { armDeviceTilt, readDeviceTilt, useDeviceTilt } from "./device-tilt";
 
 const FRAME_URLS = [
   "/backpacker-frame-1.png",
@@ -25,6 +26,7 @@ type WalkPhase = "idle" | "spawn" | "drop" | "land" | "walk";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function BackpackWalk() {
+  useDeviceTilt();
   const meadowHost = useMeadowLayerHost();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const layerRef = useRef<HTMLSpanElement>(null);
@@ -67,6 +69,7 @@ export function BackpackWalk() {
     let walkDistance = 0;
     let currentFrame = 0;
     let turningUntil = 0;
+    let tiltAmount = 0;
 
     function prepareMeadowProfile() {
       if (!meadowImage.naturalWidth || !meadowImage.naturalHeight) return;
@@ -204,7 +207,13 @@ export function BackpackWalk() {
         }
       } else if (phase === "walk") {
         const margin = width * 0.52;
-        const speed = clamp(layerBounds.width * 0.041, 38, 56);
+        tiltAmount += (readDeviceTilt() - tiltAmount) * (1 - Math.exp(-deltaSeconds / 0.18));
+        const tiltDirection = Math.abs(tiltAmount) > 0.08 ? Math.sign(tiltAmount) : 0;
+        if (tiltDirection && direction !== tiltDirection && now >= turningUntil && x > margin + 8 && x < layerBounds.width - margin - 8) {
+          beginTurn(now, tiltDirection);
+        }
+        const tiltBoost = tiltDirection === direction ? 1 + Math.abs(tiltAmount) * 2 : 1;
+        const speed = clamp(layerBounds.width * 0.041, 38, 56) * tiltBoost;
 
         if (turningUntil && now < turningUntil) {
           y = ground;
@@ -330,7 +339,18 @@ export function BackpackWalk() {
     };
     window.addEventListener("portfolio:solo-actor", handleSoloActor);
 
+    const mobileArrivalFrame = window.requestAnimationFrame(() => {
+      if (
+        window.matchMedia("(max-width: 700px)").matches
+        && document.documentElement.dataset.portfolioLayout !== "quiet"
+      ) {
+        window.dispatchEvent(new CustomEvent("portfolio:solo-actor", { detail: "backpack" }));
+        launch();
+      }
+    });
+
     return () => {
+      window.cancelAnimationFrame(mobileArrivalFrame);
       window.removeEventListener("portfolio:solo-actor", handleSoloActor);
       launchRef.current = () => undefined;
       window.cancelAnimationFrame(frameHandle);
@@ -353,7 +373,7 @@ export function BackpackWalk() {
         data-cuelume-press="press"
         data-cuelume-release="release"
         aria-label="Backpacker on the meadow"
-        onClick={() => launchRef.current()}
+        onClick={() => { armDeviceTilt(); launchRef.current(); }}
       >
         <MeadowActivityIcon activity="backpacking" />
       </button>

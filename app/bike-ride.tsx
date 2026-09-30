@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useMeadowLayerHost } from "./use-meadow-layer-host";
 import { MeadowActivityIcon } from "./meadow-activity-icon";
+import { armDeviceTilt, readDeviceTilt, useDeviceTilt } from "./device-tilt";
 
 const FRAME_URLS = [
   "/bike-rider-frame-1.png",
@@ -24,6 +25,7 @@ type RidePhase = "idle" | "spawn" | "drop" | "land" | "ride";
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function BikeRide() {
+  useDeviceTilt();
   const meadowHost = useMeadowLayerHost();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const layerRef = useRef<HTMLSpanElement>(null);
@@ -69,6 +71,7 @@ export function BikeRide() {
     let currentTrackAngle = 0;
     let currentFrame = 0;
     let turningUntil = 0;
+    let tiltAmount = 0;
 
     function prepareMeadowProfile() {
       if (!meadowImage.naturalWidth || !meadowImage.naturalHeight) return;
@@ -202,6 +205,11 @@ export function BikeRide() {
         }
       } else if (phase === "ride") {
         const margin = size * 0.54;
+        tiltAmount += (readDeviceTilt() - tiltAmount) * (1 - Math.exp(-deltaSeconds / 0.18));
+        const tiltDirection = Math.abs(tiltAmount) > 0.08 ? Math.sign(tiltAmount) : 0;
+        if (tiltDirection && direction !== tiltDirection && now >= turningUntil && x > margin + 8 && x < layerWidth - margin - 8) {
+          beginTurn(now, tiltDirection);
+        }
 
         if (turningUntil && now < turningUntil) {
           y = ground;
@@ -228,8 +236,9 @@ export function BikeRide() {
               ? "uphill"
               : "level";
 
-          x += direction * currentSpeed * deltaSeconds;
-          rideDistance += currentSpeed * deltaSeconds;
+          const tiltBoost = tiltDirection === direction ? 1 + Math.abs(tiltAmount) * 2 : 1;
+          x += direction * currentSpeed * tiltBoost * deltaSeconds;
+          rideDistance += currentSpeed * tiltBoost * deltaSeconds;
 
           if (x >= layerWidth - margin) {
             x = layerWidth - margin;
@@ -369,7 +378,7 @@ export function BikeRide() {
         data-cuelume-press="press"
         data-cuelume-release="release"
         aria-label="Cyclist on the meadow"
-        onClick={() => launchRef.current()}
+        onClick={() => { armDeviceTilt(); launchRef.current(); }}
       >
         <MeadowActivityIcon activity="cycling" />
       </button>
