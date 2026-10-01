@@ -13512,7 +13512,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 .work-feature__media--single { aspect-ratio: 1145 / 550; grid-template-columns: 1fr; grid-template-rows: 1fr; }
 .work-feature__summary a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .work-feature__summary {
-  max-width: none;
+  max-width: 68ch;
   margin: 24px 0 0;
   color: var(--muted);
   font: 16px/1.6 var(--sans);
@@ -13674,18 +13674,8 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
   }
 
   .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather {
-    /* The artwork is wider than the viewport; keep the readout inside the phone. */
-    right: calc((var(--meadow-render-width) - 100vw) / 2 + 16px);
-    bottom: 12px;
-    width: min(280px, calc(100vw - 32px));
-  }
-
-  .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__ascii-primary {
-    font-size: 12px;
-  }
-
-  .hero-meadow[data-environment-style="painterly-realism"] .alamo-weather__secondary.sr-only {
-    font-size: 11px;
+    /* The breeze and time sit on the grass at phone width. */
+    display: none;
   }
 
   .pranathi-work.pranathi-work--editorial {

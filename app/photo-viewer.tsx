@@ -158,8 +158,12 @@ export function usePhotoViewer() {
           </div>
         )}
         <nav className={styles.navigation} aria-label="Browse photographs">
-          <button type="button" className={styles.navigationButton} aria-label="Previous photograph" onClick={() => showPhoto(-1)} disabled={selectedIndex <= 0}>←</button>
-          <button type="button" className={styles.navigationButton} aria-label="Next photograph" onClick={() => showPhoto(1)} disabled={selectedIndex < 0 || selectedIndex >= sequence.length - 1}>→</button>
+          <button type="button" className={styles.navigationButton} aria-label="Previous photograph" onClick={() => showPhoto(-1)} disabled={selectedIndex <= 0}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+          <button type="button" className={styles.navigationButton} aria-label="Next photograph" onClick={() => showPhoto(1)} disabled={selectedIndex < 0 || selectedIndex >= sequence.length - 1}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
         </nav>
         <button ref={closeButtonRef} className={styles.close} onClick={(event) => closeRef.current(event.detail === 0)}>Close</button>
       </dialog>

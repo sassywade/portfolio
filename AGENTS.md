@@ -14,7 +14,7 @@ Write with the restraint of Typehug and the continuity of Torph: make a small sp
 
 ## Non-negotiable defaults
 
-- Homepage navigation uses the shared top header with the `Neel Saswade` wordmark and `Work`, `Photo`, and `About`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow. Other pages retain the same shared header. Work scrolls to `#work`; Photo opens `/photography`, the dedicated masonry gallery. Play and Resume are not in the high-level navigation yet.
+- Homepage navigation uses the shared top header with the `Neel Saswade` wordmark and `Work`, `Photo`, and `About`. Keep the current introduction and meadow, with the breeze and time readout at the bottom right of the meadow on desktop. Hide that readout at 700px and below. Other pages retain the same shared header. Work scrolls to `#work`; Photo opens `/photography`, the dedicated masonry gallery. Play and Resume are not in the high-level navigation yet.
 - On mobile, balance the shared header across the viewport: the wordmark stays left, the 14px navigation sits right, top padding is 16px, and link gaps are 16px. Preserve the established desktop header spacing and type.
 - There is no archive section, promotional footer, or contact/social cluster. The homepage ends with a basic footer row showing the year, name, and a Back to top link.
 - The homepage background is #F5F5F4 with the subtle studio grid, which fades away before Work.

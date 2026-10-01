@@ -53,12 +53,12 @@ test("hero typography preserves the reference sizes and natural wrapping", async
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
-  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: none;[^}]*text-wrap: pretty;/);
+  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: 68ch;[^}]*text-wrap: pretty;/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
   assert.doesNotMatch(css, /hero-copy-break/);
 });
 
-test("mobile hero balances the intro and keeps weather inside the oversized meadow", async () => {
+test("mobile hero balances the intro and hides the weather readout", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const mobile = css.slice(css.indexOf("/* Mobile keeps the complete Alamo scene"));
   assert.match(mobile, /@media \(max-width: 700px\)/);
@@ -67,8 +67,7 @@ test("mobile hero balances the intro and keeps weather inside the oversized mead
   assert.match(mobile, /--cypress-display-width: clamp\(216px, 56vw, 232px\)/);
   assert.match(mobile, /\.hero-meadow\[data-meadow-variant="living"\] > \.cypress-tree\s*\{[^}]*width: var\(--cypress-display-width\)/);
   const weather = mobile.match(/\.hero-meadow\[data-environment-style="painterly-realism"\] \.alamo-weather\s*\{([^}]+)\}/)[1];
-  assert.match(weather, /right: calc\(\(var\(--meadow-render-width\) - 100vw\) \/ 2 \+ 16px\)/);
-  assert.match(weather, /width: min\(280px, calc\(100vw - 32px\)\)/);
+  assert.match(weather, /display:\s*none/);
 });
 
 test("mobile meadow exits without drifting behind an opaque Work rectangle", async () => {
@@ -280,14 +279,15 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
 });
 
-test("Life hover expands only one print and types its caption", async () => {
+test("Life hover expands only one print and types its caption at the top right", async () => {
   const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
   assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
-  assert.match(css, /\.life-print__caption \{[\s\S]*?top: 12px;[\s\S]*?left: calc\(142\.5% \+ 12px\);/);
+  assert.match(css, /\.life-gallery__caption \{[\s\S]*?right: 0;[\s\S]*?bottom: calc\(100% \+ \(100cqw \+ 80px\) \/ 11 \* 1\.275 \+ 8px\);/);
+  assert.doesNotMatch(css, /\.life-print__caption/);
   assert.doesNotMatch(css, /caption-rise/);
   assert.ok(css.includes(".life-gallery:has(.life-print:hover) > h2 { opacity: 0.12; }"));
   assert.ok(css.includes(".life-gallery:has(.life-print :focus-visible, .life-print:focus-visible) > h2 { opacity: 0.12; }"));
-  assert.match(css, /@media \(max-width: 700px\), \(hover: none\)[\s\S]*?\.life-print \.life-print__caption \{ display: none; \}/);
+  assert.match(css, /@media \(max-width: 700px\), \(hover: none\)[\s\S]*?\.life-gallery__caption \{ display: none; \}/);
   assert.match(css, /transform: rotate\(var\(--print-angle\)\)/);
   assert.match(css, /--letter-index/);
   assert.ok(css.includes("calc(150ms + var(--letter-index) * 30ms)"));
@@ -1922,9 +1922,9 @@ test("projects reveal as one composition and stay visible on return", async () =
 });
 
 
-test("project descriptions span the work section and wrap cleanly", async () => {
+test("project descriptions keep a readable measure and wrap cleanly", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__summary \{[^}]*max-width: none;[^}]*text-wrap: pretty;/);
+  assert.match(css, /\.work-feature__summary \{[^}]*max-width: 68ch;[^}]*text-wrap: pretty;/);
 });
 
 test("alternate Growth video is the first visit-local prototype and defaults off", async () => {

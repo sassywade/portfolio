@@ -242,7 +242,7 @@ The homepage studio grid fades away with the meadow handoff, using the existing 
 
 On screens up to 700px wide, the painterly meadow is anchored to the bottom of the hero, with a reserved landscape area below the copy. The header and hero together fill the first viewport; short screens or enlarged text can grow the hero to avoid overlap. The existing hero-to-Work dissolve remains. Phone type and cypress are smaller; the backpacker remains the default mobile visitor and desktop keeps the photographer. All hobby toggles and reduced-motion static visitors remain available.
 
-The mobile intro block sits 12px below its original responsive offset, with a 30px name. The cypress uses its mobile width token explicitly (216–232px), overriding legacy fixed-width rules. The weather readout compensates for the centered meadow artwork's extra width so its right edge stays 16px inside the phone; both weather lines may wrap within the viewport. Desktop remains unchanged.
+The mobile intro block sits 12px below its original responsive offset, with a 30px name. The cypress uses its mobile width token explicitly (216–232px), overriding legacy fixed-width rules. Hide the breeze and time readout at this width; it crosses the grass. Desktop keeps the readout at the bottom right.
 
 The mobile hero-to-Work handoff keeps the scene in the hero's natural scroll position instead of applying the desktop's downward exit translation and scale. Fade the whole scene using the inverse of the existing full-page paper opacity, including its miniature visitors. The mobile Work wrapper stays transparent so no inset rectangle cuts across the landscape. Reuse the existing reversible scroll progress and reduced-motion handling; do not add a second animation loop or change the desktop handoff.
 
@@ -272,7 +272,11 @@ Each complete project (heading, media, and summary) enters once with a 250ms fad
 
 The shared soundscape gives the first portfolio arrival one quiet, session-local cue: a low meditative hum followed by a soft filtered wind swell. It is synthesized in the browser, waits for the first user gesture when autoplay is blocked, and stays silent when reduced motion is preferred.
 
-Project summaries stay left-aligned beneath their media and span the full mockup composition width, with normal text wrapping and no character-based width cap. Small screens use the available width.
+Project summaries stay left-aligned beneath their media, capped at a readable 68ch measure with `text-wrap: pretty`. Small screens use the available width.
+
+The About Life strip shows one shared caption at the top right of the strip, raised above the reach of an enlarged print so text never overlaps photographs. It types in on fine-pointer hover, appears immediately on keyboard focus, and is hidden on phones and touch layouts. Each print keeps an accessible description.
+
+The shared photo viewer's Previous and Next controls sit at the vertical middle of the screen as plain white circles with simple chevrons and a soft drop shadow.
 
 The inline Work wrapper stays transparent, including the quiet layout. Only the full-page paper layer removes the grid during the meadow handoff; never paint a bounded background on the rising Work container, which would cover the meadow as a rectangular bar.
 

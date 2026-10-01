@@ -21,45 +21,38 @@
   transform-origin: bottom center;
 }
 .life-print__paper img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1px; }
-/* Keep every caption at the same top-right anchor when its print expands. */
-.life-print__caption {
+/* One shared caption sits at the top right, above the reach of an enlarged print. */
+.life-gallery__viewport { position: relative; container-type: inline-size; }
+.life-gallery__caption {
   position: absolute;
-  top: 12px;
-  left: calc(142.5% + 12px);
-  width: max-content;
+  right: 0;
+  bottom: calc(100% + (100cqw + 80px) / 11 * 1.275 + 8px);
   margin: 0;
   color: var(--muted);
   font: 400 16px/1.45 var(--serif);
+  text-align: right;
   pointer-events: none;
-  opacity: 0;
 }
 .life-print__line { display: block; white-space: nowrap; }
-.life-print__word { white-space: nowrap; }
-.life-print__letter { opacity: 0; }
+.life-print__letter { animation: life-letter 1ms step-end both; animation-delay: calc(150ms + var(--letter-index) * 30ms); }
+@keyframes life-letter { from { opacity: 0; } to { opacity: 1; } }
 .life-print:focus-visible { outline: 2px solid var(--muted); outline-offset: 6px; z-index: 20; }
 .life-print:focus-visible .life-print__paper { transform: scale(1.85); }
-.life-print:focus-visible .life-print__caption,
-.life-print:focus-visible .life-print__letter { opacity: 1; transition: none; }
+.life-gallery__track:has(:focus-visible) ~ .life-gallery__caption .life-print__letter,
+.life-gallery__viewport:has(:focus-visible) .life-print__letter { animation: none; }
 /* Keyboard selection takes precedence if the pointer is resting on another print. */
 .life-gallery__track:has(:focus-visible) .life-print:not(:focus-visible) .life-print__paper { transform: none; }
-.life-gallery__track:has(:focus-visible) .life-print:not(:focus-visible) .life-print__caption { opacity: 0; }
 @media (hover: hover) and (pointer: fine) {
   .life-print:hover { z-index: 20; }
   .life-print:hover .life-print__paper { transform: scale(1.85); }
-  .life-print:hover .life-print__caption { opacity: 1; }
-  .life-print:hover .life-print__letter { opacity: 1; }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .life-print__paper { transition: transform 250ms var(--motion-ease-out); }
-  .life-print:hover .life-print__letter { transition: opacity 1ms step-end; transition-delay: calc(150ms + var(--letter-index) * 30ms); }
-  .life-print:focus-visible .life-print__paper,
-  .life-print:focus-visible .life-print__letter { transition: none; }
+  .life-print:focus-visible .life-print__paper { transition: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .life-print__paper, .life-print__letter { transition: none; }
-}
-@media (min-width: 701px) and (max-width: 1200px) {
-  .life-print:nth-last-child(-n + 3) .life-print__caption { left: auto; right: calc(142.5% + 12px); text-align: right; }
+  .life-print__paper { transition: none; }
+  .life-print__letter { animation: none; }
 }
 @media (max-width: 700px), (hover: none) {
   .life-gallery__viewport { overflow-x: auto; padding: 12px 8px 16px; margin-inline: -8px; }
@@ -68,7 +61,7 @@
   .life-print__composition { position: relative; transform: none; }
   .life-print__paper { height: 210px; }
   .life-print:hover .life-print__paper, .life-print:focus-visible .life-print__paper { transform: none; }
-  .life-print .life-print__caption { display: none; }
+  .life-gallery__caption { display: none; }
 }
 .about-page--journal .simple-page {
   width: min(888px, calc(100% - 64px));
