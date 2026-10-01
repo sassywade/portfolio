@@ -279,15 +279,15 @@ test("keeps About motion calm, accessible, and reduced-motion safe", async () =>
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.about-page__gallery\[data-motion-ready="true"\] \.film-photo__paper/);
 });
 
-test("Life hover expands only one print and types its caption at the top right", async () => {
+test("Life hover expands only one print and types its caption beside its top edge", async () => {
   const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
   assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
-  assert.match(css, /\.life-gallery__caption \{[\s\S]*?right: 0;[\s\S]*?bottom: calc\(100% \+ \(100cqw \+ 80px\) \/ 11 \* 1\.275 \+ 8px\);/);
-  assert.doesNotMatch(css, /\.life-print__caption/);
+  assert.match(css, /\.life-print__caption \{[\s\S]*?top: calc\(-85% \+ 4px\);[\s\S]*?left: calc\(142\.5% \+ 12px\);/);
+  assert.match(css, /\.life-print:nth-last-child\(-n \+ 3\) \.life-print__caption \{ left: auto; right: calc\(142\.5% \+ 12px\); text-align: right; \}/);
   assert.doesNotMatch(css, /caption-rise/);
   assert.ok(css.includes(".life-gallery:has(.life-print:hover) > h2 { opacity: 0.12; }"));
   assert.ok(css.includes(".life-gallery:has(.life-print :focus-visible, .life-print:focus-visible) > h2 { opacity: 0.12; }"));
-  assert.match(css, /@media \(max-width: 700px\), \(hover: none\)[\s\S]*?\.life-gallery__caption \{ display: none; \}/);
+  assert.match(css, /@media \(max-width: 700px\), \(hover: none\)[\s\S]*?\.life-print \.life-print__caption \{ display: none; \}/);
   assert.match(css, /transform: rotate\(var\(--print-angle\)\)/);
   assert.match(css, /--letter-index/);
   assert.ok(css.includes("calc(150ms + var(--letter-index) * 30ms)"));

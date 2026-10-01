@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { usePhotoViewer } from "../photo-viewer";
 
 type PhotoSlot = {
@@ -45,39 +45,20 @@ const rotations = [-5, -4, 0, 2, -4, 1, 2, -3, 1, 0, 5];
 
 export function AboutPhotoGallery() {
   const { openPhoto, viewer, selectedId } = usePhotoViewer();
-  const [hovered, setHovered] = useState<number | null>(null);
-  const [focused, setFocused] = useState<number | null>(null);
-  const active = focused ?? hovered;
-  let character = 0;
   return (
     <>
     <section className="about-page__gallery life-gallery" aria-labelledby="about-gallery-title">
       <h2 id="about-gallery-title">Recents from life</h2>
       <div className="life-gallery__viewport">
-        {active !== null && (
-          <p className="life-gallery__caption" key={active} aria-hidden="true">
-            {captionLines[active].map((line, lineIndex) => (
-              <span className="life-print__line" key={lineIndex}>
-                {Array.from(line).map((letter) => {
-                  const position = character++;
-                  return <span className="life-print__letter" key={position} style={{ "--letter-index": position } as CSSProperties}>{letter}</span>;
-                })}
-              </span>
-            ))}
-          </p>
-        )}
         <div className="life-gallery__track">
           {lifePhotos.map((photo, index) => {
+            let character = 0;
             return (
               <figure
                 key={photo.id}
                 className="life-print"
                 aria-label={photo.description}
                 style={{ "--print-angle": `${rotations[index]}deg` } as CSSProperties}
-                onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(index); }}
-                onPointerLeave={() => setHovered((current) => (current === index ? null : current))}
-                onFocus={(event) => { if (event.target.matches(":focus-visible")) setFocused(index); }}
-                onBlur={() => setFocused((current) => (current === index ? null : current))}
               >
                 <div className="life-print__composition">
                   <button className="life-print__paper" type="button" aria-label={`Open ${photo.title}`} aria-haspopup="dialog"
@@ -89,7 +70,19 @@ export function AboutPhotoGallery() {
                     }}>
                     <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="180px" unoptimized draggable={false} />
                   </button>
-                  <figcaption className="sr-only">{photo.description}</figcaption>
+                  <figcaption className="life-print__caption">
+                    <span className="sr-only">{photo.description}</span>
+                    <span aria-hidden="true">
+                      {captionLines[index].map((line, lineIndex) => (
+                        <span className="life-print__line" key={lineIndex}>
+                          {Array.from(line).map((letter) => {
+                            const position = character++;
+                            return <span className="life-print__letter" key={position} style={{ "--letter-index": position } as CSSProperties}>{letter}</span>;
+                          })}
+                        </span>
+                      ))}
+                    </span>
+                  </figcaption>
                 </div>
               </figure>
             );

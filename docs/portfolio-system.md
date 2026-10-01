@@ -274,7 +274,7 @@ The shared soundscape gives the first portfolio arrival one quiet, session-local
 
 Project summaries stay left-aligned beneath their media, capped at a readable 68ch measure with `text-wrap: pretty`. Small screens use the available width.
 
-The About Life strip shows one shared caption at the top right of the strip, raised above the reach of an enlarged print so text never overlaps photographs. It types in on fine-pointer hover, appears immediately on keyboard focus, and is hidden on phones and touch layouts. Each print keeps an accessible description.
+Each About Life caption types out beside its enlarged print, aligned with that print's top edge so it clears the unscaled neighbors. It comes out of the right side; between 701px and 1200px the last three prints flip it to the left side. Keyboard focus shows it immediately; phones and touch layouts hide it. Each print keeps an accessible description.
 
 The shared photo viewer's Previous and Next controls sit at the vertical middle of the screen as plain white circles with simple chevrons and a soft drop shadow.
 
