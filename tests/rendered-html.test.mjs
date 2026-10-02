@@ -53,7 +53,7 @@ test("hero typography preserves the reference sizes and natural wrapping", async
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
-  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: 68ch;[^}]*text-wrap: pretty;/);
+  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: 66\.666%;[^}]*text-wrap: pretty;/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
   assert.doesNotMatch(css, /hero-copy-break/);
 });
@@ -1363,6 +1363,27 @@ test("Life has eleven captioned prints with the shared click-to-open viewer", as
   assert.match(photography, /usePhotoViewer/);
 });
 
+test("About photos load from right-sized thumbnails and fade in once decoded", async () => {
+  const gallery = await readFile(new URL("../app/about/about-photo-gallery.tsx", import.meta.url), "utf8");
+  const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
+  const quest = await readFile(new URL("../app/about/quest-image.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
+  // Prints render the thumbnail; the viewer still opens the original behind that preview.
+  assert.match(gallery, /<LoadedImage src=\{thumbnailFor\(photo\.src\)\}[^>]*loading="eager"/);
+  assert.match(gallery, /openPhoto\(\{ id: photo\.id, src: photo\.src, thumbnail: thumbnailFor\(photo\.src\)/);
+  assert.match(gallery, /"--print-index": index/);
+  assert.match(about, /<LoadedImage\s+src="\/about\/neel-profile-thumb\.jpg"/);
+  assert.match(quest, /<LoadedImage src=\{src\}/);
+  for (const src of gallery.matchAll(/src: "(\/about\/[^"]+)"/g)) {
+    await access(new URL(`../public${src[1].replace(/\.[^.]+$/, "-thumb.jpg")}`, import.meta.url));
+  }
+  await access(new URL("../public/about/neel-profile-thumb.jpg", import.meta.url));
+  assert.ok(css.includes(".about-page__quest-art img { opacity: 0; }"));
+  assert.ok(css.includes('.about-page__quest-art img[data-loaded="true"] { opacity: 1; }'));
+  assert.match(css, /\.life-print__paper img \{ transition: opacity 240ms var\(--motion-ease-out\) calc\(var\(--print-index, 0\) \* 30ms\); \}/);
+  assert.match(css, /\.about-page__quest-art img \{ transition: transform 220ms var\(--motion-ease-out\), opacity 240ms var\(--motion-ease-out\); \}/);
+});
+
 test("the cypress grounds into both grass layers without a cutout halo", async () => {
   const grass = await readFile(new URL("../app/meadow-grass.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
@@ -1928,9 +1949,10 @@ test("projects reveal as one composition and stay visible on return", async () =
 });
 
 
-test("project descriptions keep a readable measure and wrap cleanly", async () => {
+test("project descriptions span two-thirds of the media width and wrap cleanly", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__summary \{[^}]*max-width: 68ch;[^}]*text-wrap: pretty;/);
+  assert.match(css, /\.work-feature__summary \{[^}]*max-width: 66\.666%;[^}]*text-wrap: pretty;/);
+  assert.doesNotMatch(css, /\.work-feature__summary \{[^}]*max-width: none/);
 });
 
 test("alternate Growth video is the first visit-local prototype and defaults off", async () => {

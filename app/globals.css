@@ -4229,11 +4229,15 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
 .pranathi-footer {
   width: min(100% - 64px, 1368px);
   margin: 0 auto;
-  padding-top: 130px;
+  padding-top: 28px;
 }
 
+/* A quiet sentence-case closing row in Geist, matching the navigation register. */
 .pranathi-footer .footer-bottomline {
   margin-top: 0;
+  font: 400 13px/1.4 var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .sr-only {
@@ -4303,7 +4307,7 @@ html[data-environment-style="ascii-field-notes"]:not([data-atmosphere="grid"]) {
   }
 
   .pranathi-footer {
-    padding-top: 92px;
+    padding-top: 24px;
   }
 }
 
@@ -13512,7 +13516,8 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 .work-feature__media--single { aspect-ratio: 1145 / 550; grid-template-columns: 1fr; grid-template-rows: 1fr; }
 .work-feature__summary a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .work-feature__summary {
-  max-width: 68ch;
+  /* Two-thirds of the media width keeps the measure long without spanning the frame. */
+  max-width: 66.666%;
   margin: 24px 0 0;
   color: var(--muted);
   font: 16px/1.6 var(--sans);

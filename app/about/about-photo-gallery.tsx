@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties } from "react";
+import { LoadedImage } from "../loaded-image";
 import { usePhotoViewer } from "../photo-viewer";
 
 type PhotoSlot = {
@@ -43,6 +43,10 @@ const captionLines = [
 
 const rotations = [-5, -4, 0, 2, -4, 1, 2, -3, 1, 0, 5];
 
+/* Prints show a 640px thumbnail; the viewer opens the original behind that preview. */
+const thumbnailFor = (src: string) => src.replace(/\.[^.]+$/, "-thumb.jpg");
+const viewerSequence = lifePhotos.map((item) => ({ id: item.id, src: item.src, thumbnail: thumbnailFor(item.src), label: item.alt, ratio: 2 / 3, frame: "film" as const }));
+
 export function AboutPhotoGallery() {
   const { openPhoto, viewer, selectedId } = usePhotoViewer();
   return (
@@ -58,17 +62,17 @@ export function AboutPhotoGallery() {
                 key={photo.id}
                 className="life-print"
                 aria-label={photo.description}
-                style={{ "--print-angle": `${rotations[index]}deg` } as CSSProperties}
+                style={{ "--print-angle": `${rotations[index]}deg`, "--print-index": index } as CSSProperties}
               >
                 <div className="life-print__composition">
                   <button className="life-print__paper" type="button" aria-label={`Open ${photo.title}`} aria-haspopup="dialog"
                     style={{ visibility: selectedId === photo.id ? "hidden" : undefined }}
                     onClick={(event) => {
                       const image = event.currentTarget.querySelector("img")!;
-                      openPhoto({ id: photo.id, src: photo.src, label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 2 / 3, frame: "film" }, event.currentTarget, event.detail !== 0, image,
-                        lifePhotos.map((item) => ({ id: item.id, src: item.src, label: item.alt, ratio: 2 / 3, frame: "film" })));
+                      openPhoto({ id: photo.id, src: photo.src, thumbnail: thumbnailFor(photo.src), label: photo.alt, ratio: image.naturalWidth / image.naturalHeight || 2 / 3, frame: "film" }, event.currentTarget, event.detail !== 0, image,
+                        viewerSequence);
                     }}>
-                    <Image src={photo.src} alt={photo.alt} width={900} height={1200} sizes="180px" unoptimized draggable={false} />
+                    <LoadedImage src={thumbnailFor(photo.src)} alt={photo.alt} width={900} height={1200} sizes="180px" loading="eager" unoptimized draggable={false} />
                   </button>
                   <figcaption className="life-print__caption">
                     <span className="sr-only">{photo.description}</span>

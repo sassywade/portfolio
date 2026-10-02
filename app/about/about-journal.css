@@ -82,9 +82,9 @@
   align-items: center;
   margin-top: 0;
 }
-.about-page--journal .about-page__identity .about-page__intro { max-width: none; }
+.about-page--journal .about-page__identity .about-page__intro { max-width: 520px; }
 .about-page--journal .simple-page .about-page__greeting {
-  margin: 0 0 8px;
+  margin: 0 0 16px;
   color: var(--ink);
   font: italic 400 36px/1.2 var(--serif);
   letter-spacing: -0.03em;
@@ -92,11 +92,11 @@
 .about-page--journal .about-page__identity .about-page__intro p {
   margin: 0;
   color: var(--muted);
-  font: 400 18px/40px var(--serif);
+  font: 400 18px/1.55 var(--serif);
   letter-spacing: -0.012em;
   max-width: none;
 }
-.about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 40px; }
+.about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 18px; }
 .about-page--journal .about-page__portrait-card {
   width: 272px;
   padding: 10px;
@@ -118,7 +118,7 @@
 .about-page--journal .about-page__socials {
   justify-content: flex-end;
   gap: 18px;
-  margin-top: 36px;
+  margin-top: 28px;
 }
 .about-page--journal .about-page__socials a { gap: 6px; font-size: 16px; }
 .about-page--journal .about-page__social-icon { width: 16px; height: 16px; }
@@ -166,8 +166,21 @@
 .about-page__quest p { margin: 0; color: #a09a94; font: 400 16px/1.5 var(--serif); }
 .about-page__quest p a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .about-page__quests a:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
+/* Photos develop in once their pixels are ready instead of popping; cached images are
+   marked before first paint, so repeat visits skip the fade. Prints cascade left to right. */
+.about-page__portrait-image,
+.life-print__paper img,
+.about-page__quest-art img { opacity: 0; }
+.about-page__portrait-image[data-loaded="true"],
+.life-print__paper img[data-loaded="true"],
+.about-page__quest-art img[data-loaded="true"] { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .about-page__portrait-image,
+  .about-page__quest-art img { transition: opacity 240ms var(--motion-ease-out); }
+  .life-print__paper img { transition: opacity 240ms var(--motion-ease-out) calc(var(--print-index, 0) * 30ms); }
+}
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .about-page__quest-art img { transition: transform 220ms var(--motion-ease-out); }
+  .about-page__quest-art img { transition: transform 220ms var(--motion-ease-out), opacity 240ms var(--motion-ease-out); }
   .about-page__quest-art:hover img { transform: rotate(-1.5deg) scale(1.015); }
   .about-page__quest:nth-child(2) .about-page__quest-art:hover img { transform: rotate(1.5deg) scale(1.015); }
 }
@@ -176,8 +189,8 @@
   .about-page--journal .about-page__identity { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .about-page--journal .about-page__portrait-card { width: 200px; }
   .about-page--journal .simple-page .about-page__greeting { font-size: 30px; }
-  .about-page--journal .about-page__identity .about-page__intro p { font-size: 16px; line-height: 1.75; }
-  .about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 28px; }
+  .about-page--journal .about-page__identity .about-page__intro p { font-size: 16px; line-height: 1.6; }
+  .about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 16px; }
   .about-page--journal .about-page__socials { margin-top: 28px; }
   .about-page--journal .about-page__gallery { margin-top: 64px; }
   .about-page--journal .about-page__gallery-track { width: max-content; }

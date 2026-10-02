@@ -272,7 +272,7 @@ Each complete project (heading, media, and summary) enters once with a 250ms fad
 
 The shared soundscape gives the first portfolio arrival one quiet, session-local cue: a low meditative hum followed by a soft filtered wind swell. It is synthesized in the browser, waits for the first user gesture when autoplay is blocked, and stays silent when reduced motion is preferred.
 
-Project summaries stay left-aligned beneath their media, capped at a readable 68ch measure with `text-wrap: pretty`. Small screens use the available width.
+Project summaries stay left-aligned beneath their media, capped at two-thirds of the media width with `text-wrap: pretty`, including on phones.
 
 Each About Life caption types out beside its enlarged print, aligned with that print's top edge so it clears the unscaled neighbors. It comes out of the right side; between 701px and 1200px the last three prints flip it to the left side. Keyboard focus shows it immediately; phones and touch layouts hide it. Each print keeps an accessible description.
 
@@ -310,6 +310,8 @@ The Photo search field floats without an underline or enclosing border. On arriv
 On Photo page arrival, keep the temporary server column layout hidden until client measurements and the saved grouping resolve before paint. Restoring preferences must never capture positions or trigger the search/reorder animation. Reveal the final gallery with a 200ms opacity-only fade; thumbnails reserve their dimensions and fade in on load, including cached images. Reduced motion makes both reveals immediate.
 
 The Photo search row includes a lightweight sort dropdown aligned to its right edge, with Selected work, Color, and Photography style. It shares the grouping state with the prototype pickers, closes on selection, outside click, or Escape, and keeps visible keyboard focus.
+
+About photographs never ship at camera resolution to the page. Each Life print and the portrait load a sibling `-thumb.jpg` in `public/about` (640px long edge for prints, 1000px for the portrait, generated with `sips`); the originals stay in place and only open inside the viewer behind that thumbnail preview. All About photos use `LoadedImage` from `app/loaded-image.tsx`, which marks `data-loaded` once pixels are ready: images sit at opacity 0 and fade in over 240ms on the shared ease-out, prints cascade left to right at 30ms steps, cached images are marked before first paint so repeat visits skip the fade, and reduced motion shows them immediately. Reuse this pair, right-sized file plus `LoadedImage`, for any new photograph on the site instead of pointing `next/image` at an original.
 
 The shared photo viewer keeps the already-loaded thumbnail as a background preview throughout expansion. Reveal the larger image only after decoding succeeds, using a short 160ms opacity fade; keep the preview if loading or decoding fails. The viewing surface uses paper instead of black, and reduced motion reveals the decoded image immediately. This applies to Photo and About without changing their framing or close behavior.
 

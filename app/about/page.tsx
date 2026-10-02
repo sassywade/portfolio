@@ -1,6 +1,6 @@
 import { SiteHeader } from "../site-header";
 import { AboutPhotoGallery } from "./about-photo-gallery";
-import Image from "next/image";
+import { LoadedImage } from "../loaded-image";
 import { QuestImage } from "./quest-image";
 import "./about-journal.css";
 
@@ -12,8 +12,8 @@ export default function AboutPage() {
         <div className="about-page__identity">
           <div className="about-page__portrait-card" aria-label="Portrait photo slot">
             <div className="about-page__portrait-photo">
-              <Image
-                src="/about/neel-profile.jpg"
+              <LoadedImage
+                src="/about/neel-profile-thumb.jpg"
                 alt="Neel Saswade"
                 fill
                 priority
@@ -25,8 +25,10 @@ export default function AboutPage() {
           <div className="simple-page__copy about-page__intro">
             <h1 id="about-title" className="about-page__greeting">Hello!</h1>
             <p className="about-page__lead">
-              I’m a designer who likes to tackle ambiguous problems, enjoying all
-              the bits of systems-thinking to delightfully crafted interactions.<br />
+              I’m drawn towards ambiguous problems, from the systems thinking
+              underneath to the small interactions that make them feel good.
+            </p>
+            <p>
               I found my way to design through a human-robot interaction lab in
               college. Watching people meet unfamiliar machines with a mix of
               confusion and curiosity made me interested in how we introduce new
@@ -69,7 +71,7 @@ export default function AboutPage() {
           <div className="about-page__quest-grid">
             <article className="about-page__quest">
               <a className="about-page__quest-art" href="https://x.com/neel_saswade/status/2077068857160700242?s=20" target="_blank" rel="noreferrer" aria-label="Glean Passport on X">
-                <Image src="/about/passport.png" alt="An open Glean work passport with project stamps" width={1080} height={675} />
+                <LoadedImage src="/about/passport.png" alt="An open Glean work passport with project stamps" width={1080} height={675} />
               </a>
               <h3>Glean Passport</h3>
               <p>I thought it’d be fun to visualize a work passport for all the projects you&apos;ve worked on (<a href="https://x.com/neel_saswade/status/2077068857160700242?s=20" target="_blank" rel="noreferrer">posted on X</a>).</p>

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { LoadedImage } from "../loaded-image";
 import { usePhotoViewer } from "../photo-viewer";
 
 export function QuestImage({ src, alt, title }: { src: string; alt: string; title: string }) {
@@ -13,7 +13,7 @@ export function QuestImage({ src, alt, title }: { src: string; alt: string; titl
           const image = event.currentTarget.querySelector("img")!;
           openPhoto({ id: src, src, label: alt, ratio: image.naturalWidth / image.naturalHeight || 1.6 }, event.currentTarget, event.detail !== 0, image);
         }}>
-        <Image src={src} alt={alt} width={1080} height={675} />
+        <LoadedImage src={src} alt={alt} width={1080} height={675} />
       </button>
       {viewer}
     </>
