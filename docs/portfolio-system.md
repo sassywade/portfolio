@@ -272,7 +272,7 @@ Each complete project (heading, media, and summary) enters once with a 250ms fad
 
 The shared soundscape gives the first portfolio arrival one quiet, session-local cue: a low meditative hum followed by a soft filtered wind swell. It is synthesized in the browser, waits for the first user gesture when autoplay is blocked, and stays silent when reduced motion is preferred.
 
-Project summaries stay left-aligned beneath their media, capped at two-thirds of the media width with `text-wrap: pretty`, including on phones.
+Project summaries stay left-aligned beneath their media, capped at three-quarters of the media width with `text-wrap: pretty`, including on phones.
 
 Each About Life caption types out beside its enlarged print, aligned with that print's top edge so it clears the unscaled neighbors. It comes out of the right side; between 701px and 1200px the last three prints flip it to the left side. Keyboard focus shows it immediately; phones and touch layouts hide it. Each print keeps an accessible description.
 

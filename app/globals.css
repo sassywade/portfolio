@@ -13516,8 +13516,8 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 .work-feature__media--single { aspect-ratio: 1145 / 550; grid-template-columns: 1fr; grid-template-rows: 1fr; }
 .work-feature__summary a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .work-feature__summary {
-  /* Two-thirds of the media width keeps the measure long without spanning the frame. */
-  max-width: 66.666%;
+  /* Three-quarters of the media width keeps the measure long without spanning the frame. */
+  max-width: 75%;
   margin: 24px 0 0;
   color: var(--muted);
   font: 16px/1.6 var(--sans);
