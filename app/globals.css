@@ -13650,6 +13650,9 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
 
   .pranathi-intro--home {
     min-height: calc(100svh - 33px);
+    /* Follow the phone browser's live toolbar height so the meadow stays flush
+       with the visible bottom edge whether the toolbar is expanded or collapsed. */
+    min-height: calc(100dvh - 33px);
     padding-top: calc(clamp(40px, 8svh, 76px) + 12px);
     padding-bottom: clamp(220px, 31svh, 276px);
   }

@@ -10,9 +10,7 @@ export function WorkScroll() {
     const work = document.getElementById("work");
     if (!work || !sections.length) return;
     const desktop = window.matchMedia("(min-width: 1080px) and (pointer: fine)");
-    const touch = window.matchMedia("(pointer: coarse)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let touchGesture: { x: number; y: number; lastY: number; captured: boolean; landed: boolean } | null = null;
     let heroLanding = false;
     let idleTimer = 0;
     let scrollFrame = 0;
@@ -22,7 +20,6 @@ export function WorkScroll() {
       scrollFrame = 0;
       window.clearTimeout(idleTimer);
       heroLanding = false;
-      touchGesture = null;
     };
     // Use a calm ease-in-out curve: cubic-bezier(0.77, 0, 0.175, 1).
     const easeScroll = (progress: number) => {
@@ -40,10 +37,10 @@ export function WorkScroll() {
       const rect = section.getBoundingClientRect();
       return window.scrollY + rect.top - Math.max(32, (window.innerHeight - rect.height) / 2);
     };
-    const settle = (section: HTMLElement, smooth: boolean, duration = 560, alignTop = false) => {
+    const settle = (section: HTMLElement, smooth: boolean, duration = 560) => {
       cancelAnimationFrame(scrollFrame);
       const from = window.scrollY;
-      const to = alignTop ? window.scrollY + section.getBoundingClientRect().top - 24 : center(section);
+      const to = center(section);
       if (!smooth || reduced.matches) {
         window.scrollTo({ top: to, behavior: "instant" });
         return;
@@ -64,37 +61,8 @@ export function WorkScroll() {
       }
       return false;
     };
-    const touchStart = (event: TouchEvent) => {
-      stopScroll();
-      if (!touch.matches || window.scrollY > 8 || event.touches.length !== 1 || nestedScroll(event.target)) return;
-      if (event.target instanceof Element && event.target.closest('a, button, summary, [role="button"]')) return;
-      const finger = event.touches[0];
-      touchGesture = { x: finger.clientX, y: finger.clientY, lastY: finger.clientY, captured: false, landed: false };
-    };
-    const touchMove = (event: TouchEvent) => {
-      const gesture = touchGesture;
-      if (!gesture) return;
-      if (event.touches.length !== 1) { stopScroll(); return; }
-      const finger = event.touches[0];
-      const upward = gesture.y - finger.clientY;
-      const horizontal = Math.abs(finger.clientX - gesture.x);
-      if (upward < -12 || horizontal > Math.max(12, Math.abs(upward)) || (gesture.captured && finger.clientY - gesture.lastY > 12)) {
-        stopScroll();
-        return;
-      }
-      gesture.lastY = Math.min(gesture.lastY, finger.clientY);
-      // Capture the first upward move before the browser commits to momentum.
-      if (!gesture.captured && (upward <= 0 || upward < horizontal * 1.2)) return;
-      if (!event.cancelable) { stopScroll(); return; }
-      // Only this opening swipe is owned here; no listener captures gestures in Work.
-      event.preventDefault();
-      gesture.captured = true;
-      if (!gesture.landed && upward >= 40) {
-        gesture.landed = true;
-        settle(sections[0], !reduced.matches, 560, true);
-      }
-    };
-    const touchEnd = () => { touchGesture = null; };
+    // Touch scrolling is fully native. No touch listener captures or prevents a swipe,
+    // so a phone follows the finger from the hero into Work without a scripted jump.
     const wheel = (event: WheelEvent) => {
       const eligible = desktop.matches && !reduced.matches && !event.ctrlKey && !event.metaKey
         && Math.abs(event.deltaY) > Math.abs(event.deltaX) && !nestedScroll(event.target);
@@ -141,20 +109,12 @@ export function WorkScroll() {
     document.addEventListener("click", click);
     window.addEventListener("keydown", stopScroll);
     window.addEventListener("pointerdown", stopScroll);
-    window.addEventListener("touchstart", touchStart, { passive: true });
-    window.addEventListener("touchmove", touchMove, { passive: false });
-    window.addEventListener("touchend", touchEnd, { passive: true });
-    window.addEventListener("touchcancel", stopScroll, { passive: true });
     window.addEventListener("resize", stopScroll);
     return () => {
       cancelAnimationFrame(initialFrame);
       stopScroll();
       window.removeEventListener("keydown", stopScroll);
       window.removeEventListener("pointerdown", stopScroll);
-      window.removeEventListener("touchstart", touchStart);
-      window.removeEventListener("touchmove", touchMove);
-      window.removeEventListener("touchend", touchEnd);
-      window.removeEventListener("touchcancel", stopScroll);
       window.removeEventListener("resize", stopScroll);
       delete root.dataset.workSnap;
       reduced.removeEventListener("change", syncMotion);

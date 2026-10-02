@@ -88,6 +88,8 @@ test("homepage has a deliberate narrow-screen work layout", async () => {
   ]);
   assert.match(css, /Mobile keeps the complete Alamo scene[\s\S]*?@media \(max-width: 700px\) \{[\s\S]*?\.hero-meadow\s*\{[\s\S]*?--meadow-render-width: max\(100vw, 680px\);[\s\S]*?display: block;[\s\S]*?position: absolute;[\s\S]*?height: 100%;/);
   assert.match(css, /\.pranathi-intro--home\s*\{\s*min-height: calc\(100svh - 33px\);[\s\S]*?padding-bottom: clamp\(220px, 31svh, 276px\);/);
+  // The phone hero follows the live viewport so the meadow stays flush with the visible bottom edge.
+  assert.match(css, /\.pranathi-intro--home\s*\{\s*min-height: calc\(100svh - 33px\);[^}]*min-height: calc\(100dvh - 33px\);[^}]*padding-top: calc\(clamp\(40px, 8svh, 76px\) \+ 12px\);/);
   assert.match(backpack, /matchMedia\("\(max-width: 700px\)"\)[\s\S]*?detail: "backpack"[\s\S]*?launch\(\);/);
   assert.match(css, /\.work-feature__media--split,[\s\S]*?\.work-feature__media--trio\s*\{[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
   assert.match(css, /\.work-feature__media--split > :first-child,[\s\S]*?\.work-feature__media--trio > :nth-child\(2\)[\s\S]*?grid-column: 1 \/ -1;/);
@@ -1831,8 +1833,12 @@ test("scroll assistance only captures the intentional hero handoff", async () =>
   assert.equal(frames.size, 0);
 });
 
-test("touch work stays natively scrollable after the opening swipe", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+test("touch scrolling stays native from the hero through Work", async () => {
+  const [css, scroll] = await Promise.all([
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.doesNotMatch(scroll, /addEventListener\("touch/, "no touch listener prevents or scripts a phone swipe");
   assert.match(css, /@media \(pointer: coarse\) \{\s*html\[data-work-snap="on"\] \{ scroll-snap-type: none; \}/);
   assert.doesNotMatch(css, /@media \(min-width: 1080px\), \(pointer: coarse\)/);
   assert.match(css, /html\[data-work-snap="on"\] \.work-feature \{[\s\S]*?scroll-snap-stop: normal;/);

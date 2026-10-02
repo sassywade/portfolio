@@ -11,18 +11,21 @@ async function load(file, context) {
   return exports;
 }
 
-test("opening touch swipe lands on project one, then releases scrolling and cancels safely", async () => {
+test("touch scrolling on the homepage is fully native with no swipe capture", async () => {
+  const source = await readFile(new URL("../app/work-scroll.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(source, /touchstart|touchmove|touchend|touchcancel|TouchEvent/, "no touch listener can prevent or script a swipe");
+  assert.doesNotMatch(source, /pointer: coarse/, "no coarse-pointer branch owns the hero swipe");
+
   const events = new Map();
   const frames = new Map();
   let nextFrame = 0;
   let cleanup;
-  const coarse = { matches: true };
   const reduced = { matches: false, addEventListener() {}, removeEventListener() {} };
   const desktop = { matches: false, addEventListener() {}, removeEventListener() {} };
   const win = {
     innerHeight: 800, scrollY: 0,
-    matchMedia: query => query.includes("reduced-motion") ? reduced : query.includes("fine") ? desktop : coarse,
-    addEventListener: (name, callback) => events.set(name, callback),
+    matchMedia: query => query.includes("reduced-motion") ? reduced : desktop,
+    addEventListener: (name, callback, options) => events.set(name, { callback, options }),
     removeEventListener: name => events.delete(name),
     clearTimeout() {}, setTimeout() {},
     scrollTo: ({ top }) => { win.scrollY = top; },
@@ -45,55 +48,14 @@ test("opening touch swipe lands on project one, then releases scrolling and canc
     cancelAnimationFrame: id => frames.delete(id),
   });
   WorkScroll();
+  for (const name of ["touchstart", "touchmove", "touchend", "touchcancel"]) {
+    assert.equal(events.has(name), false, `${name} is never listened to, so the phone follows the finger`);
+  }
+  // A phone's trackpad-like wheel events (not a fine desktop pointer) stay native too.
   let captured = 0;
-  const finger = (x = 150, y = 600) => ({ clientX: x, clientY: y });
-  const start = (target = new Target(), touches = [finger()]) => events.get("touchstart")({ target, touches });
-  const move = (x, y, touches = [finger(x, y)]) => events.get("touchmove")({ touches, cancelable: true, preventDefault: () => captured++ });
-  const finish = () => {
-    events.get("touchend")();
-    const callbacks = [...frames.values()];
-    frames.clear();
-    callbacks.forEach(callback => callback(1000));
-  };
-  start(); move(150, 540);
-  assert.equal(captured, 1);
-  assert.equal(frames.size, 1);
-  move(150, 400);
-  assert.equal(frames.size, 1, "one swipe never restarts the animation");
-  finish();
-  assert.equal(win.scrollY, 1076, "first project title has 24px of breathing room");
-  captured = 0;
-  start(); move(150, 450); finish();
-  assert.equal(captured, 0, "all subsequent work swipes remain native");
-  assert.equal(win.scrollY, 1076);
-
-  win.scrollY = 0;
-  start(); move(230, 590); finish();
-  start(); move(150, 650); finish();
-  start(); finish();
-  assert.equal(captured, 0, "horizontal gestures, downward pulls, and taps are not captured");
-  const nested = new Target();
-  nested.closest = () => ({});
-  start(nested); move(150, 450); finish();
-  assert.equal(captured, 0, "nested controls retain their gestures");
-  start(); move(150, 540);
-  events.get("touchcancel")();
-  assert.equal(frames.size, 0);
-  start(); move(150, 540); move(150, 500, [finger(), finger(200, 500)]);
-  assert.equal(frames.size, 0, "pinching interrupts the handoff");
-  start(); move(150, 540); move(150, 570);
-  assert.equal(frames.size, 0, "reversing direction interrupts");
-  start(); move(150, 540); events.get("pointerdown")();
-  assert.equal(frames.size, 0, "a fresh interaction interrupts");
-  coarse.matches = false;
-  captured = 0;
-  start(); move(150, 500); finish();
-  assert.equal(captured, 0, "desktop is unchanged");
-  coarse.matches = true;
-  reduced.matches = true;
-  start(); move(150, 500);
-  assert.equal(frames.size, 0, "reduced motion lands immediately");
-  assert.equal(win.scrollY, 1076);
+  events.get("wheel").callback({ deltaY: 40, deltaX: 0, cancelable: true, target: new Target(), preventDefault: () => captured++ });
+  assert.equal(captured, 0, "touch layouts never scrolljack the hero");
+  assert.equal(frames.size, 0, "no scripted scroll starts on a touch layout");
   cleanup();
   assert.equal(events.size, 0);
 });
