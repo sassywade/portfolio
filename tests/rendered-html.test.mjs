@@ -1356,7 +1356,7 @@ test("Life has eleven captioned prints with the shared click-to-open viewer", as
   const quest = await readFile(new URL("../app/about/quest-image.tsx", import.meta.url), "utf8");
   assert.match(quest, /usePhotoViewer/);
   assert.match(quest, /aria-haspopup="dialog"/);
-  for (const caption of ["Sunset in Kyoto", "My first road race", "Cathedral lakes", "The spirit of gravel?"]) {
+  for (const caption of ["Sunset gradient in Kyoto", "First road race #bonked", "0/10 insect experience", "The spirit of gravel?"]) {
     assert.ok(gallery.includes(caption));
   }
   const photography = await readFile(new URL("../app/photography/photography-gallery.tsx", import.meta.url), "utf8");

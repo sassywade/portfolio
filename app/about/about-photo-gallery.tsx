@@ -14,31 +14,31 @@ type PhotoSlot = {
 };
 
 const lifePhotos: PhotoSlot[] = [
-  { id: "stars-over-camp", title: "A night under the stars", description: "Seeing the milky way for the first time in Big Sur", alt: "A glowing tent beneath a starry sky", orientation: "portrait", src: "/about/stars-over-camp.jpeg" },
-  { id: "ride-closeup", title: "A good day to ride", description: "Riding out of Stinson beach in June", alt: "Cyclists riding on a coastal road", orientation: "portrait", src: "/about/ride-closeup.JPG" },
-  { id: "pink-sky", title: "A beautiful sunset in Kyoto", description: "Sunset in Kyoto", alt: "A pink sunset over a city street in Kyoto", orientation: "portrait", src: "/about/pink-sky.jpg" },
-  { id: "ride-day", title: "Out with the crew", description: "My first road race", alt: "Cyclists riding together", orientation: "portrait", src: "/about/ride-day.JPG" },
-  { id: "bike-in-the-meadow", title: "Parked for a minute", description: "My new bike! Meet Dark Envy (aka Eric)", alt: "A road bike resting in a flower-covered meadow", orientation: "portrait", src: "/about/bike-in-the-meadow.JPG" },
-  { id: "mountain-lookout", title: "Take in the whole thing", description: "Reading on my ultralight chair after making camp", alt: "Person looking at a mountain landscape", orientation: "portrait", src: "/about/mountain-lookout.JPG" },
-  { id: "camp-view", title: "10/10 camping spot in Yosemite", description: "Cathedral lakes", alt: "A tent below a mountain peak", orientation: "portrait", src: "/about/camp-view.JPG" },
-  { id: "san-francisco-park", title: "Alamo Square", description: "Alamo square during SF summer", alt: "People relaxing in Alamo Square with San Francisco in the background", orientation: "portrait", src: "/about/san-francisco-park.JPG" },
+  { id: "stars-over-camp", title: "A night under the stars", description: "Milky way spotted in Big Sur", alt: "A glowing tent beneath a starry sky", orientation: "portrait", src: "/about/stars-over-camp.jpeg" },
+  { id: "ride-closeup", title: "A good day to ride", description: "Riding out of Stinson beach", alt: "Cyclists riding on a coastal road", orientation: "portrait", src: "/about/ride-closeup.JPG" },
+  { id: "pink-sky", title: "A beautiful sunset in Kyoto", description: "Sunset gradient in Kyoto", alt: "A pink sunset over a city street in Kyoto", orientation: "portrait", src: "/about/pink-sky.jpg" },
+  { id: "ride-day", title: "Out with the crew", description: "First road race #bonked", alt: "Cyclists riding together", orientation: "portrait", src: "/about/ride-day.JPG" },
+  { id: "bike-in-the-meadow", title: "Parked for a minute", description: "New steed. Meet Dark Envy aka Eric", alt: "A road bike resting in a flower-covered meadow", orientation: "portrait", src: "/about/bike-in-the-meadow.JPG" },
+  { id: "mountain-lookout", title: "Take in the whole thing", description: "Reading on my fav chair #ultralight", alt: "Person looking at a mountain landscape", orientation: "portrait", src: "/about/mountain-lookout.JPG" },
+  { id: "camp-view", title: "10/10 camping spot in Yosemite", description: "10/10 camping spot. 0/10 insect experience", alt: "A tent below a mountain peak", orientation: "portrait", src: "/about/camp-view.JPG" },
+  { id: "san-francisco-park", title: "Alamo Square", description: "Alamo square during SF Summer", alt: "People relaxing in Alamo Square with San Francisco in the background", orientation: "portrait", src: "/about/san-francisco-park.JPG" },
   { id: "ride-through-the-grass", title: "Chasing the light", description: "The spirit of gravel?", alt: "Cyclist riding through a grassy field", orientation: "portrait", src: "/about/ride-through-the-grass.JPG" },
-  { id: "red-wall-bike", title: "Bike against a red wall", description: "My first bike", alt: "A road bike against a red wall", orientation: "portrait", src: "/about/red-wall-bike.JPG" },
-  { id: "san-francisco-from-above", title: "The city from above", description: "Exploring Bernal Heights with the gf", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
+  { id: "red-wall-bike", title: "Bike against a red wall", description: "The old steed (retired now)", alt: "A road bike against a red wall", orientation: "portrait", src: "/about/red-wall-bike.JPG" },
+  { id: "san-francisco-from-above", title: "The city from above", description: "Exploring Bernal Heights", alt: "San Francisco skyline from a grassy hill", orientation: "portrait", src: "/about/san-francisco-from-above.JPG" },
 ];
 
 const captionLines = [
-  ["Seeing the milky way for", "the first time in Big Sur"],
-  ["Riding out of Stinson", "beach in June"],
-  ["Sunset in Kyoto"],
-  ["My first road race"],
-  ["My new bike!", "Meet Dark Envy (aka Eric)"],
-  ["Reading on my ultralight", "chair after making camp"],
-  ["Cathedral lakes"],
-  ["Alamo square during", "SF summer"],
+  ["Milky way spotted", "in Big Sur"],
+  ["Riding out of", "Stinson beach"],
+  ["Sunset gradient", "in Kyoto"],
+  ["First road race", "#bonked"],
+  ["New steed", "meet Dark Envy aka Eric"],
+  ["Reading on my fav", "chair #ultralight"],
+  ["10/10 camping spot", "0/10 insect experience"],
+  ["Alamo square during", "SF Summer"],
   ["The spirit of gravel?"],
-  ["My first bike"],
-  ["Exploring Bernal", "Heights with the gf"],
+  ["The old steed", "(retired now)"],
+  ["Exploring Bernal Heights"],
 ];
 
 const rotations = [-5, -4, 0, 2, -4, 1, 2, -3, 1, 0, 5];
