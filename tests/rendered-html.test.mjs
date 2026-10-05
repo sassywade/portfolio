@@ -38,6 +38,19 @@ async function render(path = "/") {
   );
 }
 
+test("self-hosted fonts resolve on the site instead of the build machine", async () => {
+  const html = await (await render()).text();
+  assert.doesNotMatch(html, /\.vinext\/fonts/);
+  assert.doesNotMatch(html, /\/Users\//);
+  const urls = [...html.matchAll(/\/_next\/static\/_vinext_fonts\/[^"')\s]+/g)].map((match) => match[0]);
+  assert.ok(urls.some((url) => url.includes("/newsreader-")));
+  assert.ok(urls.some((url) => /\/geist-mono-/.test(url)));
+  assert.ok(urls.some((url) => /\/geist-(?!mono)/.test(url)));
+  for (const url of new Set(urls)) {
+    await access(new URL(`../dist/client${url}`, import.meta.url));
+  }
+});
+
 test("mobile hero copy is concise while desktop retains the full introduction", async () => {
   const html = await (await render()).text();
   const intro = html.match(/<p class="hero-copy-line">([\s\S]*?)<\/p>/)[1];
@@ -53,7 +66,7 @@ test("hero typography preserves the reference sizes and natural wrapping", async
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.pranathi-name\s*\{\s*margin-bottom: 13px;\s*color: var\(--muted\);\s*font: italic 36px \/ 1\.15 var\(--serif\);\s*letter-spacing: normal;/);
   assert.match(css, /\.work-feature__header h3\s*\{[^}]*font: italic clamp\(26px, 2\.3vw, 36px\)/);
-  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: 75%;[^}]*text-wrap: pretty;/);
+  assert.match(css, /\.work-feature__summary\s*\{[^}]*max-width: none;[^}]*text-wrap: pretty;/);
   assert.match(css, /\.pranathi-bio\s*\{\s*max-width: 740px;\s*color: var\(--ink\);\s*font-size: 20px;/);
   assert.doesNotMatch(css, /hero-copy-break/);
 });
@@ -1949,10 +1962,10 @@ test("projects reveal as one composition and stay visible on return", async () =
 });
 
 
-test("project descriptions span three-quarters of the media width and wrap cleanly", async () => {
+test("project descriptions span the full media width and wrap cleanly", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(css, /\.work-feature__summary \{[^}]*max-width: 75%;[^}]*text-wrap: pretty;/);
-  assert.doesNotMatch(css, /\.work-feature__summary \{[^}]*max-width: none/);
+  assert.match(css, /\.work-feature__summary \{[^}]*max-width: none;[^}]*text-wrap: pretty;/);
+  assert.doesNotMatch(css, /\.work-feature__summary \{[^}]*max-width: (?!none)/);
 });
 
 test("alternate Growth video is the first visit-local prototype and defaults off", async () => {

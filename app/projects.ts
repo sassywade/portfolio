@@ -428,7 +428,7 @@ export const featuredWork = [
       { kind: "skins", src: "/work/artifacts/app-skins.png", alt: "Artifact drafts styled for Slack, Outlook, and Gmail", width: 1335, height: 784 },
     ],
   },
-  { slug: "growth", video: { src: "/work/growth-main.mp4", poster: "/work/growth-main-poster.jpg" }, navTitle: "Growth", title: "Growth at Glean", year: "2025", company: "Glean", layout: "trio", summary: "I spent two years designing for Growth as Glean scaled from 25K to 1M weekly active users. We constantly experimented with onboarding and activation, finding the right ways to help new users understand Glean’s value and build the right mental model within their first few moments with the product." },
+  { slug: "growth", video: { src: "/work/growth-main.mp4", poster: "/work/growth-main-poster.jpg" }, navTitle: "Growth", title: "Growth at Glean", year: "2025", company: "Glean", layout: "trio", summary: "I spent two years designing for Growth as Glean scaled from 25K to 1M weekly active users. We experimented with onboarding and activation to help new users build the right mental model in their first moments." },
   {
     slug: "snap",
     navTitle: "Web3 at Snap",

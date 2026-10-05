@@ -1,8 +1,21 @@
 import vinext from "vinext";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
+import { rewriteStaleVinextFontUrls } from "./vite-font-paths";
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
+
+function serveVinextFontsFromSite(): Plugin {
+  return {
+    name: "portfolio:serve-vinext-fonts",
+    enforce: "post",
+    transform(code) {
+      const rewritten = rewriteStaleVinextFontUrls(code);
+      if (rewritten === code) return null;
+      return rewritten;
+    },
+  };
+}
 
 const localBindingConfig = {
   main: "./worker/index.ts",
@@ -25,6 +38,7 @@ export default defineConfig(async () => {
       : undefined,
     plugins: [
       vinext(),
+      serveVinextFontsFromSite(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
         config: localBindingConfig,

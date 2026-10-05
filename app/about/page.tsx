@@ -25,14 +25,14 @@ export default function AboutPage() {
           <div className="simple-page__copy about-page__intro">
             <h1 id="about-title" className="about-page__greeting">Hello!</h1>
             <p className="about-page__lead">
-              I’m drawn towards ambiguous problems, from the systems thinking
-              underneath to the small interactions that make them feel good.
+              I’m interested by ambiguous problems and the systems and
+              interactions that shape them.
             </p>
             <p>
               I found my way to design through a human-robot interaction lab in
-              college. Watching people meet unfamiliar machines with a mix of
-              confusion and curiosity made me interested in how we introduce new
-              technologies to people.
+              college. Watching people figure out unfamiliar machines made me
+              curious about how we help people understand and use new
+              technologies.
             </p>
             <nav className="about-page__socials" aria-label="Links">
               <a href="/Neel-Saswade-Resume.pdf" target="_blank" rel="noreferrer" data-social="resume" aria-label="Resume">

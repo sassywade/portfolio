@@ -24,11 +24,11 @@ export function WorkSections() {
               <header className="work-feature__header">
                 <h3 id={`work-${project.slug}-title`}>{project.title}</h3>
                 <div className="work-feature__meta">
-                  <span>{project.year}</span>
                   <span className={`hero-company hero-company--${project.company.toLowerCase()}`}>
                     <span className="hero-company__mark" aria-hidden="true" />
                     <span>{project.company}</span>
                   </span>
+                  <span>{project.year}</span>
                 </div>
               </header>
               <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}${"panels" in project ? " " + artifactStyles.composition : ""}`} role={"video" in project || "panels" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project || "panels" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>

@@ -13394,21 +13394,23 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 }
 .work-feature__placeholder { min-width: 0; background: #000; border-radius: 12px; }
 .work-feature__company-corner {
-  display: grid;
+  position: relative;
   min-width: 0;
   min-height: 0;
-  place-items: end start;
   overflow: hidden;
   border-radius: 12px;
   background: #ececec;
 }
+/* The screen bleeds past the left and bottom edges so the frame crops it; only the top-right corner is a real corner. */
 .work-feature__company-corner img {
+  position: absolute;
+  top: 15.5%;
+  right: 4%;
   display: block;
-  width: 94%;
+  width: 100%;
   height: auto;
-  max-height: 92%;
-  object-fit: contain;
-  border-radius: 8px;
+  max-width: none;
+  border-radius: 0 8px 0 0;
   box-shadow: 0 12px 24px rgb(0 0 0 / 14%), 0 2px 5px rgb(0 0 0 / 10%);
 }
 .work-feature__video { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; border-radius: 12px; background: #fff; }
@@ -13516,8 +13518,7 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
 .work-feature__media--single { aspect-ratio: 1145 / 550; grid-template-columns: 1fr; grid-template-rows: 1fr; }
 .work-feature__summary a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .work-feature__summary {
-  /* Three-quarters of the media width keeps the measure long without spanning the frame. */
-  max-width: 75%;
+  max-width: none;
   margin: 24px 0 0;
   color: var(--muted);
   font: 16px/1.6 var(--sans);

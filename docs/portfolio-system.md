@@ -84,6 +84,7 @@ Portfolio copy follows a Typehug- and Torph-inspired rule: short, concrete sente
 - Work tiles are quiet containers for future screenshots. A compact title sits below each tile; one-line descriptions are hidden by default. The homepage shows four Glean projects followed by two Snap projects. Until a real cover is supplied, keep the tile substantial and light gray.
 - Project imagery should use `object-fit: contain`; never crop supplied work.
 - Use color sparingly for real brand marks and explicit interactive affordances.
+- Newsreader, Geist, and Geist Mono stay self-hosted. Built HTML must reference `/_next/static/_vinext_fonts/…`, never a machine path under `.vinext/fonts`.
 
 ## 5. Interaction boundaries
 
@@ -272,7 +273,7 @@ Each complete project (heading, media, and summary) enters once with a 250ms fad
 
 The shared soundscape gives the first portfolio arrival one quiet, session-local cue: a low meditative hum followed by a soft filtered wind swell. It is synthesized in the browser, waits for the first user gesture when autoplay is blocked, and stays silent when reduced motion is preferred.
 
-Project summaries stay left-aligned beneath their media, capped at three-quarters of the media width with `text-wrap: pretty`, including on phones.
+Project summaries stay left-aligned beneath their media and span the full media width with `text-wrap: pretty`.
 
 Each About Life caption types out beside its enlarged print, aligned with that print's top edge so it clears the unscaled neighbors. It comes out of the right side; between 701px and 1200px the last three prints flip it to the left side. Keyboard focus shows it immediately; phones and touch layouts hide it. Each print keeps an accessible description.
 
