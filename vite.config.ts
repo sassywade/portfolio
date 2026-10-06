@@ -36,6 +36,9 @@ export default defineConfig(async () => {
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
+    // Never ship source maps. This covers every build environment
+    // (client, ssr, rsc) so original TypeScript is not exposed in production.
+    build: { sourcemap: false },
     plugins: [
       vinext(),
       serveVinextFontsFromSite(),

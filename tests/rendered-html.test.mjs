@@ -1,6 +1,19 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
+import { join } from "node:path";
 import test from "node:test";
+
+test("production build ships no source maps", async () => {
+  const dist = new URL("../dist/", import.meta.url);
+  const entries = await readdir(dist, { recursive: true, withFileTypes: true });
+  const files = entries.filter((entry) => entry.isFile());
+  assert.ok(files.length > 0, "dist/ should contain build output");
+  assert.deepEqual(files.filter((entry) => entry.name.endsWith(".map")).map((entry) => entry.name), []);
+  for (const entry of files.filter((entry) => /\.(m?js|css)$/.test(entry.name))) {
+    const code = await readFile(join(entry.parentPath, entry.name), "utf8");
+    assert.doesNotMatch(code, /sourceMappingURL=/, `${entry.name} references a source map`);
+  }
+});
 
 test("expanded film photos retain their image ratio with an even white mat", async () => {
   const css = await readFile(new URL("../app/photography/photography.module.css", import.meta.url), "utf8");
