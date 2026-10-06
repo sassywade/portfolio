@@ -59,9 +59,7 @@
 @media (prefers-reduced-motion: reduce) {
   .life-print__paper, .life-print__letter { transition: none; }
 }
-@media (min-width: 701px) and (max-width: 1200px) {
-  .life-print:nth-last-child(-n + 3) .life-print__caption { left: auto; right: calc(142.5% + 12px); text-align: right; }
-}
+.life-print[data-caption-side="left"] .life-print__caption { left: auto; right: calc(142.5% + 12px); text-align: right; }
 @media (max-width: 700px), (hover: none) {
   .life-gallery__viewport { overflow-x: auto; padding: 12px 8px 16px; margin-inline: -8px; }
   .life-gallery__track { width: max-content; gap: 20px; align-items: flex-start; }
@@ -71,23 +69,25 @@
   .life-print:hover .life-print__paper, .life-print:focus-visible .life-print__paper { transform: none; }
   .life-print .life-print__caption { display: none; }
 }
+/* Share the homepage intro's column, top offset, and name/bio type so About
+   opens in the same place. */
 .about-page--journal .simple-page {
-  width: min(888px, calc(100% - 64px));
-  padding-top: clamp(88px, 10vw, 160px);
+  width: min(100% - 48px, var(--portfolio-reading-width));
+  padding-top: clamp(128px, 19vh, 205px);
   padding-bottom: 160px;
 }
 .about-page--journal .about-page__identity {
-  grid-template-columns: minmax(0, 1fr) 272px;
-  gap: 72px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 248px;
+  gap: 56px;
+  align-items: start;
   margin-top: 0;
 }
-.about-page--journal .about-page__identity .about-page__intro { max-width: 520px; }
+.about-page--journal .about-page__identity .about-page__intro { max-width: none; }
 .about-page--journal .simple-page .about-page__greeting {
-  margin: 0 0 16px;
+  margin: 0 0 13px;
   color: var(--ink);
-  font: italic 400 36px/1.2 var(--serif);
-  letter-spacing: -0.03em;
+  font: italic 400 30px/1.15 var(--serif);
+  letter-spacing: normal;
 }
 .about-page--journal .about-page__identity .about-page__intro p {
   margin: 0;
@@ -97,8 +97,10 @@
   max-width: none;
 }
 .about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 18px; }
+.about-page--journal .about-page__intro p,
+.about-page__quest p { text-wrap: pretty; }
 .about-page--journal .about-page__portrait-card {
-  width: 272px;
+  width: 248px;
   padding: 10px;
   border: 0;
   border-radius: 2px;
@@ -116,14 +118,14 @@
   overflow: hidden;
 }
 .about-page--journal .about-page__socials {
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 18px;
   margin-top: 28px;
 }
 .about-page--journal .about-page__socials a { gap: 6px; font-size: 16px; }
 .about-page--journal .about-page__social-icon { width: 16px; height: 16px; }
 .about-page--journal .about-page__social-icon svg path { fill: none; stroke: currentColor; }
-.about-page--journal [data-social="twitter"] svg path { fill: currentColor; stroke: none; }
+.about-page--journal :is([data-social="twitter"], [data-social="linkedin"]) svg path { fill: currentColor; stroke: none; }
 .about-page__social-divider { width: 1px; height: 24px; background: var(--line); margin-inline: -6px; }
 .about-page--journal .about-page__gallery { margin-top: 100px; }
 .about-page--journal .about-page__gallery > h2,
@@ -184,11 +186,14 @@
   .about-page__quest-art:hover img { transform: rotate(-1.5deg) scale(1.015); }
   .about-page__quest:nth-child(2) .about-page__quest-art:hover img { transform: rotate(1.5deg) scale(1.015); }
 }
+@media (max-width: 900px) {
+  .about-page--journal .simple-page { width: min(100% - 36px, 680px); padding-top: 120px; }
+}
 @media (max-width: 700px) {
-  .about-page--journal .simple-page { width: calc(100% - 40px); padding-top: 56px; padding-bottom: 80px; }
+  .about-page--journal .simple-page { width: calc(100% - 32px); padding-top: 56px; padding-bottom: 80px; }
   .about-page--journal .about-page__identity { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .about-page--journal .about-page__portrait-card { width: 200px; }
-  .about-page--journal .simple-page .about-page__greeting { font-size: 30px; }
+  .about-page--journal .simple-page .about-page__greeting { font-size: 26px; }
   .about-page--journal .about-page__identity .about-page__intro p { font-size: 16px; line-height: 1.6; }
   .about-page--journal .about-page__identity .about-page__intro p + p { margin-top: 16px; }
   .about-page--journal .about-page__socials { margin-top: 28px; }

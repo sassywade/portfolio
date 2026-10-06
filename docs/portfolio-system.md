@@ -12,7 +12,7 @@ The About biography is one continuous paragraph beneath Hello!, without an inter
 
 About's “Recents from life” is now an independent hover contact sheet. Each print expands upward from its bottom edge, retaining its rotation; neighbors remain still. A matching angled caption types beside that print, using Neel's supplied captions. Clicking does nothing and About no longer uses the photo viewer. Keyboard focus shows the complete caption immediately; reduced motion removes transitions and typing. Touch layouts show static captions below scrollable prints. Photography retains its existing modal viewer. This supersedes earlier About viewer and whole-row-hover directions below.
 
-The September 24 About design is implemented in `app/about/about-journal.css`: “Hello!”, two introductory paragraphs, a rounded white portrait mat, right-aligned Resume and social links, an angled “Recents from life” strip, and three Side quests using supplied transparent assets. Glean Passport links to Neel’s supplied X post. Preserve the existing photo viewer and reduced-motion behavior. This design supersedes the earlier one-screen About composition.
+The September 24 About design is implemented in `app/about/about-journal.css`: “Hello!”, two introductory paragraphs, a rounded white portrait mat, left-aligned X and LinkedIn links followed by a divider and Resume (with a document icon), an angled “Recents from life” strip, and three Side quests using supplied transparent assets. Glean Passport links to Neel’s supplied X post. Preserve the existing photo viewer and reduced-motion behavior. This design supersedes the earlier one-screen About composition. About's identity row shares the homepage intro's reading column and top offset so moving between the two pages doesn't shift the layout. Its type stays a step smaller than the homepage: “Hello!” is 30px (26px on mobile) and the paragraphs are 18px (16px on mobile).
 
 The About page uses “Hello,” and “Life” with the homepage ink color. Its resume link reads “CV”. On desktop the Life strip extends slightly beyond the introduction, using responsive card widths and modest overlap; mobile keeps readable cards in a horizontally scrollable strip. Preserve the white film matting and hover lift.
 
@@ -275,7 +275,7 @@ The shared soundscape gives the first portfolio arrival one quiet, session-local
 
 Project summaries stay left-aligned beneath their media and span the full media width with `text-wrap: pretty`.
 
-Each About Life caption types out beside its enlarged print, aligned with that print's top edge so it clears the unscaled neighbors. It comes out of the right side; between 701px and 1200px the last three prints flip it to the left side. Keyboard focus shows it immediately; phones and touch layouts hide it. Each print keeps an accessible description.
+Each About Life caption types out beside its enlarged print, aligned with that print's top edge so it clears the unscaled neighbors. It comes out of the right side, and moves to the left of the print when the right side would leave the viewport. Keyboard focus shows it immediately; phones and touch layouts hide it. Each print keeps an accessible description.
 
 The shared photo viewer's Previous and Next controls sit at the vertical middle of the screen as plain white circles with simple chevrons and a soft drop shadow.
 

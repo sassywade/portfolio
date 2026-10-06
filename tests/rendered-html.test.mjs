@@ -298,7 +298,7 @@ test("Life hover expands only one print and types its caption beside its top edg
   const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
   assert.match(css, /\.life-print:hover \.life-print__paper.*scale\(1\.85\)/);
   assert.match(css, /\.life-print__caption \{[\s\S]*?top: calc\(-85% \+ 4px\);[\s\S]*?left: calc\(142\.5% \+ 12px\);/);
-  assert.match(css, /\.life-print:nth-last-child\(-n \+ 3\) \.life-print__caption \{ left: auto; right: calc\(142\.5% \+ 12px\); text-align: right; \}/);
+  assert.match(css, /\.life-print\[data-caption-side="left"\] \.life-print__caption \{ left: auto; right: calc\(142\.5% \+ 12px\); text-align: right; \}/);
   assert.doesNotMatch(css, /caption-rise/);
   assert.ok(css.includes(".life-gallery:has(.life-print:hover) > h2 { opacity: 0.12; }"));
   assert.ok(css.includes(".life-gallery:has(.life-print :focus-visible, .life-print:focus-visible) > h2 { opacity: 0.12; }"));
@@ -321,15 +321,24 @@ test("About keeps one biography paragraph and a softly tilting 2px portrait", as
   assert.ok(css.includes("(prefers-reduced-motion: no-preference)"));
 });
 
+test("About opens in the homepage intro's column with a smaller greeting and body copy", async () => {
+  const css = await readFile(new URL("../app/about/about-journal.css", import.meta.url), "utf8");
+  assert.match(css, /\.about-page--journal \.simple-page \{\s*width: min\(100% - 48px, var\(--portfolio-reading-width\)\);\s*padding-top: clamp\(128px, 19vh, 205px\);/);
+  assert.match(css, /@media \(max-width: 900px\) \{\s*\.about-page--journal \.simple-page \{ width: min\(100% - 36px, 680px\); padding-top: 120px; \}/);
+  assert.match(css, /\.about-page--journal \.simple-page \.about-page__greeting \{[^}]*color: var\(--ink\);[^}]*font: italic 400 30px\/1\.15 var\(--serif\);/);
+  assert.match(css, /\.about-page--journal \.about-page__identity \.about-page__intro p \{[^}]*color: var\(--muted\);[^}]*font: 400 18px\/1\.55 var\(--serif\);/);
+  assert.ok(css.includes(".about-page--journal .about-page__intro p,\n.about-page__quest p { text-wrap: pretty; }"));
+});
+
 test("keeps About links concise and opens the resume in a new tab", async () => {
   const about = await readFile(new URL("../app/about/page.tsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.match(about, /className="about-page__greeting">Hello!<\/h1>/);
   assert.match(css, /\.about-page \.about-page__greeting\s*\{[\s\S]*color: var\(--ink\);[\s\S]*font: italic clamp\(22px, 1\.8vw, 28px\)[\s\S]*font-weight: 400;/);
-  assert.match(about, /data-social="resume"[\s\S]*data-social="twitter"[\s\S]*data-social="linkedin"/);
+  assert.match(about, /data-social="twitter"[\s\S]*data-social="linkedin"[\s\S]*about-page__social-divider[\s\S]*data-social="resume"/);
   assert.doesNotMatch(about, /mailto:|data-social="email"/);
-  assert.match(about, /aria-label="Resume"/);
+  assert.match(about, /data-social="resume">\s*<span className="about-page__social-icon" aria-hidden="true">[\s\S]*?<\/span>\s*Resume\s*<\/a>/);
   assert.match(about, /2077068857160700242/);
   for (const asset of ["passport.png", "underwallet.png", "task-valley.png"]) {
     assert.ok(about.includes(`/about/${asset}`));
@@ -1366,6 +1375,8 @@ test("Life has eleven captioned prints with the shared click-to-open viewer", as
   assert.match(gallery, /usePhotoViewer/);
   assert.match(gallery, /frame: "film"/);
   assert.match(gallery, /captionLines/);
+  assert.match(gallery, /placeLifeCaptions/);
+  assert.match(gallery, /data-caption-side/);
   const quest = await readFile(new URL("../app/about/quest-image.tsx", import.meta.url), "utf8");
   assert.match(quest, /usePhotoViewer/);
   assert.match(quest, /aria-haspopup="dialog"/);

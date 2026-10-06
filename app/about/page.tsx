@@ -25,23 +25,17 @@ export default function AboutPage() {
           <div className="simple-page__copy about-page__intro">
             <h1 id="about-title" className="about-page__greeting">Hello!</h1>
             <p className="about-page__lead">
-              I’m interested by ambiguous problems and the systems and
-              interactions that shape them.
+              I joined Glean as its fifth designer and have been here through a
+              lot of the product’s evolution. I’m drawn to ambiguous problems
+              and the systems and interactions that shape them.
             </p>
             <p>
               I found my way to design through a human-robot interaction lab in
               college. Watching people figure out unfamiliar machines made me
-              curious about how we help people understand and use new
-              technologies.
+              curious about how we introduce new technologies in ways that make
+              sense.
             </p>
             <nav className="about-page__socials" aria-label="Links">
-              <a href="/Neel-Saswade-Resume.pdf" target="_blank" rel="noreferrer" data-social="resume" aria-label="Resume">
-                <span className="about-page__social-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" focusable="false"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6" /></svg>
-                </span>
-                Resume
-              </a>
-              <span className="about-page__social-divider" aria-hidden="true" />
               <a
                 href="https://x.com/neel_saswade"
                 target="_blank"
@@ -57,8 +51,17 @@ export default function AboutPage() {
               </a>
               <a href="https://www.linkedin.com/in/neel-saswade/" target="_blank" rel="noreferrer" data-social="linkedin" aria-label="LinkedIn">
                 <span className="about-page__social-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" focusable="false"><circle cx="5" cy="5" r="2" /><path d="M3.5 10h3v11h-3zM11 10h3v1.5c1-2.5 7-2.5 7 2.5v7h-3v-6c0-3-4-3-4 0v6h-3z" /></svg>
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13Zm1.78 13.02H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" />
+                  </svg>
                 </span>
+              </a>
+              <span className="about-page__social-divider" aria-hidden="true" />
+              <a href="/Neel-Saswade-Resume.pdf" target="_blank" rel="noreferrer" data-social="resume">
+                <span className="about-page__social-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false"><path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8zM14 3v3.5A1.5 1.5 0 0 0 15.5 8H19M9 13h6M9 16.5h4" /></svg>
+                </span>
+                Resume
               </a>
             </nav>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { LoadedImage } from "../loaded-image";
 import { usePhotoViewer } from "../photo-viewer";
 
@@ -47,14 +47,45 @@ const rotations = [-5, -4, 0, 2, -4, 1, 2, -3, 1, 0, 5];
 const thumbnailFor = (src: string) => src.replace(/\.[^.]+$/, "-thumb.jpg");
 const viewerSequence = lifePhotos.map((item) => ({ id: item.id, src: item.src, thumbnail: thumbnailFor(item.src), label: item.alt, ratio: 2 / 3, frame: "film" as const }));
 
+/* Captions sit to the right of the enlarged print. When that side would leave
+   the viewport, flip the print so the caption comes out of the left instead. */
+function placeLifeCaptions(track: HTMLElement) {
+  const prints = [...track.querySelectorAll<HTMLElement>(".life-print")];
+  for (const print of prints) print.removeAttribute("data-caption-side");
+  const limit = window.innerWidth - 16;
+  for (const print of prints) {
+    const caption = print.querySelector(".life-print__caption");
+    if (caption && caption.getBoundingClientRect().right > limit) print.setAttribute("data-caption-side", "left");
+  }
+}
+
 export function AboutPhotoGallery() {
   const { openPhoto, viewer, selectedId } = usePhotoViewer();
+  const trackRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let cancelled = false;
+    const place = () => {
+      if (!cancelled) placeLifeCaptions(track);
+    };
+    place();
+    const observer = new ResizeObserver(place);
+    observer.observe(track);
+    window.addEventListener("resize", place);
+    void document.fonts?.ready.then(place);
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      window.removeEventListener("resize", place);
+    };
+  }, []);
   return (
     <>
     <section className="about-page__gallery life-gallery" aria-labelledby="about-gallery-title">
       <h2 id="about-gallery-title">Recents from life</h2>
       <div className="life-gallery__viewport">
-        <div className="life-gallery__track">
+        <div className="life-gallery__track" ref={trackRef}>
           {lifePhotos.map((photo, index) => {
             let character = 0;
             return (
