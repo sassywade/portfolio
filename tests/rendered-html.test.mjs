@@ -120,8 +120,12 @@ test("homepage has a deliberate narrow-screen work layout", async () => {
   assert.match(css, /\.work-feature__media--split,[\s\S]*?\.work-feature__media--trio\s*\{[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
   assert.match(css, /\.work-feature__media--split > :first-child,[\s\S]*?\.work-feature__media--trio > :nth-child\(2\)[\s\S]*?grid-column: 1 \/ -1;/);
   assert.match(css, /\.work-feature__media--trio > :first-child,[\s\S]*?\.work-feature__media--trio > :nth-child\(3\)[\s\S]*?grid-row: 2;/);
-  assert.match(css, /#work-growth \.work-feature__checklist img\s*\{[\s\S]*?object-fit: cover;[\s\S]*?object-position: center 44%;[\s\S]*?mask-image: none;/);
-  assert.match(css, /#work-growth \.work-feature__checklist::after\s*\{\s*display: none;/);
+  // Phone supporting frames keep desktop-like crops; Growth's portrait row keeps the full checklist and its fade.
+  assert.match(css, /\.work-feature__media--split > :not\(:first-child\)\s*\{\s*grid-row: 2;\s*min-height: 0;\s*aspect-ratio: 16 \/ 10;/);
+  assert.match(css, /\.work-feature__media--trio > :first-child,\s*\.work-feature__media--trio > :nth-child\(3\)\s*\{\s*grid-row: 2;\s*min-height: 0;\s*aspect-ratio: 2 \/ 3;/);
+  assert.match(css, /#work-growth \.work-feature__checklist img\s*\{\s*transform: translateY\(-10%\);\s*\}/);
+  assert.doesNotMatch(css, /#work-growth \.work-feature__checklist::after\s*\{\s*display: none;/);
+  assert.match(css, /#work-growth \.work-feature__onboarding-track\s*\{[^}]*animation: growth-onboarding-pan 15s linear infinite;[^}]*animation-play-state: paused;/);
   assert.match(css, /\.work-feature__media--assets > \*\s*\{\s*min-height: clamp\(190px, 58vw, 300px\);\s*aspect-ratio: 1 \/ 1\.08;/);
 });
 
@@ -1556,12 +1560,29 @@ test("artifact skins include reading holds and suspend when not visible", async 
   assert.match(source, /duration: 15000/);
   assert.match(source, /add\(1\.5, depth === 0 \? focused/);
   assert.match(source, /add\(3\.8, depth === 0 \? focused/);
-  assert.match(source, /const focused = "translate\(-50%, 7cqw\) scale\(1\)"/);
+  assert.match(source, /const focused = "translate\(-50%, 13\.3cqh\) scale\(1\)"/);
   assert.doesNotMatch(source, /const bottom|const revealed/);
   assert.match(source, /IntersectionObserver/);
   assert.match(source, /visibilitychange/);
   assert.match(source, /prefers-reduced-motion/);
   assert.match(source, /animation.cancel\(\)/);
+});
+
+test("every work piece opens a larger isolated view", async () => {
+  const html = await (await render()).text();
+  const work = html.split('id="work"')[1].split('class="site-footer')[0];
+  // Two videos, popups, Rolodex, corner, homepage cards, three Artifacts panels, onboarding, checklist, two Snap groups.
+  assert.equal((work.match(/data-work-zoom="" role="button" tabindex="0" aria-haspopup="dialog"/g) ?? []).length, 13);
+  assert.equal((work.match(/aria-label="Enlarge /g) ?? []).length, 13);
+  assert.match(work, /data-work-zoom="" role="group" aria-label="Glean homepage, before and after"/);
+  const zoom = await readFile(new URL("../app/work-zoom.tsx", import.meta.url), "utf8");
+  assert.match(zoom, /document\.addEventListener\("click", onClick, true\)/);
+  assert.match(zoom, /control\.getAttribute\("aria-pressed"\) !== "true"/);
+  assert.match(zoom, /event\.key === "Escape"/);
+  assert.match(zoom, /prefers-reduced-motion/);
+  assert.match(zoom, />Close<\/button>/);
+  const css = await readFile(new URL("../app/work-zoom.module.css", import.meta.url), "utf8");
+  assert.match(css, /html\[data-work-zoom="open"\] \.reveal:has\(\[data-work-zoomed\]\)\) \{ filter: none;/);
 });
 
 test("dark work tiles are an opt-in, work-only prototype", async () => {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./homepage-cards.module.css";
+import { zoomable } from "./work-zoom-props";
 
 const cards = [
   [8, "Respond to Frank about Glean’s pricing plan"],
@@ -30,7 +31,7 @@ export function HomepageCards() {
     return () => { observer.disconnect(); document.removeEventListener("visibilitychange", sync); reduced.removeEventListener("change", sync); };
   }, []);
   return <div ref={root} className={styles.stage} data-homepage-cards="vertical" data-running={running}
-    tabIndex={0} role="region" aria-label="Glean homepage cards. Focus or hover to pause.">
+    {...zoomable("Glean homepage cards")}>
     <div className={styles.track}>
       {[0, 1].map(copy => <div className={styles.group} key={copy} aria-hidden={copy === 1 ? true : undefined}>
         {cards.map(([index, label]) => <img key={index}

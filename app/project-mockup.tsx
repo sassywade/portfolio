@@ -2,16 +2,16 @@
 
 import type { Project } from "./projects";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type HTMLAttributes } from "react";
 
-type ProjectVideoProps = {
+type ProjectVideoProps = HTMLAttributes<HTMLVideoElement> & {
   ariaLabel: string;
   className: string;
   poster: string;
   src: string;
 };
 
-export function ProjectVideo({ ariaLabel, className, poster, src }: ProjectVideoProps) {
+export function ProjectVideo({ ariaLabel, className, poster, src, ...attributes }: ProjectVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export function ProjectVideo({ ariaLabel, className, poster, src }: ProjectVideo
       // Work media is below the fold. Let the intersection observer start the
       // request when the tile is actually approaching the viewport.
       preload="none"
+      {...attributes}
     >
       <source src={src} type="video/mp4" />
     </video>

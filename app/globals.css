@@ -13437,6 +13437,12 @@ html[data-portfolio-layout="quiet"] .meadow-settings__panel :is(h2, h3, p, butto
   width: 90%;
   height: auto;
 }
+.work-feature__onboarding-track,
+.work-feature__onboarding-group { display: contents; }
+.work-feature__onboarding-group[aria-hidden="true"] { display: none; }
+@keyframes growth-onboarding-pan {
+  to { transform: translateY(-50%); }
+}
 .work-feature__popups {
   position: relative;
   min-width: 0;
@@ -13749,42 +13755,76 @@ html[data-work-snap="on"] .pranathi-work--editorial { padding-bottom: max(180px,
     aspect-ratio: 708 / 500;
   }
 
-  .work-feature__media--split > :not(:first-child),
+  /* Supporting frames stay close to the desktop panels, so each mock crops the same way. */
+  .work-feature__media--split > :not(:first-child) {
+    grid-row: 2;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  /* Growth's side frames are portrait on desktop; a taller row keeps the full checklist card. */
   .work-feature__media--trio > :first-child,
   .work-feature__media--trio > :nth-child(3) {
     grid-row: 2;
-    min-height: clamp(116px, 36vw, 164px);
-    aspect-ratio: 4 / 3;
+    min-height: 0;
+    aspect-ratio: 2 / 3;
+  }
+
+  .work-feature__popups img {
+    width: 92%;
+  }
+
+  .work-feature__company-corner img {
+    top: 16%;
+    right: 8%;
+    width: 116%;
   }
 
   #work-growth .work-feature__onboarding {
-    display: grid;
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-    gap: 4px;
-    padding: 10px;
+    position: relative;
+    display: block;
     overflow: hidden;
+    container-type: inline-size;
+  }
+
+  #work-growth .work-feature__onboarding-track {
+    position: absolute;
+    top: 0;
+    left: 7%;
+    display: flex;
+    width: 86%;
+    flex-direction: column;
+    animation: growth-onboarding-pan 15s linear infinite;
+    animation-play-state: paused;
+  }
+
+  #work-growth .work-feature__onboarding-group {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 7cqw;
+    padding-top: 7cqw;
+  }
+
+  #work-growth .work-feature__onboarding[data-running="true"] .work-feature__onboarding-track {
+    animation-play-state: running;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #work-growth .work-feature__onboarding-track { animation: none; }
+    #work-growth .work-feature__onboarding-group[aria-hidden="true"] { display: none; }
   }
 
   #work-growth .work-feature__onboarding img {
     width: 100%;
-    height: 100%;
-    min-height: 0;
-    object-fit: contain;
   }
 
   #work-growth .work-feature__checklist img {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    object-fit: cover;
-    object-position: center 44%;
-    transform: none;
-    -webkit-mask-image: none;
-    mask-image: none;
+    transform: translateY(-10%);
   }
 
   #work-growth .work-feature__checklist::after {
-    display: none;
+    height: 14%;
   }
 
   .work-feature__media--single > *,

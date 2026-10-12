@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import styles from "./artifact-panels.module.css";
+import { zoomable } from "./work-zoom-props";
 
 const skins = [
   { name: "Gmail", file: "gmail-skin.png", width: 1335, height: 1175 },
@@ -9,14 +10,16 @@ const skins = [
   { name: "Outlook", file: "outlook-skin.png", width: 1335, height: 1775 },
 ];
 
+// Offsets follow the tile height, so the lifted draft sits at the same place on any tile shape.
+const stack = (d: number) => `translate(-50%, ${45.5 - d * 17}cqh) scale(${1 - d * .06})`;
+
 // Each 5-second turn lifts once, holds, and returns to the stack.
 function frames(index: number) {
   const result: Keyframe[] = [];
   for (let turn = 0; turn < 3; turn++) {
     const depth = (index - turn + 3) % 3;
     const nextDepth = (index - turn + 2) % 3;
-    const stack = (d: number) => `translate(-50%, ${24 - d * 9}cqw) scale(${1 - d * .06})`;
-    const focused = "translate(-50%, 7cqw) scale(1)";
+    const focused = "translate(-50%, 13.3cqh) scale(1)";
     const add = (time: number, transform: string, opacity: number, zIndex: number) =>
       result.push({ offset: (turn * 5 + time) / 15, transform, opacity, zIndex, easing: "cubic-bezier(.77, 0, .175, 1)" });
     add(0, stack(depth), 1, 3 - depth);
@@ -58,11 +61,11 @@ export function ArtifactSkins() {
     };
   }, []);
   return (
-    <div ref={root} className={`${styles.panel} ${styles.skins}`} data-artifact-panel="skins" aria-label="Artifact skins for Gmail, Slack, and Outlook">
+    <div ref={root} className={`${styles.panel} ${styles.skins}`} data-artifact-panel="skins" {...zoomable("artifact drafts for Gmail, Slack, and Outlook")}>
       {skins.map((skin, index) => (
         <img key={skin.file} src={`/work/artifacts/${skin.file}`} alt={`${skin.name} artifact draft`}
           width={skin.width} height={skin.height} loading="lazy"
-          style={{ transform: `translate(-50%, ${24 - index * 9}cqw) scale(${1 - index * .06})`, zIndex: 3 - index }} />
+          style={{ transform: stack(index), zIndex: 3 - index }} />
       ))}
     </div>
   );

@@ -22,7 +22,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.skins { container-type: inline-size; }
+.skins { container-type: size; }
 .panel.skins img {
   width: 82%;
   left: 50%;
@@ -38,16 +38,22 @@
     gap: 12px;
   }
 
+  /* Desktop proportions keep the document running off the bottom edge. */
   .composition > :first-child {
     grid-column: 1 / -1;
     grid-row: 1;
-    min-height: clamp(218px, 67vw, 310px);
-    aspect-ratio: 16 / 10;
+    min-height: 0;
+    aspect-ratio: 708 / 450;
   }
 
   .composition > :not(:first-child) {
     grid-row: 2;
-    min-height: clamp(116px, 36vw, 164px);
-    aspect-ratio: 4 / 3;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  .panel[data-artifact-panel="document"] img {
+    top: auto;
+    bottom: -1%;
   }
 }

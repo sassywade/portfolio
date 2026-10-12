@@ -1,4 +1,4 @@
-import { featuredWork, growthOnboardingScreens, growthChecklist, homepageCompanyCorner, psychicPopups } from "./projects";
+import { featuredWork, growthChecklist, homepageCompanyCorner, psychicPopups } from "./projects";
 import { Reveal } from "./reveal";
 import { WorkNav } from "./work-nav";
 import { ProjectVideo } from "./project-mockup";
@@ -10,6 +10,9 @@ import artifactStyles from "./artifact-panels.module.css";
 import { ArtifactSkins } from "./artifact-skins";
 import { HomepageComparison } from "./homepage-comparison";
 import { HomepageCards } from "./homepage-cards";
+import { GrowthOnboarding } from "./growth-onboarding";
+import { WorkZoom } from "./work-zoom";
+import { zoomable } from "./work-zoom-props";
 
 export function WorkSections() {
   return (
@@ -33,25 +36,19 @@ export function WorkSections() {
               </header>
               <div className={`work-feature__media work-feature__media--${project.layout}${"media" in project ? " work-feature__media--assets" : ""}${"panels" in project ? " " + artifactStyles.composition : ""}`} role={"video" in project || "panels" in project ? "group" : "img"} aria-label={"video" in project ? `${project.title} — project demo` : "media" in project || "panels" in project ? `${project.title} — project assets` : `${project.title} — project assets coming soon`}>
                 {"panels" in project ? project.panels.map(panel => panel.kind === "skins" ? <ArtifactSkins key={panel.kind} /> : (
-                  <div key={panel.kind} className={artifactStyles.panel} data-artifact-panel={panel.kind}>
+                  <div key={panel.kind} className={artifactStyles.panel} data-artifact-panel={panel.kind} {...zoomable(panel.alt)}>
                     <img src={panel.src} alt={panel.alt} width={panel.width} height={panel.height} loading="lazy" />
                   </div>
                 )) : <>
-                {project.slug === "growth" && (
-                  <div className="work-feature__onboarding">
-                    {growthOnboardingScreens.map((screen) => (
-                      <img key={screen.src} src={screen.src} alt={screen.alt} width={980} height={592} loading="lazy" />
-                    ))}
-                  </div>
-                )}
+                {project.slug === "growth" && <GrowthOnboarding />}
                 {project.slug === "growth" ? (
-                  <GrowthPrototypeVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
+                  <GrowthPrototypeVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} {...zoomable(`${project.title} product walkthrough`)} />
                 ) : project.slug === "homepage" ? (
                   <HomepageComparison src="/work/homepage-final.mp4" poster={project.video.poster} />
                 ) : "video" in project ? (
-                  <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} />
+                  <ProjectVideo src={project.video.src} poster={project.video.poster} className="work-feature__video" ariaLabel={`${project.title} product walkthrough`} {...zoomable(`${project.title} product walkthrough`)} />
                 ) : "media" in project ? project.media.groups.map((group) => (
-                  <div className="work-feature__asset-group" key={group.label}>
+                  <div className="work-feature__asset-group" key={group.label} {...zoomable(`${group.label} screens`)}>
                     <div className="work-feature__asset-phones">
                       {group.images.map((image) => <img key={image.src} src={image.src} alt={image.alt} width={image.src.includes("treasure-collection") ? 565 : 576} height={1156} loading="lazy" decoding="async" />)}
                     </div>
@@ -59,15 +56,15 @@ export function WorkSections() {
                   </div>
                 )) : <div className="work-feature__placeholder" />}
                 {project.slug === "growth" ? (
-                  <div className="work-feature__checklist">
+                  <div className="work-feature__checklist" {...zoomable(growthChecklist.alt)}>
                     <img src={growthChecklist.src} alt={growthChecklist.alt} width={1012} height={1806} loading="lazy" />
                   </div>
                 ) : project.slug === "psychic" ? (
-                  <div className="work-feature__popups">
+                  <div className="work-feature__popups" {...zoomable(psychicPopups.alt)}>
                     <img src={psychicPopups.src} alt={psychicPopups.alt} width={1395} height={960} loading="lazy" />
                   </div>
                 ) : "media" in project ? null : project.slug === "homepage" ? (
-                  <div className="work-feature__company-corner">
+                  <div className="work-feature__company-corner" {...zoomable(homepageCompanyCorner.alt)}>
                     <img src={homepageCompanyCorner.src} alt={homepageCompanyCorner.alt} width={1586} height={796} loading="lazy" />
                   </div>
                 ) : <div className="work-feature__placeholder" />}
@@ -82,6 +79,7 @@ export function WorkSections() {
           </section>
         ))}
       </div>
+      <WorkZoom />
     </WorkTileSurface>
   );
 }

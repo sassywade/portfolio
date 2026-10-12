@@ -1,0 +1,14 @@
+.layer[hidden] { display: none; }
+.backdrop { position: fixed; inset: 0; z-index: 20; background: var(--paper, #f5f5f4); cursor: zoom-out; }
+.close { position: fixed; top: 20px; right: clamp(18px, 4vw, 56px); z-index: 22; min-height: 44px; padding: 10px; border: 0; background: transparent; color: var(--ink); font: 14px var(--sans); cursor: pointer; }
+.close:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+:global([data-work-zoom]) { cursor: zoom-in; }
+:global([data-work-zoom][role="button"]:focus-visible) { outline: 2px solid var(--ink); outline-offset: 4px; }
+:global([data-work-zoomed="true"]) { position: relative; z-index: 21; cursor: zoom-out; transform-origin: center; }
+:global([data-work-zoomed="true"]:focus-visible) { outline: none; }
+
+/* While open, the resting work section and shell step out of the way so the paper covers the viewport. */
+:global(html[data-work-zoom="open"] .site-shell) { isolation: auto; }
+:global(html[data-work-zoom="open"] .pranathi-work) { z-index: 1001; transform: none; will-change: auto; }
+:global(html[data-work-zoom="open"] .reveal:has([data-work-zoomed])) { filter: none; transition: none; }

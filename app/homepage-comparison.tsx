@@ -40,7 +40,7 @@ export function HomepageComparison({ src, poster }: { src: string; poster: strin
     };
   }, [src, before]);
   return (
-    <div className={styles.tile} data-comparison={before ? "before" : "after"} data-instant={instant}>
+    <div className={styles.tile} data-comparison={before ? "before" : "after"} data-instant={instant} data-work-zoom="" role="group" aria-label="Glean homepage, before and after">
       <div className={styles.track}>
         <button type="button" className={styles.screen} aria-label="Show Before homepage" aria-pressed={before} onClick={event => select(true, event)}>
           <img src="/work/homepage-before.png" alt="Previous Glean homepage with search, activity feed, and calendar" width={5120} height={3328} loading="lazy" draggable={false} />

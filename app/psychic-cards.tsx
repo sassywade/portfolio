@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import styles from "./psychic-cards.module.css";
+import { zoomable } from "./work-zoom-props";
 
 type Mode = "wheel" | "rolodex" | "grid";
 let mode: Mode = "rolodex";
@@ -63,8 +64,9 @@ function CardStage({ mode, flipped }: { mode: Mode; flipped: boolean }) {
     const timer = setInterval(() => setStep(value => value + 1), mode === "grid" ? 1400 : 3400);
     return () => clearInterval(timer);
   }, [running, mode]);
-  return <div ref={root} className={styles.stage} data-mode={mode} data-running={running} data-wheel-side={flipped ? "right" : "left"}>
-    <div className={styles.canvas} role="img" aria-label="A collection of proactive Glean cards: email replies, Slack updates, briefings, documents, and dashboards">
+  return <div ref={root} className={styles.stage} data-mode={mode} data-running={running} data-wheel-side={flipped ? "right" : "left"}
+    {...zoomable("proactive Glean cards: email replies, Slack updates, briefings, documents, and dashboards")}>
+    <div className={styles.canvas}>
       {mode === "grid" ? Array.from({ length: 15 }, (_, slot) => {
         // Visit each cell in a scattered, deterministic order, not a row-by-row wipe.
         const order = (slot * 4) % 15;
